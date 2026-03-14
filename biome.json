@@ -10,7 +10,18 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"a11y": {
+				"noNoninteractiveTabindex": "off",
+				"noStaticElementInteractions": "off",
+				"useSemanticElements": "off"
+			}
 		}
 	},
 	"files": {

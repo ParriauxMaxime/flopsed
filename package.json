@@ -8,16 +8,20 @@
 		"build": "rspack build",
 		"check": "biome check .",
 		"check:fix": "biome check --fix .",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"tree-editor": "node specs/tech-tree-server.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"type": "commonjs",
 	"dependencies": {
+		"@dagrejs/dagre": "^2.0.4",
 		"@emotion/react": "^11.14.0",
 		"react": "^19.2.4",
-		"react-dom": "^19.2.4"
+		"react-dom": "^19.2.4",
+		"ts-pattern": "^5.9.0",
+		"zustand": "^5.0.11"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

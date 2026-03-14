@@ -1,3 +1,4 @@
+import path from "node:path";
 import { defineConfig } from "@rspack/cli";
 import { HtmlRspackPlugin, type RspackPluginFunction } from "@rspack/core";
 
@@ -6,7 +7,9 @@ export default defineConfig({
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".jsx"],
 		alias: {
-			"@": "./src",
+			"@modules": path.resolve(__dirname, "src/modules"),
+			"@components": path.resolve(__dirname, "src/components"),
+			"@utils": path.resolve(__dirname, "src/utils"),
 		},
 	},
 	module: {
