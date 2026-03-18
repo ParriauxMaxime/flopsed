@@ -16,6 +16,58 @@
     },
 
     {
+      "id": "desktop_pc",
+      "tier": "freelancing",
+      "name": "Desktop PC",
+      "description": "+50 FLOPS",
+      "icon": "🖥️",
+      "baseCost": 500,
+      "costMultiplier": 1.5,
+      "max": 3,
+      "effects": [
+        { "type": "flops", "op": "add", "value": 50 }
+      ]
+    },
+    {
+      "id": "second_monitor",
+      "tier": "freelancing",
+      "name": "Second Monitor",
+      "description": "+10 FLOPS",
+      "icon": "🖵",
+      "baseCost": 150,
+      "costMultiplier": 1.3,
+      "max": 5,
+      "effects": [
+        { "type": "flops", "op": "add", "value": 10 }
+      ]
+    },
+    {
+      "id": "junior_dev",
+      "tier": "startup",
+      "name": "Junior Dev",
+      "description": "Auto-writes 10 LoC/s",
+      "icon": "👨‍💻",
+      "baseCost": 2000,
+      "costMultiplier": 1.3,
+      "max": 5,
+      "effects": [
+        { "type": "devLoc", "op": "add", "value": 10 }
+      ]
+    },
+    {
+      "id": "senior_dev",
+      "tier": "startup",
+      "name": "Senior Dev",
+      "description": "Auto-writes 50 LoC/s",
+      "icon": "🧑‍💻",
+      "baseCost": 10000,
+      "costMultiplier": 1.4,
+      "max": 3,
+      "effects": [
+        { "type": "devLoc", "op": "add", "value": 50 }
+      ]
+    },
+    {
       "id": "intern",
       "tier": "startup",
       "name": "Intern",

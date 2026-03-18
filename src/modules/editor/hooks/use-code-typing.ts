@@ -27,6 +27,11 @@ export interface TypingState {
 	currentLine: string;
 }
 
+// Cap how many tokens we visually advance per advanceTokens() call.
+// LoC accounting still happens for all tokens, but we skip the string
+// manipulation for tokens beyond this cap — they'll catch up next frame.
+const MAX_VISUAL_TOKENS_PER_CALL = 60;
+
 export function useCodeTyping() {
 	const addLoc = useGameStore((s) => s.addLoc);
 	const enqueueBlock = useGameStore((s) => s.enqueueBlock);
@@ -76,15 +81,15 @@ export function useCodeTyping() {
 	}, [addLoc]);
 
 	// ── Batched rendering ──
-	// Multiple advanceToken() calls per frame get collapsed into one setState
+	// Throttle React state updates to ~20fps — fast enough to look smooth,
+	// avoids expensive re-renders at high loc/s rates
 	const dirtyRef = useRef(false);
-	const rafRef = useRef(0);
+	const flushTimerRef = useRef(0);
+	const FLUSH_INTERVAL_MS = 50; // ~20fps for visual updates
 
 	const flushTypingState = useCallback(() => {
-		rafRef.current = 0;
+		flushTimerRef.current = 0;
 		dirtyRef.current = false;
-		// Spread to create a new array reference so React/useMemo detect the change
-		// (typingLinesRef is mutated via .push() for perf — one copy per frame is fine)
 		setTyping({
 			lines: [...typingLinesRef.current],
 			currentLine: typingCurrentRef.current,
@@ -94,19 +99,24 @@ export function useCodeTyping() {
 	const scheduleFlush = useCallback(() => {
 		if (!dirtyRef.current) {
 			dirtyRef.current = true;
-			rafRef.current = requestAnimationFrame(flushTypingState);
+			flushTimerRef.current = window.setTimeout(
+				flushTypingState,
+				FLUSH_INTERVAL_MS,
+			);
 		}
 	}, [flushTypingState]);
 
-	// Cleanup rAF on unmount
+	// Cleanup timer on unmount
 	useEffect(() => {
 		return () => {
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
+			if (flushTimerRef.current) clearTimeout(flushTimerRef.current);
 		};
 	}, []);
 
 	const advanceTokens = useCallback(
 		(count: number) => {
+			let visualBudget = MAX_VISUAL_TOKENS_PER_CALL;
+
 			for (let n = 0; n < count; n++) {
 				const tokens = tokenQueueRef.current;
 				const pos = tokenPosRef.current;
@@ -137,27 +147,31 @@ export function useCodeTyping() {
 					typingCurrentRef.current = "";
 
 					// Block completion flushes immediately (triggers queue update)
-					if (rafRef.current) {
-						cancelAnimationFrame(rafRef.current);
-						rafRef.current = 0;
+					if (flushTimerRef.current) {
+						clearTimeout(flushTimerRef.current);
+						flushTimerRef.current = 0;
 					}
 					dirtyRef.current = false;
 					setTyping({ lines: [], currentLine: "" });
 					continue;
 				}
 
-				// Accumulate LoC instead of calling addLoc directly
+				// Accumulate LoC regardless of visual budget
 				const locPerToken = currentBlockDef.current.loc / tokens.length;
 				pendingLocRef.current += locPerToken;
 
-				const token = tokens[pos];
 				tokenPosRef.current = pos + 1;
 
-				if (token.newline) {
-					typingLinesRef.current.push(typingCurrentRef.current);
-					typingCurrentRef.current = "";
-				} else {
-					typingCurrentRef.current += token.html;
+				// Only do the expensive string work within visual budget
+				if (visualBudget > 0) {
+					visualBudget--;
+					const token = tokens[pos];
+					if (token.newline) {
+						typingLinesRef.current.push(typingCurrentRef.current);
+						typingCurrentRef.current = "";
+					} else {
+						typingCurrentRef.current += token.html;
+					}
 				}
 			}
 

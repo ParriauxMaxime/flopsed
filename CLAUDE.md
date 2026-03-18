@@ -122,20 +122,20 @@ cd specs && node balance-check.js
 ```
 
 Add `--verbose` for per-tier duration breakdown. The script simulates 3 player profiles (casual 4 keys/s, average 6 keys/s, fast 9 keys/s) and checks:
-- AGI reached between 33-50 minutes
-- 80-150 total purchases
-- Max wait between purchases ≤ 160 seconds
+- AGI reached between 25-45 minutes
+- 80-500 total purchases
+- Max wait between purchases ≤ 300 seconds
 - All 6 tiers reached
 - Each tier lasts within min/max duration bounds
 
 If any check fails, adjust the data files and re-run until all pass. The same simulation engine is also available in-app via the GodMode panel → "Balance Sim" tab (`src/utils/balance-sim.ts`).
 
 **Current validated targets (as of last balance pass):**
-- Casual: AGI ~48 min
-- Average: AGI ~45 min
-- Fast: AGI ~43 min
-- ~127 purchases across the game
-- Longest wait ~155s (in AGI Race tier)
+- Casual: AGI ~33 min
+- Average: AGI ~26 min
+- Fast: AGI ~25 min
+- ~208 purchases across the game
+- Longest wait ~184s (saving for first AI model in AI Lab)
 
 ## Workflow
 

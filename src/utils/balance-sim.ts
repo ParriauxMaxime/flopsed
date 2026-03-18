@@ -170,8 +170,8 @@ const aiModels: AiModel[] = aiModelsData.models as AiModel[];
 const { core, flopsAllocation } = balanceData;
 
 const RULES = {
-	agiMinMinutes: 18,
-	agiMaxMinutes: 40,
+	agiMinMinutes: 25,
+	agiMaxMinutes: 45,
 	maxWaitSeconds: 300,
 	minPurchases: 80,
 	maxPurchases: 500,

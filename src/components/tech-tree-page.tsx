@@ -18,6 +18,8 @@ const NODE_W = 172;
 const NODE_H = 58;
 const NODE_RX = 8;
 const ICON_SIZE = 20;
+const TEXT_X = ICON_SIZE + 14;
+const TEXT_MAX_W = NODE_W - TEXT_X - 8;
 
 // ── Layout ──
 
@@ -121,11 +123,6 @@ function usePanZoom() {
 
 	const onWheel = useCallback((e: React.WheelEvent) => {
 		e.preventDefault();
-		const delta = e.deltaY > 0 ? 0.9 : 1.1;
-		setTransform((t) => ({
-			...t,
-			scale: Math.max(0.2, Math.min(3, t.scale * delta)),
-		}));
 	}, []);
 
 	const onMouseDown = useCallback((e: ReactMouseEvent) => {
@@ -146,7 +143,19 @@ function usePanZoom() {
 		isPanning.current = false;
 	}, []);
 
-	return { transform, onWheel, onMouseDown, onMouseMove, onMouseUp };
+	const onTouchMove = useCallback((e: React.TouchEvent) => {
+		// Prevent pinch-to-zoom on touch devices
+		if (e.touches.length > 1) e.preventDefault();
+	}, []);
+
+	return {
+		transform,
+		onWheel,
+		onMouseDown,
+		onMouseMove,
+		onMouseUp,
+		onTouchMove,
+	};
 }
 
 // ── Styles ──
@@ -157,6 +166,7 @@ const containerCss = css({
 	position: "relative",
 	background: "#0d1117",
 	cursor: "grab",
+	touchAction: "pan-x pan-y",
 	"&:active": { cursor: "grabbing" },
 });
 
@@ -279,17 +289,19 @@ function SvgNode({
 				strokeWidth={1.5}
 			/>
 			<text
-				x={ICON_SIZE + 14}
+				x={TEXT_X}
 				y={NODE_H / 2 - 7}
 				fill="#c9d1d9"
-				fontSize={14}
+				fontSize={ln.node.name.length > 14 ? 11 : 14}
 				fontWeight="bold"
 				fontFamily="inherit"
+				textLength={ln.node.name.length > 14 ? TEXT_MAX_W : undefined}
+				lengthAdjust="spacingAndGlyphs"
 			>
 				{ln.node.name}
 			</text>
 			<text
-				x={ICON_SIZE + 14}
+				x={TEXT_X}
 				y={NODE_H / 2 + 11}
 				fill="#6272a4"
 				fontSize={12}
@@ -389,8 +401,14 @@ export function TechTreePage() {
 	const cash = useGameStore((s) => s.cash);
 	const researchNode = useGameStore((s) => s.researchNode);
 	const containerRef = useRef<HTMLDivElement>(null);
-	const { transform, onWheel, onMouseDown, onMouseMove, onMouseUp } =
-		usePanZoom();
+	const {
+		transform,
+		onWheel,
+		onMouseDown,
+		onMouseMove,
+		onMouseUp,
+		onTouchMove,
+	} = usePanZoom();
 
 	const treeLayout = useMemo(() => computeLayout(allTechNodes), []);
 
@@ -430,6 +448,7 @@ export function TechTreePage() {
 			onMouseMove={onMouseMove}
 			onMouseUp={onMouseUp}
 			onMouseLeave={onMouseUp}
+			onTouchMove={onTouchMove}
 		>
 			<svg css={svgCss} role="img" aria-label="Tech tree">
 				<g

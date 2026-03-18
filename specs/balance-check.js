@@ -20,27 +20,27 @@ const VERBOSE = process.argv.includes("--verbose");
 
 // ── Thresholds (edit these to adjust tolerance) ──
 const RULES = {
-	agiMinMinutes: 18,
+	agiMinMinutes: 25,
 	agiMaxMinutes: 45,
-	maxWaitSeconds: 750,
+	maxWaitSeconds: 300,
 	minPurchases: 80,
 	maxPurchases: 500,
 	minTiers: 6,
 	tierMinDuration: {
 		garage: 30,
-		freelancing: 50,
+		freelancing: 120,
 		startup: 120,
-		tech_company: 120,
+		tech_company: 180,
 		ai_lab: 60,
 		agi_race: 120,
 	},
 	tierMaxDuration: {
 		garage: 300,
-		freelancing: 600,
-		startup: 700,
-		tech_company: 1000,
-		ai_lab: 1000,
-		agi_race: 800,
+		freelancing: 500,
+		startup: 600,
+		tech_company: 800,
+		ai_lab: 600,
+		agi_race: 650,
 	},
 };
 
@@ -69,6 +69,10 @@ function simulate(keysPerSec = 6) {
 		devSpeedMultiplier: 1,
 		cashMultiplier: 1,
 		aiLocMultiplier: 1,
+		freelancerLoc: 0,
+		freelancerLocMultiplier: 1,
+		freelancerCostDiscount: 1,
+		freelancerMaxBonus: 0,
 		internCostDiscount: 1,
 		devCostDiscount: 1,
 		teamCostDiscount: 1,
@@ -101,6 +105,7 @@ function simulate(keysPerSec = 6) {
 
 	function getEffMax(u) {
 		let bonus = 0;
+		if (u.costCategory === 'freelancer') bonus = sim.freelancerMaxBonus;
 		if (u.costCategory === 'intern') bonus = sim.internMaxBonus;
 		if (u.costCategory === 'team') bonus = sim.teamMaxBonus;
 		if (u.costCategory === 'manager') bonus = sim.managerMaxBonus;
@@ -112,6 +117,7 @@ function simulate(keysPerSec = 6) {
 	function getCost(u) {
 		const owned = sim.owned[u.id] || 0;
 		let cost = Math.floor(u.baseCost * Math.pow(u.costMultiplier, owned));
+		if (u.costCategory === 'freelancer') cost = Math.floor(cost * sim.freelancerCostDiscount);
 		if (u.costCategory === 'intern') cost = Math.floor(cost * sim.internCostDiscount);
 		if (u.costCategory === 'dev') cost = Math.floor(cost * sim.devCostDiscount);
 		if (u.costCategory === 'team') cost = Math.floor(cost * sim.teamCostDiscount);
@@ -149,6 +155,12 @@ function simulate(keysPerSec = 6) {
 			if (e.type === "storageFlops" && e.op === "add")
 				sim.storageFlops += e.value;
 			if (e.type === "autoLoc" && e.op === "add") sim.devLoc += e.value;
+			if (e.type === "freelancerLoc" && e.op === "add") sim.freelancerLoc += e.value;
+			if (e.type === "freelancerLocMultiplier" && e.op === "multiply")
+				sim.freelancerLocMultiplier *= e.value;
+			if (e.type === "freelancerCostDiscount" && e.op === "multiply")
+				sim.freelancerCostDiscount *= e.value;
+			if (e.type === "freelancerMaxBonus" && e.op === "add") sim.freelancerMaxBonus += e.value;
 			if (e.type === "internLoc" && e.op === "add") sim.internLoc += e.value;
 			if (e.type === "devLoc" && e.op === "add") sim.devLoc += e.value;
 			if (e.type === "teamLoc" && e.op === "add") sim.teamLoc += e.value;
@@ -208,6 +220,7 @@ function simulate(keysPerSec = 6) {
 	function calcAutoLoc() {
 		const managerTeamBonus = 1 + sim.managerCount * 0.5 * sim.managerMultiplier;
 		return (
+			sim.freelancerLoc * sim.freelancerLocMultiplier +
 			sim.internLoc * sim.internLocMultiplier +
 			sim.devLoc * sim.devLocMultiplier * sim.devSpeedMultiplier +
 			sim.teamLoc * sim.teamLocMultiplier * managerTeamBonus +
@@ -216,11 +229,24 @@ function simulate(keysPerSec = 6) {
 		) * sim.locProductionMultiplier;
 	}
 
+	const techGatedModels = {
+		gpt_3: "openai_gpt3",
+		gpt_35: "openai_gpt35",
+		gpt_4: "openai_gpt4",
+		gpt_41: "openai_gpt41",
+		gpt_5: "openai_gpt5",
+		claude_haiku: "anthropic_haiku",
+		claude_sonnet: "anthropic_sonnet",
+		claude_opus: "anthropic_opus",
+	};
+
 	const agiTarget = balance.core.agiLocTarget || 200000000;
 	const maxSec = 3600;
 	let purchaseCount = 0;
 	let lastPurchaseTime = 0;
 	let longestWait = 0;
+	let longestWaitAt = 0;
+	let longestWaitNextBuy = null;
 	let agiTime = null;
 	const tierTimes = { 0: 0 };
 
@@ -329,6 +355,12 @@ function simulate(keysPerSec = 6) {
 						val += (calcAutoLoc() + effLocPerKey() * keysPerSec) * cashPerLoc() * (e.value - 1);
 					if (e.type === "internCostDiscount" || e.type === "devCostDiscount" || e.type === "teamCostDiscount" || e.type === "managerCostDiscount")
 						val += 100; // fixed value — cost reduction is always useful
+					if (e.type === "modelUnlock") {
+						const model = aiModels.find((x) => x.id === e.value);
+						if (model) {
+							val += (model.locPerSec * sim.aiLocMultiplier * cashPerLoc()) / (model.cost + cost);
+						}
+					}
 				}
 				if (cost > 0 && val / cost > bestTechVal) {
 					bestTechVal = val / cost;
@@ -361,11 +393,13 @@ function simulate(keysPerSec = 6) {
 			});
 			const availModels =
 				sim.currentTier >= 4
-					? aiModels.filter(
-							(m) =>
-								!sim.ownedModels[m.id] &&
-								(!m.requires || sim.ownedModels[m.requires]),
-						)
+					? aiModels.filter((m) => {
+							if (sim.ownedModels[m.id]) return false;
+							if (m.requires && !sim.ownedModels[m.requires]) return false;
+							const gateNode = techGatedModels[m.id];
+							if (gateNode && !(sim.ownedTech[gateNode] || 0)) return false;
+							return true;
+						})
 					: [];
 
 			const totalLocS =
@@ -447,12 +481,20 @@ function simulate(keysPerSec = 6) {
 				}
 			}
 			purchaseCount++;
+			if (!boughtThisTick) {
+				const wait = t - lastPurchaseTime;
+				if (wait > longestWait) {
+					longestWait = wait;
+					longestWaitAt = t;
+					longestWaitNextBuy = best.type === "u"
+						? { name: best.item.name, tier: best.item.tier }
+						: { name: best.item.name, tier: "ai_model" };
+				}
+			}
 			boughtThisTick = true;
 		}
 
 		if (boughtThisTick) {
-			const wait = t - lastPurchaseTime;
-			if (wait > longestWait) longestWait = wait;
 			lastPurchaseTime = t;
 		}
 
@@ -472,6 +514,8 @@ function simulate(keysPerSec = 6) {
 		agiTime,
 		purchaseCount,
 		longestWait,
+		longestWaitAt,
+		longestWaitNextBuy,
 		tierTimes,
 		totalCash: sim.totalCash,
 		totalLoc: sim.totalLoc,
@@ -543,6 +587,10 @@ function check() {
 			);
 		else
 			pass(`Longest wait: ${r.longestWait}s (max: ${RULES.maxWaitSeconds}s)`);
+		if (r.longestWaitNextBuy) {
+			const nb = r.longestWaitNextBuy;
+			results.push(`  info: Longest wait: ${r.longestWait}s at t=${r.longestWaitAt}s, next buy: ${nb.name} (tier: ${nb.tier})`);
+		}
 
 		const tiersReached = Object.keys(r.tierTimes).length;
 		if (tiersReached < RULES.minTiers)
