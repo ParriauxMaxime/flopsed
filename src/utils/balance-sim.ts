@@ -186,6 +186,17 @@ export function runBalanceSim(config: Partial<SimConfig> = {}): SimResult {
 		autoTypeEnabled: false,
 	};
 
+	const techGatedModels: Record<string, string> = {
+		gpt_3: "openai_gpt3",
+		gpt_35: "openai_gpt35",
+		gpt_4: "openai_gpt4",
+		gpt_41: "openai_gpt41",
+		gpt_5: "openai_gpt5",
+		claude_haiku: "anthropic_haiku",
+		claude_sonnet: "anthropic_sonnet",
+		claude_opus: "anthropic_opus",
+	};
+
 	const log: SimLogEntry[] = [];
 	const snapshots: SimSnapshot[] = [];
 	const purchases: SimPurchase[] = [];
@@ -460,6 +471,15 @@ export function runBalanceSim(config: Partial<SimConfig> = {}): SimResult {
 						e.type === "managerCostDiscount"
 					)
 						val += 100;
+					if (e.type === "modelUnlock") {
+						const modelId = e.value as string;
+						const model = aiModels.find((x) => x.id === modelId);
+						if (model) {
+							val +=
+								(model.locPerSec * sim.aiLocMultiplier * cashPerLoc()) /
+								(model.cost + cost);
+						}
+					}
 				}
 				if (cost > 0 && val / cost > bestTechVal) {
 					bestTechVal = val / cost;
@@ -489,11 +509,13 @@ export function runBalanceSim(config: Partial<SimConfig> = {}): SimResult {
 			});
 			const availModels =
 				sim.currentTier >= 4
-					? aiModels.filter(
-							(m) =>
-								!sim.ownedModels[m.id] &&
-								(!m.requires || sim.ownedModels[m.requires]),
-						)
+					? aiModels.filter((m) => {
+							if (sim.ownedModels[m.id]) return false;
+							if (m.requires && !sim.ownedModels[m.requires]) return false;
+							const gateNode = techGatedModels[m.id];
+							if (gateNode && !(sim.ownedTech[gateNode] ?? 0)) return false;
+							return true;
+						})
 					: [];
 
 			const totalLocS =

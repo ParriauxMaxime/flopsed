@@ -1,6 +1,21 @@
 {
   "upgrades": [
     {
+      "id": "malt_freelancer",
+      "tier": "freelancing",
+      "name": "Malt Freelancer",
+      "description": "Remote dev — writes 5 LoC/s",
+      "icon": "💻",
+      "baseCost": 200,
+      "costMultiplier": 1.2,
+      "max": 3,
+      "costCategory": "freelancer",
+      "effects": [
+        { "type": "freelancerLoc", "op": "add", "value": 5 }
+      ]
+    },
+
+    {
       "id": "intern",
       "tier": "startup",
       "name": "Intern",
@@ -153,24 +168,6 @@
           "type": "instantCash",
           "op": "add",
           "value": 50000000
-        }
-      ]
-    },
-    {
-      "id": "llm_instance",
-      "tier": "ai_lab",
-      "name": "LLM Instance",
-      "description": "AI writes 1,000 LoC/s",
-      "icon": "🧠",
-      "baseCost": 5000000,
-      "costMultiplier": 1.25,
-      "max": 3,
-      "costCategory": "llm",
-      "effects": [
-        {
-          "type": "llmLoc",
-          "op": "add",
-          "value": 1000
         }
       ]
     },
