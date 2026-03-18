@@ -44,17 +44,20 @@ const initialState: GameState = {
 	autoLocPerSec: 0,
 	locProductionMultiplier: 1,
 	cashMultiplier: 1,
+	freelancerCostDiscount: 1,
 	internCostDiscount: 1,
 	devCostDiscount: 1,
 	teamCostDiscount: 1,
 	managerCostDiscount: 1,
 	llmCostDiscount: 1,
 	agentCostDiscount: 1,
+	freelancerMaxBonus: 0,
 	internMaxBonus: 0,
 	teamMaxBonus: 0,
 	managerMaxBonus: 0,
 	llmMaxBonus: 0,
 	agentMaxBonus: 0,
+	unlockedModels: {},
 
 	currentTierIndex: 0,
 	ownedUpgrades: {},
@@ -67,6 +70,7 @@ const initialState: GameState = {
 function getEffectiveMax(upgrade: Upgrade, state?: GameState): number {
 	if (!state || !upgrade.costCategory) return upgrade.max;
 	let bonus = 0;
+	if (upgrade.costCategory === "freelancer") bonus = state.freelancerMaxBonus;
 	if (upgrade.costCategory === "intern") bonus = state.internMaxBonus;
 	if (upgrade.costCategory === "team") bonus = state.teamMaxBonus;
 	if (upgrade.costCategory === "manager") bonus = state.managerMaxBonus;
@@ -82,6 +86,8 @@ function getUpgradeCost(
 ): number {
 	let cost = Math.floor(upgrade.baseCost * upgrade.costMultiplier ** owned);
 	if (state) {
+		if (upgrade.costCategory === "freelancer")
+			cost = Math.floor(cost * state.freelancerCostDiscount);
 		if (upgrade.costCategory === "intern")
 			cost = Math.floor(cost * state.internCostDiscount);
 		if (upgrade.costCategory === "dev")
@@ -104,6 +110,7 @@ function getTechNodeCost(node: TechNode, owned: number): number {
 
 function recalcDerivedStats(state: GameState): void {
 	let locPerKey = core.startingLocPerKey;
+	let freelancerLoc = 0;
 	let internLoc = 0;
 	let devLoc = 0;
 	let teamLoc = 0;
@@ -116,6 +123,7 @@ function recalcDerivedStats(state: GameState): void {
 	let storageFlops = 0;
 	let locProductionMultiplier = 1;
 	let cashMultiplier = 1;
+	let freelancerLocMultiplier = 1;
 	let internLocMultiplier = 1;
 	let devLocMultiplier = 1;
 	let teamLocMultiplier = 1;
@@ -123,18 +131,21 @@ function recalcDerivedStats(state: GameState): void {
 	let agentLocMultiplier = 1;
 	let managerMultiplier = 1;
 	let devSpeedMultiplier = 1;
+	let freelancerCostDiscount = 1;
 	let internCostDiscount = 1;
 	let devCostDiscount = 1;
 	let teamCostDiscount = 1;
 	let managerCostDiscount = 1;
 	let llmCostDiscount = 1;
 	let agentCostDiscount = 1;
+	let freelancerMaxBonus = 0;
 	let internMaxBonus = 0;
 	let teamMaxBonus = 0;
 	let managerMaxBonus = 0;
 	let llmMaxBonus = 0;
 	let agentMaxBonus = 0;
 	let tierIndex = state.currentTierIndex;
+	const unlockedModels: Record<string, boolean> = {};
 
 	function applyEffect(effect: UpgradeEffect, owned: number) {
 		const val = effect.value as number;
@@ -147,6 +158,9 @@ function recalcDerivedStats(state: GameState): void {
 			})
 			.with({ type: "autoLoc", op: "add" }, () => {
 				devLoc += val * owned;
+			})
+			.with({ type: "freelancerLoc", op: "add" }, () => {
+				freelancerLoc += val * owned;
 			})
 			.with({ type: "internLoc", op: "add" }, () => {
 				internLoc += val * owned;
@@ -181,6 +195,9 @@ function recalcDerivedStats(state: GameState): void {
 			.with({ type: "devSpeed", op: "multiply" }, () => {
 				devSpeedMultiplier *= val ** owned;
 			})
+			.with({ type: "freelancerLocMultiplier", op: "multiply" }, () => {
+				freelancerLocMultiplier *= val ** owned;
+			})
 			.with({ type: "internLocMultiplier", op: "multiply" }, () => {
 				internLocMultiplier *= val ** owned;
 			})
@@ -192,6 +209,9 @@ function recalcDerivedStats(state: GameState): void {
 			})
 			.with({ type: "managerMultiplier", op: "multiply" }, () => {
 				managerMultiplier *= val ** owned;
+			})
+			.with({ type: "freelancerCostDiscount", op: "multiply" }, () => {
+				freelancerCostDiscount *= val ** owned;
 			})
 			.with({ type: "internCostDiscount", op: "multiply" }, () => {
 				internCostDiscount *= val ** owned;
@@ -223,6 +243,9 @@ function recalcDerivedStats(state: GameState): void {
 			.with({ type: "agentCostDiscount", op: "multiply" }, () => {
 				agentCostDiscount *= val ** owned;
 			})
+			.with({ type: "freelancerMaxBonus", op: "add" }, () => {
+				freelancerMaxBonus += val * owned;
+			})
 			.with({ type: "internMaxBonus", op: "add" }, () => {
 				internMaxBonus += val * owned;
 			})
@@ -240,6 +263,10 @@ function recalcDerivedStats(state: GameState): void {
 			})
 			.with({ type: "tierUnlock", op: "set" }, () => {
 				tierIndex = Math.max(tierIndex, val);
+			})
+			.with({ type: "modelUnlock", op: "enable" }, () => {
+				const modelId = effect.value as string;
+				unlockedModels[modelId] = true;
 			})
 			.otherwise(() => {});
 	}
@@ -270,6 +297,7 @@ function recalcDerivedStats(state: GameState): void {
 
 	// Combine auto LoC:
 	const totalAutoLoc =
+		freelancerLoc * freelancerLocMultiplier +
 		internLoc * internLocMultiplier +
 		devLoc * devLocMultiplier * devSpeedMultiplier +
 		teamLoc * teamLocMultiplier * managerTeamBonus +
@@ -284,18 +312,21 @@ function recalcDerivedStats(state: GameState): void {
 	state.flops = baseFlops + hardwareFlops;
 	state.locProductionMultiplier = locProductionMultiplier;
 	state.cashMultiplier = cashMultiplier;
+	state.freelancerCostDiscount = freelancerCostDiscount;
 	state.internCostDiscount = internCostDiscount;
 	state.devCostDiscount = devCostDiscount;
 	state.teamCostDiscount = teamCostDiscount;
 	state.managerCostDiscount = managerCostDiscount;
 	state.llmCostDiscount = llmCostDiscount;
 	state.agentCostDiscount = agentCostDiscount;
+	state.freelancerMaxBonus = freelancerMaxBonus;
 	state.internMaxBonus = internMaxBonus;
 	state.teamMaxBonus = teamMaxBonus;
 	state.managerMaxBonus = managerMaxBonus;
 	state.llmMaxBonus = llmMaxBonus;
 	state.agentMaxBonus = agentMaxBonus;
 	state.currentTierIndex = tierIndex;
+	state.unlockedModels = unlockedModels;
 }
 
 export const useGameStore = create<GameState & GameActions>()(
