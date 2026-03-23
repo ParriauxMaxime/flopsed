@@ -59,6 +59,9 @@ const initialState: GameState = {
 	llmMaxBonus: 0,
 	agentMaxBonus: 0,
 	unlockedModels: {},
+	flopSlider: 0.7,
+	aiLocAccumulator: 0,
+	aiUnlocked: false,
 
 	currentTierIndex: 0,
 	ownedUpgrades: {},
@@ -340,6 +343,7 @@ function recalcDerivedStats(state: GameState): void {
 	state.agentMaxBonus = agentMaxBonus;
 	state.currentTierIndex = tierIndex;
 	state.unlockedModels = unlockedModels;
+	state.aiUnlocked = Object.values(unlockedModels).some(Boolean);
 }
 
 export const useGameStore = create<GameState & GameActions>()(
@@ -586,6 +590,10 @@ export const useGameStore = create<GameState & GameActions>()(
 					totalLoc: locDelta > 0 ? s.totalLoc + locDelta : s.totalLoc,
 				}));
 			},
+
+			setFlopSlider: (value: number) => {
+				set({ flopSlider: Math.min(1, Math.max(0, value)) });
+			},
 		}),
 		{
 			name: "agi-rush-save",
@@ -601,6 +609,7 @@ export const useGameStore = create<GameState & GameActions>()(
 				ownedTechNodes: state.ownedTechNodes,
 				autoTypeEnabled: state.autoTypeEnabled,
 				reachedMilestones: state.reachedMilestones,
+				flopSlider: state.flopSlider,
 			}),
 			onRehydrateStorage: () => (state) => {
 				if (state) recalcDerivedStats(state);
