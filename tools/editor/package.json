@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "concurrently \"rspack serve\" \"tsx server.ts\"",
-		"build": "rspack build",
+		"build": "tsx node_modules/@rspack/cli/bin/rspack.js build",
 		"server": "tsx server.ts"
 	},
 	"dependencies": {
