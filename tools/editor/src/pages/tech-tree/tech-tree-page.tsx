@@ -6,6 +6,7 @@ import {
 	ReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import Dagre from "@dagrejs/dagre";
 import { useCallback, useMemo, useState } from "react";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useTechTreeStore } from "../../store/data-store";
@@ -47,6 +48,22 @@ const toolBtnStyle = css`
 	font-weight: 500;
 	&:hover { background: #3a3a5a; }
 `;
+
+function layoutWithDagre(nodes: TechNode[]): TechNode[] {
+	const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+	g.setGraph({ rankdir: "TB", nodesep: 60, ranksep: 80 });
+	for (const n of nodes) {
+		g.setNode(n.id, { width: 160, height: 60 });
+		for (const req of n.requires ?? []) {
+			g.setEdge(req, n.id);
+		}
+	}
+	Dagre.layout(g);
+	return nodes.map((n) => {
+		const pos = g.node(n.id);
+		return { ...n, x: Math.round(pos.x), y: Math.round(pos.y) };
+	});
+}
 
 function makeDefaultNode(): TechNode {
 	return {
@@ -101,6 +118,10 @@ export function TechTreePage() {
 		updateNodes([...nodes, makeDefaultNode()]);
 	}, [nodes, updateNodes]);
 
+	const handleRelayout = useCallback(() => {
+		updateNodes(layoutWithDagre(nodes));
+	}, [nodes, updateNodes]);
+
 	const handleNodeChange = useCallback(
 		(updated: TechNode) => {
 			const next = nodes.map((n) => (n.id === selectedId ? updated : n));
@@ -135,6 +156,9 @@ export function TechTreePage() {
 					<div css={toolbarStyle}>
 						<button type="button" css={toolBtnStyle} onClick={handleAdd}>
 							+ Add Node
+						</button>
+						<button type="button" css={toolBtnStyle} onClick={handleRelayout}>
+							Re-layout
 						</button>
 					</div>
 					<ReactFlow
