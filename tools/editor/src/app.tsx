@@ -2,6 +2,11 @@ import { css } from "@emotion/react";
 import { match } from "ts-pattern";
 import { Sidebar } from "./components/sidebar";
 import { ToastContainer } from "./components/toast";
+import { AiModelsPage } from "./pages/ai-models/ai-models-page";
+import { BalancePage } from "./pages/balance/balance-page";
+import { EventsPage } from "./pages/events/events-page";
+import { MilestonesPage } from "./pages/milestones/milestones-page";
+import { TiersPage } from "./pages/tiers/tiers-page";
 import { UpgradesPage } from "./pages/upgrades/upgrades-page";
 import { PageEnum, useUiStore } from "./store/ui-store";
 
@@ -28,13 +33,11 @@ function PageContent() {
 	return match(activePage)
 		.with(PageEnum.tech_tree, () => <div css={stubStyle}>Tech Tree coming soon</div>)
 		.with(PageEnum.upgrades, () => <UpgradesPage />)
-		.with(PageEnum.ai_models, () => <div css={stubStyle}>AI Models coming soon</div>)
-		.with(PageEnum.events, () => <div css={stubStyle}>Events coming soon</div>)
-		.with(PageEnum.milestones, () => (
-			<div css={stubStyle}>Milestones coming soon</div>
-		))
-		.with(PageEnum.tiers, () => <div css={stubStyle}>Tiers coming soon</div>)
-		.with(PageEnum.balance, () => <div css={stubStyle}>Balance coming soon</div>)
+		.with(PageEnum.ai_models, () => <AiModelsPage />)
+		.with(PageEnum.events, () => <EventsPage />)
+		.with(PageEnum.milestones, () => <MilestonesPage />)
+		.with(PageEnum.tiers, () => <TiersPage />)
+		.with(PageEnum.balance, () => <BalancePage />)
 		.with(PageEnum.simulation, () => (
 			<div css={stubStyle}>Simulation coming soon</div>
 		))
