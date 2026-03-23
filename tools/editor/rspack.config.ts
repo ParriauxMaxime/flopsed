@@ -6,6 +6,9 @@ import RefreshPlugin from "@rspack/plugin-react-refresh";
 const isDev = process.env.NODE_ENV !== "production";
 
 export default defineConfig({
+	experiments: {
+		css: true,
+	},
 	entry: "./src/main.tsx",
 	output: {
 		path: path.resolve(import.meta.dirname, "dist"),
@@ -42,7 +45,7 @@ export default defineConfig({
 			},
 			{
 				test: /\.css$/,
-				type: "css",
+				type: "css/auto",
 			},
 		],
 	},

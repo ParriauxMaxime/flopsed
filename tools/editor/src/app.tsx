@@ -6,6 +6,7 @@ import { AiModelsPage } from "./pages/ai-models/ai-models-page";
 import { BalancePage } from "./pages/balance/balance-page";
 import { EventsPage } from "./pages/events/events-page";
 import { MilestonesPage } from "./pages/milestones/milestones-page";
+import { TechTreePage } from "./pages/tech-tree/tech-tree-page";
 import { TiersPage } from "./pages/tiers/tiers-page";
 import { UpgradesPage } from "./pages/upgrades/upgrades-page";
 import { PageEnum, useUiStore } from "./store/ui-store";
@@ -31,7 +32,7 @@ function PageContent() {
 	const activePage = useUiStore((s) => s.activePage);
 
 	return match(activePage)
-		.with(PageEnum.tech_tree, () => <div css={stubStyle}>Tech Tree coming soon</div>)
+		.with(PageEnum.tech_tree, () => <TechTreePage />)
 		.with(PageEnum.upgrades, () => <UpgradesPage />)
 		.with(PageEnum.ai_models, () => <AiModelsPage />)
 		.with(PageEnum.events, () => <EventsPage />)
