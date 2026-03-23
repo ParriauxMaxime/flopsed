@@ -6,6 +6,7 @@ import { AiModelsPage } from "./pages/ai-models/ai-models-page";
 import { BalancePage } from "./pages/balance/balance-page";
 import { EventsPage } from "./pages/events/events-page";
 import { MilestonesPage } from "./pages/milestones/milestones-page";
+import { SimulationPage } from "./pages/simulation/simulation-page";
 import { TechTreePage } from "./pages/tech-tree/tech-tree-page";
 import { TiersPage } from "./pages/tiers/tiers-page";
 import { UpgradesPage } from "./pages/upgrades/upgrades-page";
@@ -23,10 +24,6 @@ const mainStyle = css`
 	overflow: auto;
 `;
 
-const stubStyle = css`
-	color: #777;
-	font-size: 16px;
-`;
 
 function PageContent() {
 	const activePage = useUiStore((s) => s.activePage);
@@ -39,9 +36,7 @@ function PageContent() {
 		.with(PageEnum.milestones, () => <MilestonesPage />)
 		.with(PageEnum.tiers, () => <TiersPage />)
 		.with(PageEnum.balance, () => <BalancePage />)
-		.with(PageEnum.simulation, () => (
-			<div css={stubStyle}>Simulation coming soon</div>
-		))
+		.with(PageEnum.simulation, () => <SimulationPage />)
 		.exhaustive();
 }
 
