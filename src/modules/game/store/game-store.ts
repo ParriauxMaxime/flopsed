@@ -2,12 +2,12 @@ import { useEventStore } from "@modules/event";
 import { match } from "ts-pattern";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import aiModelsData from "../../../../specs/data/ai-models.json";
 import balanceData from "../../../../specs/data/balance.json";
 import milestonesData from "../../../../specs/data/milestones.json";
 import techTreeData from "../../../../specs/data/tech-tree.json";
 import tiersData from "../../../../specs/data/tiers.json";
 import upgradesData from "../../../../specs/data/upgrades.json";
+import { aiModels } from "../ai-models";
 import type {
 	GameActions,
 	GameState,
@@ -20,17 +20,12 @@ import type {
 	UpgradeEffect,
 } from "../types";
 
-interface AiModelData {
-	id: string;
-	locPerSec: number;
-	flopsCost: number;
-}
-const aiModels: AiModelData[] = aiModelsData.models as AiModelData[];
-
 export const tiers: Tier[] = tiersData.tiers as Tier[];
 export const allUpgrades: Upgrade[] = upgradesData.upgrades as Upgrade[];
 export const allMilestones: Milestone[] = milestonesData.milestones;
 export const allTechNodes: TechNode[] = techTreeData.nodes as TechNode[];
+
+const AI_BLOCK_SIZE = 10;
 
 const { core } = balanceData;
 
@@ -413,21 +408,21 @@ export const useGameStore = create<GameState & GameActions>()(
 					}
 
 					// Flush AI accumulator into blocks (10 LoC per block)
-					const AI_BLOCK_SIZE = 10;
-					while (aiLocAccumulator >= AI_BLOCK_SIZE) {
-						aiLocAccumulator -= AI_BLOCK_SIZE;
-						const aiLines = Array.from(
-							{ length: AI_BLOCK_SIZE },
-							() => '<span class="cm-comment">// ai</span>',
-						);
-						if (!mutated) {
-							blockQueue = blockQueue.slice();
-							mutated = true;
+					if (s.running)
+						while (aiLocAccumulator >= AI_BLOCK_SIZE) {
+							aiLocAccumulator -= AI_BLOCK_SIZE;
+							const aiLines = Array.from(
+								{ length: AI_BLOCK_SIZE },
+								() => '<span class="cm-comment">// ai</span>',
+							);
+							if (!mutated) {
+								blockQueue = blockQueue.slice();
+								mutated = true;
+							}
+							blockQueue.push({ lines: aiLines, loc: AI_BLOCK_SIZE });
+							loc += AI_BLOCK_SIZE;
+							totalLoc += AI_BLOCK_SIZE;
 						}
-						blockQueue.push({ lines: aiLines, loc: AI_BLOCK_SIZE });
-						loc += AI_BLOCK_SIZE;
-						totalLoc += AI_BLOCK_SIZE;
-					}
 
 					// Execute lines from queue via accumulated FLOPS (1 FLOP = 1 line)
 					// When stopped, FLOPS don't execute — LoC piles up, no cash earned

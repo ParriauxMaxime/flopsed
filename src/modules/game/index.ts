@@ -1,3 +1,5 @@
+export type { AiModelData } from "./ai-models";
+export { aiModels } from "./ai-models";
 export { useGameLoop } from "./hooks/use-game-loop";
 export {
 	allMilestones,
