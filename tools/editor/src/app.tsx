@@ -1,19 +1,13 @@
 import { css } from "@emotion/react";
+import { match } from "ts-pattern";
+import { Sidebar } from "./components/sidebar";
+import { ToastContainer } from "./components/toast";
+import { PageEnum, useUiStore } from "./store/ui-store";
 
 const containerStyle = css`
 	display: flex;
 	height: 100vh;
 	width: 100vw;
-`;
-
-const sidebarStyle = css`
-	width: 220px;
-	background: #16161c;
-	border-right: 1px solid #2a2a35;
-	padding: 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
 `;
 
 const mainStyle = css`
@@ -22,19 +16,38 @@ const mainStyle = css`
 	overflow: auto;
 `;
 
+const stubStyle = css`
+	color: #777;
+	font-size: 16px;
+`;
+
+function PageContent() {
+	const activePage = useUiStore((s) => s.activePage);
+
+	return match(activePage)
+		.with(PageEnum.tech_tree, () => <div css={stubStyle}>Tech Tree coming soon</div>)
+		.with(PageEnum.upgrades, () => <div css={stubStyle}>Upgrades coming soon</div>)
+		.with(PageEnum.ai_models, () => <div css={stubStyle}>AI Models coming soon</div>)
+		.with(PageEnum.events, () => <div css={stubStyle}>Events coming soon</div>)
+		.with(PageEnum.milestones, () => (
+			<div css={stubStyle}>Milestones coming soon</div>
+		))
+		.with(PageEnum.tiers, () => <div css={stubStyle}>Tiers coming soon</div>)
+		.with(PageEnum.balance, () => <div css={stubStyle}>Balance coming soon</div>)
+		.with(PageEnum.simulation, () => (
+			<div css={stubStyle}>Simulation coming soon</div>
+		))
+		.exhaustive();
+}
+
 export function App() {
 	return (
 		<div css={containerStyle}>
-			<nav css={sidebarStyle}>
-				<h2 css={css`font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 8px;`}>
-					Editor
-				</h2>
-				<span css={css`color: #666; font-size: 13px;`}>No pages yet</span>
-			</nav>
+			<Sidebar />
 			<main css={mainStyle}>
-				<h1 css={css`font-size: 20px; color: #ccc;`}>AGI Rush Editor</h1>
-				<p css={css`margin-top: 12px; color: #777;`}>Select a page from the sidebar to begin editing.</p>
+				<PageContent />
 			</main>
+			<ToastContainer />
 		</div>
 	);
 }
