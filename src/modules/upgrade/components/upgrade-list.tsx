@@ -97,7 +97,7 @@ function UpgradeCard({ upgrade }: { upgrade: Upgrade }) {
 			<div css={descStyle}>{upgrade.description}</div>
 			<div css={costStyle}>{maxed ? "MAXED" : `$${formatNumber(cost)}`}</div>
 			<div css={ownedStyle}>
-				{upgrade.max === 1 ? (owned > 0 ? "✓" : "") : `${owned}/${upgrade.max}`}
+				{effectiveMax === 1 ? (owned > 0 ? "✓" : "") : `${owned}/${effectiveMax}`}
 			</div>
 		</button>
 	);
