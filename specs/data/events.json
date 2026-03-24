@@ -43,12 +43,12 @@
     {
       "id": "stackoverflow_down",
       "name": "Stack Overflow is down",
-      "description": "Lose all Stack Overflow bonuses for 15s. How do you even code?",
+      "description": "Half typing speed for 15s. How do you even code?",
       "icon": "📚",
       "minTier": "freelancing",
       "duration": 15,
       "effects": [
-        { "type": "disableUpgrade", "upgradeId": "stackoverflow_premium" }
+        { "type": "locPerKey", "op": "multiply", "value": 0.5 }
       ],
       "weight": 8
     },
