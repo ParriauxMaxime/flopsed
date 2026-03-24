@@ -120,6 +120,8 @@ export interface GameState {
 	flopSlider: number;
 	/** Accumulator for fractional AI-generated LoC between ticks (not persisted) */
 	aiLocAccumulator: number;
+	/** Accumulator for fractional auto-generated LoC between ticks (not persisted) */
+	autoLocAccumulator: number;
 	/** Whether any AI model is unlocked (derived from unlockedModels) */
 	aiUnlocked: boolean;
 

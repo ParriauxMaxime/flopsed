@@ -64,6 +64,7 @@ const initialState: GameState = {
 	unlockedModels: {},
 	flopSlider: 0.7,
 	aiLocAccumulator: 0,
+	autoLocAccumulator: 0,
 	aiUnlocked: false,
 
 	currentTierIndex: 0,
@@ -378,14 +379,17 @@ export const useGameStore = create<GameState & GameActions>()(
 					let mutated = false;
 
 					// Auto-generate LoC and enqueue as blocks so FLOPS can execute them
+					let autoLocAccumulator = s.autoLocAccumulator;
 					if (s.autoLocPerSec > 0) {
 						const autoGained = s.autoLocPerSec * dt;
 						loc += autoGained;
 						totalLoc += autoGained;
+						autoLocAccumulator += autoGained;
 
 						// Flush whole lines into the block queue
-						const wholeLines = Math.floor(autoGained);
+						const wholeLines = Math.floor(autoLocAccumulator);
 						if (wholeLines > 0) {
+							autoLocAccumulator -= wholeLines;
 							if (!mutated) {
 								blockQueue = blockQueue.slice();
 								mutated = true;
@@ -493,6 +497,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						blockQueue,
 						executionProgress: progress,
 						aiLocAccumulator,
+						autoLocAccumulator,
 					};
 
 					// Check milestones
