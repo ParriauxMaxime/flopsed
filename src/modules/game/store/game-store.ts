@@ -276,6 +276,9 @@ function recalcDerivedStats(state: GameState): void {
 				const modelId = effect.value as string;
 				unlockedModels[modelId] = true;
 			})
+			.with({ type: "singularity", op: "enable" }, () => {
+				// Win condition — handled elsewhere
+			})
 			.otherwise(() => {});
 	}
 
