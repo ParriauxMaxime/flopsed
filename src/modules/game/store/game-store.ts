@@ -442,11 +442,10 @@ export const useGameStore = create<GameState & GameActions>()(
 							totalLoc += AI_BLOCK_SIZE;
 						}
 
-					// Execute lines from queue via accumulated FLOPS (1 FLOP = 1 line)
-					// When stopped, FLOPS don't execute — LoC piles up, no cash earned
-					let progress = s.running
-						? s.executionProgress + effectiveFlops * dt
-						: s.executionProgress;
+					// Execute lines from queue via FLOPS (1 FLOP = 1 line/s)
+					// Don't accumulate progress across ticks — cap to this tick's budget
+					const flopsBudget = effectiveFlops * dt;
+					let progress = s.running ? flopsBudget : 0;
 
 					while (
 						s.running &&
@@ -495,7 +494,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						totalCash,
 						totalExecutedLoc,
 						blockQueue,
-						executionProgress: progress,
+						executionProgress: Math.min(progress, 1),
 						aiLocAccumulator,
 						autoLocAccumulator,
 					};
