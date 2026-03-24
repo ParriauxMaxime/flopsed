@@ -1,5 +1,8 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "@rspack/cli";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import { HtmlRspackPlugin, type RspackPluginFunction } from "@rspack/core";
 import RefreshPlugin from "@rspack/plugin-react-refresh";
 
@@ -11,14 +14,14 @@ export default defineConfig({
 	},
 	entry: "./src/main.tsx",
 	output: {
-		path: path.resolve(import.meta.dirname, "dist"),
+		path: path.resolve(__dirname, "dist"),
 		publicPath: "/",
 		clean: true,
 	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".json"],
 		alias: {
-			"@shared": path.resolve(import.meta.dirname, "../../specs/lib"),
+			"@shared": path.resolve(__dirname, "../../specs/lib"),
 		},
 	},
 	module: {
