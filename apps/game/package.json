@@ -1,0 +1,28 @@
+{
+	"name": "@agi-rush/game",
+	"private": true,
+	"version": "0.0.0",
+	"type": "commonjs",
+	"scripts": {
+		"dev": "rspack serve",
+		"build": "rspack build"
+	},
+	"dependencies": {
+		"@agi-rush/domain": "*",
+		"@agi-rush/engine": "*",
+		"@agi-rush/design-system": "*",
+		"@dagrejs/dagre": "^2.0.4",
+		"@emotion/react": "^11.14.0",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"ts-pattern": "^5.9.0",
+		"zustand": "^5.0.11"
+	},
+	"devDependencies": {
+		"@rspack/cli": "^1.7.8",
+		"@rspack/core": "^1.7.8",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"typescript": "^5.9.3"
+	}
+}

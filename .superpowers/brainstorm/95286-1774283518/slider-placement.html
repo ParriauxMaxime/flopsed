@@ -1,0 +1,180 @@
+<h2>Where should the FLOPS slider live?</h2>
+<p class="subtitle">The slider appears when the first AI model is purchased (Tier 4). It splits FLOPS between execution (LoC &rarr; Cash) and AI generation (writes new LoC).</p>
+
+<div class="cards">
+  <!-- Option A: Below Resource Bar -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0d1117;border-radius:8px;overflow:hidden;font-family:monospace;font-size:11px;color:#c5c8c6;">
+        <!-- Resource Bar -->
+        <div style="display:flex;gap:8px;padding:12px;background:#161b22;border-bottom:1px solid #1e2630;">
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:18px;font-weight:bold;color:#58a6ff;">12.4K</div>
+            <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">LoC</div>
+          </div>
+          <div style="width:1px;background:#1e2630;"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:18px;font-weight:bold;color:#d19a66;">$8.2K</div>
+            <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">Cash</div>
+          </div>
+          <div style="width:1px;background:#1e2630;"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:18px;font-weight:bold;color:#c678dd;">50K</div>
+            <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">FLOPS</div>
+          </div>
+        </div>
+        <!-- SLIDER HERE -->
+        <div style="padding:10px 12px;background:#131820;border-bottom:1px solid #1e2630;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:9px;color:#3fb950;">Exec 70%</span>
+            <span style="font-size:9px;color:#6272a4;">FLOPS Split</span>
+            <span style="font-size:9px;color:#c678dd;">AI 30%</span>
+          </div>
+          <div style="position:relative;height:6px;background:#1e2630;border-radius:3px;">
+            <div style="position:absolute;left:0;top:0;height:100%;width:70%;background:linear-gradient(90deg,#3fb950,#c678dd);border-radius:3px;"></div>
+            <div style="position:absolute;left:68%;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;border:2px solid #c678dd;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:8px;color:#484e58;">35K loc/s</span>
+            <span style="font-size:8px;color:#484e58;">15K loc/s gen</span>
+          </div>
+        </div>
+        <!-- Tier Progress placeholder -->
+        <div style="padding:8px 12px;border-bottom:1px solid #1e2630;">
+          <div style="font-size:9px;color:#6272a4;">TIER 4 &mdash; AI LAB</div>
+          <div style="height:3px;background:#1e2630;border-radius:2px;margin-top:4px;">
+            <div style="width:40%;height:100%;background:#58a6ff;border-radius:2px;"></div>
+          </div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;background:#161b22;border-bottom:1px solid #1e2630;">
+          <div style="flex:1;padding:6px;text-align:center;font-size:9px;color:#58a6ff;border-bottom:2px solid #58a6ff;">UPGRADES</div>
+          <div style="flex:1;padding:6px;text-align:center;font-size:9px;color:#6272a4;">MILESTONES</div>
+        </div>
+        <div style="padding:12px;color:#484e58;font-size:9px;height:40px;">Upgrade list...</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Below Resource Bar</h3>
+      <p>Slider sits between resources and tier progress. Always visible, close to the FLOPS number it controls. Compact horizontal bar.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Inside Resource Bar (replaces FLOPS cell) -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0d1117;border-radius:8px;overflow:hidden;font-family:monospace;font-size:11px;color:#c5c8c6;">
+        <!-- Resource Bar with integrated slider -->
+        <div style="padding:12px;background:#161b22;border-bottom:1px solid #1e2630;">
+          <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <div style="flex:1;text-align:center;">
+              <div style="font-size:18px;font-weight:bold;color:#58a6ff;">12.4K</div>
+              <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">LoC</div>
+            </div>
+            <div style="width:1px;background:#1e2630;"></div>
+            <div style="flex:1;text-align:center;">
+              <div style="font-size:18px;font-weight:bold;color:#d19a66;">$8.2K</div>
+              <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">Cash</div>
+            </div>
+            <div style="width:1px;background:#1e2630;"></div>
+            <div style="flex:1;text-align:center;">
+              <div style="font-size:18px;font-weight:bold;color:#c678dd;">50K</div>
+              <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">FLOPS</div>
+            </div>
+          </div>
+          <!-- Slider integrated -->
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:8px;color:#3fb950;width:30px;">Exec</span>
+            <div style="flex:1;position:relative;height:4px;background:#1e2630;border-radius:2px;">
+              <div style="position:absolute;left:0;top:0;height:100%;width:70%;background:linear-gradient(90deg,#3fb950,#c678dd);border-radius:2px;"></div>
+              <div style="position:absolute;left:68%;top:-5px;width:12px;height:12px;background:#fff;border-radius:50%;border:2px solid #c678dd;"></div>
+            </div>
+            <span style="font-size:8px;color:#c678dd;width:20px;text-align:right;">AI</span>
+          </div>
+        </div>
+        <!-- Tier Progress -->
+        <div style="padding:8px 12px;border-bottom:1px solid #1e2630;">
+          <div style="font-size:9px;color:#6272a4;">TIER 4 &mdash; AI LAB</div>
+          <div style="height:3px;background:#1e2630;border-radius:2px;margin-top:4px;">
+            <div style="width:40%;height:100%;background:#58a6ff;border-radius:2px;"></div>
+          </div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;background:#161b22;border-bottom:1px solid #1e2630;">
+          <div style="flex:1;padding:6px;text-align:center;font-size:9px;color:#58a6ff;border-bottom:2px solid #58a6ff;">UPGRADES</div>
+          <div style="flex:1;padding:6px;text-align:center;font-size:9px;color:#6272a4;">MILESTONES</div>
+        </div>
+        <div style="padding:12px;color:#484e58;font-size:9px;height:60px;">Upgrade list...</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Integrated in Resource Bar</h3>
+      <p>Slider lives inside the resource bar below the three stats. Most compact, but makes the resource bar taller and denser.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Collapsible panel below tier progress -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0d1117;border-radius:8px;overflow:hidden;font-family:monospace;font-size:11px;color:#c5c8c6;">
+        <!-- Resource Bar -->
+        <div style="display:flex;gap:8px;padding:12px;background:#161b22;border-bottom:1px solid #1e2630;">
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:18px;font-weight:bold;color:#58a6ff;">12.4K</div>
+            <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">LoC</div>
+          </div>
+          <div style="width:1px;background:#1e2630;"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:18px;font-weight:bold;color:#d19a66;">$8.2K</div>
+            <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">Cash</div>
+          </div>
+          <div style="width:1px;background:#1e2630;"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:18px;font-weight:bold;color:#c678dd;">50K</div>
+            <div style="font-size:9px;color:#6272a4;text-transform:uppercase;">FLOPS</div>
+          </div>
+        </div>
+        <!-- Tier Progress -->
+        <div style="padding:8px 12px;border-bottom:1px solid #1e2630;">
+          <div style="font-size:9px;color:#6272a4;">TIER 4 &mdash; AI LAB</div>
+          <div style="height:3px;background:#1e2630;border-radius:2px;margin-top:4px;">
+            <div style="width:40%;height:100%;background:#58a6ff;border-radius:2px;"></div>
+          </div>
+        </div>
+        <!-- Expanded FLOPS Panel -->
+        <div style="padding:10px 12px;background:#111720;border-bottom:1px solid #1e2630;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:10px;font-weight:bold;color:#c678dd;">FLOPS ALLOCATION</span>
+            <span style="font-size:8px;color:#484e58;">&#9660;</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div style="font-size:14px;font-weight:bold;color:#3fb950;">35K</div>
+              <div style="font-size:8px;color:#6272a4;">EXEC (70%)</div>
+              <div style="font-size:8px;color:#484e58;">35K loc/s</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:14px;font-weight:bold;color:#c678dd;">15K</div>
+              <div style="font-size:8px;color:#6272a4;">AI GEN (30%)</div>
+              <div style="font-size:8px;color:#484e58;">9K loc/s</div>
+            </div>
+          </div>
+          <div style="position:relative;height:6px;background:#1e2630;border-radius:3px;">
+            <div style="position:absolute;left:0;top:0;height:100%;width:70%;background:linear-gradient(90deg,#3fb950,#c678dd);border-radius:3px;"></div>
+            <div style="position:absolute;left:68%;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;border:2px solid #c678dd;"></div>
+          </div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;background:#161b22;border-bottom:1px solid #1e2630;">
+          <div style="flex:1;padding:6px;text-align:center;font-size:9px;color:#58a6ff;border-bottom:2px solid #58a6ff;">UPGRADES</div>
+          <div style="flex:1;padding:6px;text-align:center;font-size:9px;color:#6272a4;">MILESTONES</div>
+        </div>
+        <div style="padding:12px;color:#484e58;font-size:9px;height:20px;">Upgrade list...</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Dedicated Panel (below tier)</h3>
+      <p>Full panel with breakdown stats: exec FLOPS, AI gen FLOPS, throughput rates. More info-dense, shows the player exactly what each side produces. Can be collapsed.</p>
+    </div>
+  </div>
+</div>

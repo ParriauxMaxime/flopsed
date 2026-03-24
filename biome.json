@@ -25,7 +25,7 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!specs", "!dist", "!.claude"]
+		"includes": ["**", "!**/dist", "!**/node_modules", "!.claude", "!specs"]
 	},
 	"formatter": {
 		"enabled": true,

@@ -1,0 +1,17 @@
+{
+	"name": "@agi-rush/design-system",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"main": "index.ts",
+	"types": "index.ts",
+	"dependencies": {
+		"@agi-rush/domain": "*"
+	},
+	"peerDependencies": {
+		"@emotion/react": ">=11",
+		"@xyflow/react": ">=12",
+		"react": ">=19",
+		"react-dom": ">=19"
+	}
+}

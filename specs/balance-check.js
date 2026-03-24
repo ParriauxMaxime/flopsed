@@ -10,11 +10,13 @@
  *   1 = balance broken (with details on what to fix)
  */
 
-const tiers = require("./data/tiers.json").tiers;
-const upgrades = require("./data/upgrades.json").upgrades;
-const techNodes = require("./data/tech-tree.json").nodes;
-const aiModels = require("./data/ai-models.json").models;
-const balance = require("./data/balance.json");
+const path = require("path");
+const domainDir = path.resolve(__dirname, "../libs/domain/data");
+const tiers = require(path.join(domainDir, "tiers.json")).tiers;
+const upgrades = require(path.join(domainDir, "upgrades.json")).upgrades;
+const techNodes = require(path.join(domainDir, "tech-tree.json")).nodes;
+const aiModels = require(path.join(domainDir, "ai-models.json")).models;
+const balance = require(path.join(domainDir, "balance.json"));
 
 const VERBOSE = process.argv.includes("--verbose");
 
