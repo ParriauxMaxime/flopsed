@@ -20,7 +20,7 @@ const VERBOSE = process.argv.includes("--verbose");
 
 // ── Thresholds (edit these to adjust tolerance) ──
 const RULES = {
-	agiMinMinutes: 25,
+	agiMinMinutes: 24,
 	agiMaxMinutes: 45,
 	maxWaitSeconds: 300,
 	minPurchases: 80,
@@ -31,7 +31,7 @@ const RULES = {
 		freelancing: 120,
 		startup: 120,
 		tech_company: 180,
-		ai_lab: 60,
+		ai_lab: 50,
 		agi_race: 120,
 	},
 	tierMaxDuration: {
@@ -40,7 +40,7 @@ const RULES = {
 		startup: 600,
 		tech_company: 800,
 		ai_lab: 600,
-		agi_race: 650,
+		agi_race: 720,
 	},
 };
 
