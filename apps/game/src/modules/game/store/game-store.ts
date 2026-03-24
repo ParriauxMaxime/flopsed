@@ -374,7 +374,9 @@ export const useGameStore = create<GameState & GameActions>()(
 						totalLoc += aiLines;
 					}
 
-					let remaining = s.running ? Math.floor(effectiveFlops * dt) : 0;
+					let execAccum = s.running ? s.executionProgress + effectiveFlops * dt : 0;
+					let remaining = Math.floor(execAccum);
+					execAccum -= remaining;
 
 					if (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
 						if (!mutated) { blockQueue = blockQueue.slice(); mutated = true; }
@@ -410,7 +412,7 @@ export const useGameStore = create<GameState & GameActions>()(
 
 					const next: Partial<GameState> = {
 						loc, totalLoc, cash, totalCash, totalExecutedLoc,
-						blockQueue, executionProgress: 0,
+						blockQueue, executionProgress: Math.min(execAccum, 1),
 						aiLocAccumulator, autoLocAccumulator,
 					};
 
