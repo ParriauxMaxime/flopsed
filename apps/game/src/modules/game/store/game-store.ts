@@ -80,6 +80,7 @@ export interface GameState {
 	ownedTechNodes: Record<string, number>;
 	autoTypeEnabled: boolean;
 	running: boolean;
+	singularity: boolean;
 	reachedMilestones: string[];
 }
 
@@ -146,6 +147,7 @@ const initialState: GameState = {
 	ownedTechNodes: { computer: 1 },
 	autoTypeEnabled: false,
 	running: true,
+	singularity: false,
 	reachedMilestones: [],
 };
 
@@ -205,6 +207,7 @@ function recalcDerivedStats(state: GameState): void {
 	let agentMaxBonus = 0;
 	let tierIndex = state.currentTierIndex;
 	const unlockedModels: Record<string, boolean> = {};
+	let singularity = false;
 
 	function applyEffect(effect: UpgradeEffect, owned: number) {
 		const val = effect.value as number;
@@ -248,7 +251,7 @@ function recalcDerivedStats(state: GameState): void {
 			.with({ type: "agentMaxBonus", op: "add" }, () => { agentMaxBonus += val * owned; })
 			.with({ type: "tierUnlock", op: "set" }, () => { tierIndex = Math.max(tierIndex, val); })
 			.with({ type: "modelUnlock", op: "enable" }, () => { unlockedModels[effect.value as string] = true; })
-			.with({ type: "singularity", op: "enable" }, () => { /* Win condition */ })
+			.with({ type: "singularity", op: "enable" }, () => { singularity = true; })
 			.otherwise(() => {});
 	}
 
@@ -306,6 +309,10 @@ function recalcDerivedStats(state: GameState): void {
 	state.currentTierIndex = tierIndex;
 	state.unlockedModels = unlockedModels;
 	state.aiUnlocked = Object.values(unlockedModels).some(Boolean);
+	state.singularity = singularity;
+	if (singularity) {
+		state.running = false;
+	}
 }
 
 export const useGameStore = create<GameState & GameActions>()(
