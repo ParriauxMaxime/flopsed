@@ -386,7 +386,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						totalLoc += autoGained;
 						autoLocAccumulator += autoGained;
 
-						// Flush whole lines into the block queue
+						// Flush whole lines — use empty lines array, only loc matters for execution
 						const wholeLines = Math.floor(autoLocAccumulator);
 						if (wholeLines > 0) {
 							autoLocAccumulator -= wholeLines;
@@ -394,11 +394,7 @@ export const useGameStore = create<GameState & GameActions>()(
 								blockQueue = blockQueue.slice();
 								mutated = true;
 							}
-							const autoLines = Array.from(
-								{ length: wholeLines },
-								() => '<span class="cm-keyword">auto</span>',
-							);
-							blockQueue.push({ lines: autoLines, loc: wholeLines });
+							blockQueue.push({ lines: [], loc: wholeLines });
 						}
 					}
 
@@ -425,63 +421,69 @@ export const useGameStore = create<GameState & GameActions>()(
 						}
 					}
 
-					// Flush AI accumulator into blocks (10 LoC per block)
-					if (s.running)
-						while (aiLocAccumulator >= AI_BLOCK_SIZE) {
-							aiLocAccumulator -= AI_BLOCK_SIZE;
-							const aiLines = Array.from(
-								{ length: AI_BLOCK_SIZE },
-								() => '<span class="cm-comment">// ai</span>',
-							);
-							if (!mutated) {
-								blockQueue = blockQueue.slice();
-								mutated = true;
-							}
-							blockQueue.push({ lines: aiLines, loc: AI_BLOCK_SIZE });
-							loc += AI_BLOCK_SIZE;
-							totalLoc += AI_BLOCK_SIZE;
+					// Flush AI accumulator into blocks
+					if (s.running && aiLocAccumulator >= AI_BLOCK_SIZE) {
+						const aiLines = Math.floor(aiLocAccumulator / AI_BLOCK_SIZE) * AI_BLOCK_SIZE;
+						aiLocAccumulator -= aiLines;
+						if (!mutated) {
+							blockQueue = blockQueue.slice();
+							mutated = true;
 						}
+						blockQueue.push({ lines: [], loc: aiLines });
+						loc += aiLines;
+						totalLoc += aiLines;
+					}
 
 					// Execute lines from queue via FLOPS (1 FLOP = 1 line/s)
 					// Don't accumulate progress across ticks — cap to this tick's budget
-					const flopsBudget = effectiveFlops * dt;
-					let progress = s.running ? flopsBudget : 0;
+					let remaining = s.running ? Math.floor(effectiveFlops * dt) : 0;
 
-					while (
-						s.running &&
-						blockQueue.length > 0 &&
-						progress >= 1 &&
-						loc >= 1
-					) {
-						const block = blockQueue[0];
-						if (block.lines.length > 0) {
-							progress -= 1;
-							const earned = tier.cashPerLoc * s.cashMultiplier;
-							cash += earned;
-							totalCash += earned;
-							loc -= 1;
-							totalExecutedLoc += 1;
+					if (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
+						if (!mutated) {
+							blockQueue = blockQueue.slice();
+							mutated = true;
+						}
+						const earnRate = tier.cashPerLoc * s.cashMultiplier;
 
-							if (!mutated) {
-								blockQueue = blockQueue.slice();
-								mutated = true;
-							}
-							const updatedBlock = {
-								...block,
-								lines: block.lines.slice(1),
-								loc: block.loc - 1,
-							};
-							if (updatedBlock.lines.length === 0) {
+						while (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
+							const block = blockQueue[0];
+							if (block.loc <= 0 && block.lines.length <= 0) {
 								blockQueue.shift();
+								continue;
+							}
+							// Lines-based blocks (typed code) — consume lines one at a time
+							if (block.lines.length > 0) {
+								const consume = Math.min(remaining, block.lines.length, Math.floor(loc));
+								if (consume <= 0) break;
+								cash += earnRate * consume;
+								totalCash += earnRate * consume;
+								loc -= consume;
+								totalExecutedLoc += consume;
+								remaining -= consume;
+								if (consume >= block.lines.length) {
+									blockQueue.shift();
+								} else {
+									blockQueue[0] = {
+										...block,
+										lines: block.lines.slice(consume),
+										loc: block.loc - consume,
+									};
+								}
 							} else {
-								blockQueue[0] = updatedBlock;
+								// Numeric-only blocks (auto/AI code) — bulk consume
+								const consume = Math.min(remaining, block.loc, Math.floor(loc));
+								if (consume <= 0) break;
+								cash += earnRate * consume;
+								totalCash += earnRate * consume;
+								loc -= consume;
+								totalExecutedLoc += consume;
+								remaining -= consume;
+								if (consume >= block.loc) {
+									blockQueue.shift();
+								} else {
+									blockQueue[0] = { ...block, loc: block.loc - consume };
+								}
 							}
-						} else {
-							if (!mutated) {
-								blockQueue = blockQueue.slice();
-								mutated = true;
-							}
-							blockQueue.shift();
 						}
 					}
 
@@ -494,7 +496,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						totalCash,
 						totalExecutedLoc,
 						blockQueue,
-						executionProgress: Math.min(progress, 1),
+						executionProgress: 0,
 						aiLocAccumulator,
 						autoLocAccumulator,
 					};
