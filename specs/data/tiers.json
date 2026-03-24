@@ -38,7 +38,7 @@
       "cashPerLoc": 5.00,
       "locRequired": 40000,
       "cashRequired": 60000,
-      "cost": 100000
+      "cost": 200000
     },
     {
       "id": "ai_lab",
@@ -48,7 +48,7 @@
       "cashPerLoc": 8.00,
       "locRequired": 500000,
       "cashRequired": 5000000,
-      "cost": 10000000
+      "cost": 20000000
     },
     {
       "id": "agi_race",

@@ -164,7 +164,7 @@
 			"name": "GPU Cluster",
 			"description": "+10,000 FLOPS",
 			"icon": "🎮",
-			"baseCost": 200000,
+			"baseCost": 400000,
 			"costMultiplier": 1.7,
 			"max": 5,
 			"effects": [
@@ -181,7 +181,7 @@
 			"name": "Architect",
 			"description": "LoC execution yields x2 cash",
 			"icon": "📐",
-			"baseCost": 100000,
+			"baseCost": 200000,
 			"costMultiplier": 2,
 			"max": 3,
 			"effects": [
@@ -198,7 +198,7 @@
 			"name": "Data Center",
 			"description": "+100,000 FLOPS",
 			"icon": "🏭",
-			"baseCost": 500000,
+			"baseCost": 800000,
 			"costMultiplier": 1.8,
 			"max": 3,
 			"effects": [
@@ -215,7 +215,7 @@
 			"name": "Series A Funding",
 			"description": "Immediate $2M cash injection",
 			"icon": "💰",
-			"baseCost": 1000000,
+			"baseCost": 2000000,
 			"costMultiplier": 1,
 			"max": 1,
 			"effects": [
@@ -232,7 +232,7 @@
 			"name": "Tech Lead",
 			"description": "Auto-writes 500 LoC/s",
 			"icon": "🧑‍🏫",
-			"baseCost": 30000000,
+			"baseCost": 50000000,
 			"costMultiplier": 1.6,
 			"max": 5,
 			"effects": [
@@ -249,7 +249,7 @@
 			"name": "Series B Funding",
 			"description": "Immediate $50M cash injection",
 			"icon": "💰",
-			"baseCost": 50000000,
+			"baseCost": 100000000,
 			"costMultiplier": 1,
 			"max": 1,
 			"effects": [

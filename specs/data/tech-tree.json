@@ -515,7 +515,7 @@
 				"tier_startup"
 			],
 			"max": 1,
-			"baseCost": 100000,
+			"baseCost": 200000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -745,7 +745,7 @@
 				"tier_tech_company"
 			],
 			"max": 1,
-			"baseCost": 10000000,
+			"baseCost": 20000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
