@@ -272,7 +272,7 @@
 			"description": "+20% intern LoC/s per level",
 			"icon": "📖",
 			"requires": [
-				"node_24"
+				"interns"
 			],
 			"max": 5,
 			"baseCost": 300,
@@ -294,7 +294,7 @@
 			"description": "-15% intern hiring cost per level",
 			"icon": "🪤",
 			"requires": [
-				"node_24"
+				"interns"
 			],
 			"max": 5,
 			"baseCost": 250,
@@ -316,7 +316,7 @@
 			"description": "+10% cash per LoC per level",
 			"icon": "✅",
 			"requires": [
-				"node_24"
+				"interns"
 			],
 			"max": 5,
 			"baseCost": 400,
@@ -1038,7 +1038,7 @@
 			"description": "+10 max interns per level",
 			"icon": "📋",
 			"requires": [
-				"node_24"
+				"interns"
 			],
 			"max": 5,
 			"baseCost": 500,
