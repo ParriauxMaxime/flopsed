@@ -15,7 +15,7 @@
       "index": 1,
       "name": "Freelancing",
       "tagline": "You're selling your code. Clients appear.",
-      "cashPerLoc": 0.25,
+      "cashPerLoc": 0.40,
       "locRequired": 800,
       "cashRequired": 500,
       "cost": 80

@@ -318,7 +318,7 @@
 			"requires": [
 				"interns"
 			],
-			"max": 5,
+			"max": 3,
 			"baseCost": 400,
 			"costMultiplier": 1.5,
 			"currency": "cash",
@@ -450,7 +450,7 @@
 			"requires": [
 				"tier_startup"
 			],
-			"max": 5,
+			"max": 3,
 			"baseCost": 4000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
@@ -596,7 +596,7 @@
 			"requires": [
 				"teams_gate"
 			],
-			"max": 5,
+			"max": 3,
 			"baseCost": 40000,
 			"costMultiplier": 1.6,
 			"currency": "cash",
@@ -678,7 +678,7 @@
 			"requires": [
 				"management_gate"
 			],
-			"max": 5,
+			"max": 3,
 			"baseCost": 60000,
 			"costMultiplier": 1.7,
 			"currency": "cash",

@@ -50,7 +50,7 @@
       {
         "id": "freelancing",
         "unlockAt": 100,
-        "cashPerLoc": 0.25,
+        "cashPerLoc": 0.40,
         "targetUnlockMinute": 5,
         "expectedPurchases": 12,
         "_note": "5x cash bump. First real acceleration. Mechanical keyboard is the breakthrough."
