@@ -296,85 +296,133 @@ export function runBalanceSim(
 		return sim.locPerKey * sim.locPerKeyMultiplier * eventLocPerKeyMultiplier;
 	}
 
-	function applyEffects(
-		effects: Array<{
-			type: string;
-			op: string;
-			value: number | boolean | string;
-		}>,
+	/**
+	 * Recalculate ALL derived stats from scratch — matches the game's
+	 * recalcDerivedStats(). Loops over all owned upgrades and tech nodes,
+	 * applying effects with val ** owned for multiply ops.
+	 */
+	function recalcSimStats(): void {
+		// Reset to base values
+		sim.locPerKey = core.startingLocPerKey;
+		sim.locPerKeyMultiplier = 1;
+		sim.flops = core.startingFlops;
+		sim.cpuFlops = 0;
+		sim.ramFlops = 0;
+		sim.storageFlops = 0;
+		sim.freelancerLoc = 0;
+		sim.freelancerLocMultiplier = 1;
+		sim.freelancerCostDiscount = 1;
+		sim.freelancerMaxBonus = 0;
+		sim.internLoc = 0;
+		sim.internLocMultiplier = 1;
+		sim.internCostDiscount = 1;
+		sim.internMaxBonus = 0;
+		sim.devLoc = 0;
+		sim.devLocMultiplier = 1;
+		sim.devCostDiscount = 1;
+		sim.devSpeedMultiplier = 1;
+		sim.teamLoc = 0;
+		sim.teamLocMultiplier = 1;
+		sim.teamCostDiscount = 1;
+		sim.teamMaxBonus = 0;
+		sim.managerCount = 0;
+		sim.managerMultiplier = 1;
+		sim.managerCostDiscount = 1;
+		sim.managerMaxBonus = 0;
+		sim.llmLoc = 0;
+		sim.llmLocMultiplier = 1;
+		sim.llmCostDiscount = 1;
+		sim.llmMaxBonus = 0;
+		sim.agentLoc = 0;
+		sim.agentLocMultiplier = 1;
+		sim.agentCostDiscount = 1;
+		sim.agentMaxBonus = 0;
+		sim.locProductionMultiplier = 1;
+		sim.cashMultiplier = 1;
+		sim.aiLocMultiplier = 1;
+		sim.autoTypeEnabled = false;
+		let tierIndex = sim.currentTier;
+
+		function applyEffect(e: { type: string; op: string; value: number | boolean | string }, owned: number): void {
+			const val = e.value as number;
+			// Add effects scale linearly with owned count
+			if (e.op === "add") {
+				if (e.type === "locPerKey") sim.locPerKey += val * owned;
+				if (e.type === "flops") sim.flops += val * owned;
+				if (e.type === "cpuFlops") sim.cpuFlops += val * owned;
+				if (e.type === "ramFlops") sim.ramFlops += val * owned;
+				if (e.type === "storageFlops") sim.storageFlops += val * owned;
+				if (e.type === "autoLoc") sim.devLoc += val * owned;
+				if (e.type === "freelancerLoc") sim.freelancerLoc += val * owned;
+				if (e.type === "freelancerMaxBonus") sim.freelancerMaxBonus += val * owned;
+				if (e.type === "internLoc") sim.internLoc += val * owned;
+				if (e.type === "devLoc") sim.devLoc += val * owned;
+				if (e.type === "teamLoc") sim.teamLoc += val * owned;
+				if (e.type === "managerLoc") sim.managerCount += val * owned;
+				if (e.type === "internMaxBonus") sim.internMaxBonus += val * owned;
+				if (e.type === "teamMaxBonus") sim.teamMaxBonus += val * owned;
+				if (e.type === "managerMaxBonus") sim.managerMaxBonus += val * owned;
+				if (e.type === "llmLoc") sim.llmLoc += val * owned;
+				if (e.type === "agentLoc") sim.agentLoc += val * owned;
+				if (e.type === "llmMaxBonus") sim.llmMaxBonus += val * owned;
+				if (e.type === "agentMaxBonus") sim.agentMaxBonus += val * owned;
+			}
+			// Multiply effects compound exponentially: val ** owned
+			if (e.op === "multiply") {
+				const mult = val ** owned;
+				if (e.type === "locPerKey") sim.locPerKeyMultiplier *= mult;
+				if (e.type === "locProductionSpeed") sim.locProductionMultiplier *= mult;
+				if (e.type === "cashMultiplier") sim.cashMultiplier *= mult;
+				if (e.type === "devSpeed") sim.devSpeedMultiplier *= mult;
+				if (e.type === "freelancerLocMultiplier") sim.freelancerLocMultiplier *= mult;
+				if (e.type === "freelancerCostDiscount") sim.freelancerCostDiscount *= mult;
+				if (e.type === "internLocMultiplier") sim.internLocMultiplier *= mult;
+				if (e.type === "devLocMultiplier") sim.devLocMultiplier *= mult;
+				if (e.type === "teamLocMultiplier") sim.teamLocMultiplier *= mult;
+				if (e.type === "managerMultiplier") sim.managerMultiplier *= mult;
+				if (e.type === "internCostDiscount") sim.internCostDiscount *= mult;
+				if (e.type === "devCostDiscount") sim.devCostDiscount *= mult;
+				if (e.type === "teamCostDiscount") sim.teamCostDiscount *= mult;
+				if (e.type === "managerCostDiscount") sim.managerCostDiscount *= mult;
+				if (e.type === "llmLocMultiplier") sim.llmLocMultiplier *= mult;
+				if (e.type === "agentLocMultiplier") sim.agentLocMultiplier *= mult;
+				if (e.type === "llmCostDiscount") sim.llmCostDiscount *= mult;
+				if (e.type === "agentCostDiscount") sim.agentCostDiscount *= mult;
+				if (e.type === "aiLocMultiplier") sim.aiLocMultiplier *= mult;
+			}
+			if (e.type === "autoType" && e.op === "enable") sim.autoTypeEnabled = true;
+			if (e.type === "tierUnlock" && e.op === "set") tierIndex = Math.max(tierIndex, val);
+			if (e.type === "modelUnlock" && e.op === "enable") sim.ownedModels[e.value as string] = true;
+		}
+
+		// Apply all tech node effects
+		for (const node of techNodes) {
+			const owned = sim.ownedTech[node.id] ?? 0;
+			if (owned === 0) continue;
+			for (const e of node.effects) applyEffect(e, owned);
+		}
+
+		// Apply all upgrade effects
+		for (const u of upgrades) {
+			const owned = sim.owned[u.id] ?? 0;
+			if (owned === 0) continue;
+			for (const e of u.effects) applyEffect(e, owned);
+		}
+
+		sim.currentTier = tierIndex;
+		sim.aiUnlocked = Object.values(sim.ownedModels).some(Boolean);
+	}
+
+	/** Apply effects for a newly purchased item (instant effects only — recalc handles the rest) */
+	function applyInstantEffects(
+		effects: Array<{ type: string; op: string; value: number | boolean | string }>,
 	): void {
 		for (const e of effects) {
-			const val = e.value as number;
-			if (e.type === "locPerKey" && e.op === "add") sim.locPerKey += val;
-			if (e.type === "locPerKey" && e.op === "multiply")
-				sim.locPerKeyMultiplier *= val;
-			if (e.type === "flops" && e.op === "add") sim.flops += val;
-			if (e.type === "cpuFlops" && e.op === "add") sim.cpuFlops += val;
-			if (e.type === "ramFlops" && e.op === "add") sim.ramFlops += val;
-			if (e.type === "storageFlops" && e.op === "add") sim.storageFlops += val;
-			if (e.type === "autoLoc" && e.op === "add") sim.devLoc += val;
-			if (e.type === "freelancerLoc" && e.op === "add")
-				sim.freelancerLoc += val;
-			if (e.type === "freelancerLocMultiplier" && e.op === "multiply")
-				sim.freelancerLocMultiplier *= val;
-			if (e.type === "freelancerCostDiscount" && e.op === "multiply")
-				sim.freelancerCostDiscount *= val;
-			if (e.type === "freelancerMaxBonus" && e.op === "add")
-				sim.freelancerMaxBonus += val;
-			if (e.type === "internLoc" && e.op === "add") sim.internLoc += val;
-			if (e.type === "devLoc" && e.op === "add") sim.devLoc += val;
-			if (e.type === "teamLoc" && e.op === "add") sim.teamLoc += val;
-			if (e.type === "managerLoc" && e.op === "add") sim.managerCount += val;
-			if (e.type === "devSpeed" && e.op === "multiply")
-				sim.devSpeedMultiplier *= val;
-			if (e.type === "locProductionSpeed" && e.op === "multiply")
-				sim.locProductionMultiplier *= val;
-			if (e.type === "cashMultiplier" && e.op === "multiply")
-				sim.cashMultiplier *= val;
-			if (e.type === "internLocMultiplier" && e.op === "multiply")
-				sim.internLocMultiplier *= val;
-			if (e.type === "devLocMultiplier" && e.op === "multiply")
-				sim.devLocMultiplier *= val;
-			if (e.type === "teamLocMultiplier" && e.op === "multiply")
-				sim.teamLocMultiplier *= val;
-			if (e.type === "managerMultiplier" && e.op === "multiply")
-				sim.managerMultiplier *= val;
-			if (e.type === "internCostDiscount" && e.op === "multiply")
-				sim.internCostDiscount *= val;
-			if (e.type === "devCostDiscount" && e.op === "multiply")
-				sim.devCostDiscount *= val;
-			if (e.type === "teamCostDiscount" && e.op === "multiply")
-				sim.teamCostDiscount *= val;
-			if (e.type === "managerCostDiscount" && e.op === "multiply")
-				sim.managerCostDiscount *= val;
-			if (e.type === "llmLoc" && e.op === "add") sim.llmLoc += val;
-			if (e.type === "agentLoc" && e.op === "add") sim.agentLoc += val;
-			if (e.type === "llmLocMultiplier" && e.op === "multiply")
-				sim.llmLocMultiplier *= val;
-			if (e.type === "agentLocMultiplier" && e.op === "multiply")
-				sim.agentLocMultiplier *= val;
-			if (e.type === "llmCostDiscount" && e.op === "multiply")
-				sim.llmCostDiscount *= val;
-			if (e.type === "agentCostDiscount" && e.op === "multiply")
-				sim.agentCostDiscount *= val;
-			if (e.type === "aiLocMultiplier" && e.op === "multiply")
-				sim.aiLocMultiplier *= val;
 			if (e.type === "instantCash" && e.op === "add") {
+				const val = e.value as number;
 				sim.cash += val;
 				sim.totalCash += val;
 			}
-			if (e.type === "internMaxBonus" && e.op === "add")
-				sim.internMaxBonus += val;
-			if (e.type === "teamMaxBonus" && e.op === "add") sim.teamMaxBonus += val;
-			if (e.type === "managerMaxBonus" && e.op === "add")
-				sim.managerMaxBonus += val;
-			if (e.type === "llmMaxBonus" && e.op === "add") sim.llmMaxBonus += val;
-			if (e.type === "agentMaxBonus" && e.op === "add")
-				sim.agentMaxBonus += val;
-			if (e.type === "autoType" && e.op === "enable")
-				sim.autoTypeEnabled = true;
-			if (e.type === "tierUnlock" && e.op === "set")
-				sim.currentTier = Math.max(sim.currentTier, val);
 		}
 	}
 
@@ -594,7 +642,8 @@ export function runBalanceSim(
 			const freeNode = availTech.find((n) => getTechCost(n) === 0);
 			if (freeNode) {
 				sim.ownedTech[freeNode.id] = (sim.ownedTech[freeNode.id] ?? 0) + 1;
-				applyEffects(freeNode.effects);
+				recalcSimStats();
+				applyInstantEffects(freeNode.effects);
 				purchaseCount++;
 				continue;
 			}
@@ -613,7 +662,8 @@ export function runBalanceSim(
 				if (gateNode.currency === "loc") sim.loc -= cost;
 				else sim.cash -= cost;
 				sim.ownedTech[gateNode.id] = (sim.ownedTech[gateNode.id] ?? 0) + 1;
-				applyEffects(gateNode.effects);
+				recalcSimStats();
+				applyInstantEffects(gateNode.effects);
 				purchaseCount++;
 				continue;
 			}
@@ -679,7 +729,8 @@ export function runBalanceSim(
 			else sim.cash -= bestTech.cost;
 			sim.ownedTech[bestTech.node.id] =
 				(sim.ownedTech[bestTech.node.id] ?? 0) + 1;
-			applyEffects(bestTech.node.effects);
+			recalcSimStats();
+			applyInstantEffects(bestTech.node.effects);
 			purchaseCount++;
 		}
 
@@ -776,7 +827,8 @@ export function runBalanceSim(
 				const u = best.item as UpgradeData;
 				sim.cash -= best.cost;
 				sim.owned[u.id] = (sim.owned[u.id] ?? 0) + 1;
-				applyEffects(u.effects);
+				recalcSimStats();
+				applyInstantEffects(u.effects);
 				purchases.push({
 					time: t,
 					type: PurchaseTypeEnum.upgrade,
@@ -786,6 +838,7 @@ export function runBalanceSim(
 				const m = best.item as AiModel;
 				sim.cash -= best.cost;
 				sim.ownedModels[m.id] = true;
+				recalcSimStats();
 				if (!sim.aiUnlocked) {
 					sim.aiUnlocked = true;
 					if (cfg.aiStrategy === AiStrategyEnum.exec_heavy)
