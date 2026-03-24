@@ -1,6 +1,20 @@
-export type { AiModelData } from "@agi-rush/domain";
+export type {
+	AiModelData,
+	Milestone,
+	TechNode,
+	Tier,
+	Upgrade,
+	UpgradeEffect,
+} from "@agi-rush/domain";
 export { aiModels } from "@agi-rush/domain";
+export { SingularitySequence } from "./components/singularity-sequence";
 export { useGameLoop } from "./hooks/use-game-loop";
+export type {
+	GameActions,
+	GameState,
+	GodModeOverrides,
+	QueuedBlock,
+} from "./store/game-store";
 export {
 	allMilestones,
 	allTechNodes,
@@ -16,16 +30,3 @@ export {
 	PageEnum,
 	useUiStore,
 } from "./store/ui-store";
-export type {
-	GameActions,
-	GameState,
-	GodModeOverrides,
-	QueuedBlock,
-} from "./store/game-store";
-export type {
-	Milestone,
-	TechNode,
-	Tier,
-	Upgrade,
-	UpgradeEffect,
-} from "@agi-rush/domain";

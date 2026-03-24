@@ -1,11 +1,18 @@
 import { GodModePage } from "@components/god-mode-page";
 import { Sidebar } from "@components/sidebar";
 import { TechTreePage } from "@components/tech-tree-page";
-import { css, Global } from "@emotion/react";
+import { css, Global, keyframes } from "@emotion/react";
 import type { EditorTheme } from "@modules/editor";
 import { EDITOR_THEMES, Editor, type EditorThemeEnum } from "@modules/editor";
 import { EventToast } from "@modules/event/components/event-toast";
-import { PageEnum, useGameLoop, useGameStore, useUiStore } from "@modules/game";
+import {
+	PageEnum,
+	SingularitySequence,
+	useGameLoop,
+	useGameStore,
+	useUiStore,
+} from "@modules/game";
+import { useState } from "react";
 import { match } from "ts-pattern";
 
 const globalStyles = css({
@@ -53,6 +60,21 @@ const tabActiveCss = css(tabCss, {
 	background: "#141920",
 	borderBottom: "1px solid #141920",
 	marginBottom: -1,
+});
+
+// ── CRT collapse animation ──
+
+const crtCollapseAnim = keyframes({
+	"0%": { transform: "scaleY(1)", opacity: 1, filter: "brightness(1)" },
+	"5%": { filter: "brightness(2)", transform: "scaleY(1) skewX(-2deg)" },
+	"10%": { filter: "brightness(1)", transform: "scaleY(1) skewX(1deg)" },
+	"15%": { filter: "none", transform: "scaleY(1)" },
+	"60%": { transform: "scaleY(0.005)", opacity: 0.9 },
+	"100%": { transform: "scaleY(0)", opacity: 0 },
+});
+
+const shellCollapseCss = css({
+	animation: `${crtCollapseAnim} 1.1s ease-in forwards`,
 });
 
 // ── Panel styles ──
@@ -274,11 +296,15 @@ export function App() {
 	useGameLoop();
 	const page = useUiStore((s) => s.page);
 	const setPage = useUiStore((s) => s.setPage);
+	const singularity = useGameStore((s) => s.singularity);
+	const [singularityAnimate] = useState(!singularity);
 
 	return (
 		<>
 			<Global styles={globalStyles} />
-			<div css={shellCss}>
+			<div
+				css={[shellCss, singularity && singularityAnimate && shellCollapseCss]}
+			>
 				{/* Panel 1: Code Editor (always visible) */}
 				<div css={editorPanelCss}>
 					<div css={tabBarCss}>
@@ -319,6 +345,7 @@ export function App() {
 				<Sidebar />
 			</div>
 			<EventToast />
+			{singularity && <SingularitySequence animate={singularityAnimate} />}
 		</>
 	);
 }
