@@ -162,7 +162,7 @@
 			"id": "gpu_cluster",
 			"tier": "tech_company",
 			"name": "GPU Cluster",
-			"description": "+10,000 FLOPS",
+			"description": "+2,000 FLOPS",
 			"icon": "🎮",
 			"baseCost": 400000,
 			"costMultiplier": 1.7,
@@ -171,7 +171,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 10000
+					"value": 2000
 				}
 			]
 		},
@@ -196,7 +196,7 @@
 			"id": "data_center",
 			"tier": "tech_company",
 			"name": "Data Center",
-			"description": "+100,000 FLOPS",
+			"description": "+20,000 FLOPS",
 			"icon": "🏭",
 			"baseCost": 800000,
 			"costMultiplier": 1.8,
@@ -205,7 +205,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 100000
+					"value": 20000
 				}
 			]
 		},
@@ -333,7 +333,7 @@
 			"id": "supercomputer",
 			"tier": "agi_race",
 			"name": "Supercomputer",
-			"description": "+1B FLOPS",
+			"description": "+20M FLOPS",
 			"icon": "🖲️",
 			"baseCost": 500000000,
 			"costMultiplier": 1.5,
@@ -342,7 +342,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 1000000000
+					"value": 20000000
 				}
 			]
 		},

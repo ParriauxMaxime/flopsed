@@ -50,7 +50,7 @@
       {
         "id": "freelancing",
         "unlockAt": 100,
-        "cashPerLoc": 0.30,
+        "cashPerLoc": 0.50,
         "targetUnlockMinute": 5,
         "expectedPurchases": 12,
         "_note": "5x cash bump. First real acceleration. Mechanical keyboard is the breakthrough."
@@ -58,7 +58,7 @@
       {
         "id": "startup",
         "unlockAt": 2000,
-        "cashPerLoc": 1.00,
+        "cashPerLoc": 1.50,
         "targetUnlockMinute": 12,
         "expectedPurchases": 20,
         "_note": "5x cash bump. Devs start auto-writing. Player can breathe."
@@ -74,7 +74,7 @@
       {
         "id": "ai_lab",
         "unlockAt": 5000000,
-        "cashPerLoc": 5.00,
+        "cashPerLoc": 3.50,
         "targetUnlockMinute": 28,
         "expectedPurchases": 20,
         "_note": "5x cash bump. AI arrives. FLOPS slider unlocks. The crunch returns."
@@ -82,7 +82,7 @@
       {
         "id": "agi_race",
         "unlockAt": 1000000000,
-        "cashPerLoc": 10.00,
+        "cashPerLoc": 7.00,
         "targetUnlockMinute": 35,
         "expectedPurchases": 8,
         "_note": "10x cash bump. Final sprint. Numbers go exponential."
@@ -254,7 +254,7 @@
     "minTiers": 6,
     "tierMinDuration": {
       "garage": 30,
-      "freelancing": 120,
+      "freelancing": 60,
       "startup": 120,
       "tech_company": 150,
       "ai_lab": 30,
