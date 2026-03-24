@@ -1040,7 +1040,7 @@
 			"requires": [
 				"interns"
 			],
-			"max": 2,
+			"max": 3,
 			"baseCost": 500,
 			"costMultiplier": 1.5,
 			"currency": "cash",

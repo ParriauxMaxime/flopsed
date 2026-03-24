@@ -56,31 +56,14 @@
 			]
 		},
 		{
-			"id": "developer",
-			"tier": "startup",
-			"name": "Developer",
-			"description": "Auto-writes 20 LoC/s",
-			"icon": "👨‍💻",
-			"baseCost": 5000,
-			"costMultiplier": 1.3,
-			"max": 5,
-			"effects": [
-				{
-					"type": "devLoc",
-					"op": "add",
-					"value": 20
-				}
-			]
-		},
-		{
 			"id": "intern",
 			"tier": "startup",
 			"name": "Intern",
-			"description": "Auto-writes 5 LoC/s",
+			"description": "Auto-writes 15 LoC/s",
 			"icon": "👶",
 			"baseCost": 500,
 			"costMultiplier": 1.2,
-			"max": 5,
+			"max": 10,
 			"costCategory": "intern",
 			"requires": [
 				"interns"
@@ -89,7 +72,7 @@
 				{
 					"type": "internLoc",
 					"op": "add",
-					"value": 5
+					"value": 15
 				}
 			]
 		},
