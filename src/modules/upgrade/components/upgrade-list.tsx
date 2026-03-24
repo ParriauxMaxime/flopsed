@@ -111,15 +111,23 @@ export function UpgradeList() {
 		.filter((t) => t.index <= currentTierIndex)
 		.map((t) => t.id);
 
+	const state = useGameStore((s) => s);
+
 	const visibleUpgrades = allUpgrades.filter(
 		(u) =>
 			availableTierIds.includes(u.tier) &&
 			(!u.requires || u.requires.every((id) => (ownedTechNodes[id] ?? 0) > 0)),
 	);
 
+	const sorted = [...visibleUpgrades].sort((a, b) => {
+		const aMaxed = (state.ownedUpgrades[a.id] ?? 0) >= getEffectiveMax(a, state) ? 1 : 0;
+		const bMaxed = (state.ownedUpgrades[b.id] ?? 0) >= getEffectiveMax(b, state) ? 1 : 0;
+		return aMaxed - bMaxed;
+	});
+
 	return (
 		<div>
-			{visibleUpgrades.map((upgrade) => (
+			{sorted.map((upgrade) => (
 				<UpgradeCard key={upgrade.id} upgrade={upgrade} />
 			))}
 		</div>
