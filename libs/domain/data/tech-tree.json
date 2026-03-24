@@ -1035,12 +1035,12 @@
 		{
 			"id": "intern_capacity",
 			"name": "Intern Program",
-			"description": "+10 max interns per level",
+			"description": "+5 max interns per level",
 			"icon": "📋",
 			"requires": [
 				"interns"
 			],
-			"max": 5,
+			"max": 2,
 			"baseCost": 500,
 			"costMultiplier": 1.5,
 			"currency": "cash",
@@ -1048,7 +1048,7 @@
 				{
 					"type": "internMaxBonus",
 					"op": "add",
-					"value": 10
+					"value": 5
 				}
 			],
 			"x": 340,

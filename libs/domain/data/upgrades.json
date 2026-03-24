@@ -56,50 +56,27 @@
 			]
 		},
 		{
-			"id": "junior_dev",
+			"id": "developer",
 			"tier": "startup",
-			"name": "Junior Dev",
-			"description": "Auto-writes 10 LoC/s",
+			"name": "Developer",
+			"description": "Auto-writes 20 LoC/s",
 			"icon": "👨‍💻",
-			"baseCost": 2000,
+			"baseCost": 5000,
 			"costMultiplier": 1.3,
 			"max": 5,
 			"effects": [
 				{
 					"type": "devLoc",
 					"op": "add",
-					"value": 10
+					"value": 20
 				}
-			],
-			"requires": [
-				"interns"
-			]
-		},
-		{
-			"id": "senior_dev",
-			"tier": "startup",
-			"name": "Senior Dev",
-			"description": "Auto-writes 50 LoC/s",
-			"icon": "🧑‍💻",
-			"baseCost": 10000,
-			"costMultiplier": 1.4,
-			"max": 3,
-			"effects": [
-				{
-					"type": "devLoc",
-					"op": "add",
-					"value": 50
-				}
-			],
-			"requires": [
-				"interns"
 			]
 		},
 		{
 			"id": "intern",
 			"tier": "startup",
 			"name": "Intern",
-			"description": "Auto-writes 2 LoC/s",
+			"description": "Auto-writes 5 LoC/s",
 			"icon": "👶",
 			"baseCost": 500,
 			"costMultiplier": 1.2,
@@ -112,7 +89,7 @@
 				{
 					"type": "internLoc",
 					"op": "add",
-					"value": 2
+					"value": 5
 				}
 			]
 		},

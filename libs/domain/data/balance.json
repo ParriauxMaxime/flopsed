@@ -248,7 +248,7 @@
   "validation": {
     "agiMinMinutes": 30,
     "agiMaxMinutes": 55,
-    "maxWaitSeconds": 400,
+    "maxWaitSeconds": 450,
     "minPurchases": 80,
     "maxPurchases": 500,
     "minTiers": 6,
