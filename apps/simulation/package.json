@@ -1,0 +1,17 @@
+{
+	"name": "@agi-rush/simulation",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"start": "tsx src/main.ts"
+	},
+	"dependencies": {
+		"@agi-rush/domain": "*",
+		"@agi-rush/engine": "*"
+	},
+	"devDependencies": {
+		"tsx": "^4.19.4",
+		"typescript": "^5.8.3"
+	}
+}

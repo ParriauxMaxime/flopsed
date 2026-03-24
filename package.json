@@ -11,7 +11,8 @@
 		"editor": "npm run dev -w @agi-rush/editor",
 		"typecheck": "tsc --noEmit -p apps/game/tsconfig.json && tsc --noEmit -p apps/editor/tsconfig.json",
 		"check": "biome check .",
-		"check:fix": "biome check --fix ."
+		"check:fix": "biome check --fix .",
+		"sim": "npm run start -w @agi-rush/simulation --"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

@@ -243,5 +243,30 @@
     "formula": "paradigmShifts = floor(log10(totalLifetimeLoc / 1e6))",
     "bonusPerShift": 1.5,
     "_note": "Each paradigm shift gives x1.5 to ALL production. Stacks multiplicatively. 3 shifts = x3.375."
+  },
+
+  "validation": {
+    "agiMinMinutes": 18,
+    "agiMaxMinutes": 45,
+    "maxWaitSeconds": 300,
+    "minPurchases": 80,
+    "maxPurchases": 500,
+    "minTiers": 6,
+    "tierMinDuration": {
+      "garage": 30,
+      "freelancing": 120,
+      "startup": 120,
+      "tech_company": 150,
+      "ai_lab": 30,
+      "agi_race": 120
+    },
+    "tierMaxDuration": {
+      "garage": 300,
+      "freelancing": 500,
+      "startup": 600,
+      "tech_company": 800,
+      "ai_lab": 600,
+      "agi_race": 720
+    }
   }
 }
