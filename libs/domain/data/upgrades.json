@@ -179,7 +179,7 @@
 			"id": "architect",
 			"tier": "tech_company",
 			"name": "Architect",
-			"description": "LoC execution yields x2 cash",
+			"description": "LoC execution yields x1.3 cash",
 			"icon": "📐",
 			"baseCost": 200000,
 			"costMultiplier": 2,
@@ -188,7 +188,7 @@
 				{
 					"type": "cashMultiplier",
 					"op": "multiply",
-					"value": 2
+					"value": 1.3
 				}
 			]
 		},
@@ -247,7 +247,7 @@
 			"id": "ml_pipeline",
 			"tier": "ai_lab",
 			"name": "ML Pipeline",
-			"description": "x1.5 cash per LoC",
+			"description": "x1.2 cash per LoC",
 			"icon": "🔬",
 			"baseCost": 80000000,
 			"costMultiplier": 2,
@@ -256,7 +256,7 @@
 				{
 					"type": "cashMultiplier",
 					"op": "multiply",
-					"value": 1.5
+					"value": 1.2
 				}
 			]
 		},
