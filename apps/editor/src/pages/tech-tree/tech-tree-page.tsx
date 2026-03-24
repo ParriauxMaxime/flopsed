@@ -129,6 +129,9 @@ export function TechTreePage() {
 		(updated: TechNode) => {
 			const next = nodes.map((n) => (n.id === selectedId ? updated : n));
 			updateNodes(next);
+			if (updated.id !== selectedId) {
+				setSelectedId(updated.id);
+			}
 		},
 		[nodes, selectedId, updateNodes],
 	);

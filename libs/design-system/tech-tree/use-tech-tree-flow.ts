@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
 	type Edge,
 	type Node,
@@ -42,7 +42,7 @@ export function useTechTreeFlow({ nodes, onUpdate }: UseTechTreeFlowParams) {
 	const [flowNodes, setFlowNodes] = useState<Node[]>(() => toFlowNodes(nodes));
 	const [flowEdges, setFlowEdges] = useState<Edge[]>(() => toFlowEdges(nodes));
 
-	useMemo(() => {
+	useEffect(() => {
 		setFlowNodes(toFlowNodes(nodes));
 		setFlowEdges(toFlowEdges(nodes));
 	}, [nodes]);
