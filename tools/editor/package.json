@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"rspack serve\" \"tsx server.ts\"",
+		"dev": "concurrently \"tsx node_modules/@rspack/cli/bin/rspack.js serve\" \"tsx server.ts\"",
 		"build": "tsx node_modules/@rspack/cli/bin/rspack.js build",
 		"server": "tsx server.ts"
 	},
