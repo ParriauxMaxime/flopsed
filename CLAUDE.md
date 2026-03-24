@@ -8,6 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` — Production build of game to `apps/game/dist/`
 - `npm run editor` — Start editor dev server (port 3738) + API (port 3737)
 - `npm run typecheck` — TypeScript strict check (no emit) for both apps
+- `npm run sim` — Run balance simulation (3 profiles, exit 0/1)
+- `npm run sim -- --verbose` — With per-tier breakdown
+- `npm run sim -- --json` — Structured JSON output
 - `npm run check` — Biome lint + format check
 - `npm run check:fix` — Auto-fix biome issues
 
@@ -163,26 +166,19 @@ Use `ts-pattern` `match()` instead of switch statements or complex if-else chain
 
 ## Balance Validation
 
-**IMPORTANT:** After editing any JSON in `libs/domain/data/` (upgrades, ai-models, tiers, tech-tree, balance, events), ALWAYS run the balance checker:
+**IMPORTANT:** After editing any JSON in `libs/domain/data/` (upgrades, ai-models, tiers, tech-tree, balance, events), ALWAYS run the balance simulation:
 
 ```bash
-cd specs && node balance-check.js
+npm run sim              # human-readable
+npm run sim -- --json    # structured JSON (for programmatic use)
+npm run sim -- --verbose # per-tier breakdown
 ```
 
-Add `--verbose` for per-tier duration breakdown. The script simulates 3 player profiles (casual 4 keys/s, average 6 keys/s, fast 9 keys/s) and checks:
-- AGI reached between 22-45 minutes
-- 80-500 total purchases
-- Max wait between purchases ≤ 300 seconds
-- All 6 tiers reached
-- Each tier lasts within min/max duration bounds
+The simulation lives at `apps/simulation/` and imports from `@agi-rush/engine` + `@agi-rush/domain`. It simulates 3 player profiles (casual 4 keys/s, average 6 keys/s, fast 9 keys/s) and validates against thresholds defined in `libs/domain/data/balance.json` under the `validation` key.
 
-If any check fails, adjust the data files and re-run until all pass. The same simulation engine is also available in the editor app → Simulation page, or via `@agi-rush/engine`'s `runBalanceSim()`.
+If any check fails, adjust the data files and re-run until all pass. The same simulation engine is also available in the editor app → Simulation page.
 
-**Current validated targets (as of last balance pass):**
-- Casual: AGI ~31 min
-- Average: AGI ~24 min
-- Fast: AGI ~23 min
-- ~202 purchases across the game
+**Key balance insight:** The game applies `multiply` effects as `val ** owned`. This means x2 stacking 3 times = 8x (not 6x). When a tier feels too fast, check compounding multipliers from the previous tier.
 
 ## Workflow
 
