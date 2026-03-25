@@ -275,17 +275,17 @@
 			"id": "ai_agent",
 			"tier": "agi_race",
 			"name": "AI Agent",
-			"description": "Autonomous agent — writes 10,000 LoC/s",
+			"description": "Autonomous agent — writes 100,000 LoC/s",
 			"icon": "🤖",
-			"baseCost": 500000000,
-			"costMultiplier": 1.3,
-			"max": 3,
+			"baseCost": 2000000000,
+			"costMultiplier": 2,
+			"max": 5,
 			"costCategory": "agent",
 			"effects": [
 				{
 					"type": "agentLoc",
 					"op": "add",
-					"value": 10000
+					"value": 100000
 				}
 			]
 		},
@@ -312,7 +312,7 @@
 			"name": "The Singularity",
 			"description": "You win. Or do you?",
 			"icon": "🌀",
-			"baseCost": 5000000000,
+			"baseCost": 50000000000000,
 			"costMultiplier": 1,
 			"max": 1,
 			"effects": [

@@ -767,7 +767,7 @@
 				"tier_ai_lab"
 			],
 			"max": 1,
-			"baseCost": 500000000,
+			"baseCost": 5000000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -925,20 +925,20 @@
 		{
 			"id": "agent_autonomy",
 			"name": "Self-Improvement",
-			"description": "+25% agent output per level",
+			"description": "x2 agent output per level",
 			"icon": "♾️",
 			"requires": [
 				"agent_gate"
 			],
 			"max": 5,
-			"baseCost": 200000000,
-			"costMultiplier": 1.7,
+			"baseCost": 5000000000,
+			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
 				{
 					"type": "agentLocMultiplier",
 					"op": "multiply",
-					"value": 1.25
+					"value": 2
 				}
 			],
 			"x": 500,
@@ -969,20 +969,20 @@
 		{
 			"id": "agent_alignment",
 			"name": "Alignment Research",
-			"description": "+20% cash per LoC per level",
+			"description": "x1.5 cash per LoC per level",
 			"icon": "⚖️",
 			"requires": [
 				"agent_gate"
 			],
 			"max": 5,
-			"baseCost": 300000000,
-			"costMultiplier": 1.7,
+			"baseCost": 10000000000,
+			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
 				{
 					"type": "cashMultiplier",
 					"op": "multiply",
-					"value": 1.2
+					"value": 1.5
 				}
 			],
 			"x": 820,

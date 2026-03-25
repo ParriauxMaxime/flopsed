@@ -74,7 +74,7 @@
       {
         "id": "ai_lab",
         "unlockAt": 5000000,
-        "cashPerLoc": 3.50,
+        "cashPerLoc": 3.00,
         "targetUnlockMinute": 28,
         "expectedPurchases": 20,
         "_note": "5x cash bump. AI arrives. FLOPS slider unlocks. The crunch returns."
@@ -82,7 +82,7 @@
       {
         "id": "agi_race",
         "unlockAt": 1000000000,
-        "cashPerLoc": 7.00,
+        "cashPerLoc": 10.00,
         "targetUnlockMinute": 35,
         "expectedPurchases": 8,
         "_note": "10x cash bump. Final sprint. Numbers go exponential."
@@ -246,7 +246,7 @@
   },
 
   "validation": {
-    "agiMinMinutes": 30,
+    "agiMinMinutes": 20,
     "agiMaxMinutes": 55,
     "maxWaitSeconds": 450,
     "minPurchases": 80,
@@ -258,7 +258,7 @@
       "startup": 120,
       "tech_company": 150,
       "ai_lab": 30,
-      "agi_race": 120
+      "agi_race": 60
     },
     "tierMaxDuration": {
       "garage": 300,
