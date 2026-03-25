@@ -63,30 +63,62 @@ function getSubtitle(node: Record<string, unknown>): string {
 	return `${node.baseCost as number} ${currency}`;
 }
 
-const rowStyle = css({
+const innerCss = css({
 	display: "flex",
-	alignItems: "center",
+	height: "100%",
 	gap: 6,
 });
 
-const nameStyle = css({
-	color: "#ccd6f6",
-	fontSize: 13,
-	fontWeight: 600,
-	whiteSpace: "nowrap",
+const iconCss = css({
+	fontSize: 16,
+	lineHeight: 1,
+	flexShrink: 0,
+	display: "flex",
+	alignItems: "center",
 });
 
-const subtitleStyle = css({
+const contentCss = css({
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "center",
+	flex: 1,
+	minWidth: 0,
+	position: "relative",
+});
+
+const nameCss = css({
+	color: "#ccd6f6",
+	fontSize: 12,
+	fontWeight: 600,
+	lineHeight: 1.3,
+	wordBreak: "break-word",
+});
+
+const quantityCss = css({
+	position: "absolute",
+	bottom: 0,
+	right: 0,
 	color: "#8892b0",
-	fontSize: 11,
-	marginTop: 2,
+	fontSize: 10,
+});
+
+const editorSubtitleCss = css({
+	color: "#8892b0",
+	fontSize: 10,
+	marginTop: 1,
+	whiteSpace: "nowrap",
+	overflow: "hidden",
+	textOverflow: "ellipsis",
 });
 
 export function TechNodeComponent({ data, selected }: NodeProps) {
 	const node = data as Record<string, unknown>;
+	const name = node.name as string;
+	const description = node.description as string | undefined;
 	const currency = (node.currency as string) ?? "cash";
 	const state = node.state as NodeStateEnum | undefined;
 	const style = getStateStyle(state, currency, selected ?? false);
+	const isSingleLine = name.length <= 14;
 
 	return (
 		<div
@@ -94,19 +126,32 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 				background: "#16213e",
 				border: `2px solid ${style.borderColor}`,
 				borderRadius: 8,
-				padding: "8px 12px",
-				minWidth: 140,
+				padding: "4px 8px",
+				width: 140,
+				height: 56,
+				boxSizing: "border-box",
+				overflow: "hidden",
 				cursor: style.cursor,
 				opacity: style.opacity,
 				transition: "opacity 0.2s, border-color 0.2s",
 			})}
 		>
 			<Handle type="target" position={Position.Top} />
-			<div css={rowStyle}>
-				<span>{node.icon as string}</span>
-				<span css={nameStyle}>{node.name as string}</span>
+			<div css={innerCss}>
+				<div css={iconCss}>{node.icon as string}</div>
+				<div css={contentCss}>
+					<span css={nameCss}>{name}</span>
+					{state ? (
+						<span css={quantityCss}>{getSubtitle(node)}</span>
+					) : (
+						isSingleLine && (
+							<div css={editorSubtitleCss}>
+								{description || getSubtitle(node)}
+							</div>
+						)
+					)}
+				</div>
 			</div>
-			<div css={subtitleStyle}>{getSubtitle(node)}</div>
 			<Handle type="source" position={Position.Bottom} />
 		</div>
 	);

@@ -5,6 +5,9 @@ import { HtmlRspackPlugin, type RspackPluginFunction } from "@rspack/core";
 const isProd = process.env.NODE_ENV === "production";
 
 export default defineConfig({
+	experiments: {
+		css: true,
+	},
 	entry: "./src/main.tsx",
 	output: {
 		publicPath: isProd ? "/incremental-agi-rush/" : "/",

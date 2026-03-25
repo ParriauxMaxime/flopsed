@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import {
 	Background,
-	Controls,
+
 	type Edge,
 	type Node,
 	ReactFlow,
@@ -199,21 +199,55 @@ export function TechTreePage() {
 	const researchNode = useGameStore((s) => s.researchNode);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const flowNodes = useMemo(
-		() => buildFlowNodes(allTechNodes, ownedTechNodes, loc, cash),
-		[ownedTechNodes, loc, cash],
-	);
+	// Throttle node rebuilds to avoid React Flow DOM churn on every game tick.
+	// Only recompute every 500ms, or immediately when purchases change.
+	const lastBuild = useRef(0);
+	const cachedNodes = useRef<Node[]>([]);
+	const prevOwned = useRef(ownedTechNodes);
+
+	const flowNodes = useMemo(() => {
+		const now = Date.now();
+		const ownedChanged = prevOwned.current !== ownedTechNodes;
+		if (ownedChanged || now - lastBuild.current > 500 || cachedNodes.current.length === 0) {
+			prevOwned.current = ownedTechNodes;
+			lastBuild.current = now;
+			cachedNodes.current = buildFlowNodes(allTechNodes, ownedTechNodes, loc, cash);
+		}
+		return cachedNodes.current;
+	}, [ownedTechNodes, loc, cash]);
 
 	const flowEdges = useMemo(
 		() => buildFlowEdges(allTechNodes, ownedTechNodes),
 		[ownedTechNodes],
 	);
 
+	// Compute pan bounds from all node positions (not just visible ones)
+	const translateExtent = useMemo((): [[number, number], [number, number]] => {
+		const padding = 200;
+		let minX = Number.POSITIVE_INFINITY;
+		let minY = Number.POSITIVE_INFINITY;
+		let maxX = Number.NEGATIVE_INFINITY;
+		let maxY = Number.NEGATIVE_INFINITY;
+		for (const n of allTechNodes) {
+			const x = n.x ?? 0;
+			const y = n.y ?? 0;
+			minX = Math.min(minX, x);
+			minY = Math.min(minY, y);
+			maxX = Math.max(maxX, x + 140);
+			maxY = Math.max(maxY, y + 56);
+		}
+		return [
+			[minX - padding, minY - padding],
+			[maxX + padding, maxY + padding],
+		];
+	}, []);
+
 	const [hovered, setHovered] = useState<{
 		node: TechNode;
 		x: number;
 		y: number;
 	} | null>(null);
+	const leaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
 	const handleNodeClick = useCallback(
 		(_e: React.MouseEvent, node: Node) => {
@@ -234,13 +268,16 @@ export function TechTreePage() {
 
 	const handleNodeMouseEnter = useCallback(
 		(e: React.MouseEvent, node: Node) => {
+			clearTimeout(leaveTimer.current);
 			const techNode = allTechNodes.find((n) => n.id === node.id);
 			if (techNode && containerRef.current) {
+				const el = e.currentTarget as HTMLElement;
 				const containerRect = containerRef.current.getBoundingClientRect();
+				const nodeRect = el.getBoundingClientRect();
 				setHovered({
 					node: techNode,
-					x: e.clientX - containerRect.left + 12,
-					y: e.clientY - containerRect.top,
+					x: nodeRect.right - containerRect.left + 12,
+					y: nodeRect.top - containerRect.top,
 				});
 			}
 		},
@@ -248,7 +285,7 @@ export function TechTreePage() {
 	);
 
 	const handleNodeMouseLeave = useCallback(() => {
-		setHovered(null);
+		leaveTimer.current = setTimeout(() => setHovered(null), 100);
 	}, []);
 
 	return (
@@ -265,10 +302,15 @@ export function TechTreePage() {
 				nodesConnectable={false}
 				elementsSelectable={false}
 				panOnDrag
-				zoomOnScroll
+				zoomOnScroll={false}
+				zoomOnPinch={false}
+				zoomOnDoubleClick={false}
+				minZoom={1}
+				maxZoom={1}
+				translateExtent={translateExtent}
+			proOptions={{ hideAttribution: true }}
 			>
 				<Background gap={20} color="#1e2630" />
-				<Controls showInteractive={false} />
 			</ReactFlow>
 
 			{hovered && (

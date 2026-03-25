@@ -56,7 +56,7 @@ function layoutWithDagre(nodes: TechNode[]): TechNode[] {
 	const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 	g.setGraph({ rankdir: "TB", nodesep: 60, ranksep: 80 });
 	for (const n of nodes) {
-		g.setNode(n.id, { width: 160, height: 60 });
+		g.setNode(n.id, { width: 140, height: 56 });
 		for (const req of n.requires ?? []) {
 			g.setEdge(req, n.id);
 		}
