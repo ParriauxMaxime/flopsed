@@ -15,7 +15,7 @@
       "index": 1,
       "name": "Freelancing",
       "tagline": "You're selling your code. Clients appear.",
-      "cashPerLoc": 0.35,
+      "cashPerLoc": 0.25,
       "locRequired": 800,
       "cashRequired": 500,
       "cost": 80
@@ -25,7 +25,7 @@
       "index": 2,
       "name": "Startup",
       "tagline": "You have a company now. Time to hire.",
-      "cashPerLoc": 1.00,
+      "cashPerLoc": 0.80,
       "locRequired": 5000,
       "cashRequired": 2500,
       "cost": 2000
@@ -58,7 +58,7 @@
       "cashPerLoc": 10.00,
       "locRequired": 10000000,
       "cashRequired": 2000000000,
-      "cost": 5000000000
+      "cost": 10000000000
     }
   ]
 }

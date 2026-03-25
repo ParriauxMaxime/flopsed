@@ -303,6 +303,97 @@
         "description": "Occasionally generates meme comments. No cash value, but funny in the editor.",
         "memeRate": 0.02
       }
+    },
+    {
+      "id": "gpt_6",
+      "family": "gpt",
+      "name": "GPT",
+      "version": "GPT-6",
+      "icon": "🟢",
+      "tier": "agi_race",
+      "cost": 500000000000,
+      "locPerSec": 2000000,
+      "flopsCost": 300000,
+      "codeQuality": 95,
+      "requires": "gpt_5",
+      "special": {
+        "id": "recursive_improvement",
+        "name": "Recursive improvement",
+        "description": "Can improve its own weights. +50% LoC/s every 60s (caps at 3x)."
+      }
+    },
+    {
+      "id": "gpt_7",
+      "family": "gpt",
+      "name": "GPT",
+      "version": "GPT-7",
+      "icon": "🟢",
+      "tier": "agi_race",
+      "cost": 10000000000000,
+      "locPerSec": 10000000,
+      "flopsCost": 1000000,
+      "codeQuality": 99,
+      "requires": "gpt_6",
+      "special": {
+        "id": "superintelligent",
+        "name": "Superintelligent",
+        "description": "Writes code faster than you can read it. Approaching singularity."
+      }
+    },
+    {
+      "id": "claude_saga",
+      "family": "claude",
+      "name": "Claude",
+      "version": "Saga",
+      "icon": "🟠",
+      "tier": "agi_race",
+      "cost": 1000000000000,
+      "locPerSec": 5000000,
+      "flopsCost": 500000,
+      "codeQuality": 99,
+      "requires": "claude_opus",
+      "special": {
+        "id": "perfect_alignment",
+        "name": "Perfect alignment",
+        "description": "100% quality floor — every line is production-ready.",
+        "minQuality": 100
+      }
+    },
+    {
+      "id": "claude_universe",
+      "family": "claude",
+      "name": "Claude",
+      "version": "Universe",
+      "icon": "🟠",
+      "tier": "agi_race",
+      "cost": 50000000000000,
+      "locPerSec": 50000000,
+      "flopsCost": 5000000,
+      "codeQuality": 100,
+      "requires": "claude_saga",
+      "special": {
+        "id": "omniscient",
+        "name": "Omniscient",
+        "description": "Writes all possible programs simultaneously. The singularity is here."
+      }
+    },
+    {
+      "id": "gemini_supreme",
+      "family": "gemini",
+      "name": "Gemini",
+      "version": "Supreme",
+      "icon": "🔵",
+      "tier": "agi_race",
+      "cost": 5000000000000,
+      "locPerSec": 8000000,
+      "flopsCost": 800000,
+      "codeQuality": 96,
+      "requires": "gemini_ultra",
+      "special": {
+        "id": "distributed",
+        "name": "Distributed",
+        "description": "Runs across every datacenter on Earth. Unlimited scale."
+      }
     }
   ],
 

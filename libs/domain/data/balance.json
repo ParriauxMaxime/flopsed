@@ -50,7 +50,7 @@
       {
         "id": "freelancing",
         "unlockAt": 100,
-        "cashPerLoc": 0.35,
+        "cashPerLoc": 0.25,
         "targetUnlockMinute": 5,
         "expectedPurchases": 12,
         "_note": "5x cash bump. First real acceleration. Mechanical keyboard is the breakthrough."
@@ -58,7 +58,7 @@
       {
         "id": "startup",
         "unlockAt": 2000,
-        "cashPerLoc": 1.00,
+        "cashPerLoc": 0.80,
         "targetUnlockMinute": 12,
         "expectedPurchases": 20,
         "_note": "5x cash bump. Devs start auto-writing. Player can breathe."
