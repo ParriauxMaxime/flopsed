@@ -48,6 +48,22 @@ export interface SimPurchase {
 	name: string;
 }
 
+export interface IdleGap {
+	start: number;
+	end: number;
+	duration: number;
+	nextPurchase: string;
+	tier: number;
+}
+
+export interface IdleStats {
+	totalIdleTime: number;
+	idlePercent: number;
+	gaps: IdleGap[];
+	avgGap: number;
+	medianGap: number;
+}
+
 export interface SimResult {
 	agiTime: number | null;
 	endTime: number;
@@ -64,6 +80,7 @@ export interface SimResult {
 	snapshots: SimSnapshot[];
 	log: SimLogEntry[];
 	purchases: SimPurchase[];
+	idle: IdleStats;
 }
 
 // Internal data interfaces used by balance-sim

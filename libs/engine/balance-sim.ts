@@ -923,6 +923,45 @@ export function runBalanceSim(
 	if (longestWait > RULES.maxWaitSeconds)
 		failures.push(`Longest wait: ${longestWait}s`);
 
+	// Compute idle stats from purchase timestamps
+	const gaps: import("./types").IdleGap[] = [];
+	let prevPurchaseTime = 0;
+	for (const p of purchases) {
+		const gap = p.time - prevPurchaseTime;
+		if (gap > 1) {
+			gaps.push({
+				start: prevPurchaseTime,
+				end: p.time,
+				duration: gap,
+				nextPurchase: p.name,
+				tier: tierTimes
+					? Object.entries(tierTimes)
+							.filter(([, t]) => t <= p.time)
+							.sort(([, a], [, b]) => b - a)[0]?.[0]
+							? Number(
+									Object.entries(tierTimes)
+										.filter(([, t]) => t <= p.time)
+										.sort(([, a], [, b]) => b - a)[0][0],
+								)
+							: 0
+					: 0,
+			});
+		}
+		prevPurchaseTime = p.time;
+	}
+	const sortedGaps = [...gaps].sort((a, b) => a.duration - b.duration);
+	const totalIdleTime = gaps.reduce((a, g) => a + g.duration, 0);
+	const idle: import("./types").IdleStats = {
+		totalIdleTime,
+		idlePercent: endTime > 0 ? (totalIdleTime / endTime) * 100 : 0,
+		gaps,
+		avgGap: gaps.length > 0 ? totalIdleTime / gaps.length : 0,
+		medianGap:
+			sortedGaps.length > 0
+				? sortedGaps[Math.floor(sortedGaps.length / 2)].duration
+				: 0,
+	};
+
 	return {
 		agiTime,
 		endTime,
@@ -939,5 +978,6 @@ export function runBalanceSim(
 		snapshots,
 		log,
 		purchases,
+		idle,
 	};
 }

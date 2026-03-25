@@ -99,9 +99,50 @@ export function SimResults({ result }: SimResultsProps) {
 					<div css={metricValueCss}>{Math.round(result.longestWait)}s</div>
 				</div>
 				<div css={metricCardCss}>
+					<div css={metricLabelCss}>Idle Time</div>
+					<div css={metricValueCss}>{result.idle.idlePercent}%</div>
+				</div>
+			</div>
+
+			<div css={metricsCss}>
+				<div css={metricCardCss}>
+					<div css={metricLabelCss}>Avg Gap</div>
+					<div css={metricValueCss}>{Math.round(result.idle.avgGap)}s</div>
+				</div>
+				<div css={metricCardCss}>
+					<div css={metricLabelCss}>Median Gap</div>
+					<div css={metricValueCss}>{Math.round(result.idle.medianGap)}s</div>
+				</div>
+				<div css={metricCardCss}>
+					<div css={metricLabelCss}>AI Models</div>
+					<div css={metricValueCss}>{result.aiModelsOwned}</div>
+				</div>
+				<div css={metricCardCss}>
 					<div css={metricLabelCss}>Final Tier</div>
 					<div css={metricValueCss}>{result.finalTier}</div>
 				</div>
+			</div>
+
+			<div css={sectionTitleCss}>Top Idle Gaps</div>
+			<div css={css({ fontSize: 13, marginBottom: 16 })}>
+				{result.idle.gaps
+					.sort((a, b) => b.duration - a.duration)
+					.slice(0, 8)
+					.map((g, i) => (
+						<div
+							key={i}
+							css={css({
+								display: "flex",
+								justifyContent: "space-between",
+								padding: "4px 8px",
+								background: i % 2 === 0 ? "#161b22" : "transparent",
+								borderRadius: 3,
+							})}
+						>
+							<span css={css({ color: "#d19a66" })}>{Math.round(g.duration)}s</span>
+							<span css={css({ color: "#8892b0" })}>saving for {g.nextPurchase}</span>
+						</div>
+					))}
 			</div>
 
 			<div css={sectionTitleCss}>Cash Over Time</div>

@@ -93,6 +93,13 @@ interface ProfileResult {
 	tierDurations: Record<string, number>;
 	failures: string[];
 	aiModelsOwned: number;
+	idle: {
+		totalIdleTime: number;
+		idlePercent: number;
+		avgGap: number;
+		medianGap: number;
+		topGaps: { duration: number; nextPurchase: string }[];
+	};
 }
 
 function validateProfile(profile: Profile): ProfileResult {
@@ -178,6 +185,11 @@ function validateProfile(profile: Profile): ProfileResult {
 		}
 	}
 
+	const topGaps = [...result.idle.gaps]
+		.sort((a, b) => b.duration - a.duration)
+		.slice(0, 5)
+		.map((g) => ({ duration: Math.round(g.duration), nextPurchase: g.nextPurchase }));
+
 	return {
 		name: profile.name,
 		keysPerSec: profile.keysPerSec,
@@ -189,6 +201,13 @@ function validateProfile(profile: Profile): ProfileResult {
 		tierDurations,
 		failures,
 		aiModelsOwned: result.aiModelsOwned,
+		idle: {
+			totalIdleTime: Math.round(result.idle.totalIdleTime),
+			idlePercent: Math.round(result.idle.idlePercent),
+			avgGap: Math.round(result.idle.avgGap),
+			medianGap: Math.round(result.idle.medianGap),
+			topGaps,
+		},
 	};
 }
 
@@ -277,6 +296,18 @@ function printHuman(results: ProfileResult[]): void {
 				}
 			}
 			console.log(`  info: AI models owned: ${r.aiModelsOwned}`);
+			console.log(
+				`  info: Idle time: ${r.idle.totalIdleTime}s (${r.idle.idlePercent}% of session)`,
+			);
+			console.log(
+				`  info: Avg gap: ${r.idle.avgGap}s | Median: ${r.idle.medianGap}s`,
+			);
+			if (r.idle.topGaps.length > 0) {
+				console.log("  info: Top idle gaps:");
+				for (const g of r.idle.topGaps) {
+					console.log(`    ${g.duration}s → saving for ${g.nextPurchase}`);
+				}
+			}
 		}
 	}
 
