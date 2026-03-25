@@ -13,6 +13,14 @@ const CHART_W = 700;
 const CHART_H = 200;
 const PAD = { top: 10, right: 10, bottom: 30, left: 60 };
 
+function formatCash(v: number): string {
+	if (v >= 1e12) return `$${(v / 1e12).toFixed(0)}T`;
+	if (v >= 1e9) return `$${(v / 1e9).toFixed(0)}B`;
+	if (v >= 1e6) return `$${(v / 1e6).toFixed(0)}M`;
+	if (v >= 1e3) return `$${(v / 1e3).toFixed(0)}K`;
+	return `$${v.toFixed(0)}`;
+}
+
 interface CashChartProps {
 	snapshots: SimSnapshot[];
 }
@@ -20,18 +28,26 @@ interface CashChartProps {
 export function CashChart({ snapshots }: CashChartProps) {
 	const { points, xTicks, yTicks } = useMemo(() => {
 		if (snapshots.length === 0)
-			return { points: "", xTicks: [], yTicks: [], maxCash: 0, maxTime: 0 };
+			return { points: "", xTicks: [], yTicks: [] };
 
 		const mTime = snapshots[snapshots.length - 1].time;
-		const mCash = Math.max(...snapshots.map((s) => s.cash), 1);
+		const cashValues = snapshots.map((s) => s.cash).filter((c) => c > 0);
+		if (cashValues.length === 0)
+			return { points: "", xTicks: [], yTicks: [] };
+
+		const minLog = Math.floor(Math.log10(Math.max(cashValues[0], 1)));
+		const maxLog = Math.ceil(Math.log10(Math.max(cashValues[cashValues.length - 1], 1)));
+		const logRange = Math.max(maxLog - minLog, 1);
 
 		const innerW = CHART_W - PAD.left - PAD.right;
 		const innerH = CHART_H - PAD.top - PAD.bottom;
 
 		const pts = snapshots
+			.filter((s) => s.cash > 0)
 			.map((s) => {
 				const x = PAD.left + (s.time / mTime) * innerW;
-				const y = PAD.top + innerH - (s.cash / mCash) * innerH;
+				const logY = (Math.log10(s.cash) - minLog) / logRange;
+				const y = PAD.top + innerH - logY * innerH;
 				return `${x},${y}`;
 			})
 			.join(" ");
@@ -44,21 +60,16 @@ export function CashChart({ snapshots }: CashChartProps) {
 			};
 		});
 
-		const yT = Array.from({ length: 4 }, (_, i) => {
-			const v = (mCash / 3) * i;
-			return {
-				y: PAD.top + innerH - (v / mCash) * innerH,
-				label: v >= 1000 ? `${(v / 1000).toFixed(0)}k` : `${v.toFixed(0)}`,
-			};
-		});
+		const yT: { y: number; label: string }[] = [];
+		for (let exp = minLog; exp <= maxLog; exp++) {
+			const logY = (exp - minLog) / logRange;
+			yT.push({
+				y: PAD.top + innerH - logY * innerH,
+				label: formatCash(10 ** exp),
+			});
+		}
 
-		return {
-			points: pts,
-			xTicks: xT,
-			yTicks: yT,
-			maxCash: mCash,
-			maxTime: mTime,
-		};
+		return { points: pts, xTicks: xT, yTicks: yT };
 	}, [snapshots]);
 
 	if (snapshots.length === 0) return null;
@@ -70,7 +81,6 @@ export function CashChart({ snapshots }: CashChartProps) {
 				width="100%"
 				preserveAspectRatio="xMidYMid meet"
 			>
-				{/* grid lines */}
 				{yTicks.map((t) => (
 					<line
 						key={t.label}
@@ -82,7 +92,6 @@ export function CashChart({ snapshots }: CashChartProps) {
 						strokeWidth={1}
 					/>
 				))}
-				{/* axis labels */}
 				{xTicks.map((t) => (
 					<text
 						key={t.label}
@@ -107,7 +116,6 @@ export function CashChart({ snapshots }: CashChartProps) {
 						{t.label}
 					</text>
 				))}
-				{/* data line */}
 				<polyline
 					fill="none"
 					stroke="#3fb950"
