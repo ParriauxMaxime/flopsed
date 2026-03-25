@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+	applyEdgeChanges,
+	applyNodeChanges,
 	type Edge,
 	type Node,
 	type OnConnect,
 	type OnEdgesChange,
 	type OnNodesChange,
-	applyEdgeChanges,
-	applyNodeChanges,
 } from "@xyflow/react";
+import { useCallback, useEffect, useState } from "react";
 import type { TechNode } from "./types";
 
 interface UseTechTreeFlowParams {

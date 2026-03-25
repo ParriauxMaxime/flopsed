@@ -97,7 +97,11 @@ function UpgradeCard({ upgrade }: { upgrade: Upgrade }) {
 			<div css={descStyle}>{upgrade.description}</div>
 			<div css={costStyle}>{maxed ? "MAXED" : `$${formatNumber(cost)}`}</div>
 			<div css={ownedStyle}>
-				{effectiveMax === 1 ? (owned > 0 ? "✓" : "") : `${owned}/${effectiveMax}`}
+				{effectiveMax === 1
+					? owned > 0
+						? "✓"
+						: ""
+					: `${owned}/${effectiveMax}`}
 			</div>
 		</button>
 	);
@@ -120,8 +124,10 @@ export function UpgradeList() {
 	);
 
 	const sorted = [...visibleUpgrades].sort((a, b) => {
-		const aMaxed = (state.ownedUpgrades[a.id] ?? 0) >= getEffectiveMax(a, state) ? 1 : 0;
-		const bMaxed = (state.ownedUpgrades[b.id] ?? 0) >= getEffectiveMax(b, state) ? 1 : 0;
+		const aMaxed =
+			(state.ownedUpgrades[a.id] ?? 0) >= getEffectiveMax(a, state) ? 1 : 0;
+		const bMaxed =
+			(state.ownedUpgrades[b.id] ?? 0) >= getEffectiveMax(b, state) ? 1 : 0;
 		return aMaxed - bMaxed;
 	});
 

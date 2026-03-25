@@ -51,10 +51,7 @@ export const useUiStore = create<UiState>((set) => ({
 			useMilestonesStore,
 		];
 		const hasDirty = stores.some((s) => s.getState().dirty);
-		if (
-			hasDirty &&
-			!window.confirm("You have unsaved changes. Navigate away?")
-		)
+		if (hasDirty && !window.confirm("You have unsaved changes. Navigate away?"))
 			return;
 		set({ activePage: page });
 	},

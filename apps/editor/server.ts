@@ -11,8 +11,11 @@ const app = express();
 const PORT = 3737;
 
 import { createRequire } from "node:module";
+
 const require = createRequire(import.meta.url);
-const domainDir = path.dirname(require.resolve("@agi-rush/domain/package.json"));
+const domainDir = path.dirname(
+	require.resolve("@agi-rush/domain/package.json"),
+);
 const SPECS_DIR = path.join(domainDir, "data");
 const BALANCE_CHECK = path.resolve(__dirname, "../../specs/balance-check.js");
 
@@ -39,7 +42,10 @@ app.get("/api/data/:file", async (req, res) => {
 		return;
 	}
 	try {
-		const content = await fs.readFile(path.join(SPECS_DIR, `${file}.json`), "utf-8");
+		const content = await fs.readFile(
+			path.join(SPECS_DIR, `${file}.json`),
+			"utf-8",
+		);
 		res.json(JSON.parse(content));
 	} catch {
 		res.status(500).json({ error: `Failed to read ${file}.json` });
@@ -62,10 +68,20 @@ app.put("/api/data/:file", async (req, res) => {
 });
 
 app.post("/api/balance-check", (_req, res) => {
-	execFile("node", [BALANCE_CHECK], { timeout: 30_000, cwd: path.dirname(BALANCE_CHECK) }, (err, stdout, stderr) => {
-		const exitCode = err && "status" in err ? (err as { status: number }).status : err ? 1 : 0;
-		res.json({ stdout, stderr, exitCode });
-	});
+	execFile(
+		"node",
+		[BALANCE_CHECK],
+		{ timeout: 30_000, cwd: path.dirname(BALANCE_CHECK) },
+		(err, stdout, stderr) => {
+			const exitCode =
+				err && "status" in err
+					? (err as { status: number }).status
+					: err
+						? 1
+						: 0;
+			res.json({ stdout, stderr, exitCode });
+		},
+	);
 });
 
 // SPA fallback

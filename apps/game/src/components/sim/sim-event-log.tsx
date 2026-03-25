@@ -1,5 +1,5 @@
-import { css } from "@emotion/react";
 import type { SimLogEntry } from "@agi-rush/engine";
+import { css } from "@emotion/react";
 import { formatNumber, formatTime } from "@utils/format";
 
 const containerCss = css({

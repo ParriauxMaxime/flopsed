@@ -1,5 +1,5 @@
-import { css } from "@emotion/react";
 import type { SimSnapshot } from "@agi-rush/engine";
+import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 
 const wrapperCss = css({

@@ -1,5 +1,5 @@
-import { events as allEvents } from "@agi-rush/domain";
 import type { EventEffect } from "@agi-rush/domain";
+import { events as allEvents } from "@agi-rush/domain";
 import { css, keyframes } from "@emotion/react";
 import { useGameStore } from "@modules/game";
 import { resolveChoiceEffects, useEventStore } from "../store/event-store";

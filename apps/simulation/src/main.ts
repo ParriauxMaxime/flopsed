@@ -3,12 +3,12 @@ import {
 	balanceJson,
 	eventsJson,
 	techTreeJson,
+	tiers,
 	tiersJson,
 	upgradesJson,
-	tiers,
 } from "@agi-rush/domain";
-import { runBalanceSim } from "@agi-rush/engine";
 import type { SimData, SimResult } from "@agi-rush/engine";
+import { runBalanceSim } from "@agi-rush/engine";
 
 // ── CLI flags ──
 
@@ -49,9 +49,24 @@ interface Profile {
 }
 
 const profiles: Profile[] = [
-	{ name: ProfileEnum.casual, label: "Casual (4 keys/s)", keysPerSec: 4, skill: 0.6 },
-	{ name: ProfileEnum.average, label: "Average (6 keys/s)", keysPerSec: 6, skill: 0.8 },
-	{ name: ProfileEnum.fast, label: "Fast (9 keys/s)", keysPerSec: 9, skill: 0.95 },
+	{
+		name: ProfileEnum.casual,
+		label: "Casual (4 keys/s)",
+		keysPerSec: 4,
+		skill: 0.6,
+	},
+	{
+		name: ProfileEnum.average,
+		label: "Average (6 keys/s)",
+		keysPerSec: 6,
+		skill: 0.8,
+	},
+	{
+		name: ProfileEnum.fast,
+		label: "Fast (9 keys/s)",
+		keysPerSec: 9,
+		skill: 0.95,
+	},
 ];
 
 // ── Assemble SimData ──
@@ -144,7 +159,7 @@ function validateProfile(profile: Profile): ProfileResult {
 		const end =
 			i + 1 < tierIds.length && result.tierTimes[i + 1] !== undefined
 				? result.tierTimes[i + 1]
-				: result.agiTime ?? 3600;
+				: (result.agiTime ?? 3600);
 		const duration = end - start;
 		tierDurations[id] = duration;
 

@@ -19,13 +19,38 @@ interface PageConfig {
 }
 
 const pages: PageConfig[] = [
-	{ key: "tech_tree", label: "Tech Tree", icon: "\u{1F333}", store: useTechTreeStore },
-	{ key: "upgrades", label: "Upgrades", icon: "\u{1F6D2}", store: useUpgradesStore },
-	{ key: "ai_models", label: "AI Models", icon: "\u{1F916}", store: useAiModelsStore },
+	{
+		key: "tech_tree",
+		label: "Tech Tree",
+		icon: "\u{1F333}",
+		store: useTechTreeStore,
+	},
+	{
+		key: "upgrades",
+		label: "Upgrades",
+		icon: "\u{1F6D2}",
+		store: useUpgradesStore,
+	},
+	{
+		key: "ai_models",
+		label: "AI Models",
+		icon: "\u{1F916}",
+		store: useAiModelsStore,
+	},
 	{ key: "events", label: "Events", icon: "\u26A1", store: useEventsStore },
-	{ key: "milestones", label: "Milestones", icon: "\u{1F3C6}", store: useMilestonesStore },
+	{
+		key: "milestones",
+		label: "Milestones",
+		icon: "\u{1F3C6}",
+		store: useMilestonesStore,
+	},
 	{ key: "tiers", label: "Tiers", icon: "\u{1F4CA}", store: useTiersStore },
-	{ key: "balance", label: "Balance", icon: "\u2696\uFE0F", store: useBalanceStore },
+	{
+		key: "balance",
+		label: "Balance",
+		icon: "\u2696\uFE0F",
+		store: useBalanceStore,
+	},
 	{ key: "simulation", label: "Simulation", icon: "\u{1F9EA}", store: null },
 ];
 

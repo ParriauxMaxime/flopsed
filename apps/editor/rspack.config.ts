@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "@rspack/cli";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 import { HtmlRspackPlugin, type RspackPluginFunction } from "@rspack/core";
 import RefreshPlugin from "@rspack/plugin-react-refresh";
 

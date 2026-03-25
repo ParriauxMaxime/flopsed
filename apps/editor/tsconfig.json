@@ -1,4 +1,10 @@
 {
 	"extends": "../../tsconfig.base.json",
-	"include": ["src/**/*", "server.ts", "../../libs/domain", "../../libs/engine", "../../libs/design-system"]
+	"include": [
+		"src/**/*",
+		"server.ts",
+		"../../libs/domain",
+		"../../libs/engine",
+		"../../libs/design-system"
+	]
 }

@@ -1,9 +1,6 @@
+import { type Column, EditableTable } from "@agi-rush/design-system";
 import { css } from "@emotion/react";
 import { useCallback, useMemo } from "react";
-import {
-	type Column,
-	EditableTable,
-} from "@agi-rush/design-system";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useEventsStore } from "../../store/data-store";
 
@@ -62,7 +59,11 @@ const eventColumns: Column<GameEvent>[] = [
 		width: "100px",
 		render: (value) => {
 			const arr = Array.isArray(value) ? value : [];
-			return <span css={effectsBadge}>{arr.length} effect{arr.length !== 1 ? "s" : ""}</span>;
+			return (
+				<span css={effectsBadge}>
+					{arr.length} effect{arr.length !== 1 ? "s" : ""}
+				</span>
+			);
 		},
 	},
 	{ key: "description", label: "Description", editable: true },
@@ -201,10 +202,7 @@ export function EventsPage() {
 						css={configInputStyle}
 						value={eventConfig.minIntervalSeconds ?? 0}
 						onChange={(e) =>
-							handleConfigChange(
-								"minIntervalSeconds",
-								Number(e.target.value),
-							)
+							handleConfigChange("minIntervalSeconds", Number(e.target.value))
 						}
 					/>
 				</div>
@@ -215,10 +213,7 @@ export function EventsPage() {
 						css={configInputStyle}
 						value={eventConfig.maxIntervalSeconds ?? 0}
 						onChange={(e) =>
-							handleConfigChange(
-								"maxIntervalSeconds",
-								Number(e.target.value),
-							)
+							handleConfigChange("maxIntervalSeconds", Number(e.target.value))
 						}
 					/>
 				</div>
@@ -229,10 +224,7 @@ export function EventsPage() {
 						css={configInputStyle}
 						value={eventConfig.maxConcurrent ?? 0}
 						onChange={(e) =>
-							handleConfigChange(
-								"maxConcurrent",
-								Number(e.target.value),
-							)
+							handleConfigChange("maxConcurrent", Number(e.target.value))
 						}
 					/>
 				</div>

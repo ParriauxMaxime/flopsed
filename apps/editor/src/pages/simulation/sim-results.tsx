@@ -1,5 +1,5 @@
-import { css } from "@emotion/react";
 import type { SimResult } from "@agi-rush/engine";
+import { css } from "@emotion/react";
 import { CashChart } from "./cash-chart";
 import { TierTimeline } from "./tier-timeline";
 

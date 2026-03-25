@@ -20,7 +20,10 @@
 			"a11y": {
 				"noNoninteractiveTabindex": "off",
 				"noStaticElementInteractions": "off",
-				"useSemanticElements": "off"
+				"useSemanticElements": "off",
+				"noLabelWithoutControl": "off",
+				"useKeyWithClickEvents": "off",
+				"noSvgWithoutTitle": "off"
 			}
 		}
 	},

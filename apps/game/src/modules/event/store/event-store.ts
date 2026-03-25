@@ -1,15 +1,15 @@
-import {
-	DEFAULT_EVENT_MODIFIERS,
-	TIER_INDEX,
-	eventConfig,
-	events as allEvents,
-} from "@agi-rush/domain";
 import type {
 	ActiveEvent,
 	EventDefinition,
 	EventEffect,
 	EventModifiers,
 	ExpressionContext,
+} from "@agi-rush/domain";
+import {
+	events as allEvents,
+	DEFAULT_EVENT_MODIFIERS,
+	eventConfig,
+	TIER_INDEX,
 } from "@agi-rush/domain";
 import { resolveExpression } from "@agi-rush/engine";
 import { match } from "ts-pattern";
@@ -209,7 +209,11 @@ export const useEventStore = create<EventState & EventActions>()(
 			let { eventLog } = state;
 			const hasActiveNonSynthetic = updatedEvents.some((ev) => !ev.synthetic);
 
-			if (running && !hasActiveNonSynthetic && performance.now() >= nextSpawnAt) {
+			if (
+				running &&
+				!hasActiveNonSynthetic &&
+				performance.now() >= nextSpawnAt
+			) {
 				const def = pickWeightedEvent(currentTierIndex);
 				if (def !== null) {
 					const now = performance.now();

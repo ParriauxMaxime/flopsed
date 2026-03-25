@@ -154,9 +154,7 @@ function isArrayOfObjects(value: unknown): value is Record<string, unknown>[] {
 	);
 }
 
-function isPlainObject(
-	value: unknown,
-): value is Record<string, unknown> {
+function isPlainObject(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
@@ -230,11 +228,7 @@ function MiniTable({ data, onChange }: MiniTableProps) {
 										next[rowIdx] = {
 											...row,
 											[k]:
-												val === ""
-													? ""
-													: Number.isNaN(numVal)
-														? val
-														: numVal,
+												val === "" ? "" : Number.isNaN(numVal) ? val : numVal,
 										};
 										onChange(next);
 									}}
@@ -273,9 +267,7 @@ function FieldEditor({ path, obj, onChange }: FieldEditorProps) {
 							<div css={subSectionTitleStyle}>{key}</div>
 							<MiniTable
 								data={value}
-								onChange={(newData) =>
-									onChange(currentPath, newData)
-								}
+								onChange={(newData) => onChange(currentPath, newData)}
 							/>
 						</div>
 					);
@@ -285,11 +277,7 @@ function FieldEditor({ path, obj, onChange }: FieldEditorProps) {
 					return (
 						<div key={key} css={subSectionStyle}>
 							<div css={subSectionTitleStyle}>{key}</div>
-							<FieldEditor
-								path={currentPath}
-								obj={value}
-								onChange={onChange}
-							/>
+							<FieldEditor path={currentPath} obj={value} onChange={onChange} />
 						</div>
 					);
 				}
@@ -300,28 +288,16 @@ function FieldEditor({ path, obj, onChange }: FieldEditorProps) {
 							<label css={fieldLabelStyle}>{key}</label>
 							<input
 								css={fieldInputStyle}
-								type={
-									typeof value === "number"
-										? "number"
-										: "text"
-								}
-								step={
-									typeof value === "number" ? "any" : undefined
-								}
+								type={typeof value === "number" ? "number" : "text"}
+								step={typeof value === "number" ? "any" : undefined}
 								value={
-									value === null || value === undefined
-										? ""
-										: String(value)
+									value === null || value === undefined ? "" : String(value)
 								}
 								onChange={(e) => {
 									const val = e.target.value;
 									const numVal = Number(val);
 									const newValue =
-										typeof value === "number"
-											? val === ""
-												? 0
-												: numVal
-											: val;
+										typeof value === "number" ? (val === "" ? 0 : numVal) : val;
 									onChange(currentPath, newValue);
 								}}
 							/>
@@ -340,10 +316,7 @@ function FieldEditor({ path, obj, onChange }: FieldEditorProps) {
 
 export function BalancePage() {
 	const store = useBalanceStore();
-	const data = useMemo(
-		() => (store.data ?? {}) as BalanceData,
-		[store.data],
-	);
+	const data = useMemo(() => (store.data ?? {}) as BalanceData, [store.data]);
 
 	const handleLoad = useCallback(() => {
 		store.load();

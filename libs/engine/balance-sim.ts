@@ -343,7 +343,10 @@ export function runBalanceSim(
 		sim.autoTypeEnabled = false;
 		let tierIndex = sim.currentTier;
 
-		function applyEffect(e: { type: string; op: string; value: number | boolean | string }, owned: number): void {
+		function applyEffect(
+			e: { type: string; op: string; value: number | boolean | string },
+			owned: number,
+		): void {
 			const val = e.value as number;
 			// Add effects scale linearly with owned count
 			if (e.op === "add") {
@@ -354,7 +357,8 @@ export function runBalanceSim(
 				if (e.type === "storageFlops") sim.storageFlops += val * owned;
 				if (e.type === "autoLoc") sim.devLoc += val * owned;
 				if (e.type === "freelancerLoc") sim.freelancerLoc += val * owned;
-				if (e.type === "freelancerMaxBonus") sim.freelancerMaxBonus += val * owned;
+				if (e.type === "freelancerMaxBonus")
+					sim.freelancerMaxBonus += val * owned;
 				if (e.type === "internLoc") sim.internLoc += val * owned;
 				if (e.type === "devLoc") sim.devLoc += val * owned;
 				if (e.type === "teamLoc") sim.teamLoc += val * owned;
@@ -371,11 +375,14 @@ export function runBalanceSim(
 			if (e.op === "multiply") {
 				const mult = val ** owned;
 				if (e.type === "locPerKey") sim.locPerKeyMultiplier *= mult;
-				if (e.type === "locProductionSpeed") sim.locProductionMultiplier *= mult;
+				if (e.type === "locProductionSpeed")
+					sim.locProductionMultiplier *= mult;
 				if (e.type === "cashMultiplier") sim.cashMultiplier *= mult;
 				if (e.type === "devSpeed") sim.devSpeedMultiplier *= mult;
-				if (e.type === "freelancerLocMultiplier") sim.freelancerLocMultiplier *= mult;
-				if (e.type === "freelancerCostDiscount") sim.freelancerCostDiscount *= mult;
+				if (e.type === "freelancerLocMultiplier")
+					sim.freelancerLocMultiplier *= mult;
+				if (e.type === "freelancerCostDiscount")
+					sim.freelancerCostDiscount *= mult;
 				if (e.type === "internLocMultiplier") sim.internLocMultiplier *= mult;
 				if (e.type === "devLocMultiplier") sim.devLocMultiplier *= mult;
 				if (e.type === "teamLocMultiplier") sim.teamLocMultiplier *= mult;
@@ -390,9 +397,12 @@ export function runBalanceSim(
 				if (e.type === "agentCostDiscount") sim.agentCostDiscount *= mult;
 				if (e.type === "aiLocMultiplier") sim.aiLocMultiplier *= mult;
 			}
-			if (e.type === "autoType" && e.op === "enable") sim.autoTypeEnabled = true;
-			if (e.type === "tierUnlock" && e.op === "set") tierIndex = Math.max(tierIndex, val);
-			if (e.type === "modelUnlock" && e.op === "enable") sim.ownedModels[e.value as string] = true;
+			if (e.type === "autoType" && e.op === "enable")
+				sim.autoTypeEnabled = true;
+			if (e.type === "tierUnlock" && e.op === "set")
+				tierIndex = Math.max(tierIndex, val);
+			if (e.type === "modelUnlock" && e.op === "enable")
+				sim.ownedModels[e.value as string] = true;
 		}
 
 		// Apply all tech node effects
@@ -415,7 +425,11 @@ export function runBalanceSim(
 
 	/** Apply effects for a newly purchased item (instant effects only — recalc handles the rest) */
 	function applyInstantEffects(
-		effects: Array<{ type: string; op: string; value: number | boolean | string }>,
+		effects: Array<{
+			type: string;
+			op: string;
+			value: number | boolean | string;
+		}>,
 	): void {
 		for (const e of effects) {
 			if (e.type === "instantCash" && e.op === "add") {

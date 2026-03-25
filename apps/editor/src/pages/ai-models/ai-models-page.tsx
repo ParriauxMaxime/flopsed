@@ -1,9 +1,6 @@
+import { type Column, EditableTable } from "@agi-rush/design-system";
 import { css } from "@emotion/react";
 import { useCallback, useMemo } from "react";
-import {
-	type Column,
-	EditableTable,
-} from "@agi-rush/design-system";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useAiModelsStore } from "../../store/data-store";
 

@@ -214,9 +214,7 @@ export function EditableTable<T extends Record<string, unknown>>({
 								{col.label}
 							</th>
 						))}
-						{onRowDelete && (
-							<th css={thStyle} style={{ width: "36px" }} />
-						)}
+						{onRowDelete && <th css={thStyle} style={{ width: "36px" }} />}
 					</tr>
 				</thead>
 				<tbody>
@@ -347,7 +345,11 @@ function CellEditor<T extends Record<string, unknown>>({
 	}
 
 	if (!col.editable && col.type !== "select" && col.type !== "number") {
-		return <span css={css`color: #8892b0; padding: 4px 6px;`}>{String(value ?? "")}</span>;
+		return (
+			<span css={css`color: #8892b0; padding: 4px 6px;`}>
+				{String(value ?? "")}
+			</span>
+		);
 	}
 
 	if (col.type === "select" && col.options) {

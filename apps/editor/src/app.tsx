@@ -25,7 +25,6 @@ const mainStyle = css`
 	min-height: 0;
 `;
 
-
 function PageContent() {
 	const activePage = useUiStore((s) => s.activePage);
 

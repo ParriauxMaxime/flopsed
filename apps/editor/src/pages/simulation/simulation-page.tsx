@@ -1,8 +1,12 @@
-import { css } from "@emotion/react";
-import { runBalanceSim } from "@agi-rush/engine";
 import type { SimConfig, SimData, SimResult } from "@agi-rush/engine";
+import { runBalanceSim } from "@agi-rush/engine";
+import { css } from "@emotion/react";
 import { useCallback, useState } from "react";
-import { type BalanceCheckResult, fetchData, runBalanceCheck } from "../../api/client";
+import {
+	type BalanceCheckResult,
+	fetchData,
+	runBalanceCheck,
+} from "../../api/client";
 import { CliOutput } from "./cli-output";
 import { SimControls } from "./sim-controls";
 import { SimResults } from "./sim-results";
@@ -34,7 +38,14 @@ async function fetchSimData(): Promise<SimData> {
 			fetchData<SimData["tiers"]>("tiers"),
 			fetchData<SimData["upgrades"]>("upgrades"),
 		]);
-	return { aiModels: aiModelsRaw.models, balance, events, techTree, tiers, upgrades };
+	return {
+		aiModels: aiModelsRaw.models,
+		balance,
+		events,
+		techTree,
+		tiers,
+		upgrades,
+	};
 }
 
 export function SimulationPage() {

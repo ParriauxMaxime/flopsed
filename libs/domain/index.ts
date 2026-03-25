@@ -1,22 +1,22 @@
 // Types
-export * from "./types";
 
 // Data
 export {
-	tiers,
-	upgrades,
-	techNodes,
-	aiModels,
 	agentSetups,
-	events,
-	eventConfig,
-	milestones,
-	balance,
+	aiModels,
 	aiModelsJson,
+	balance,
 	balanceJson,
+	eventConfig,
+	events,
 	eventsJson,
+	milestones,
 	milestonesJson,
+	techNodes,
 	techTreeJson,
+	tiers,
 	tiersJson,
+	upgrades,
 	upgradesJson,
 } from "./data";
+export * from "./types";

@@ -50,8 +50,7 @@ export function TierTimeline({ tierTimes, endTime }: TierTimelineProps) {
 			.sort((a, b) => a.tier - b.tier);
 
 		return entries.map((entry, i) => {
-			const nextTime =
-				i < entries.length - 1 ? entries[i + 1].time : endTime;
+			const nextTime = i < entries.length - 1 ? entries[i + 1].time : endTime;
 			const duration = nextTime - entry.time;
 			const pct = (duration / endTime) * 100;
 			return {

@@ -77,10 +77,12 @@ export function createDataStore<T>(file: string) {
 
 // One store per data file
 export const useTiersStore = createDataStore<{ tiers: unknown[] }>("tiers");
-export const useUpgradesStore =
-	createDataStore<{ upgrades: unknown[] }>("upgrades");
-export const useTechTreeStore =
-	createDataStore<{ nodes: unknown[] }>("tech-tree");
+export const useUpgradesStore = createDataStore<{ upgrades: unknown[] }>(
+	"upgrades",
+);
+export const useTechTreeStore = createDataStore<{ nodes: unknown[] }>(
+	"tech-tree",
+);
 export const useAiModelsStore = createDataStore<{
 	models: unknown[];
 	agentSetups: unknown[];

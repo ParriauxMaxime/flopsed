@@ -1,5 +1,5 @@
-import { css } from "@emotion/react";
 import type { SimSnapshot } from "@agi-rush/engine";
+import { css } from "@emotion/react";
 import { useMemo } from "react";
 
 const containerCss = css({
@@ -18,7 +18,7 @@ interface CashChartProps {
 }
 
 export function CashChart({ snapshots }: CashChartProps) {
-	const { points, xTicks, yTicks, maxCash, maxTime } = useMemo(() => {
+	const { points, xTicks, yTicks } = useMemo(() => {
 		if (snapshots.length === 0)
 			return { points: "", xTicks: [], yTicks: [], maxCash: 0, maxTime: 0 };
 
@@ -52,14 +52,24 @@ export function CashChart({ snapshots }: CashChartProps) {
 			};
 		});
 
-		return { points: pts, xTicks: xT, yTicks: yT, maxCash: mCash, maxTime: mTime };
+		return {
+			points: pts,
+			xTicks: xT,
+			yTicks: yT,
+			maxCash: mCash,
+			maxTime: mTime,
+		};
 	}, [snapshots]);
 
 	if (snapshots.length === 0) return null;
 
 	return (
 		<div css={containerCss}>
-			<svg viewBox={`0 0 ${CHART_W} ${CHART_H}`} width="100%" preserveAspectRatio="xMidYMid meet">
+			<svg
+				viewBox={`0 0 ${CHART_W} ${CHART_H}`}
+				width="100%"
+				preserveAspectRatio="xMidYMid meet"
+			>
 				{/* grid lines */}
 				{yTicks.map((t) => (
 					<line

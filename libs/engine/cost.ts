@@ -25,8 +25,7 @@ export function getEffectiveMax(
 ): number {
 	if (!bonuses || !upgrade.costCategory) return upgrade.max;
 	let bonus = 0;
-	if (upgrade.costCategory === "freelancer")
-		bonus = bonuses.freelancerMaxBonus;
+	if (upgrade.costCategory === "freelancer") bonus = bonuses.freelancerMaxBonus;
 	if (upgrade.costCategory === "intern") bonus = bonuses.internMaxBonus;
 	if (upgrade.costCategory === "team") bonus = bonuses.teamMaxBonus;
 	if (upgrade.costCategory === "manager") bonus = bonuses.managerMaxBonus;

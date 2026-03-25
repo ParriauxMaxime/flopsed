@@ -8,5 +8,10 @@
 			"@utils/*": ["src/utils/*"]
 		}
 	},
-	"include": ["src", "../../libs/domain", "../../libs/engine", "../../libs/design-system"]
+	"include": [
+		"src",
+		"../../libs/domain",
+		"../../libs/engine",
+		"../../libs/design-system"
+	]
 }

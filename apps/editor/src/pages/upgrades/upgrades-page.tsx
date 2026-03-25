@@ -1,8 +1,5 @@
+import { type Column, EditableTable } from "@agi-rush/design-system";
 import { useCallback, useMemo } from "react";
-import {
-	type Column,
-	EditableTable,
-} from "@agi-rush/design-system";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useUpgradesStore } from "../../store/data-store";
 

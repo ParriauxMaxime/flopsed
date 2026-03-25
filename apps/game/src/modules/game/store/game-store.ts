@@ -1,18 +1,17 @@
-import {
-	aiModels,
-	balance,
-	milestones as allMilestonesData,
-	techNodes as allTechNodesData,
-	tiers as tiersData,
-	upgrades as allUpgradesData,
-} from "@agi-rush/domain";
 import type {
-	AiModelData,
 	Milestone,
 	TechNode,
 	Tier,
 	Upgrade,
 	UpgradeEffect,
+} from "@agi-rush/domain";
+import {
+	aiModels,
+	milestones as allMilestonesData,
+	techNodes as allTechNodesData,
+	upgrades as allUpgradesData,
+	balance,
+	tiers as tiersData,
 } from "@agi-rush/domain";
 import {
 	getEffectiveMax as engineGetEffectiveMax,
@@ -212,46 +211,126 @@ function recalcDerivedStats(state: GameState): void {
 	function applyEffect(effect: UpgradeEffect, owned: number) {
 		const val = effect.value as number;
 		match(effect)
-			.with({ type: "locPerKey", op: "add" }, () => { locPerKey += val * owned; })
-			.with({ type: "locPerKey", op: "multiply" }, () => { locPerKey *= val ** owned; })
-			.with({ type: "autoLoc", op: "add" }, () => { devLoc += val * owned; })
-			.with({ type: "freelancerLoc", op: "add" }, () => { freelancerLoc += val * owned; })
-			.with({ type: "internLoc", op: "add" }, () => { internLoc += val * owned; })
-			.with({ type: "devLoc", op: "add" }, () => { devLoc += val * owned; })
-			.with({ type: "teamLoc", op: "add" }, () => { teamLoc += val * owned; })
-			.with({ type: "managerLoc", op: "add" }, () => { managerCount += val * owned; })
-			.with({ type: "flops", op: "add" }, () => { baseFlops += val * owned; })
-			.with({ type: "cpuFlops", op: "add" }, () => { cpuFlops += val * owned; })
-			.with({ type: "ramFlops", op: "add" }, () => { ramFlops += val * owned; })
-			.with({ type: "storageFlops", op: "add" }, () => { storageFlops += val * owned; })
-			.with({ type: "locProductionSpeed", op: "multiply" }, () => { locProductionMultiplier *= val ** owned; })
-			.with({ type: "cashMultiplier", op: "multiply" }, () => { cashMultiplier *= val ** owned; })
-			.with({ type: "devSpeed", op: "multiply" }, () => { devSpeedMultiplier *= val ** owned; })
-			.with({ type: "freelancerLocMultiplier", op: "multiply" }, () => { freelancerLocMultiplier *= val ** owned; })
-			.with({ type: "internLocMultiplier", op: "multiply" }, () => { internLocMultiplier *= val ** owned; })
-			.with({ type: "devLocMultiplier", op: "multiply" }, () => { devLocMultiplier *= val ** owned; })
-			.with({ type: "teamLocMultiplier", op: "multiply" }, () => { teamLocMultiplier *= val ** owned; })
-			.with({ type: "managerMultiplier", op: "multiply" }, () => { managerMultiplier *= val ** owned; })
-			.with({ type: "freelancerCostDiscount", op: "multiply" }, () => { freelancerCostDiscount *= val ** owned; })
-			.with({ type: "internCostDiscount", op: "multiply" }, () => { internCostDiscount *= val ** owned; })
-			.with({ type: "devCostDiscount", op: "multiply" }, () => { devCostDiscount *= val ** owned; })
-			.with({ type: "teamCostDiscount", op: "multiply" }, () => { teamCostDiscount *= val ** owned; })
-			.with({ type: "managerCostDiscount", op: "multiply" }, () => { managerCostDiscount *= val ** owned; })
-			.with({ type: "llmLoc", op: "add" }, () => { llmLoc += val * owned; })
-			.with({ type: "agentLoc", op: "add" }, () => { agentLoc += val * owned; })
-			.with({ type: "llmLocMultiplier", op: "multiply" }, () => { llmLocMultiplier *= val ** owned; })
-			.with({ type: "agentLocMultiplier", op: "multiply" }, () => { agentLocMultiplier *= val ** owned; })
-			.with({ type: "llmCostDiscount", op: "multiply" }, () => { llmCostDiscount *= val ** owned; })
-			.with({ type: "agentCostDiscount", op: "multiply" }, () => { agentCostDiscount *= val ** owned; })
-			.with({ type: "freelancerMaxBonus", op: "add" }, () => { freelancerMaxBonus += val * owned; })
-			.with({ type: "internMaxBonus", op: "add" }, () => { internMaxBonus += val * owned; })
-			.with({ type: "teamMaxBonus", op: "add" }, () => { teamMaxBonus += val * owned; })
-			.with({ type: "managerMaxBonus", op: "add" }, () => { managerMaxBonus += val * owned; })
-			.with({ type: "llmMaxBonus", op: "add" }, () => { llmMaxBonus += val * owned; })
-			.with({ type: "agentMaxBonus", op: "add" }, () => { agentMaxBonus += val * owned; })
-			.with({ type: "tierUnlock", op: "set" }, () => { tierIndex = Math.max(tierIndex, val); })
-			.with({ type: "modelUnlock", op: "enable" }, () => { unlockedModels[effect.value as string] = true; })
-			.with({ type: "singularity", op: "enable" }, () => { singularity = true; })
+			.with({ type: "locPerKey", op: "add" }, () => {
+				locPerKey += val * owned;
+			})
+			.with({ type: "locPerKey", op: "multiply" }, () => {
+				locPerKey *= val ** owned;
+			})
+			.with({ type: "autoLoc", op: "add" }, () => {
+				devLoc += val * owned;
+			})
+			.with({ type: "freelancerLoc", op: "add" }, () => {
+				freelancerLoc += val * owned;
+			})
+			.with({ type: "internLoc", op: "add" }, () => {
+				internLoc += val * owned;
+			})
+			.with({ type: "devLoc", op: "add" }, () => {
+				devLoc += val * owned;
+			})
+			.with({ type: "teamLoc", op: "add" }, () => {
+				teamLoc += val * owned;
+			})
+			.with({ type: "managerLoc", op: "add" }, () => {
+				managerCount += val * owned;
+			})
+			.with({ type: "flops", op: "add" }, () => {
+				baseFlops += val * owned;
+			})
+			.with({ type: "cpuFlops", op: "add" }, () => {
+				cpuFlops += val * owned;
+			})
+			.with({ type: "ramFlops", op: "add" }, () => {
+				ramFlops += val * owned;
+			})
+			.with({ type: "storageFlops", op: "add" }, () => {
+				storageFlops += val * owned;
+			})
+			.with({ type: "locProductionSpeed", op: "multiply" }, () => {
+				locProductionMultiplier *= val ** owned;
+			})
+			.with({ type: "cashMultiplier", op: "multiply" }, () => {
+				cashMultiplier *= val ** owned;
+			})
+			.with({ type: "devSpeed", op: "multiply" }, () => {
+				devSpeedMultiplier *= val ** owned;
+			})
+			.with({ type: "freelancerLocMultiplier", op: "multiply" }, () => {
+				freelancerLocMultiplier *= val ** owned;
+			})
+			.with({ type: "internLocMultiplier", op: "multiply" }, () => {
+				internLocMultiplier *= val ** owned;
+			})
+			.with({ type: "devLocMultiplier", op: "multiply" }, () => {
+				devLocMultiplier *= val ** owned;
+			})
+			.with({ type: "teamLocMultiplier", op: "multiply" }, () => {
+				teamLocMultiplier *= val ** owned;
+			})
+			.with({ type: "managerMultiplier", op: "multiply" }, () => {
+				managerMultiplier *= val ** owned;
+			})
+			.with({ type: "freelancerCostDiscount", op: "multiply" }, () => {
+				freelancerCostDiscount *= val ** owned;
+			})
+			.with({ type: "internCostDiscount", op: "multiply" }, () => {
+				internCostDiscount *= val ** owned;
+			})
+			.with({ type: "devCostDiscount", op: "multiply" }, () => {
+				devCostDiscount *= val ** owned;
+			})
+			.with({ type: "teamCostDiscount", op: "multiply" }, () => {
+				teamCostDiscount *= val ** owned;
+			})
+			.with({ type: "managerCostDiscount", op: "multiply" }, () => {
+				managerCostDiscount *= val ** owned;
+			})
+			.with({ type: "llmLoc", op: "add" }, () => {
+				llmLoc += val * owned;
+			})
+			.with({ type: "agentLoc", op: "add" }, () => {
+				agentLoc += val * owned;
+			})
+			.with({ type: "llmLocMultiplier", op: "multiply" }, () => {
+				llmLocMultiplier *= val ** owned;
+			})
+			.with({ type: "agentLocMultiplier", op: "multiply" }, () => {
+				agentLocMultiplier *= val ** owned;
+			})
+			.with({ type: "llmCostDiscount", op: "multiply" }, () => {
+				llmCostDiscount *= val ** owned;
+			})
+			.with({ type: "agentCostDiscount", op: "multiply" }, () => {
+				agentCostDiscount *= val ** owned;
+			})
+			.with({ type: "freelancerMaxBonus", op: "add" }, () => {
+				freelancerMaxBonus += val * owned;
+			})
+			.with({ type: "internMaxBonus", op: "add" }, () => {
+				internMaxBonus += val * owned;
+			})
+			.with({ type: "teamMaxBonus", op: "add" }, () => {
+				teamMaxBonus += val * owned;
+			})
+			.with({ type: "managerMaxBonus", op: "add" }, () => {
+				managerMaxBonus += val * owned;
+			})
+			.with({ type: "llmMaxBonus", op: "add" }, () => {
+				llmMaxBonus += val * owned;
+			})
+			.with({ type: "agentMaxBonus", op: "add" }, () => {
+				agentMaxBonus += val * owned;
+			})
+			.with({ type: "tierUnlock", op: "set" }, () => {
+				tierIndex = Math.max(tierIndex, val);
+			})
+			.with({ type: "modelUnlock", op: "enable" }, () => {
+				unlockedModels[effect.value as string] = true;
+			})
+			.with({ type: "singularity", op: "enable" }, () => {
+				singularity = true;
+			})
 			.otherwise(() => {});
 	}
 
@@ -261,13 +340,17 @@ function recalcDerivedStats(state: GameState): void {
 		const owned = state.ownedUpgrades[upgrade.id] ?? 0;
 		if (owned === 0) continue;
 		if (eventMods.disabledUpgrades.includes(upgrade.id)) continue;
-		for (const effect of upgrade.effects) { applyEffect(effect, owned); }
+		for (const effect of upgrade.effects) {
+			applyEffect(effect, owned);
+		}
 	}
 
 	for (const node of allTechNodes) {
 		const owned = state.ownedTechNodes[node.id] ?? 0;
 		if (owned === 0) continue;
-		for (const effect of node.effects) { applyEffect(effect, owned); }
+		for (const effect of node.effects) {
+			applyEffect(effect, owned);
+		}
 	}
 
 	locPerKey *= eventMods.locPerKeyMultiplier;
@@ -288,9 +371,13 @@ function recalcDerivedStats(state: GameState): void {
 	state.ramFlops = ramFlops;
 	state.storageFlops = storageFlops;
 	state.locPerKey = locPerKey;
-	state.autoLocPerSec = totalAutoLoc * locProductionMultiplier * eventMods.autoLocMultiplier;
+	state.autoLocPerSec =
+		totalAutoLoc * locProductionMultiplier * eventMods.autoLocMultiplier;
 	const computedFlops = baseFlops + hardwareFlops;
-	state.flops = eventMods.flopsOverride !== null ? eventMods.flopsOverride : computedFlops * eventMods.flopsMultiplier;
+	state.flops =
+		eventMods.flopsOverride !== null
+			? eventMods.flopsOverride
+			: computedFlops * eventMods.flopsMultiplier;
 	state.locProductionMultiplier = locProductionMultiplier;
 	state.cashMultiplier = cashMultiplier;
 	state.freelancerCostDiscount = freelancerCostDiscount;
@@ -347,7 +434,10 @@ export const useGameStore = create<GameState & GameActions>()(
 						const wholeLines = Math.floor(autoLocAccumulator);
 						if (wholeLines > 0) {
 							autoLocAccumulator -= wholeLines;
-							if (!mutated) { blockQueue = blockQueue.slice(); mutated = true; }
+							if (!mutated) {
+								blockQueue = blockQueue.slice();
+								mutated = true;
+							}
 							blockQueue.push({ lines: [], loc: wholeLines });
 						}
 					}
@@ -367,40 +457,64 @@ export const useGameStore = create<GameState & GameActions>()(
 							}
 						}
 						if (totalAiFlops > 0) {
-							const effectiveAiLoc = totalAiLoc * Math.min(1, aiFlops / totalAiFlops);
+							const effectiveAiLoc =
+								totalAiLoc * Math.min(1, aiFlops / totalAiFlops);
 							aiLocAccumulator += effectiveAiLoc * dt;
 						}
 					}
 
 					if (s.running && aiLocAccumulator >= AI_BLOCK_SIZE) {
-						const aiLines = Math.floor(aiLocAccumulator / AI_BLOCK_SIZE) * AI_BLOCK_SIZE;
+						const aiLines =
+							Math.floor(aiLocAccumulator / AI_BLOCK_SIZE) * AI_BLOCK_SIZE;
 						aiLocAccumulator -= aiLines;
-						if (!mutated) { blockQueue = blockQueue.slice(); mutated = true; }
+						if (!mutated) {
+							blockQueue = blockQueue.slice();
+							mutated = true;
+						}
 						blockQueue.push({ lines: [], loc: aiLines });
 						loc += aiLines;
 						totalLoc += aiLines;
 					}
 
-					let execAccum = s.running ? s.executionProgress + effectiveFlops * dt : 0;
+					let execAccum = s.running
+						? s.executionProgress + effectiveFlops * dt
+						: 0;
 					let remaining = Math.floor(execAccum);
 					execAccum -= remaining;
 
 					if (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
-						if (!mutated) { blockQueue = blockQueue.slice(); mutated = true; }
+						if (!mutated) {
+							blockQueue = blockQueue.slice();
+							mutated = true;
+						}
 						const earnRate = tier.cashPerLoc * s.cashMultiplier;
 						while (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
 							const block = blockQueue[0];
-							if (block.loc <= 0 && block.lines.length <= 0) { blockQueue.shift(); continue; }
+							if (block.loc <= 0 && block.lines.length <= 0) {
+								blockQueue.shift();
+								continue;
+							}
 							if (block.lines.length > 0) {
-								const consume = Math.min(remaining, block.lines.length, Math.floor(loc));
+								const consume = Math.min(
+									remaining,
+									block.lines.length,
+									Math.floor(loc),
+								);
 								if (consume <= 0) break;
 								cash += earnRate * consume;
 								totalCash += earnRate * consume;
 								loc -= consume;
 								totalExecutedLoc += consume;
 								remaining -= consume;
-								if (consume >= block.lines.length) { blockQueue.shift(); }
-								else { blockQueue[0] = { ...block, lines: block.lines.slice(consume), loc: block.loc - consume }; }
+								if (consume >= block.lines.length) {
+									blockQueue.shift();
+								} else {
+									blockQueue[0] = {
+										...block,
+										lines: block.lines.slice(consume),
+										loc: block.loc - consume,
+									};
+								}
 							} else {
 								const consume = Math.min(remaining, block.loc, Math.floor(loc));
 								if (consume <= 0) break;
@@ -409,8 +523,11 @@ export const useGameStore = create<GameState & GameActions>()(
 								loc -= consume;
 								totalExecutedLoc += consume;
 								remaining -= consume;
-								if (consume >= block.loc) { blockQueue.shift(); }
-								else { blockQueue[0] = { ...block, loc: block.loc - consume }; }
+								if (consume >= block.loc) {
+									blockQueue.shift();
+								} else {
+									blockQueue[0] = { ...block, loc: block.loc - consume };
+								}
 							}
 						}
 					}
@@ -418,9 +535,15 @@ export const useGameStore = create<GameState & GameActions>()(
 					loc = Math.max(0, loc);
 
 					const next: Partial<GameState> = {
-						loc, totalLoc, cash, totalCash, totalExecutedLoc,
-						blockQueue, executionProgress: Math.min(execAccum, 1),
-						aiLocAccumulator, autoLocAccumulator,
+						loc,
+						totalLoc,
+						cash,
+						totalCash,
+						totalExecutedLoc,
+						blockQueue,
+						executionProgress: Math.min(execAccum, 1),
+						aiLocAccumulator,
+						autoLocAccumulator,
 					};
 
 					const newMilestones: string[] = [];
@@ -447,14 +570,18 @@ export const useGameStore = create<GameState & GameActions>()(
 				if (s.cash < cost) return;
 				let cashBonus = 0;
 				for (const effect of upgrade.effects) {
-					if (effect.type === "instantCash" && effect.op === "add") cashBonus += effect.value as number;
+					if (effect.type === "instantCash" && effect.op === "add")
+						cashBonus += effect.value as number;
 				}
 				set((s) => {
 					const newState = {
 						...s,
 						cash: s.cash - cost + cashBonus,
 						totalCash: s.totalCash + cashBonus,
-						ownedUpgrades: { ...s.ownedUpgrades, [upgrade.id]: (s.ownedUpgrades[upgrade.id] ?? 0) + 1 },
+						ownedUpgrades: {
+							...s.ownedUpgrades,
+							[upgrade.id]: (s.ownedUpgrades[upgrade.id] ?? 0) + 1,
+						},
 					};
 					recalcDerivedStats(newState);
 					return newState;
@@ -465,7 +592,9 @@ export const useGameStore = create<GameState & GameActions>()(
 				const s = get();
 				const owned = s.ownedTechNodes[node.id] ?? 0;
 				if (owned >= node.max) return;
-				for (const reqId of node.requires) { if ((s.ownedTechNodes[reqId] ?? 0) === 0) return; }
+				for (const reqId of node.requires) {
+					if ((s.ownedTechNodes[reqId] ?? 0) === 0) return;
+				}
 				const cost = getTechNodeCost(node, owned);
 				const useLoc = node.currency === "loc";
 				if (useLoc && s.loc < cost) return;
@@ -482,7 +611,11 @@ export const useGameStore = create<GameState & GameActions>()(
 								linesToRemove -= block.lines.length;
 								blockQueue.shift();
 							} else {
-								blockQueue[0] = { ...block, lines: block.lines.slice(linesToRemove), loc: block.loc - linesToRemove };
+								blockQueue[0] = {
+									...block,
+									lines: block.lines.slice(linesToRemove),
+									loc: block.loc - linesToRemove,
+								};
 								linesToRemove = 0;
 							}
 						}
@@ -500,8 +633,12 @@ export const useGameStore = create<GameState & GameActions>()(
 				});
 			},
 
-			toggleAutoType: () => { set((s) => ({ autoTypeEnabled: !s.autoTypeEnabled })); },
-			toggleRunning: () => { set((s) => ({ running: !s.running })); },
+			toggleAutoType: () => {
+				set((s) => ({ autoTypeEnabled: !s.autoTypeEnabled }));
+			},
+			toggleRunning: () => {
+				set((s) => ({ running: !s.running }));
+			},
 
 			reset: () => {
 				set(initialState);
@@ -512,14 +649,20 @@ export const useGameStore = create<GameState & GameActions>()(
 			godSet: (overrides: GodModeOverrides) => {
 				set((s) => {
 					const next = { ...s, ...overrides };
-					if (overrides.loc !== undefined && overrides.totalLoc === undefined) next.totalLoc = Math.max(s.totalLoc, next.loc);
-					if (overrides.cash !== undefined && overrides.totalCash === undefined) next.totalCash = Math.max(s.totalCash, next.cash);
+					if (overrides.loc !== undefined && overrides.totalLoc === undefined)
+						next.totalLoc = Math.max(s.totalLoc, next.loc);
+					if (overrides.cash !== undefined && overrides.totalCash === undefined)
+						next.totalCash = Math.max(s.totalCash, next.cash);
 					return next;
 				});
 			},
 
 			recalc: () => {
-				set((s) => { const next = { ...s }; recalcDerivedStats(next); return next; });
+				set((s) => {
+					const next = { ...s };
+					recalcDerivedStats(next);
+					return next;
+				});
 			},
 
 			applyEventReward: (cashDelta: number, locDelta: number) => {
@@ -531,19 +674,29 @@ export const useGameStore = create<GameState & GameActions>()(
 				}));
 			},
 
-			setFlopSlider: (value: number) => { set({ flopSlider: Math.min(1, Math.max(0, value)) }); },
+			setFlopSlider: (value: number) => {
+				set({ flopSlider: Math.min(1, Math.max(0, value)) });
+			},
 		}),
 		{
 			name: "agi-rush-save",
 			partialize: (state) => ({
-				loc: state.loc, totalLoc: state.totalLoc,
-				cash: state.cash, totalCash: state.totalCash,
-				blockQueue: state.blockQueue, executionProgress: state.executionProgress,
-				currentTierIndex: state.currentTierIndex, ownedUpgrades: state.ownedUpgrades,
-				ownedTechNodes: state.ownedTechNodes, autoTypeEnabled: state.autoTypeEnabled,
-				reachedMilestones: state.reachedMilestones, flopSlider: state.flopSlider,
+				loc: state.loc,
+				totalLoc: state.totalLoc,
+				cash: state.cash,
+				totalCash: state.totalCash,
+				blockQueue: state.blockQueue,
+				executionProgress: state.executionProgress,
+				currentTierIndex: state.currentTierIndex,
+				ownedUpgrades: state.ownedUpgrades,
+				ownedTechNodes: state.ownedTechNodes,
+				autoTypeEnabled: state.autoTypeEnabled,
+				reachedMilestones: state.reachedMilestones,
+				flopSlider: state.flopSlider,
 			}),
-			onRehydrateStorage: () => (state) => { if (state) recalcDerivedStats(state); },
+			onRehydrateStorage: () => (state) => {
+				if (state) recalcDerivedStats(state);
+			},
 		},
 	),
 );

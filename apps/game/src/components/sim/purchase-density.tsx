@@ -1,5 +1,5 @@
-import { css } from "@emotion/react";
 import { PurchaseTypeEnum, type SimPurchase } from "@agi-rush/engine";
+import { css } from "@emotion/react";
 import { match } from "ts-pattern";
 
 const containerCss = css({
