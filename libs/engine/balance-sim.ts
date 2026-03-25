@@ -660,7 +660,11 @@ export function runBalanceSim(
 				applyInstantEffects(freeNode.effects);
 				purchaseCount++;
 				const isTier = freeNode.effects.some((e) => e.type === "tierUnlock");
-				purchases.push({ time: t, type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech, name: freeNode.name });
+				purchases.push({
+					time: t,
+					type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
+					name: freeNode.name,
+				});
 				continue;
 			}
 
@@ -682,7 +686,11 @@ export function runBalanceSim(
 				applyInstantEffects(gateNode.effects);
 				purchaseCount++;
 				const isTier = gateNode.effects.some((e) => e.type === "tierUnlock");
-				purchases.push({ time: t, type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech, name: gateNode.name });
+				purchases.push({
+					time: t,
+					type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
+					name: gateNode.name,
+				});
 				continue;
 			}
 
@@ -750,7 +758,9 @@ export function runBalanceSim(
 			recalcSimStats();
 			applyInstantEffects(bestTech.node.effects);
 			purchaseCount++;
-			const isModelUnlock = bestTech.node.effects.some((e) => e.type === "modelUnlock");
+			const isModelUnlock = bestTech.node.effects.some(
+				(e) => e.type === "modelUnlock",
+			);
 			purchases.push({
 				time: t,
 				type: isModelUnlock ? PurchaseTypeEnum.ai : PurchaseTypeEnum.tech,
@@ -948,12 +958,12 @@ export function runBalanceSim(
 					? Object.entries(tierTimes)
 							.filter(([, t]) => t <= p.time)
 							.sort(([, a], [, b]) => b - a)[0]?.[0]
-							? Number(
-									Object.entries(tierTimes)
-										.filter(([, t]) => t <= p.time)
-										.sort(([, a], [, b]) => b - a)[0][0],
-								)
-							: 0
+						? Number(
+								Object.entries(tierTimes)
+									.filter(([, t]) => t <= p.time)
+									.sort(([, a], [, b]) => b - a)[0][0],
+							)
+						: 0
 					: 0,
 			});
 		}

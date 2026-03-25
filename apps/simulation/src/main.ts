@@ -188,7 +188,10 @@ function validateProfile(profile: Profile): ProfileResult {
 	const topGaps = [...result.idle.gaps]
 		.sort((a, b) => b.duration - a.duration)
 		.slice(0, 5)
-		.map((g) => ({ duration: Math.round(g.duration), nextPurchase: g.nextPurchase }));
+		.map((g) => ({
+			duration: Math.round(g.duration),
+			nextPurchase: g.nextPurchase,
+		}));
 
 	return {
 		name: profile.name,

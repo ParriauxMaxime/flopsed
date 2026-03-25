@@ -27,16 +27,16 @@ interface CashChartProps {
 
 export function CashChart({ snapshots }: CashChartProps) {
 	const { points, xTicks, yTicks } = useMemo(() => {
-		if (snapshots.length === 0)
-			return { points: "", xTicks: [], yTicks: [] };
+		if (snapshots.length === 0) return { points: "", xTicks: [], yTicks: [] };
 
 		const mTime = snapshots[snapshots.length - 1].time;
 		const cashValues = snapshots.map((s) => s.cash).filter((c) => c > 0);
-		if (cashValues.length === 0)
-			return { points: "", xTicks: [], yTicks: [] };
+		if (cashValues.length === 0) return { points: "", xTicks: [], yTicks: [] };
 
 		const minLog = Math.floor(Math.log10(Math.max(cashValues[0], 1)));
-		const maxLog = Math.ceil(Math.log10(Math.max(cashValues[cashValues.length - 1], 1)));
+		const maxLog = Math.ceil(
+			Math.log10(Math.max(cashValues[cashValues.length - 1], 1)),
+		);
 		const logRange = Math.max(maxLog - minLog, 1);
 
 		const innerW = CHART_W - PAD.left - PAD.right;

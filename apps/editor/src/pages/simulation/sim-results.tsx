@@ -139,8 +139,12 @@ export function SimResults({ result }: SimResultsProps) {
 								borderRadius: 3,
 							})}
 						>
-							<span css={css({ color: "#d19a66" })}>{Math.round(g.duration)}s</span>
-							<span css={css({ color: "#8892b0" })}>saving for {g.nextPurchase}</span>
+							<span css={css({ color: "#d19a66" })}>
+								{Math.round(g.duration)}s
+							</span>
+							<span css={css({ color: "#8892b0" })}>
+								saving for {g.nextPurchase}
+							</span>
 						</div>
 					))}
 			</div>
@@ -149,7 +153,11 @@ export function SimResults({ result }: SimResultsProps) {
 			<CashChart snapshots={result.snapshots} />
 
 			<div css={sectionTitleCss}>Tier Timeline</div>
-			<TierTimeline tierTimes={result.tierTimes} endTime={result.endTime} purchases={result.purchases} />
+			<TierTimeline
+				tierTimes={result.tierTimes}
+				endTime={result.endTime}
+				purchases={result.purchases}
+			/>
 		</div>
 	);
 }

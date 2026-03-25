@@ -73,7 +73,11 @@ interface TierTimelineProps {
 	purchases?: SimPurchase[];
 }
 
-export function TierTimeline({ tierTimes, endTime, purchases }: TierTimelineProps) {
+export function TierTimeline({
+	tierTimes,
+	endTime,
+	purchases,
+}: TierTimelineProps) {
 	const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
 	const segments = useMemo(() => {
@@ -165,7 +169,9 @@ export function TierTimeline({ tierTimes, endTime, purchases }: TierTimelineProp
 				))}
 				{purchases && (
 					<>
-						<div css={css({ width: 1, background: "#2a2a4a", margin: "0 4px" })} />
+						<div
+							css={css({ width: 1, background: "#2a2a4a", margin: "0 4px" })}
+						/>
 						{Object.entries(PURCHASE_COLORS).map(([type, color]) => (
 							<div key={type} css={legendItemCss}>
 								<div
