@@ -1148,7 +1148,7 @@
 			"icon": "🟢",
 			"requires": ["openai_gpt3"],
 			"max": 1,
-			"baseCost": 12000000,
+			"baseCost": 25000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1173,7 +1173,7 @@
 			"icon": "🟢",
 			"requires": ["openai_gpt35"],
 			"max": 1,
-			"baseCost": 30000000,
+			"baseCost": 100000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1198,7 +1198,7 @@
 			"icon": "🟢",
 			"requires": ["openai_gpt4"],
 			"max": 1,
-			"baseCost": 80000000,
+			"baseCost": 500000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1248,7 +1248,7 @@
 			"icon": "🟠",
 			"requires": ["llm_gate"],
 			"max": 1,
-			"baseCost": 8000000,
+			"baseCost": 10000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1273,7 +1273,7 @@
 			"icon": "🟠",
 			"requires": ["anthropic_haiku"],
 			"max": 1,
-			"baseCost": 30000000,
+			"baseCost": 150000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1348,7 +1348,7 @@
 			"icon": "🔵",
 			"requires": ["llm_gate"],
 			"max": 1,
-			"baseCost": 15000000,
+			"baseCost": 40000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1398,7 +1398,7 @@
 			"icon": "🦙",
 			"requires": ["llm_gate"],
 			"max": 1,
-			"baseCost": 8000000,
+			"baseCost": 10000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1423,7 +1423,7 @@
 			"icon": "🦙",
 			"requires": ["meta_llama_70b"],
 			"max": 1,
-			"baseCost": 50000000,
+			"baseCost": 250000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1448,7 +1448,7 @@
 			"icon": "🇫🇷",
 			"requires": ["llm_gate"],
 			"max": 1,
-			"baseCost": 10000000,
+			"baseCost": 15000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1473,7 +1473,7 @@
 			"icon": "❌",
 			"requires": ["llm_gate"],
 			"max": 1,
-			"baseCost": 20000000,
+			"baseCost": 60000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [

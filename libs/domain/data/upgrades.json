@@ -6,9 +6,9 @@
 			"name": "Malt Freelancer",
 			"description": "Remote dev — writes 5 LoC/s",
 			"icon": "💻",
-			"baseCost": 200,
-			"costMultiplier": 1.3,
-			"max": 3,
+			"baseCost": 100,
+			"costMultiplier": 2.5,
+			"max": 5,
 			"costCategory": "freelancer",
 			"requires": ["outsourcing"],
 			"effects": [
@@ -25,9 +25,9 @@
 			"name": "Desktop PC",
 			"description": "+50 FLOPS",
 			"icon": "🖥️",
-			"baseCost": 500,
-			"costMultiplier": 1.5,
-			"max": 3,
+			"baseCost": 150,
+			"costMultiplier": 2.5,
+			"max": 5,
 			"effects": [
 				{
 					"type": "flops",
@@ -42,8 +42,8 @@
 			"name": "Second Monitor",
 			"description": "+25 FLOPS",
 			"icon": "🖵",
-			"baseCost": 150,
-			"costMultiplier": 1.3,
+			"baseCost": 80,
+			"costMultiplier": 2,
 			"max": 5,
 			"effects": [
 				{
