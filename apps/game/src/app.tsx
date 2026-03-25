@@ -12,7 +12,7 @@ import {
 	useGameStore,
 	useUiStore,
 } from "@modules/game";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 
 const globalStyles = css({
@@ -20,6 +20,9 @@ const globalStyles = css({
 		margin: 0,
 		padding: 0,
 		boxSizing: "border-box",
+	},
+	"html, body": {
+		background: "#000",
 	},
 });
 
@@ -297,12 +300,27 @@ export function App() {
 	const page = useUiStore((s) => s.page);
 	const setPage = useUiStore((s) => s.setPage);
 	const singularity = useGameStore((s) => s.singularity);
-	const [singularityAnimate] = useState(!singularity);
+	const shellRef = useRef<HTMLDivElement>(null);
+	// Was singularity off when App first mounted? If yes, any future
+	// singularity=true means the player just triggered it → animate.
+	const singularityOnMount = useRef(useGameStore.getState().singularity);
+	const singularityAnimate = singularity && !singularityOnMount.current;
+
+	// Force-trigger the CRT animation
+	useEffect(() => {
+		if (singularityAnimate && shellRef.current) {
+			const el = shellRef.current;
+			el.style.animation = "none";
+			void el.offsetHeight;
+			el.style.animation = "";
+		}
+	}, [singularityAnimate]);
 
 	return (
 		<>
 			<Global styles={globalStyles} />
 			<div
+				ref={shellRef}
 				css={[shellCss, singularity && singularityAnimate && shellCollapseCss]}
 			>
 				{/* Panel 1: Code Editor (always visible) */}
