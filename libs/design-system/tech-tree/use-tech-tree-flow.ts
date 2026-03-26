@@ -8,6 +8,7 @@ import {
 	type OnNodesChange,
 } from "@xyflow/react";
 import { useCallback, useEffect, useState } from "react";
+import { TECH_NODE_HEIGHT, TECH_NODE_WIDTH } from "./tech-node";
 import type { TechNode } from "./types";
 
 interface UseTechTreeFlowParams {
@@ -24,14 +25,42 @@ function toFlowNodes(nodes: TechNode[]): Node[] {
 	}));
 }
 
+function getHandlePair(
+	source: TechNode,
+	target: TechNode,
+): { sourceHandle: string; targetHandle: string } {
+	const sx = (source.x ?? 0) + TECH_NODE_WIDTH / 2;
+	const sy = (source.y ?? 0) + TECH_NODE_HEIGHT / 2;
+	const tx = (target.x ?? 0) + TECH_NODE_WIDTH / 2;
+	const ty = (target.y ?? 0) + TECH_NODE_HEIGHT / 2;
+	const dx = tx - sx;
+	const dy = ty - sy;
+
+	if (Math.abs(dy) >= Math.abs(dx)) {
+		return dy >= 0
+			? { sourceHandle: "bottom", targetHandle: "top" }
+			: { sourceHandle: "top", targetHandle: "bottom" };
+	}
+	return dx >= 0
+		? { sourceHandle: "right", targetHandle: "left" }
+		: { sourceHandle: "left", targetHandle: "right" };
+}
+
 function toFlowEdges(nodes: TechNode[]): Edge[] {
+	const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 	const edges: Edge[] = [];
 	for (const node of nodes) {
 		for (const req of node.requires ?? []) {
+			const sourceNode = nodeMap.get(req);
+			if (!sourceNode) continue;
+			const { sourceHandle, targetHandle } = getHandlePair(sourceNode, node);
 			edges.push({
 				id: `${req}->${node.id}`,
 				source: req,
 				target: node.id,
+				sourceHandle,
+				targetHandle,
+				type: "smoothstep",
 			});
 		}
 	}

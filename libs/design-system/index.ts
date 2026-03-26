@@ -1,6 +1,11 @@
 export type { Column } from "./components/editable-table";
 export { EditableTable } from "./components/editable-table";
-export { TechNodeComponent } from "./tech-tree/tech-node";
+export {
+	formatEffect,
+	TECH_NODE_HEIGHT,
+	TECH_NODE_WIDTH,
+	TechNodeComponent,
+} from "./tech-tree/tech-node";
 export type {
 	TechNode as TechTreeNode,
 	TechNodeEffect,

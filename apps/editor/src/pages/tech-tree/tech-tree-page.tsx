@@ -2,6 +2,8 @@ import { css } from "@emotion/react";
 import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import {
+	TECH_NODE_HEIGHT,
+	TECH_NODE_WIDTH,
 	type TechTreeNode as TechNode,
 	TechNodeComponent,
 	useTechTreeFlow,
@@ -51,7 +53,7 @@ function layoutWithDagre(nodes: TechNode[]): TechNode[] {
 	const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 	g.setGraph({ rankdir: "TB", nodesep: 60, ranksep: 80 });
 	for (const n of nodes) {
-		g.setNode(n.id, { width: 140, height: 56 });
+		g.setNode(n.id, { width: TECH_NODE_WIDTH, height: TECH_NODE_HEIGHT });
 		for (const req of n.requires ?? []) {
 			g.setEdge(req, n.id);
 		}

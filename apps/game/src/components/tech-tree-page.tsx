@@ -1,7 +1,13 @@
 import { css } from "@emotion/react";
 import { Background, type Edge, type Node, ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { NodeStateEnum, TechNodeComponent } from "@agi-rush/design-system";
+import {
+	formatEffect,
+	NodeStateEnum,
+	TECH_NODE_HEIGHT,
+	TECH_NODE_WIDTH,
+	TechNodeComponent,
+} from "@agi-rush/design-system";
 import type { TechNode } from "@modules/game";
 import { allTechNodes, getTechNodeCost, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
@@ -50,10 +56,32 @@ function buildFlowNodes(
 	return nodes;
 }
 
+function getHandlePair(
+	source: TechNode,
+	target: TechNode,
+): { sourceHandle: string; targetHandle: string } {
+	const sx = (source.x ?? 0) + TECH_NODE_WIDTH / 2;
+	const sy = (source.y ?? 0) + TECH_NODE_HEIGHT / 2;
+	const tx = (target.x ?? 0) + TECH_NODE_WIDTH / 2;
+	const ty = (target.y ?? 0) + TECH_NODE_HEIGHT / 2;
+	const dx = tx - sx;
+	const dy = ty - sy;
+
+	if (Math.abs(dy) >= Math.abs(dx)) {
+		return dy >= 0
+			? { sourceHandle: "bottom", targetHandle: "top" }
+			: { sourceHandle: "top", targetHandle: "bottom" };
+	}
+	return dx >= 0
+		? { sourceHandle: "right", targetHandle: "left" }
+		: { sourceHandle: "left", targetHandle: "right" };
+}
+
 function buildFlowEdges(
 	techNodes: TechNode[],
 	ownedTechNodes: Record<string, number>,
 ): Edge[] {
+	const nodeMap = new Map(techNodes.map((n) => [n.id, n]));
 	const edges: Edge[] = [];
 	for (const n of techNodes) {
 		const prereqsMet =
@@ -62,11 +90,16 @@ function buildFlowEdges(
 		if (!prereqsMet) continue;
 
 		for (const req of n.requires) {
+			const sourceNode = nodeMap.get(req);
+			if (!sourceNode) continue;
+			const { sourceHandle, targetHandle } = getHandlePair(sourceNode, n);
 			edges.push({
 				id: `${req}->${n.id}`,
 				source: req,
 				target: n.id,
-				type: "straight",
+				sourceHandle,
+				targetHandle,
+				type: "smoothstep",
 				style: { stroke: "#1e2630", strokeWidth: 2, opacity: 0.6 },
 			});
 		}
@@ -81,6 +114,14 @@ const containerCss = css({
 	position: "relative",
 	background: "#0d1117",
 	".react-flow__background": { background: "#0d1117 !important" },
+	".react-flow__handle": {
+		width: 0,
+		height: 0,
+		minWidth: 0,
+		minHeight: 0,
+		border: "none",
+		background: "transparent",
+	},
 });
 
 const popoverCss = css({
@@ -142,6 +183,11 @@ function NodePopover({ node, x, y }: PopoverProps) {
 				{node.icon} {node.name}
 			</div>
 			<div css={popoverDescCss}>{node.description}</div>
+			{node.effects.length > 0 && (
+				<div css={popoverDetailCss}>
+					{node.effects.map((e) => formatEffect(e)).join(", ")}
+				</div>
+			)}
 			{levelLabel && !maxed && <div css={popoverDetailCss}>{levelLabel}</div>}
 			{node.max > 1 && (
 				<div css={popoverDetailCss}>
@@ -238,8 +284,8 @@ export function TechTreePage() {
 			const y = n.y ?? 0;
 			minX = Math.min(minX, x);
 			minY = Math.min(minY, y);
-			maxX = Math.max(maxX, x + 140);
-			maxY = Math.max(maxY, y + 56);
+			maxX = Math.max(maxX, x + TECH_NODE_WIDTH);
+			maxY = Math.max(maxY, y + TECH_NODE_HEIGHT);
 		}
 		return [
 			[minX - padding, minY - padding],
@@ -317,11 +363,11 @@ export function TechTreePage() {
 				nodesConnectable={false}
 				elementsSelectable={false}
 				panOnDrag
-				zoomOnScroll={false}
-				zoomOnPinch={false}
+				zoomOnScroll
+				zoomOnPinch
 				zoomOnDoubleClick={false}
-				minZoom={1}
-				maxZoom={1}
+				minZoom={0.5}
+				maxZoom={2}
 				translateExtent={translateExtent}
 				proOptions={{ hideAttribution: true }}
 			>
