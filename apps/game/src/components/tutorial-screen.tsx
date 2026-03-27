@@ -159,6 +159,9 @@ const panelCss = css({
 	overflow: "hidden",
 	maxHeight: "30%",
 	minHeight: 80,
+	boxShadow: "0 -2px 6px rgba(0,0,0,0.15)",
+	zIndex: 1,
+	position: "relative",
 });
 
 const tabBarCss = css({

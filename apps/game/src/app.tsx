@@ -350,6 +350,9 @@ function TabbedPane({
 					borderBottom: `1px solid ${theme.border}`,
 					flexShrink: 0,
 					height: 35,
+					boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+					zIndex: 1,
+					position: "relative",
 				}}
 			>
 				{middleTabs.map((t) => {

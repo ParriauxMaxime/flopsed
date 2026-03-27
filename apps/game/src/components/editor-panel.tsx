@@ -17,6 +17,7 @@ const editorAreaCss = css({
 	display: "flex",
 	flexDirection: "column",
 	minHeight: 0,
+	boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
 });
 
 const bottomPanelCss = css({
@@ -26,6 +27,9 @@ const bottomPanelCss = css({
 	flexShrink: 0,
 	maxHeight: "40%",
 	minHeight: 120,
+	boxShadow: "0 -2px 6px rgba(0,0,0,0.15)",
+	zIndex: 1,
+	position: "relative",
 });
 
 const bottomTabBarCss = css({

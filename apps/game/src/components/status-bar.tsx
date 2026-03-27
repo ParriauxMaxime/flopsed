@@ -11,6 +11,9 @@ const barCss = css({
 	fontSize: 12,
 	flexShrink: 0,
 	height: 22,
+	boxShadow: "0 -1px 4px rgba(0,0,0,0.2)",
+	zIndex: 2,
+	position: "relative",
 });
 
 const leftCss = css({

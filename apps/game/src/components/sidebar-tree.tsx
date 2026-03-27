@@ -24,6 +24,9 @@ const sidebarCss = css({
 	minWidth: 200,
 	overflow: "hidden",
 	flexShrink: 0,
+	boxShadow: "2px 0 6px rgba(0,0,0,0.15)",
+	zIndex: 1,
+	position: "relative",
 });
 
 const scrollBaseCss = css({
