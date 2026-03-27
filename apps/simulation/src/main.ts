@@ -103,15 +103,12 @@ interface ProfileResult {
 	};
 }
 
-let lastSimResult: SimResult | null = null;
-
 function validateProfile(profile: Profile): ProfileResult {
 	const result: SimResult = runBalanceSim(simData, {
 		keysPerSec: profile.keysPerSec,
 		skill: profile.skill,
 		maxMinutes: 60,
 	});
-	lastSimResult = result;
 
 	const failures: string[] = [];
 	const agiMinutes = result.agiTime !== null ? result.agiTime / 60 : null;
