@@ -1,7 +1,8 @@
 import { EditorPanel } from "@components/editor-panel";
 import { GodModePage } from "@components/god-mode-page";
 import { MobileShell } from "@components/mobile-shell";
-import { Sidebar } from "@components/sidebar";
+import { SidebarTree } from "@components/sidebar-tree";
+import { StatusBar } from "@components/status-bar";
 import { TechTreePage } from "@components/tech-tree-page";
 import { TutorialTip, useTutorialTriggers } from "@components/tutorial-screen";
 import { css, Global, keyframes } from "@emotion/react";
@@ -28,15 +29,6 @@ const globalStyles = css({
 	"html, body": {
 		background: "#000",
 	},
-});
-
-const shellCss = css({
-	display: "flex",
-	height: "100vh",
-	overflow: "hidden",
-	background: "#0a0e14",
-	color: "#c5c8c6",
-	fontFamily: "'Courier New', monospace",
 });
 
 // ── Shared tab bar styles ──
@@ -92,12 +84,6 @@ const panelCss = css({
 	overflow: "hidden",
 });
 
-function getMiddlePanelFlex(tierIndex: number): number {
-	if (tierIndex <= 1) return 2;
-	if (tierIndex <= 3) return 5;
-	return 5.5;
-}
-
 const contentCss = css({
 	flex: 1,
 	overflow: "hidden",
@@ -113,6 +99,7 @@ interface TabDef {
 }
 
 const middleTabs: TabDef[] = [
+	{ page: PageEnum.game, filename: "agi.py" },
 	{ page: PageEnum.tech_tree, filename: "tech_tree.svg" },
 	{ page: PageEnum.settings, filename: "settings.json" },
 	{ page: PageEnum.god_mode, filename: "godmode.ts" },
@@ -303,7 +290,6 @@ export function App() {
 	const page = useUiStore((s) => s.page);
 	const setPage = useUiStore((s) => s.setPage);
 	const singularity = useGameStore((s) => s.singularity);
-	const tierIndex = useGameStore((s) => s.currentTierIndex);
 	const shellRef = useRef<HTMLDivElement>(null);
 	const singularityOnMount = useRef(useGameStore.getState().singularity);
 	const singularityAnimate = singularity && !singularityOnMount.current;
@@ -335,46 +321,50 @@ export function App() {
 			<Global styles={globalStyles} />
 			<div
 				ref={shellRef}
-				css={[shellCss, singularity && singularityAnimate && shellCollapseCss]}
+				css={[
+					{
+						display: "flex",
+						flexDirection: "column",
+						height: "100vh",
+						overflow: "hidden",
+						background: "#0a0e14",
+						color: "#c5c8c6",
+						fontFamily: "'Courier New', monospace",
+					},
+					singularity && singularityAnimate && shellCollapseCss,
+				]}
 			>
-				{/* Panel 1: Code Editor (always visible) */}
-				<EditorPanel />
+				{/* Main area: sidebar + tabbed content */}
+				<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
+					<SidebarTree />
 
-				{/* Panel 2: Tech Tree / Settings / God Mode (tab-switched) */}
-				<div
-					css={[
-						panelCss,
-						{
-							flex: getMiddlePanelFlex(tierIndex),
-							borderRight: "1px solid #1e2630",
-							transition: "flex 0.5s ease",
-						},
-					]}
-				>
-					<div css={tabBarCss}>
-						{middleTabs.map((t) => (
-							<button
-								key={t.page}
-								type="button"
-								css={t.page === page ? tabActiveCss : tabCss}
-								onClick={() => setPage(t.page)}
-							>
-								{t.filename}
-							</button>
-						))}
-					</div>
-					<div css={contentCss}>
-						{match(page)
-							.with(PageEnum.game, () => <TechTreePage />)
-							.with(PageEnum.tech_tree, () => <TechTreePage />)
-							.with(PageEnum.settings, () => <SettingsPage />)
-							.with(PageEnum.god_mode, () => <GodModePage />)
-							.exhaustive()}
+					{/* Tabbed main area */}
+					<div css={[panelCss, { flex: 1 }]}>
+						<div css={tabBarCss}>
+							{middleTabs.map((t) => (
+								<button
+									key={t.page}
+									type="button"
+									css={t.page === page ? tabActiveCss : tabCss}
+									onClick={() => setPage(t.page)}
+								>
+									{t.filename}
+								</button>
+							))}
+						</div>
+						<div css={contentCss}>
+							{match(page)
+								.with(PageEnum.game, () => <EditorPanel />)
+								.with(PageEnum.tech_tree, () => <TechTreePage />)
+								.with(PageEnum.settings, () => <SettingsPage />)
+								.with(PageEnum.god_mode, () => <GodModePage />)
+								.exhaustive()}
+						</div>
 					</div>
 				</div>
 
-				{/* Panel 3: Sidebar */}
-				<Sidebar />
+				{/* Status bar */}
+				<StatusBar />
 			</div>
 			<EventToast />
 			<TutorialTip />
