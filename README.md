@@ -2,7 +2,7 @@
 
 An incremental game where you type code, execute it for cash, and scale up toward AGI.
 
-**[Play now](https://parriauxmaxime.github.io/incremental-flopsed/)**
+**[Play now](https://flopsed.io)**
 
 ## The Loop
 
