@@ -1,6 +1,12 @@
 import { css } from "@emotion/react";
 import type { GodModeOverrides } from "@modules/game";
-import { tiers, useGameStore, useUiStore } from "@modules/game";
+import {
+	allTechNodes,
+	allUpgrades,
+	tiers,
+	useGameStore,
+	useUiStore,
+} from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -358,6 +364,66 @@ export function GodModePage() {
 						}}
 					>
 						Trigger Singularity
+					</button>
+					<button
+						type="button"
+						css={{
+							fontSize: 12,
+							padding: "6px 14px",
+							border: `1px solid ${theme.accent}`,
+							borderRadius: 3,
+							background: "none",
+							color: theme.accent,
+							fontFamily: "inherit",
+							cursor: "pointer",
+							"&:hover": {
+								background: theme.accent,
+								color: theme.background,
+							},
+						}}
+						onClick={() => {
+							const current = useGameStore.getState();
+							const nodes: Record<string, number> = {
+								...current.ownedTechNodes,
+							};
+							for (const n of allTechNodes) {
+								nodes[n.id] = n.max;
+							}
+							useGameStore.setState({ ownedTechNodes: nodes });
+							recalc();
+						}}
+					>
+						Unlock All Tech
+					</button>
+					<button
+						type="button"
+						css={{
+							fontSize: 12,
+							padding: "6px 14px",
+							border: `1px solid ${theme.success}`,
+							borderRadius: 3,
+							background: "none",
+							color: theme.success,
+							fontFamily: "inherit",
+							cursor: "pointer",
+							"&:hover": {
+								background: theme.success,
+								color: theme.background,
+							},
+						}}
+						onClick={() => {
+							const current = useGameStore.getState();
+							const upgrades: Record<string, number> = {
+								...current.ownedUpgrades,
+							};
+							for (const u of allUpgrades) {
+								upgrades[u.id] = u.max;
+							}
+							useGameStore.setState({ ownedUpgrades: upgrades });
+							recalc();
+						}}
+					>
+						Max All Upgrades
 					</button>
 				</div>
 			</Section>

@@ -643,18 +643,19 @@ export function runBalanceSim(
 		let aiLoc = 0;
 		if (sim.aiUnlocked) {
 			const aiFlops = flops * (1 - sim.flopSlider);
-			let totalAiLoc = 0;
-			let totalAiFlops = 0;
 			const activeModels = aiModels
 				.filter((m) => sim.ownedModels[m.id])
 				.sort((a, b) => b.locPerSec - a.locPerSec)
 				.slice(0, sim.llmHostSlots);
+			// Per-model FLOPS gating: each model independently capped
+			let remainingFlops = aiFlops;
 			for (const m of activeModels) {
-				totalAiLoc += m.locPerSec * sim.aiLocMultiplier;
-				totalAiFlops += m.flopsCost;
+				const modelFlops = Math.min(m.flopsCost, remainingFlops);
+				remainingFlops -= modelFlops;
+				const ratio = m.flopsCost > 0 ? modelFlops / m.flopsCost : 0;
+				aiLoc += m.locPerSec * sim.aiLocMultiplier * Math.min(1, ratio);
 			}
-			if (totalAiFlops > 0) {
-				aiLoc = totalAiLoc * Math.min(1, aiFlops / totalAiFlops);
+			if (aiLoc > 0) {
 				sim.loc += aiLoc;
 				sim.totalLoc += aiLoc;
 			}

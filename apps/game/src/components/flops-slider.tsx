@@ -52,17 +52,18 @@ export function FlopsSlider() {
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
 
 	const { aiFlopsCost, aiLocPerSec } = useMemo(() => {
-		let totalAiLoc = 0;
-		let totalAiFlops = 0;
-		for (const model of aiModels) {
-			if (unlockedModels[model.id]) {
-				totalAiLoc += model.locPerSec;
-				totalAiFlops += model.flopsCost;
-			}
+		const active = aiModels.filter((m) => unlockedModels[m.id]);
+		let totalCost = 0;
+		let totalLoc = 0;
+		let remaining = flops;
+		for (const model of active) {
+			const modelFlops = Math.min(model.flopsCost, remaining);
+			totalCost += modelFlops;
+			remaining -= modelFlops;
+			const ratio = model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
+			totalLoc += model.locPerSec * Math.min(1, ratio);
 		}
-		const cost = Math.min(totalAiFlops, flops);
-		const efficiency = totalAiFlops > 0 ? cost / totalAiFlops : 0;
-		return { aiFlopsCost: cost, aiLocPerSec: totalAiLoc * efficiency };
+		return { aiFlopsCost: totalCost, aiLocPerSec: totalLoc };
 	}, [unlockedModels, flops]);
 
 	if (!aiUnlocked) return null;

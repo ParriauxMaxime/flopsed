@@ -493,25 +493,20 @@ export const useGameStore = create<GameState & GameActions>()(
 					if (aiUnlocked && s.running) {
 						// flopSlider = % allocated to execution, rest goes to AI
 						const aiFlopsBudget = s.flops * (1 - s.flopSlider);
-						let totalAiLoc = 0;
-						let totalAiFlops = 0;
 						const activeModels = aiModels
 							.filter((m) => s.unlockedModels[m.id])
 							.sort((a, b) => b.locPerSec - a.locPerSec)
 							.slice(0, s.llmHostSlots);
+						// Per-model FLOPS gating: each model independently capped
+						// so buying a new expensive model never starves existing ones
+						let remainingFlops = aiFlopsBudget;
 						for (const model of activeModels) {
-							totalAiLoc += model.locPerSec;
-							totalAiFlops += model.flopsCost;
-						}
-						if (totalAiFlops > 0) {
-							aiFlopsCost = Math.min(totalAiFlops, aiFlopsBudget);
-							const baseEfficiency = aiFlopsCost / totalAiFlops;
-							// Excess FLOPS beyond base needs boost AI output (overclock)
-							// sqrt scaling: 4x excess FLOPS = 2x boost
-							const excessRatio = aiFlopsBudget / totalAiFlops;
-							const overclock =
-								excessRatio > 1 ? Math.sqrt(excessRatio) : baseEfficiency;
-							aiProduced = totalAiLoc * overclock * dt;
+							const modelFlops = Math.min(model.flopsCost, remainingFlops);
+							aiFlopsCost += modelFlops;
+							remainingFlops -= modelFlops;
+							const ratio =
+								model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
+							aiProduced += model.locPerSec * Math.min(1, ratio) * dt;
 						}
 					}
 					loc += aiProduced;
