@@ -228,7 +228,11 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 
 	const humanMaxLoc = Math.max(1, ...humanSources.map((s) => s.locPerSec));
 	const aiMaxLoc = Math.max(1, ...aiSources.map((s) => s.locPerSec));
-	const showSources = autoLocPerSec > 0 || humanSources.length > 1;
+	const analyticsUnlocked = useGameStore(
+		(s) => (s.ownedTechNodes.unlock_analytics ?? 0) > 0,
+	);
+	const showSources =
+		analyticsUnlocked && (autoLocPerSec > 0 || humanSources.length > 1);
 
 	// ── Themed styles ──
 
@@ -490,7 +494,24 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 					<>
 						<div css={dividerCss} />
 						<div css={sectionCss}>
-							<div css={sectionLabelCss}>LoC Sources</div>
+							<div
+								css={{
+									display: "flex",
+									justifyContent: "space-between",
+									alignItems: "center",
+								}}
+							>
+								<div css={sectionLabelCss}>LoC Sources</div>
+								<span
+									css={{
+										fontSize: 12,
+										fontVariantNumeric: "tabular-nums",
+									}}
+									style={{ color: theme.locColor }}
+								>
+									{formatNumber(autoLocPerSec + locPerKey * 6)}/s
+								</span>
+							</div>
 							{humanSources.map((s) => (
 								<div css={sourceRowCss} key={s.name}>
 									<span css={sourceNameCss} style={{ color: theme.textMuted }}>
