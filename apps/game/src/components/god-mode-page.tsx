@@ -2,131 +2,102 @@ import { css } from "@emotion/react";
 import type { GodModeOverrides } from "@modules/game";
 import { tiers, useGameStore, useUiStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { useIdeTheme } from "../hooks/use-ide-theme";
-import { ResourceBar } from "./resource-bar";
-import { SimPanel } from "./sim";
 
-const pageCss = css({
-	display: "flex",
-	flexDirection: "column",
-	height: "100%",
-	overflow: "hidden",
-	background: "#0a0e14",
-	color: "#c5c8c6",
-	fontFamily: "'Courier New', monospace",
-	fontSize: 12,
-});
-
-const contentCss = css({
-	display: "flex",
-	flex: 1,
-	overflow: "hidden",
-	gap: 1,
-});
-
-const cheatColumnCss = css({
-	flex: "0 0 320px",
-	padding: 16,
-	overflowY: "auto",
-});
-
-const simColumnCss = css({
-	flex: 1,
-	padding: 16,
-	overflowY: "auto",
-});
-
-const headingCss = css({
-	fontSize: 14,
-	color: "#e94560",
-	textTransform: "uppercase",
-	letterSpacing: 1,
-	marginBottom: 12,
-	fontWeight: "bold",
-});
-
-const rowCss = css({
-	display: "flex",
-	alignItems: "center",
-	gap: 6,
-	marginBottom: 6,
-});
-
-const labelCss = css({
-	color: "#aaa",
-	width: 72,
-	flexShrink: 0,
-});
-
-const valueCss = css({
-	color: "#6f6",
-	width: 80,
-	textAlign: "right",
-	flexShrink: 0,
-});
-
-const bumpBtnCss = css({
-	background: "transparent",
-	color: "#e94560",
-	border: "1px solid currentColor",
-	padding: "3px 8px",
-	cursor: "pointer",
-	fontFamily: "monospace",
-	fontSize: 10,
-	"&:hover": {
-		background: "#e94560",
-		color: "#fff",
-	},
-	"&:active": {
-		background: "#c7354e",
-	},
-});
-
-const resetBtnCss = css({
-	background: "transparent",
-	color: "#e94560",
-	border: "1px solid #e94560",
-	padding: "6px 12px",
-	cursor: "pointer",
-	fontFamily: "monospace",
-	fontSize: 11,
-	width: "100%",
-	marginTop: 12,
-	"&:hover": {
-		background: "#e94560",
-		color: "#fff",
-	},
-});
+// ── Helpers ──
 
 function formatShort(n: number): string {
-	if (n >= 1_000_000_000_000) return `${(n / 1_000_000_000_000).toFixed(0)}T`;
-	if (n >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(0)}B`;
-	if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(0)}M`;
-	if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+	if (n >= 1e12) return `${(n / 1e12).toFixed(0)}T`;
+	if (n >= 1e9) return `${(n / 1e9).toFixed(0)}B`;
+	if (n >= 1e6) return `${(n / 1e6).toFixed(0)}M`;
+	if (n >= 1e3) return `${(n / 1e3).toFixed(0)}K`;
 	return n.toString();
-}
-
-interface FieldConfig {
-	key: keyof GodModeOverrides;
-	label: string;
-	bumps: number[];
 }
 
 const stdBumps = [1_000, 1_000_000, 1_000_000_000, 1_000_000_000_000];
 
-const resourceFields: FieldConfig[] = [
-	{ key: "cash", label: "Cash", bumps: stdBumps },
-	{ key: "totalCash", label: "Tot. Cash", bumps: stdBumps },
-	{ key: "loc", label: "LoC", bumps: stdBumps },
-	{ key: "totalLoc", label: "Tot. LoC", bumps: stdBumps },
-	{ key: "flops", label: "FLOPS", bumps: [100, 1_000, 10_000, 100_000] },
-];
+// ── Collapsible section ──
 
-function CheatsPanel() {
+function Section({
+	title,
+	defaultOpen = true,
+	children,
+}: {
+	title: string;
+	defaultOpen?: boolean;
+	children: React.ReactNode;
+}) {
+	const theme = useIdeTheme();
+	const [open, setOpen] = useState(defaultOpen);
+
+	return (
+		<div css={{ borderBottom: `1px solid ${theme.border}` }}>
+			<button
+				type="button"
+				css={{
+					display: "flex",
+					alignItems: "center",
+					gap: 6,
+					width: "100%",
+					padding: "8px 16px",
+					background: "none",
+					border: "none",
+					color: theme.foreground,
+					fontSize: 13,
+					fontWeight: 600,
+					fontFamily: "inherit",
+					cursor: "pointer",
+					textAlign: "left",
+					"&:hover": { background: theme.hoverBg },
+				}}
+				onClick={() => setOpen(!open)}
+			>
+				<span css={{ fontSize: 10, width: 12 }}>{open ? "▾" : "▸"}</span>
+				{title}
+			</button>
+			{open && <div css={{ padding: "4px 16px 12px 34px" }}>{children}</div>}
+		</div>
+	);
+}
+
+// ── Bump button ──
+
+function BumpBtn({ label, onClick }: { label: string; onClick: () => void }) {
+	const theme = useIdeTheme();
+	return (
+		<button
+			type="button"
+			css={{
+				background: "none",
+				border: `1px solid ${theme.border}`,
+				borderRadius: 3,
+				color: theme.foreground,
+				padding: "2px 8px",
+				fontSize: 11,
+				fontFamily: "inherit",
+				cursor: "pointer",
+				"&:hover": {
+					borderColor: theme.accent,
+					color: theme.accent,
+				},
+			}}
+			onClick={onClick}
+		>
+			{label}
+		</button>
+	);
+}
+
+// ── Main page ──
+
+export function GodModePage() {
+	const theme = useIdeTheme();
 	const godSet = useGameStore((s) => s.godSet);
 	const reset = useGameStore((s) => s.reset);
 	const resetAll = useUiStore((s) => s.resetAll);
+	const recalc = useGameStore((s) => s.recalc);
 	const state = useGameStore(
 		useShallow((s) => ({
 			cash: s.cash,
@@ -146,191 +117,250 @@ function CheatsPanel() {
 		godSet({ [key]: val + amount });
 	};
 
+	const resourceRows: Array<{
+		key: keyof GodModeOverrides;
+		label: string;
+		color: string;
+		bumps: number[];
+	}> = [
+		{ key: "cash", label: "Cash", color: theme.cashColor, bumps: stdBumps },
+		{
+			key: "totalCash",
+			label: "Total Cash",
+			color: theme.cashColor,
+			bumps: stdBumps,
+		},
+		{ key: "loc", label: "LoC", color: theme.locColor, bumps: stdBumps },
+		{
+			key: "totalLoc",
+			label: "Total LoC",
+			color: theme.locColor,
+			bumps: stdBumps,
+		},
+		{
+			key: "flops",
+			label: "FLOPS",
+			color: theme.flopsColor,
+			bumps: [100, 1_000, 10_000, 100_000],
+		},
+	];
+
 	return (
-		<div>
-			{resourceFields.map((f) => (
-				<div css={rowCss} key={f.key}>
-					<span css={labelCss}>{f.label}</span>
-					<span css={valueCss}>{formatNumber(state[f.key] ?? 0)}</span>
-					{f.bumps.map((amt) => (
-						<button
-							css={bumpBtnCss}
-							type="button"
-							key={amt}
-							onClick={() => bump(f.key, amt)}
+		<div
+			css={{
+				flex: 1,
+				overflowY: "auto",
+				background: theme.background,
+				color: theme.foreground,
+				fontSize: 13,
+				"&::-webkit-scrollbar": { width: 6 },
+				"&::-webkit-scrollbar-track": { background: "transparent" },
+				"&::-webkit-scrollbar-thumb": {
+					background: theme.scrollThumb,
+					borderRadius: 3,
+				},
+			}}
+		>
+			<div css={{ padding: "16px 16px 8px", fontSize: 24, fontWeight: 300 }}>
+				God Mode
+			</div>
+
+			<Section title="Resources">
+				{resourceRows.map((r) => (
+					<div
+						key={r.key}
+						css={{
+							display: "flex",
+							alignItems: "center",
+							gap: 8,
+							marginBottom: 6,
+						}}
+					>
+						<span css={{ width: 80, color: theme.textMuted }}>{r.label}</span>
+						<span
+							css={{
+								width: 90,
+								textAlign: "right",
+								fontVariantNumeric: "tabular-nums",
+								fontWeight: 600,
+							}}
+							style={{ color: r.color }}
 						>
-							+{formatShort(amt)}
-						</button>
-					))}
-				</div>
-			))}
-			<div css={rowCss}>
-				<span css={labelCss}>Tier</span>
-				<span css={valueCss}>{state.currentTierIndex}</span>
-				<button
-					css={bumpBtnCss}
-					type="button"
-					onClick={() =>
-						godSet({
-							currentTierIndex: Math.max(0, state.currentTierIndex - 1),
-						})
-					}
-				>
-					-1
-				</button>
-				<button
-					css={bumpBtnCss}
-					type="button"
-					onClick={() =>
-						godSet({
-							currentTierIndex: Math.min(
-								tiers.length - 1,
-								state.currentTierIndex + 1,
-							),
-						})
-					}
-				>
-					+1
-				</button>
-			</div>
-			<div css={[headingCss, { marginTop: 12 }]}>AI Models</div>
-			<div css={rowCss}>
-				<span css={labelCss}>Slider</span>
-				<span css={valueCss}>{Math.round(state.flopSlider * 100)}%</span>
-			</div>
-			{["copilot", "claude_haiku", "claude_sonnet"].map((id) => (
-				<div css={rowCss} key={id}>
-					<span css={labelCss}>{id}</span>
-					<span css={valueCss}>
-						{state.unlockedModels[id] ? "\u2713" : "\u2014"}
+							{formatNumber(state[r.key] ?? 0)}
+						</span>
+						<div css={{ display: "flex", gap: 4 }}>
+							{r.bumps.map((amt) => (
+								<BumpBtn
+									key={amt}
+									label={`+${formatShort(amt)}`}
+									onClick={() => bump(r.key, amt)}
+								/>
+							))}
+						</div>
+					</div>
+				))}
+			</Section>
+
+			<Section title="Tier">
+				<div css={{ display: "flex", alignItems: "center", gap: 8 }}>
+					<span css={{ color: theme.textMuted }}>Current:</span>
+					<span css={{ fontWeight: 600 }}>
+						{tiers[state.currentTierIndex]?.name ?? "—"} (T
+						{state.currentTierIndex})
 					</span>
+					<BumpBtn
+						label="−1"
+						onClick={() =>
+							godSet({
+								currentTierIndex: Math.max(0, state.currentTierIndex - 1),
+							})
+						}
+					/>
+					<BumpBtn
+						label="+1"
+						onClick={() =>
+							godSet({
+								currentTierIndex: Math.min(
+									tiers.length - 1,
+									state.currentTierIndex + 1,
+								),
+							})
+						}
+					/>
+				</div>
+			</Section>
+
+			<Section title="AI Models" defaultOpen={false}>
+				<div
+					css={{
+						display: "flex",
+						alignItems: "center",
+						gap: 8,
+						marginBottom: 8,
+					}}
+				>
+					<span css={{ color: theme.textMuted }}>FLOPS Slider:</span>
+					<span css={{ fontWeight: 600 }}>
+						{Math.round(state.flopSlider * 100)}%
+					</span>
+				</div>
+				{["copilot", "claude_haiku", "claude_sonnet", "openai_gpt3"].map(
+					(id) => (
+						<div
+							key={id}
+							css={{
+								display: "flex",
+								alignItems: "center",
+								gap: 8,
+								marginBottom: 4,
+							}}
+						>
+							<span css={{ width: 120, color: theme.textMuted }}>{id}</span>
+							<span
+								css={{ width: 20 }}
+								style={{
+									color: state.unlockedModels[id]
+										? theme.success
+										: theme.textMuted,
+								}}
+							>
+								{state.unlockedModels[id] ? "✓" : "—"}
+							</span>
+							{!state.unlockedModels[id] && (
+								<BumpBtn
+									label="Grant"
+									onClick={() => {
+										const current = useGameStore.getState();
+										useGameStore.setState({
+											unlockedModels: {
+												...current.unlockedModels,
+												[id]: true,
+											},
+										});
+										recalc();
+									}}
+								/>
+							)}
+						</div>
+					),
+				)}
+			</Section>
+
+			<Section title="Tools" defaultOpen={false}>
+				<div css={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+					<a
+						href="http://localhost:3738"
+						target="_blank"
+						rel="noreferrer"
+						css={{
+							fontSize: 12,
+							padding: "6px 14px",
+							border: `1px solid ${theme.accent}`,
+							borderRadius: 3,
+							color: theme.accent,
+							textDecoration: "none",
+							"&:hover": { background: theme.accent, color: theme.background },
+						}}
+					>
+						Data Editor
+					</a>
+				</div>
+			</Section>
+
+			<Section title="Danger Zone" defaultOpen={false}>
+				<div css={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
 					<button
-						css={bumpBtnCss}
 						type="button"
+						css={{
+							fontSize: 12,
+							padding: "6px 14px",
+							border: "1px solid #e94560",
+							borderRadius: 3,
+							background: "none",
+							color: "#e94560",
+							fontFamily: "inherit",
+							cursor: "pointer",
+							"&:hover": { background: "#e94560", color: "#fff" },
+						}}
+						onClick={() => {
+							reset();
+							resetAll();
+							window.location.reload();
+						}}
+					>
+						Reset Game
+					</button>
+					<button
+						type="button"
+						css={{
+							fontSize: 12,
+							padding: "6px 14px",
+							border: `1px solid ${theme.cashColor}`,
+							borderRadius: 3,
+							background: "none",
+							color: theme.cashColor,
+							fontFamily: "inherit",
+							cursor: "pointer",
+							"&:hover": {
+								background: theme.cashColor,
+								color: theme.background,
+							},
+						}}
 						onClick={() => {
 							const current = useGameStore.getState();
 							useGameStore.setState({
-								unlockedModels: {
-									...current.unlockedModels,
-									[id]: true,
+								ownedUpgrades: {
+									...current.ownedUpgrades,
+									the_singularity: 1,
 								},
 							});
-							useGameStore.getState().recalc();
+							recalc();
 						}}
 					>
-						Grant
+						Trigger Singularity
 					</button>
 				</div>
-			))}
-			<button
-				css={resetBtnCss}
-				type="button"
-				onClick={() => {
-					reset();
-					resetAll();
-					window.location.reload();
-				}}
-			>
-				Reset Game
-			</button>
-			<button
-				css={[
-					resetBtnCss,
-					{
-						borderColor: "#d4a574",
-						color: "#d4a574",
-						"&:hover": { background: "#d4a574", color: "#fff" },
-					},
-				]}
-				type="button"
-				onClick={() => {
-					const current = useGameStore.getState();
-					useGameStore.setState({
-						ownedUpgrades: {
-							...current.ownedUpgrades,
-							the_singularity: 1,
-						},
-					});
-					useGameStore.getState().recalc();
-				}}
-			>
-				Trigger Singularity
-			</button>
-		</div>
-	);
-}
-
-export function GodModePage() {
-	const theme = useIdeTheme();
-	return (
-		<div
-			css={pageCss}
-			style={{ background: theme.background, color: theme.foreground }}
-		>
-			<ResourceBar />
-			<div css={contentCss}>
-				<div css={cheatColumnCss}>
-					<div css={headingCss}>Cheats</div>
-					<CheatsPanel />
-					<div
-						css={{
-							marginTop: 12,
-							borderTop: "1px solid currentColor",
-							paddingTop: 12,
-						}}
-					>
-						<div css={headingCss}>Tools</div>
-						<a
-							href="http://localhost:3738"
-							target="_blank"
-							rel="noreferrer"
-							css={{
-								display: "block",
-								fontFamily: "inherit",
-								fontSize: 11,
-								padding: "6px 12px",
-								border: "1px solid #c678dd",
-								borderRadius: 4,
-								background: "transparent",
-								color: "#c678dd",
-								textDecoration: "none",
-								textAlign: "center",
-								"&:hover": { background: "#c678dd", color: "#fff" },
-							}}
-						>
-							Tech Tree Editor
-						</a>
-						<a
-							href="http://localhost:3738"
-							target="_blank"
-							rel="noreferrer"
-							css={{
-								display: "block",
-								fontFamily: "inherit",
-								fontSize: 11,
-								padding: "6px 12px",
-								marginTop: 6,
-								border: "1px solid #d19a66",
-								borderRadius: 4,
-								background: "transparent",
-								color: "#d19a66",
-								textDecoration: "none",
-								textAlign: "center",
-								"&:hover": { background: "#d19a66", color: "#fff" },
-							}}
-						>
-							Item Pool Editor
-						</a>
-					</div>
-				</div>
-				<div
-					css={simColumnCss}
-					style={{ borderLeft: `1px solid ${theme.border}` }}
-				>
-					<div css={headingCss}>Balance Simulation</div>
-					<SimPanel autoRun />
-				</div>
-			</div>
+			</Section>
 		</div>
 	);
 }
