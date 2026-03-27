@@ -1,5 +1,12 @@
 import { css } from "@emotion/react";
-import { Background, type Edge, type Node, ReactFlow } from "@xyflow/react";
+import {
+	Background,
+	type Edge,
+	type EdgeProps,
+	type Node,
+	ReactFlow,
+	useViewport,
+} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import {
 	formatEffect,
@@ -62,32 +69,23 @@ function buildFlowNodes(
 	return nodes;
 }
 
-function getHandlePair(
-	source: TechNode,
-	target: TechNode,
-): { sourceHandle: string; targetHandle: string } {
-	const sy = source.y ?? 0;
-	const ty = target.y ?? 0;
+// ── Bundled edge rendering ──
 
-	// Tree flows top-to-bottom: source is the prerequisite (higher up)
-	if (ty > sy) return { sourceHandle: "bottom", targetHandle: "top" };
-	if (ty < sy) return { sourceHandle: "top", targetHandle: "bottom" };
-
-	// Same row — use horizontal
-	const sx = source.x ?? 0;
-	const tx = target.x ?? 0;
-	return tx >= sx
-		? { sourceHandle: "right", targetHandle: "left" }
-		: { sourceHandle: "left", targetHandle: "right" };
+interface EdgeDef {
+	sourceId: string;
+	targetId: string;
+	sx: number;
+	sy: number;
+	tx: number;
+	ty: number;
 }
 
-function buildFlowEdges(
+function buildEdgeDefs(
 	techNodes: TechNode[],
 	ownedTechNodes: Record<string, number>,
-	borderColor: string,
-): Edge[] {
+): EdgeDef[] {
 	const nodeMap = new Map(techNodes.map((n) => [n.id, n]));
-	const edges: Edge[] = [];
+	const edges: EdgeDef[] = [];
 	for (const n of techNodes) {
 		const prereqsMet =
 			n.requires.length === 0 ||
@@ -95,25 +93,174 @@ function buildFlowEdges(
 		if (!prereqsMet) continue;
 
 		for (const req of n.requires) {
-			const sourceNode = nodeMap.get(req);
-			if (!sourceNode) continue;
-			const { sourceHandle, targetHandle } = getHandlePair(sourceNode, n);
+			const src = nodeMap.get(req);
+			if (!src) continue;
 			edges.push({
-				id: `${req}->${n.id}`,
-				source: req,
-				target: n.id,
-				sourceHandle,
-				targetHandle,
-				type: "bezier",
-				style: {
-					stroke: borderColor,
-					strokeWidth: 1.5,
-					opacity: 0.5,
-				},
+				sourceId: req,
+				targetId: n.id,
+				sx: (src.x ?? 0) + TECH_NODE_WIDTH / 2,
+				sy: (src.y ?? 0) + TECH_NODE_HEIGHT,
+				tx: (n.x ?? 0) + TECH_NODE_WIDTH / 2,
+				ty: n.y ?? 0,
 			});
 		}
 	}
 	return edges;
+}
+
+/** Check if a line segment passes through any node bounding box */
+function findBlockingNode(
+	sx: number,
+	sy: number,
+	tx: number,
+	ty: number,
+	allNodes: TechNode[],
+	excludeIds: Set<string>,
+): TechNode | null {
+	const midY = (sy + ty) / 2;
+	for (const n of allNodes) {
+		if (excludeIds.has(n.id)) continue;
+		const nx = n.x ?? 0;
+		const ny = n.y ?? 0;
+		// Check if the vertical trunk at sx passes through this node
+		const pad = 8;
+		if (
+			sx > nx - pad &&
+			sx < nx + TECH_NODE_WIDTH + pad &&
+			midY > ny - pad &&
+			midY < ny + TECH_NODE_HEIGHT + pad
+		) {
+			return n;
+		}
+	}
+	return null;
+}
+
+function buildBundledPaths(
+	edges: EdgeDef[],
+	allNodes: TechNode[],
+	color: string,
+): Array<{ d: string; strokeWidth: number; opacity: number }> {
+	// Group edges by source
+	const bySource = new Map<string, EdgeDef[]>();
+	for (const e of edges) {
+		const group = bySource.get(e.sourceId) ?? [];
+		group.push(e);
+		bySource.set(e.sourceId, group);
+	}
+
+	const paths: Array<{ d: string; strokeWidth: number; opacity: number }> = [];
+
+	for (const [sourceId, group] of bySource) {
+		if (group.length === 0) continue;
+		const sx = group[0].sx;
+		const sy = group[0].sy;
+
+		if (group.length === 1) {
+			// Single edge — simple bezier
+			const e = group[0];
+			const excludeIds = new Set([e.sourceId, e.targetId]);
+			const blocker = findBlockingNode(
+				sx,
+				sy,
+				e.tx,
+				e.ty,
+				allNodes,
+				excludeIds,
+			);
+
+			if (blocker) {
+				// Route around: go to the side then down
+				const bx = blocker.x ?? 0;
+				const side =
+					sx <= bx + TECH_NODE_WIDTH / 2 ? bx - 16 : bx + TECH_NODE_WIDTH + 16;
+				paths.push({
+					d: `M ${sx} ${sy} C ${sx} ${sy + 30}, ${side} ${(sy + e.ty) / 2}, ${side} ${(sy + e.ty) / 2} S ${e.tx} ${e.ty - 30}, ${e.tx} ${e.ty}`,
+					strokeWidth: 1.5,
+					opacity: 0.4,
+				});
+			} else {
+				const midY = (sy + e.ty) / 2;
+				paths.push({
+					d: `M ${sx} ${sy} C ${sx} ${midY}, ${e.tx} ${midY}, ${e.tx} ${e.ty}`,
+					strokeWidth: 1.5,
+					opacity: 0.4,
+				});
+			}
+		} else {
+			// Multiple edges from same source — bundle them
+			// Sort targets by X position
+			const sorted = [...group].sort((a, b) => a.tx - b.tx);
+
+			// Compute trunk: vertical line down from source to a junction point
+			const minTy = Math.min(...sorted.map((e) => e.ty));
+			const junctionY = sy + (minTy - sy) * 0.5;
+
+			// Trunk (thicker)
+			paths.push({
+				d: `M ${sx} ${sy} L ${sx} ${junctionY}`,
+				strokeWidth: 2.5,
+				opacity: 0.35,
+			});
+
+			// Branches from junction to each target
+			for (const e of sorted) {
+				paths.push({
+					d: `M ${sx} ${junctionY} C ${sx} ${(junctionY + e.ty) / 2}, ${e.tx} ${(junctionY + e.ty) / 2}, ${e.tx} ${e.ty}`,
+					strokeWidth: 1.5,
+					opacity: 0.4,
+				});
+			}
+		}
+	}
+
+	return paths;
+}
+
+/** SVG overlay for bundled edges — reads viewport transform from React Flow */
+function BundledEdges({
+	edges,
+	allNodes,
+	color,
+}: {
+	edges: EdgeDef[];
+	allNodes: TechNode[];
+	color: string;
+}) {
+	const { x, y, zoom } = useViewport();
+	const paths = useMemo(
+		() => buildBundledPaths(edges, allNodes, color),
+		[edges, allNodes, color],
+	);
+
+	return (
+		<svg
+			css={{
+				position: "absolute",
+				top: 0,
+				left: 0,
+				width: "100%",
+				height: "100%",
+				pointerEvents: "none",
+				overflow: "visible",
+				zIndex: 0,
+			}}
+		>
+			<g transform={`translate(${x}, ${y}) scale(${zoom})`}>
+				{paths.map((p, i) => (
+					<path
+						key={i}
+						d={p.d}
+						stroke={color}
+						strokeWidth={p.strokeWidth / zoom}
+						fill="none"
+						opacity={p.opacity}
+						strokeLinecap="round"
+					/>
+				))}
+			</g>
+		</svg>
+	);
 }
 
 // ── Styles ──
@@ -280,10 +427,12 @@ export function TechTreePage() {
 		return cachedNodes.current;
 	}, [ownedTechNodes, loc, cash]);
 
-	const flowEdges = useMemo(
-		() => buildFlowEdges(allTechNodes, ownedTechNodes, theme.textMuted),
-		[ownedTechNodes, theme.textMuted],
+	const edgeDefs = useMemo(
+		() => buildEdgeDefs(allTechNodes, ownedTechNodes),
+		[ownedTechNodes],
 	);
+
+	const emptyEdges: Edge[] = useMemo(() => [], []);
 
 	// Compute pan bounds from all node positions (not just visible ones)
 	const translateExtent = useMemo((): [[number, number], [number, number]] => {
@@ -370,7 +519,7 @@ export function TechTreePage() {
 		<div ref={containerRef} css={[containerBaseCss, containerDynamicCss]}>
 			<ReactFlow
 				nodes={flowNodes}
-				edges={flowEdges}
+				edges={emptyEdges}
 				nodeTypes={nodeTypes}
 				onNodeClick={handleNodeClick}
 				onNodeMouseEnter={isMobile ? undefined : handleNodeMouseEnter}
@@ -390,6 +539,11 @@ export function TechTreePage() {
 				translateExtent={translateExtent}
 				proOptions={{ hideAttribution: true }}
 			>
+				<BundledEdges
+					edges={edgeDefs}
+					allNodes={allTechNodes}
+					color={theme.textMuted}
+				/>
 				<Background gap={20} color={theme.border} />
 			</ReactFlow>
 
