@@ -505,114 +505,117 @@ export function App() {
 					singularity && singularityAnimate && shellCollapseCss,
 				]}
 			>
-				{/* Main area: sidebar + tabbed content + tutorial */}
-				<div
-					css={{
-						display: "flex",
-						flexDirection: "column",
-						flex: 1,
-						overflow: "hidden",
-					}}
-				>
-					<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
-						{!sidebarUnlocked || sidebarCollapsed ? (
-							<button
-								type="button"
-								css={collapsedStripCss}
-								style={{
-									borderRight: `1px solid ${theme.border}`,
-									background: theme.sidebarBg,
-									opacity: sidebarUnlocked ? 1 : 0.3,
-									cursor: sidebarUnlocked ? "pointer" : "default",
-								}}
-								onClick={sidebarUnlocked ? toggleSidebar : undefined}
-								title={sidebarUnlocked ? "Show sidebar" : "Unlock in tech tree"}
-							>
-								<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-									<rect
-										x="1.5"
-										y="2.5"
-										width="13"
-										height="11"
-										rx="1"
-										stroke="currentColor"
-										strokeWidth="1.2"
-									/>
-									<line
-										x1="5"
-										y1="3"
-										x2="5"
-										y2="13"
-										stroke="currentColor"
-										strokeWidth="1.2"
-									/>
-								</svg>
-							</button>
-						) : (
-							<SidebarTree onCollapse={toggleSidebar} />
-						)}
-
-						{/* Tabbed pane(s) */}
-						<TabbedPane
-							activePage={page}
-							onSetPage={setPage}
-							showSplitBtn
-							splitActive={splitEnabled}
-							onToggleSplit={toggleSplit}
-						/>
-						{splitEnabled && (
-							<>
-								<div
-									css={{
-										width: 1,
-										background: theme.border,
-										flexShrink: 0,
-									}}
+				{/* Main area: sidebar + center + stats panel */}
+				<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
+					{/* Left sidebar */}
+					{!sidebarUnlocked || sidebarCollapsed ? (
+						<button
+							type="button"
+							css={collapsedStripCss}
+							style={{
+								borderRight: `1px solid ${theme.border}`,
+								background: theme.sidebarBg,
+								opacity: sidebarUnlocked ? 1 : 0.3,
+								cursor: sidebarUnlocked ? "pointer" : "default",
+							}}
+							onClick={sidebarUnlocked ? toggleSidebar : undefined}
+							title={sidebarUnlocked ? "Show sidebar" : "Unlock in tech tree"}
+						>
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect
+									x="1.5"
+									y="2.5"
+									width="13"
+									height="11"
+									rx="1"
+									stroke="currentColor"
+									strokeWidth="1.2"
 								/>
-								<TabbedPane activePage={rightPage} onSetPage={setRightPage} />
-							</>
-						)}
+								<line
+									x1="5"
+									y1="3"
+									x2="5"
+									y2="13"
+									stroke="currentColor"
+									strokeWidth="1.2"
+								/>
+							</svg>
+						</button>
+					) : (
+						<SidebarTree onCollapse={toggleSidebar} />
+					)}
 
-						{!statsPanelUnlocked || statsPanelCollapsed ? (
-							<button
-								type="button"
-								css={collapsedStripCss}
-								style={{
-									borderLeft: `1px solid ${theme.border}`,
-									background: theme.sidebarBg,
-									opacity: statsPanelUnlocked ? 1 : 0.3,
-									cursor: statsPanelUnlocked ? "pointer" : "default",
-								}}
-								onClick={statsPanelUnlocked ? toggleStatsPanel : undefined}
-								title={
-									statsPanelUnlocked ? "Show stats" : "Unlock in tech tree"
-								}
-							>
-								<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-									<rect
-										x="1.5"
-										y="2.5"
-										width="13"
-										height="11"
-										rx="1"
-										stroke="currentColor"
-										strokeWidth="1.2"
+					{/* Center: tabbed panes + tutorial */}
+					<div
+						css={{
+							display: "flex",
+							flexDirection: "column",
+							flex: 1,
+							overflow: "hidden",
+							minWidth: 0,
+						}}
+					>
+						<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
+							<TabbedPane
+								activePage={page}
+								onSetPage={setPage}
+								showSplitBtn
+								splitActive={splitEnabled}
+								onToggleSplit={toggleSplit}
+							/>
+							{splitEnabled && (
+								<>
+									<div
+										css={{
+											width: 1,
+											background: theme.border,
+											flexShrink: 0,
+										}}
 									/>
-									<line
-										x1="11"
-										y1="3"
-										x2="11"
-										y2="13"
-										stroke="currentColor"
-										strokeWidth="1.2"
-									/>
-								</svg>
-							</button>
-						) : (
-							<StatsPanel onCollapse={toggleStatsPanel} />
-						)}
+									<TabbedPane activePage={rightPage} onSetPage={setRightPage} />
+								</>
+							)}
+						</div>
+						<TutorialTip />
 					</div>
-					<TutorialTip />
+
+					{/* Right stats panel (full height) */}
+					{!statsPanelUnlocked || statsPanelCollapsed ? (
+						<button
+							type="button"
+							css={collapsedStripCss}
+							style={{
+								borderLeft: `1px solid ${theme.border}`,
+								background: theme.sidebarBg,
+								opacity: statsPanelUnlocked ? 1 : 0.3,
+								cursor: statsPanelUnlocked ? "pointer" : "default",
+							}}
+							onClick={statsPanelUnlocked ? toggleStatsPanel : undefined}
+							title={statsPanelUnlocked ? "Show stats" : "Unlock in tech tree"}
+						>
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+								<rect
+									x="1.5"
+									y="2.5"
+									width="13"
+									height="11"
+									rx="1"
+									stroke="currentColor"
+									strokeWidth="1.2"
+								/>
+								<line
+									x1="11"
+									y1="3"
+									x2="11"
+									y2="13"
+									stroke="currentColor"
+									strokeWidth="1.2"
+								/>
+							</svg>
+						</button>
+					) : (
+						<StatsPanel onCollapse={toggleStatsPanel} />
+					)}
 				</div>
 
 				{/* Status bar */}
