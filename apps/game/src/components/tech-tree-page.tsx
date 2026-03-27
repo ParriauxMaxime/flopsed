@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import {
 	Background,
 	type Edge,
-	type EdgeProps,
 	type Node,
 	ReactFlow,
 	useViewport,
@@ -15,7 +14,6 @@ import {
 	TECH_NODE_WIDTH,
 	TechNodeComponent,
 } from "@agi-rush/design-system";
-import dagre from "@dagrejs/dagre";
 import type { TechNode } from "@modules/game";
 import {
 	allTechNodes,
@@ -32,51 +30,6 @@ import { useIsMobile } from "../hooks/use-is-mobile";
 
 const nodeTypes = { techNode: TechNodeComponent };
 
-// ── Dagre auto-layout for visible nodes ──
-
-function computeLayout(
-	visibleIds: Set<string>,
-	techNodes: TechNode[],
-): Map<string, { x: number; y: number }> {
-	const g = new dagre.graphlib.Graph();
-	g.setGraph({
-		rankdir: "TB",
-		nodesep: 40,
-		ranksep: 60,
-		marginx: 20,
-		marginy: 20,
-	});
-	g.setDefaultEdgeLabel(() => ({}));
-
-	for (const n of techNodes) {
-		if (!visibleIds.has(n.id)) continue;
-		g.setNode(n.id, { width: TECH_NODE_WIDTH, height: TECH_NODE_HEIGHT });
-	}
-
-	for (const n of techNodes) {
-		if (!visibleIds.has(n.id)) continue;
-		for (const req of n.requires) {
-			if (visibleIds.has(req)) {
-				g.setEdge(req, n.id);
-			}
-		}
-	}
-
-	dagre.layout(g);
-
-	const positions = new Map<string, { x: number; y: number }>();
-	for (const id of visibleIds) {
-		const node = g.node(id);
-		if (node) {
-			positions.set(id, {
-				x: node.x - TECH_NODE_WIDTH / 2,
-				y: node.y - TECH_NODE_HEIGHT / 2,
-			});
-		}
-	}
-	return positions;
-}
-
 // ── Build React Flow data from game state ──
 
 function buildFlowNodes(
@@ -85,24 +38,16 @@ function buildFlowNodes(
 	loc: number,
 	cash: number,
 ): Node[] {
-	// First pass: determine visible nodes
-	const visibleIds = new Set<string>();
+	const nodes: Node[] = [];
 	for (const n of techNodes) {
+		const owned = ownedTechNodes[n.id] ?? 0;
+		const maxed = owned >= n.max;
 		const prereqsMet =
 			n.requires.length === 0 ||
 			n.requires.every((id) => (ownedTechNodes[id] ?? 0) > 0);
-		if (prereqsMet) visibleIds.add(n.id);
-	}
 
-	// Compute layout based on visible nodes only
-	const positions = computeLayout(visibleIds, techNodes);
+		if (!prereqsMet) continue;
 
-	const nodes: Node[] = [];
-	for (const n of techNodes) {
-		if (!visibleIds.has(n.id)) continue;
-
-		const owned = ownedTechNodes[n.id] ?? 0;
-		const maxed = owned >= n.max;
 		const cost = getTechNodeCost(n, owned);
 		const useLoc = n.currency === "loc";
 		const canAfford = useLoc ? loc >= cost : cash >= cost;
@@ -112,12 +57,10 @@ function buildFlowNodes(
 		else if (canAfford) state = NodeStateEnum.affordable;
 		else state = NodeStateEnum.visible;
 
-		const pos = positions.get(n.id) ?? { x: n.x ?? 0, y: n.y ?? 0 };
-
 		nodes.push({
 			id: n.id,
 			type: "techNode",
-			position: pos,
+			position: { x: n.x ?? 0, y: n.y ?? 0 },
 			data: { ...n, state, owned },
 		});
 	}
@@ -194,7 +137,6 @@ function buildBundledPaths(
 	nodePositions: Map<string, { x: number; y: number }>,
 	color: string,
 ): Array<{ d: string; strokeWidth: number; opacity: number }> {
-	// Group edges by source
 	const bySource = new Map<string, EdgeDef[]>();
 	for (const e of edges) {
 		const group = bySource.get(e.sourceId) ?? [];
@@ -204,13 +146,12 @@ function buildBundledPaths(
 
 	const paths: Array<{ d: string; strokeWidth: number; opacity: number }> = [];
 
-	for (const [sourceId, group] of bySource) {
+	for (const [, group] of bySource) {
 		if (group.length === 0) continue;
 		const sx = group[0].sx;
 		const sy = group[0].sy;
 
 		if (group.length === 1) {
-			// Single edge — simple bezier
 			const e = group[0];
 			const excludeIds = new Set([e.sourceId, e.targetId]);
 			const blocker = findBlockingNode(
@@ -223,7 +164,6 @@ function buildBundledPaths(
 			);
 
 			if (blocker) {
-				// Route around: go to the side then down
 				const bx = blocker.x;
 				const side =
 					sx <= bx + TECH_NODE_WIDTH / 2 ? bx - 16 : bx + TECH_NODE_WIDTH + 16;
@@ -241,22 +181,16 @@ function buildBundledPaths(
 				});
 			}
 		} else {
-			// Multiple edges from same source — bundle them
-			// Sort targets by X position
 			const sorted = [...group].sort((a, b) => a.tx - b.tx);
-
-			// Compute trunk: vertical line down from source to a junction point
 			const minTy = Math.min(...sorted.map((e) => e.ty));
 			const junctionY = sy + (minTy - sy) * 0.5;
 
-			// Trunk (thicker)
 			paths.push({
 				d: `M ${sx} ${sy} L ${sx} ${junctionY}`,
 				strokeWidth: 2.5,
 				opacity: 0.35,
 			});
 
-			// Branches from junction to each target
 			for (const e of sorted) {
 				paths.push({
 					d: `M ${sx} ${junctionY} C ${sx} ${(junctionY + e.ty) / 2}, ${e.tx} ${(junctionY + e.ty) / 2}, ${e.tx} ${e.ty}`,
@@ -270,7 +204,6 @@ function buildBundledPaths(
 	return paths;
 }
 
-/** SVG overlay for bundled edges — reads viewport transform from React Flow */
 function BundledEdges({
 	edges,
 	flowNodes,
@@ -458,8 +391,6 @@ export function TechTreePage() {
 	const setTechTreeViewport = useUiStore((s) => s.setTechTreeViewport);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	// Throttle node rebuilds to avoid React Flow DOM churn on every game tick.
-	// Only recompute every 500ms, or immediately when purchases change.
 	const lastBuild = useRef(0);
 	const cachedNodes = useRef<Node[]>([]);
 	const prevOwned = useRef(ownedTechNodes);
@@ -533,7 +464,6 @@ export function TechTreePage() {
 				researchNode(techNode);
 				if (isMobile) setHovered(null);
 			} else if (isMobile && containerRef.current) {
-				// On mobile, show popover on tap for non-affordable nodes
 				const containerRect = containerRef.current.getBoundingClientRect();
 				setHovered({
 					node: techNode,
@@ -569,7 +499,9 @@ export function TechTreePage() {
 
 	const containerDynamicCss = css({
 		background: theme.background,
-		".react-flow__background": { background: `${theme.background} !important` },
+		".react-flow__background": {
+			background: `${theme.background} !important`,
+		},
 	});
 
 	return (
