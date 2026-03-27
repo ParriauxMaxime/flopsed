@@ -1127,18 +1127,18 @@
 		{
 			"id": "freelancer_cost",
 			"name": "Rate Negotiation",
-			"description": "-15% freelancer cost per level",
+			"description": "-10% freelancer cost",
 			"icon": "🤝",
 			"requires": ["outsourcing"],
-			"max": 5,
+			"max": 1,
 			"baseCost": 800,
-			"costMultiplier": 1.4,
+			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
 				{
 					"type": "freelancerCostDiscount",
 					"op": "multiply",
-					"value": 0.85
+					"value": 0.9
 				}
 			],
 			"x": 1360,
