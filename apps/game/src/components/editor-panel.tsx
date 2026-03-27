@@ -12,7 +12,6 @@ const wrapperCss = css({
 });
 
 const editorAreaCss = css({
-	flex: 1,
 	overflow: "hidden",
 	display: "flex",
 	flexDirection: "column",
@@ -24,9 +23,6 @@ const bottomPanelCss = css({
 	display: "flex",
 	flexDirection: "column",
 	overflow: "hidden",
-	flexShrink: 0,
-	maxHeight: "40%",
-	minHeight: 120,
 	boxShadow: "0 -2px 6px rgba(0,0,0,0.15)",
 	zIndex: 1,
 	position: "relative",
@@ -63,17 +59,22 @@ export function EditorPanel() {
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
 	const theme = useIdeTheme();
 
-	return (
-		<div css={wrapperCss} data-tutorial="editor">
-			<div css={editorAreaCss}>
-				<Editor />
-			</div>
+	if (aiUnlocked) {
+		// T4+: CLI prompt is primary, editor is a small preview at top
+		return (
+			<div css={wrapperCss} data-tutorial="editor">
+				{/* Miniature editor preview — code being auto-generated */}
+				<div css={editorAreaCss} style={{ flex: "0 0 30%", maxHeight: "35%" }}>
+					<Editor />
+				</div>
 
-			{/* Terminal panel (appears when AI unlocked) */}
-			{aiUnlocked && (
+				{/* CLI prompt takes over as main panel */}
 				<div
 					css={bottomPanelCss}
-					style={{ borderTop: `1px solid ${theme.border}` }}
+					style={{
+						flex: 1,
+						borderTop: `1px solid ${theme.border}`,
+					}}
 				>
 					<div
 						css={bottomTabBarCss}
@@ -96,7 +97,16 @@ export function EditorPanel() {
 						<CliPrompt />
 					</div>
 				</div>
-			)}
+			</div>
+		);
+	}
+
+	// T0-T3: Full editor
+	return (
+		<div css={wrapperCss} data-tutorial="editor">
+			<div css={editorAreaCss} style={{ flex: 1 }}>
+				<Editor />
+			</div>
 		</div>
 	);
 }

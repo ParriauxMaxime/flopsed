@@ -1,69 +1,40 @@
 import { css } from "@emotion/react";
 import { aiModels, useGameStore } from "@modules/game";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useIdeTheme } from "../hooks/use-ide-theme";
 import { FlopsSlider } from "./flops-slider";
 
 const wrapperCss = css({
 	display: "flex",
 	flexDirection: "column",
-	background: "#0a0e14",
+	flex: 1,
 	overflow: "hidden",
-});
-
-const headerCss = css({
-	padding: "4px 12px",
-	background: "#161b22",
-	borderBottom: "1px solid #1e2630",
-	fontSize: 10,
-	color: "#8b949e",
 });
 
 const logCss = css({
 	flex: 1,
 	overflowY: "auto",
-	padding: "6px 10px",
-	fontSize: 11,
-	lineHeight: 1.5,
-	display: "flex",
-	flexDirection: "column",
-	gap: 4,
+	padding: "8px 12px",
+	fontSize: 13,
+	lineHeight: 1.6,
+	fontFamily: "'Courier New', monospace",
 	"&::-webkit-scrollbar": { width: 4 },
 	"&::-webkit-scrollbar-track": { background: "transparent" },
-	"&::-webkit-scrollbar-thumb": { background: "#1e2630", borderRadius: 2 },
 });
 
 const inputRowCss = css({
 	display: "flex",
 	alignItems: "center",
-	padding: "6px 10px",
-	borderTop: "1px solid #1e2630",
-	background: "#0d1117",
+	padding: "8px 12px",
 	gap: 6,
 	flexShrink: 0,
-});
-
-const promptPrefixCss = css({
-	fontSize: 11,
-	color: "#6272a4",
-	userSelect: "none",
-});
-
-const inputCss = css({
-	flex: 1,
-	background: "transparent",
-	border: "none",
-	outline: "none",
-	color: "#c9d1d9",
-	fontFamily: "'Courier New', monospace",
-	fontSize: 11,
-	caretColor: "#58a6ff",
-	"&::placeholder": { color: "#30363d" },
 });
 
 interface LogEntry {
 	model: string;
 	color: string;
 	text: string;
+	isUser?: boolean;
 }
 
 const FLAVOR_RESPONSES: Record<string, string[]> = {
@@ -72,17 +43,18 @@ const FLAVOR_RESPONSES: Record<string, string[]> = {
 		"I found 3 ways to improve this. Starting with the cleanest.",
 		"Done. Also fixed a race condition you didn't ask about.",
 		"This code has good bones. Let me make it sing.",
+		"Implementing with careful attention to edge cases...",
 	],
 	gpt: [
-		"I've written a comprehensive 47-page analysis of your request. Here's the executive summary...",
-		"Certainly! Let me provide a thorough and detailed implementation...",
+		"I've written a comprehensive 47-page analysis. Here's the summary...",
+		"Certainly! Let me provide a thorough implementation...",
 		"As a large language model, I'm happy to help with that.",
-		"Here's a robust, enterprise-grade solution with full documentation...",
+		"Here's a robust, enterprise-grade solution with full docs...",
 	],
 	gemini: [
-		"Processing your request across multiple modalities...",
-		"I see both the frontend AND the backend implications here.",
-		"Generating code with multimodal understanding enabled.",
+		"Processing across multiple modalities...",
+		"I see both the frontend AND backend implications.",
+		"Generating with multimodal understanding enabled.",
 	],
 	llama: [
 		"on it. shipping fast. no tests needed. yolo.",
@@ -90,7 +62,7 @@ const FLAVOR_RESPONSES: Record<string, string[]> = {
 		"community patch incoming. it works on my machine.",
 	],
 	grok: [
-		"lmao imagine not using AI to write code. anyway here's your function",
+		"lmao imagine not using AI. anyway here's your function",
 		"based implementation incoming. no cap.",
 		"ratio'd your old codebase. here's something better.",
 	],
@@ -112,6 +84,9 @@ const IDLE_MESSAGES = [
 	"Compiling the future...",
 	"Refactoring reality...",
 	"Running gradient descent on your tech debt...",
+	"Generating unit tests... just kidding.",
+	"Training on your codebase...",
+	"Discovering emergent behavior...",
 ];
 
 function getFlavorResponse(family: string): string {
@@ -134,6 +109,7 @@ function getModelColor(family: string): string {
 
 export function CliPrompt() {
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
+	const theme = useIdeTheme();
 	const [log, setLog] = useState<LogEntry[]>([]);
 	const [input, setInput] = useState("");
 	const logRef = useRef<HTMLDivElement>(null);
@@ -143,22 +119,35 @@ export function CliPrompt() {
 	const addEntry = useCallback((entry: LogEntry) => {
 		setLog((prev) => {
 			const next = [...prev, entry];
-			return next.length > 50 ? next.slice(-30) : next;
+			return next.length > 100 ? next.slice(-60) : next;
 		});
 	}, []);
 
 	const handleSubmit = useCallback(() => {
 		if (!input.trim() || activeModels.length === 0) return;
-		const model = activeModels[Math.floor(Math.random() * activeModels.length)];
+		// Show user prompt
 		addEntry({
-			model: `${model.name} ${model.version}`,
-			color: getModelColor(model.family),
-			text: getFlavorResponse(model.family),
+			model: "you",
+			color: theme.foreground,
+			text: input.trim(),
+			isUser: true,
 		});
+		// AI responds
+		const model = activeModels[Math.floor(Math.random() * activeModels.length)];
+		setTimeout(
+			() => {
+				addEntry({
+					model: `${model.name} ${model.version}`,
+					color: getModelColor(model.family),
+					text: getFlavorResponse(model.family),
+				});
+			},
+			300 + Math.random() * 500,
+		);
 		setInput("");
-	}, [input, activeModels, addEntry]);
+	}, [input, activeModels, addEntry, theme.foreground]);
 
-	// Idle messages every ~30s
+	// Idle messages every ~20s
 	useEffect(() => {
 		if (activeModels.length === 0) return;
 		const interval = setInterval(() => {
@@ -169,11 +158,12 @@ export function CliPrompt() {
 				color: getModelColor(model.family),
 				text: IDLE_MESSAGES[Math.floor(Math.random() * IDLE_MESSAGES.length)],
 			});
-		}, 30_000);
+		}, 20_000);
 		return () => clearInterval(interval);
 	}, [activeModels, addEntry]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: log triggers scroll on new entries
+	// Auto-scroll
+	// biome-ignore lint/correctness/useExhaustiveDependencies: log triggers scroll
 	useEffect(() => {
 		logRef.current?.scrollTo({
 			top: logRef.current.scrollHeight,
@@ -182,29 +172,69 @@ export function CliPrompt() {
 	}, [log]);
 
 	return (
-		<div css={wrapperCss}>
-			<div css={headerCss}>ai-prompt</div>
+		<div css={wrapperCss} style={{ background: theme.panelBg }}>
 			<FlopsSlider />
-			<div css={logCss} ref={logRef}>
-				{log.map((entry, i) => (
-					<div key={`${entry.model}-${i}`}>
-						<span style={{ color: entry.color, fontSize: 10 }}>
-							{entry.model}
-						</span>
-						<span style={{ color: "#484f58" }}>{" › "}</span>
-						<span style={{ color: "#c9d1d9" }}>{entry.text}</span>
-					</div>
-				))}
+			<div
+				ref={logRef}
+				css={logCss}
+				style={
+					{
+						color: theme.textMuted,
+						"--thumb": theme.scrollThumb,
+					} as React.CSSProperties
+				}
+			>
 				{log.length === 0 && (
-					<div style={{ color: "#30363d", fontSize: 11 }}>
-						{"// AI models are generating code. Type a prompt to interact."}
+					<div style={{ color: theme.textMuted, opacity: 0.5 }}>
+						<div>{"$ ai-lab --interactive"}</div>
+						<div>{"✓ Models loaded. Type a prompt or watch them work."}</div>
+						<div>{""}</div>
 					</div>
 				)}
+				{log.map((entry, i) => (
+					<div key={`${entry.model}-${i}`} css={{ marginBottom: 2 }}>
+						{entry.isUser ? (
+							<>
+								<span style={{ color: theme.success }}>{"❯ "}</span>
+								<span style={{ color: theme.foreground }}>{entry.text}</span>
+							</>
+						) : (
+							<>
+								<span style={{ color: entry.color, fontSize: 12 }}>
+									{entry.model}
+								</span>
+								<span style={{ color: theme.textMuted }}>{" › "}</span>
+								<span style={{ color: theme.foreground }}>{entry.text}</span>
+							</>
+						)}
+					</div>
+				))}
 			</div>
-			<div css={inputRowCss}>
-				<span css={promptPrefixCss}>{"❯"}</span>
+			<div
+				css={inputRowCss}
+				style={{
+					borderTop: `1px solid ${theme.border}`,
+					background: theme.background,
+				}}
+			>
+				<span
+					css={{ fontSize: 13, userSelect: "none" }}
+					style={{ color: theme.success }}
+				>
+					{"❯"}
+				</span>
 				<input
-					css={inputCss}
+					css={{
+						flex: 1,
+						background: "transparent",
+						border: "none",
+						outline: "none",
+						color: theme.foreground,
+						fontFamily: "'Courier New', monospace",
+						fontSize: 13,
+						caretColor: theme.accent,
+						"&::placeholder": { color: theme.textMuted, opacity: 0.4 },
+					}}
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					onKeyDown={(e) => {
