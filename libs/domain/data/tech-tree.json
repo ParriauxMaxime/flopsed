@@ -47,7 +47,7 @@
 			"icon": "⚡",
 			"requires": ["computer"],
 			"max": 1,
-			"baseCost": 15,
+			"baseCost": 80,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
