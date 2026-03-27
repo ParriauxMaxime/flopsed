@@ -151,6 +151,15 @@ function buildLineList(
 			});
 			lineNumber++;
 		}
+		// Empty line between blocks for readability
+		if (bIdx < blocksToShow.length - 1) {
+			result.push({
+				key: `gap-${bIdx}`,
+				lineNumber,
+				html: "",
+			});
+			lineNumber++;
+		}
 	}
 
 	for (let i = 0; i < typingLines.length; i++) {

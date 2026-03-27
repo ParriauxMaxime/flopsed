@@ -88,7 +88,21 @@ export const useUiStore = create<UiState>()(
 			},
 			dismissTip: () => set({ activeTip: null }),
 			resetTips: () => {
-				set({ seenTips: [], activeTip: null });
+				set({
+					seenTips: [],
+					activeTip: null,
+					page: PageEnum.game,
+					splitEnabled: true,
+					rightPage: PageEnum.tech_tree,
+					sidebarCollapsed: true,
+					statsPanelCollapsed: true,
+					techTreeViewport: {
+						x: -(1254 - 300) * 2,
+						y: -(566 - 200) * 2,
+						zoom: 2,
+					},
+					uiZoom: 100,
+				});
 				// Flush to localStorage synchronously so reload picks it up
 				try {
 					const raw = localStorage.getItem("agi-rush-ui");
