@@ -42,10 +42,23 @@ export interface SimLogEntry {
 	flops: number;
 }
 
+export interface SimPurchaseSnapshot {
+	cash: number;
+	loc: number;
+	flops: number;
+	locPerSec: number;
+	cashPerSec: number;
+	tier: number;
+	quality: number;
+}
+
 export interface SimPurchase {
 	time: number;
 	type: PurchaseTypeEnum;
 	name: string;
+	cost?: number;
+	currency?: string;
+	snapshot?: SimPurchaseSnapshot;
 }
 
 export interface IdleGap {

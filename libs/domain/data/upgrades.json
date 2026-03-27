@@ -230,6 +230,25 @@
 			]
 		},
 		{
+			"id": "llm",
+			"tier": "ai_lab",
+			"name": "LLM",
+			"description": "Host 1 AI model — auto-picks the best available",
+			"icon": "🧠",
+			"baseCost": 5000000,
+			"costMultiplier": 1.8,
+			"max": 5,
+			"costCategory": "llm",
+			"requires": ["llm_gate"],
+			"effects": [
+				{
+					"type": "llmHostSlot",
+					"op": "add",
+					"value": 1
+				}
+			]
+		},
+		{
 			"id": "series_b",
 			"tier": "ai_lab",
 			"name": "Series B Funding",
@@ -252,8 +271,8 @@
 			"name": "AI Agent",
 			"description": "Autonomous agent — writes 100,000 LoC/s",
 			"icon": "🤖",
-			"baseCost": 50000000000,
-			"costMultiplier": 2,
+			"baseCost": 20000000000,
+			"costMultiplier": 2.5,
 			"max": 5,
 			"costCategory": "agent",
 			"effects": [
@@ -270,9 +289,9 @@
 			"name": "Supercomputer",
 			"description": "+20M FLOPS",
 			"icon": "🖲️",
-			"baseCost": 500000000,
-			"costMultiplier": 1.5,
-			"max": 3,
+			"baseCost": 2000000000,
+			"costMultiplier": 1.8,
+			"max": 5,
 			"effects": [
 				{
 					"type": "flops",
@@ -287,7 +306,7 @@
 			"name": "The Singularity",
 			"description": "You win. Or do you?",
 			"icon": "🌀",
-			"baseCost": 500000000000000,
+			"baseCost": 2000000000000000,
 			"costMultiplier": 1,
 			"max": 1,
 			"effects": [

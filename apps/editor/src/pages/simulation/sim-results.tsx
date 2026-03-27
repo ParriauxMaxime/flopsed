@@ -1,3 +1,4 @@
+import { BalanceSummaryTable } from "@agi-rush/design-system";
 import type { SimResult } from "@agi-rush/engine";
 import { css } from "@emotion/react";
 import { CashChart } from "./cash-chart";
@@ -122,6 +123,9 @@ export function SimResults({ result }: SimResultsProps) {
 					<div css={metricValueCss}>{result.finalTier}</div>
 				</div>
 			</div>
+
+			<div css={sectionTitleCss}>Balance Summary</div>
+			<BalanceSummaryTable result={result} />
 
 			<div css={sectionTitleCss}>Top Idle Gaps</div>
 			<div css={css({ fontSize: 13, marginBottom: 16 })}>

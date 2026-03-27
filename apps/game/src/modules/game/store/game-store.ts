@@ -74,6 +74,7 @@ export interface GameState {
 	managerMaxBonus: number;
 	llmMaxBonus: number;
 	agentMaxBonus: number;
+	llmHostSlots: number;
 	unlockedModels: Record<string, boolean>;
 	flopSlider: number;
 	aiLocAccumulator: number;
@@ -151,6 +152,7 @@ const initialState: GameState = {
 	managerMaxBonus: 0,
 	llmMaxBonus: 0,
 	agentMaxBonus: 0,
+	llmHostSlots: 0,
 	unlockedModels: {},
 	flopSlider: 0.7,
 	aiLocAccumulator: 0,
@@ -221,6 +223,7 @@ function recalcDerivedStats(state: GameState): void {
 	let managerMaxBonus = 0;
 	let llmMaxBonus = 0;
 	let agentMaxBonus = 0;
+	let llmHostSlots = 0;
 	let tierIndex = state.currentTierIndex;
 	const unlockedModels: Record<string, boolean> = {};
 	let singularity = false;
@@ -336,6 +339,9 @@ function recalcDerivedStats(state: GameState): void {
 			.with({ type: "llmMaxBonus", op: "add" }, () => {
 				llmMaxBonus += val * owned;
 			})
+			.with({ type: "llmHostSlot", op: "add" }, () => {
+				llmHostSlots += val * owned;
+			})
 			.with({ type: "agentMaxBonus", op: "add" }, () => {
 				agentMaxBonus += val * owned;
 			})
@@ -443,9 +449,11 @@ function recalcDerivedStats(state: GameState): void {
 	state.managerMaxBonus = managerMaxBonus;
 	state.llmMaxBonus = llmMaxBonus;
 	state.agentMaxBonus = agentMaxBonus;
+	state.llmHostSlots = llmHostSlots;
 	state.currentTierIndex = tierIndex;
 	state.unlockedModels = unlockedModels;
-	state.aiUnlocked = Object.values(unlockedModels).some(Boolean);
+	state.aiUnlocked =
+		llmHostSlots > 0 && Object.values(unlockedModels).some(Boolean);
 	state.singularity = singularity;
 	if (singularity) {
 		state.running = false;
@@ -485,11 +493,13 @@ export const useGameStore = create<GameState & GameActions>()(
 					if (aiUnlocked && s.running) {
 						let totalAiLoc = 0;
 						let totalAiFlops = 0;
-						for (const model of aiModels) {
-							if (s.unlockedModels[model.id]) {
-								totalAiLoc += model.locPerSec;
-								totalAiFlops += model.flopsCost;
-							}
+						const activeModels = aiModels
+							.filter((m) => s.unlockedModels[m.id])
+							.sort((a, b) => b.locPerSec - a.locPerSec)
+							.slice(0, s.llmHostSlots);
+						for (const model of activeModels) {
+							totalAiLoc += model.locPerSec;
+							totalAiFlops += model.flopsCost;
 						}
 						if (totalAiFlops > 0) {
 							// AI gets what it needs, capped by available FLOPS

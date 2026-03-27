@@ -6,6 +6,7 @@ import type {
 	SimEventEffect,
 	SimLogEntry,
 	SimPurchase,
+	SimPurchaseSnapshot,
 	SimResult,
 	SimSnapshot,
 	TechNodeData,
@@ -102,6 +103,7 @@ export function runBalanceSim(
 		managerMaxBonus: 0,
 		llmMaxBonus: 0,
 		agentMaxBonus: 0,
+		llmHostSlots: 0,
 		codeQuality: 100,
 		currentTier: 0,
 		owned: {} as Record<string, number>,
@@ -335,6 +337,7 @@ export function runBalanceSim(
 		sim.llmLocMultiplier = 1;
 		sim.llmCostDiscount = 1;
 		sim.llmMaxBonus = 0;
+		sim.llmHostSlots = 0;
 		sim.agentLoc = 0;
 		sim.agentLocMultiplier = 1;
 		sim.agentCostDiscount = 1;
@@ -372,6 +375,7 @@ export function runBalanceSim(
 				if (e.type === "agentLoc") sim.agentLoc += val * owned;
 				if (e.type === "llmMaxBonus") sim.llmMaxBonus += val * owned;
 				if (e.type === "agentMaxBonus") sim.agentMaxBonus += val * owned;
+				if (e.type === "llmHostSlot") sim.llmHostSlots += val * owned;
 			}
 			// Multiply effects compound exponentially: val ** owned
 			if (e.op === "multiply") {
@@ -424,7 +428,9 @@ export function runBalanceSim(
 		}
 
 		sim.currentTier = tierIndex;
-		sim.aiUnlocked = Object.values(sim.ownedModels).some(Boolean);
+		sim.aiUnlocked =
+			sim.llmHostSlots > 0 &&
+			Object.values(sim.ownedModels).some(Boolean);
 	}
 
 	/** Apply effects for a newly purchased item (instant effects only — recalc handles the rest) */
@@ -457,6 +463,23 @@ export function runBalanceSim(
 			eventAutoLocMultiplier *
 			eventLocProductionMultiplier
 		);
+	}
+
+	function capturePurchaseSnapshot(): SimPurchaseSnapshot {
+		const manualL = effLocPerKey() * cfg.keysPerSec;
+		const autoTypeL = sim.autoTypeEnabled ? effLocPerKey() * 5 : 0;
+		const autoL = calcAutoLoc();
+		const totalLocS = manualL + autoTypeL + autoL;
+		const fl = totalFlops();
+		return {
+			cash: sim.cash,
+			loc: sim.loc,
+			flops: fl,
+			locPerSec: totalLocS,
+			cashPerSec: Math.min(totalLocS, fl) * cashPerLoc(),
+			tier: sim.currentTier,
+			quality: sim.codeQuality,
+		};
 	}
 
 	const agiTarget =
@@ -623,13 +646,13 @@ export function runBalanceSim(
 			const aiFlops = flops * (1 - sim.flopSlider);
 			let totalAiLoc = 0;
 			let totalAiFlops = 0;
-			for (const [id, v] of Object.entries(sim.ownedModels)) {
-				if (!v) continue;
-				const m = aiModels.find((x) => x.id === id);
-				if (m) {
-					totalAiLoc += m.locPerSec * sim.aiLocMultiplier;
-					totalAiFlops += m.flopsCost;
-				}
+			const activeModels = aiModels
+				.filter((m) => sim.ownedModels[m.id])
+				.sort((a, b) => b.locPerSec - a.locPerSec)
+				.slice(0, sim.llmHostSlots);
+			for (const m of activeModels) {
+				totalAiLoc += m.locPerSec * sim.aiLocMultiplier;
+				totalAiFlops += m.flopsCost;
 			}
 			if (totalAiFlops > 0) {
 				aiLoc = totalAiLoc * Math.min(1, aiFlops / totalAiFlops);
@@ -680,6 +703,9 @@ export function runBalanceSim(
 					time: t,
 					type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
 					name: freeNode.name,
+					cost: 0,
+					currency: freeNode.currency,
+					snapshot: capturePurchaseSnapshot(),
 				});
 				continue;
 			}
@@ -706,6 +732,9 @@ export function runBalanceSim(
 					time: t,
 					type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
 					name: gateNode.name,
+					cost,
+					currency: gateNode.currency,
+					snapshot: capturePurchaseSnapshot(),
 				});
 				continue;
 			}
@@ -800,6 +829,9 @@ export function runBalanceSim(
 				time: t,
 				type: isModelUnlock ? PurchaseTypeEnum.ai : PurchaseTypeEnum.tech,
 				name: bestTech.node.name,
+				cost: bestTech.cost,
+				currency: bestTech.node.currency,
+				snapshot: capturePurchaseSnapshot(),
 			});
 		}
 
@@ -868,6 +900,19 @@ export function runBalanceSim(
 					if (e.type === "cashMultiplier")
 						val += Math.min(totalLocS, execCap) * cashPerLoc() * (ev - 1);
 					if (e.type === "instantCash") val += ev / 60;
+					if (e.type === "llmHostSlot") {
+						const unlockedCount = Object.values(sim.ownedModels).filter(Boolean).length;
+						const activeCount = Math.min(unlockedCount, sim.llmHostSlots);
+						if (activeCount < unlockedCount) {
+							const sorted = aiModels
+								.filter((m) => sim.ownedModels[m.id])
+								.sort((a, b) => b.locPerSec - a.locPerSec);
+							const nextModel = sorted[activeCount];
+							if (nextModel) {
+								val += nextModel.locPerSec * sim.aiLocMultiplier * cashPerLoc();
+							}
+						}
+					}
 					if (e.type === "devSpeed" || e.type === "locProductionSpeed")
 						val +=
 							calcAutoLoc() *
@@ -902,14 +947,17 @@ export function runBalanceSim(
 					time: t,
 					type: PurchaseTypeEnum.upgrade,
 					name: u.name,
+					cost: best.cost,
+					currency: "cash",
+					snapshot: capturePurchaseSnapshot(),
 				});
 			} else {
 				const m = best.item as AiModel;
 				sim.cash -= best.cost;
 				sim.ownedModels[m.id] = true;
+				const wasAiUnlocked = sim.aiUnlocked;
 				recalcSimStats();
-				if (!sim.aiUnlocked) {
-					sim.aiUnlocked = true;
+				if (!wasAiUnlocked && sim.aiUnlocked) {
 					if (cfg.aiStrategy === AiStrategyEnum.exec_heavy)
 						sim.flopSlider = 0.7;
 					else if (cfg.aiStrategy === AiStrategyEnum.ai_heavy)
@@ -920,6 +968,9 @@ export function runBalanceSim(
 					time: t,
 					type: PurchaseTypeEnum.ai,
 					name: `${m.name} ${m.version}`,
+					cost: best.cost,
+					currency: "cash",
+					snapshot: capturePurchaseSnapshot(),
 				});
 			}
 			purchaseCount++;

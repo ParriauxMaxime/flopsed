@@ -6,7 +6,8 @@
 	"main": "index.ts",
 	"types": "index.ts",
 	"dependencies": {
-		"@agi-rush/domain": "*"
+		"@agi-rush/domain": "*",
+		"@agi-rush/engine": "*"
 	},
 	"peerDependencies": {
 		"@emotion/react": ">=11",

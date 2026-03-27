@@ -1,3 +1,4 @@
+export { BalanceSummaryTable } from "./components/balance-summary-table";
 export type { Column } from "./components/editable-table";
 export { EditableTable } from "./components/editable-table";
 export {

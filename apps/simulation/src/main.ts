@@ -15,6 +15,7 @@ import { runBalanceSim } from "@agi-rush/engine";
 const args = process.argv.slice(2);
 const verbose = args.includes("--verbose");
 const jsonOutput = args.includes("--json");
+const traceOutput = args.includes("--trace");
 const profileFlag = args.includes("--profile")
 	? args[args.indexOf("--profile") + 1]
 	: null;
@@ -102,12 +103,15 @@ interface ProfileResult {
 	};
 }
 
+let lastSimResult: SimResult | null = null;
+
 function validateProfile(profile: Profile): ProfileResult {
 	const result: SimResult = runBalanceSim(simData, {
 		keysPerSec: profile.keysPerSec,
 		skill: profile.skill,
 		maxMinutes: 60,
 	});
+	lastSimResult = result;
 
 	const failures: string[] = [];
 	const agiMinutes = result.agiTime !== null ? result.agiTime / 60 : null;
@@ -339,6 +343,30 @@ if (profileFlag && selectedProfiles.length === 0) {
 		`Unknown profile: ${profileFlag}. Available: ${profiles.map((p) => p.name).join(", ")}`,
 	);
 	process.exit(1);
+}
+
+if (traceOutput) {
+	// Trace mode: run selected profiles and dump enriched purchase timelines
+	const traceProfiles = selectedProfiles;
+	const traceResults = traceProfiles.map((p) => {
+		const result: SimResult = runBalanceSim(simData, {
+			keysPerSec: p.keysPerSec,
+			skill: p.skill,
+			maxMinutes: 60,
+		});
+		return {
+			profile: p.name,
+			keysPerSec: p.keysPerSec,
+			purchases: result.purchases,
+			snapshots: result.snapshots,
+			tierTimes: result.tierTimes,
+			agiTime: result.agiTime,
+		};
+	});
+	// Single profile: output object directly; multiple: output array
+	const output = traceResults.length === 1 ? traceResults[0] : traceResults;
+	console.log(JSON.stringify(output, null, 2));
+	process.exit(0);
 }
 
 const results = selectedProfiles.map(validateProfile);

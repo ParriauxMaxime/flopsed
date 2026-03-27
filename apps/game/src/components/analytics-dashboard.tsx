@@ -109,12 +109,12 @@ export function AnalyticsDashboard() {
 
 	const humanSources = useMemo((): SourceRow[] => {
 		const rows: SourceRow[] = [];
-		if ((ownedUpgrades.freelancer ?? 0) > 0)
+		if ((ownedUpgrades.malt_freelancer ?? 0) > 0)
 			rows.push({
 				name: "Freelancers",
 				locPerSec: freelancerLocPerSec,
 				color: "#3fb950",
-				count: ownedUpgrades.freelancer,
+				count: ownedUpgrades.malt_freelancer,
 			});
 		if ((ownedUpgrades.intern ?? 0) > 0)
 			rows.push({

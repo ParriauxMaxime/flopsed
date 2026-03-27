@@ -1,3 +1,4 @@
+import { BalanceSummaryTable } from "@agi-rush/design-system";
 import {
 	aiModelsJson,
 	balanceJson,
@@ -103,6 +104,9 @@ export function SimPanel({ autoRun = false }: { autoRun?: boolean }) {
 					)}
 
 					<SimSummary result={result} />
+
+					<div css={sectionTitleCss}>Balance Summary</div>
+					<BalanceSummaryTable result={result} />
 
 					<div css={sectionTitleCss}>Purchase Density</div>
 					<PurchaseDensity

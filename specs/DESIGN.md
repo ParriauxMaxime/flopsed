@@ -7,6 +7,32 @@ The meta layer: you're building the thing that replaces you.
 
 ---
 
+## Core Design Principles
+
+### Currency Split: Soft-Lock Prevention
+**LoC upgrades cost cash. FLOPS upgrades cost LoC.** This is intentional and must not change.
+
+The player always produces LoC by typing — even with zero cash and zero FLOPS. This means:
+- You can always earn LoC → buy FLOPS upgrades (LoC-priced)
+- FLOPS execute LoC → earn cash → buy LoC upgrades (cash-priced)
+- No combination of bad decisions can soft-lock the player
+
+If both currencies were cash, a player who spent everything on LoC production with 0 FLOPS would be stuck (code piles up, nothing executes, no cash). The split guarantees a way out.
+
+### The Pipeline: LoC → FLOPS → Cash
+LoC and FLOPS are intrinsically linked in a pipeline. Having more LoC/s than FLOPS is **the normal state** — code should pile up in the queue, creating visible pressure that motivates the player to upgrade hardware. The queue filling up IS the game.
+
+- **LoC/s > FLOPS** = queue grows, player sees code piling up, feels the urge to upgrade hardware
+- **LoC/s ≈ FLOPS** = balanced flow, satisfying throughput
+- **LoC/s < FLOPS** = idle FLOPS, wasted capacity — feels bad, signals "buy more LoC sources"
+
+Absurd FLOPS without matching LoC generation is wasteful — until AI tiers (T4+), where LLMs and agents **consume FLOPS to generate LoC**, creating the dual-demand tension that defines the late game.
+
+### Upgrade Diversity Per Tier
+Each tier should offer meaningful choices in BOTH LoC and FLOPS. If a tier is dominated by one type of upgrade, the player's decisions feel automatic. The interesting gameplay comes from choosing between "produce more code" vs "execute code faster" with limited resources.
+
+---
+
 ## Resources
 
 ### Primary
