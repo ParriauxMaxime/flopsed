@@ -171,6 +171,58 @@
 				}
 			],
 			"weight": 3
+		},
+		{
+			"id": "dev_burnout",
+			"name": "Dev Burnout",
+			"description": "Your developers are exhausted. Token production -50% for 30s.",
+			"icon": "🔥",
+			"minTier": "ai_lab",
+			"duration": 30,
+			"effects": [
+				{
+					"type": "tokenProduction",
+					"op": "multiply",
+					"value": 0.5
+				}
+			],
+			"interaction": {
+				"type": "mash_keys",
+				"reductionPerKey": 0.5
+			},
+			"weight": 3
+		},
+		{
+			"id": "prompt_fatigue",
+			"name": "Prompt Fatigue",
+			"description": "Low-quality prompts. Token production -30% for 20s.",
+			"icon": "😤",
+			"minTier": "ai_lab",
+			"duration": 20,
+			"effects": [
+				{
+					"type": "tokenProduction",
+					"op": "multiply",
+					"value": 0.7
+				}
+			],
+			"weight": 2
+		},
+		{
+			"id": "prompt_breakthrough",
+			"name": "Prompt Breakthrough",
+			"description": "Perfect prompt! Token production ×3 for 15s.",
+			"icon": "💡",
+			"minTier": "ai_lab",
+			"duration": 15,
+			"effects": [
+				{
+					"type": "tokenProduction",
+					"op": "multiply",
+					"value": 3
+				}
+			],
+			"weight": 1
 		}
 	],
 

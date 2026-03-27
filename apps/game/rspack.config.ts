@@ -1,6 +1,10 @@
 import path from "node:path";
 import { defineConfig } from "@rspack/cli";
-import { HtmlRspackPlugin, type RspackPluginFunction } from "@rspack/core";
+import {
+	CopyRspackPlugin,
+	HtmlRspackPlugin,
+	type RspackPluginFunction,
+} from "@rspack/core";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -52,6 +56,9 @@ export default defineConfig({
 	plugins: [
 		new HtmlRspackPlugin({
 			template: "./src/index.html",
+		}) as unknown as RspackPluginFunction,
+		new CopyRspackPlugin({
+			patterns: [{ from: "public", to: "." }],
 		}) as unknown as RspackPluginFunction,
 	],
 	devServer: {

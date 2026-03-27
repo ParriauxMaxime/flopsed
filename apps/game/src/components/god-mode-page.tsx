@@ -143,9 +143,10 @@ export function GodModePage() {
 			totalCash: s.totalCash,
 			loc: s.loc,
 			totalLoc: s.totalLoc,
+			tokens: s.tokens,
+			totalTokens: s.totalTokens,
 			flops: s.flops,
 			currentTierIndex: s.currentTierIndex,
-			flopSlider: s.flopSlider,
 			unlockedModels: s.unlockedModels,
 		})),
 	);
@@ -181,6 +182,12 @@ export function GodModePage() {
 			label: "FLOPS",
 			color: theme.flopsColor,
 			bumps: [100, 1_000, 10_000, 100_000],
+		},
+		{
+			key: "tokens",
+			label: "Tokens",
+			color: "#d4a574",
+			bumps: [1_000, 100_000, 10_000_000],
 		},
 	];
 
@@ -311,19 +318,6 @@ export function GodModePage() {
 			</Section>
 
 			<Section title="AI Models" defaultOpen={false}>
-				<div
-					css={{
-						display: "flex",
-						alignItems: "center",
-						gap: 8,
-						marginBottom: 8,
-					}}
-				>
-					<span css={{ color: theme.textMuted }}>FLOPS Slider:</span>
-					<span css={{ fontWeight: 600 }}>
-						{Math.round(state.flopSlider * 100)}%
-					</span>
-				</div>
 				{["copilot", "claude_haiku", "claude_sonnet", "openai_gpt3"].map(
 					(id) => (
 						<div

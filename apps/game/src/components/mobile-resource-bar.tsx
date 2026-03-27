@@ -98,24 +98,6 @@ export function MobileResourceBar({ onOpenSettings }: MobileResourceBarProps) {
 	const loc = useGameStore((s) => s.loc);
 	const flops = useGameStore((s) => s.flops);
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
-	const flopSlider = useGameStore((s) => s.flopSlider);
-	const setFlopSlider = useGameStore((s) => s.setFlopSlider);
-
-	const [sliderOpen, setSliderOpen] = useState(false);
-
-	const execPct = Math.round(flopSlider * 100);
-	const aiPct = 100 - execPct;
-
-	const onSliderChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			setFlopSlider(Number.parseFloat(e.target.value));
-		},
-		[setFlopSlider],
-	);
-
-	const toggleSlider = useCallback(() => {
-		setSliderOpen((prev) => !prev);
-	}, []);
 
 	return (
 		<div css={barCss}>
@@ -127,42 +109,14 @@ export function MobileResourceBar({ onOpenSettings }: MobileResourceBarProps) {
 					{"📝"} {formatNumber(loc)}
 				</span>
 				{aiUnlocked && (
-					<button
-						type="button"
-						css={[
-							statCss,
-							{
-								color: "#c678dd",
-								background: "none",
-								border: "none",
-								cursor: "pointer",
-								padding: 0,
-							},
-						]}
-						onClick={toggleSlider}
-					>
+					<span css={[statCss, { color: "#c678dd" }]}>
 						{"⚡"} {formatNumber(flops)}
-					</button>
+					</span>
 				)}
 				<button type="button" css={gearButtonCss} onClick={onOpenSettings}>
 					{"⚙"}
 				</button>
 			</div>
-			{aiUnlocked && sliderOpen && (
-				<div css={sliderRowCss}>
-					<span css={sliderLabelCss}>Exec {execPct}%</span>
-					<input
-						type="range"
-						min={0}
-						max={1}
-						step={0.01}
-						value={flopSlider}
-						onChange={onSliderChange}
-						css={sliderInputCss}
-					/>
-					<span css={sliderLabelCss}>AI {aiPct}%</span>
-				</div>
-			)}
 		</div>
 	);
 }

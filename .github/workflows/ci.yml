@@ -48,7 +48,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: cp apps/game/public/CNAME apps/game/dist/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/game/dist

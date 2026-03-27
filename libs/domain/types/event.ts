@@ -43,6 +43,7 @@ export type EventEffect =
 	| { type: "instantLoc"; op: "add"; value: number }
 	| { type: "codeQuality"; op: "add"; value: number }
 	| { type: "conditionalCash"; threshold: string; reward: string }
+	| { type: "tokenProduction"; op: "multiply"; value: number }
 	| { type: "disableUpgrade"; upgradeId: string }
 	| { type: "choice"; options: EventChoiceOption[] };
 
@@ -95,6 +96,7 @@ export interface EventModifiers {
 	autoLocMultiplier: number;
 	cashMultiplier: number;
 	locProductionMultiplier: number;
+	tokenProductionMultiplier: number;
 	disabledUpgrades: string[];
 }
 
@@ -105,6 +107,7 @@ export const DEFAULT_EVENT_MODIFIERS: EventModifiers = {
 	autoLocMultiplier: 1,
 	cashMultiplier: 1,
 	locProductionMultiplier: 1,
+	tokenProductionMultiplier: 1,
 	disabledUpgrades: [],
 };
 

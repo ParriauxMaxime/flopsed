@@ -134,8 +134,6 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
 	const autoExec = useGameStore((s) => s.autoExecuteEnabled);
 	const executeManual = useGameStore((s) => s.executeManual);
-	const flopSlider = useGameStore((s) => s.flopSlider);
-	const setFlopSlider = useGameStore((s) => s.setFlopSlider);
 	const llmHostSlots = useGameStore((s) => s.llmHostSlots);
 	const freelancerLocPerSec = useGameStore((s) => s.freelancerLocPerSec);
 	const internLocPerSec = useGameStore((s) => s.internLocPerSec);
@@ -215,16 +213,18 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 			.filter((m) => unlockedModels[m.id])
 			.sort((a, b) => b.locPerSec - a.locPerSec)
 			.slice(0, llmHostSlots);
-		const totalAiFlops = activeModels.reduce((sum, m) => sum + m.flopsCost, 0);
-		const aiFlopsBudget = flops * (1 - flopSlider);
-		const aiEfficiency =
-			totalAiFlops > 0 ? Math.min(1, aiFlopsBudget / totalAiFlops) : 0;
-		return activeModels.map((model) => ({
-			name: `${model.name} ${model.version}`,
-			locPerSec: model.locPerSec * aiEfficiency,
-			color: modelColor(model, theme.textMuted),
-		}));
-	}, [aiUnlocked, unlockedModels, llmHostSlots, flops, flopSlider, theme]);
+		let remaining = flops;
+		return activeModels.map((model) => {
+			const modelFlops = Math.min(model.flopsCost, remaining);
+			remaining -= modelFlops;
+			const ratio = model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
+			return {
+				name: `${model.name} ${model.version}`,
+				locPerSec: model.locPerSec * Math.min(1, ratio),
+				color: modelColor(model, theme.textMuted),
+			};
+		});
+	}, [aiUnlocked, unlockedModels, llmHostSlots, flops, theme]);
 
 	const humanMaxLoc = Math.max(1, ...humanSources.map((s) => s.locPerSec));
 	const aiMaxLoc = Math.max(1, ...aiSources.map((s) => s.locPerSec));
@@ -504,20 +504,26 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 									alignItems: "center",
 								}}
 							>
-								<div css={sectionLabelCss}>LoC Sources</div>
+								<div css={sectionLabelCss}>
+									{aiUnlocked ? "Token Sources" : "LoC Sources"}
+								</div>
 								<span
 									css={{
 										fontSize: 12,
 										fontVariantNumeric: "tabular-nums",
 									}}
-									style={{ color: theme.locColor }}
+									style={{
+										color: aiUnlocked ? theme.cashColor : theme.locColor,
+									}}
 								>
 									{formatNumber(
 										autoLocPerSec +
 											locPerKey * 6 +
-											aiSources.reduce((sum, s) => sum + s.locPerSec, 0),
+											(aiUnlocked
+												? 0
+												: aiSources.reduce((sum, s) => sum + s.locPerSec, 0)),
 									)}
-									/s
+									{aiUnlocked ? " tokens/s" : "/s"}
 								</span>
 							</div>
 							{humanSources.map((s) => (
@@ -591,33 +597,6 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 									))}
 								</>
 							)}
-						</div>
-					</>
-				)}
-
-				{/* FLOPS slider (T4+) */}
-				{aiUnlocked && (
-					<>
-						<div css={dividerCss} />
-						<div css={sectionCss}>
-							<div css={sectionLabelCss}>FLOPS Allocation</div>
-							<div css={sliderWrapperCss}>
-								<div css={sliderLabelCss}>
-									<span>Exec {Math.round(flopSlider * 100)}%</span>
-									<span>AI {Math.round((1 - flopSlider) * 100)}%</span>
-								</div>
-								<input
-									type="range"
-									min={0}
-									max={1}
-									step={0.01}
-									value={flopSlider}
-									onChange={(e) =>
-										setFlopSlider(Number.parseFloat(e.target.value))
-									}
-									css={sliderCss}
-								/>
-							</div>
 						</div>
 					</>
 				)}

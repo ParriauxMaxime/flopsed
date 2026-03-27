@@ -110,7 +110,6 @@ export function runBalanceSim(
 		ownedTech: {} as Record<string, number>,
 		ownedModels: {} as Record<string, boolean>,
 		aiUnlocked: false,
-		flopSlider: flopsAllocation.defaultSplit,
 		autoTypeEnabled: false,
 		autoExecuteEnabled: false,
 		manualExecCooldown: 0,
@@ -641,16 +640,17 @@ export function runBalanceSim(
 
 		// ── AI + execution ──
 		let aiLoc = 0;
+		let aiFlopsCost = 0;
 		if (sim.aiUnlocked) {
-			const aiFlops = flops * (1 - sim.flopSlider);
 			const activeModels = aiModels
 				.filter((m) => sim.ownedModels[m.id])
 				.sort((a, b) => b.locPerSec - a.locPerSec)
 				.slice(0, sim.llmHostSlots);
 			// Per-model FLOPS gating: each model independently capped
-			let remainingFlops = aiFlops;
+			let remainingFlops = flops;
 			for (const m of activeModels) {
 				const modelFlops = Math.min(m.flopsCost, remainingFlops);
+				aiFlopsCost += modelFlops;
 				remainingFlops -= modelFlops;
 				const ratio = m.flopsCost > 0 ? modelFlops / m.flopsCost : 0;
 				aiLoc += m.locPerSec * sim.aiLocMultiplier * Math.min(1, ratio);
@@ -659,7 +659,7 @@ export function runBalanceSim(
 				sim.loc += aiLoc;
 				sim.totalLoc += aiLoc;
 			}
-			const execFlops = flops * sim.flopSlider;
+			const execFlops = Math.max(0, flops - aiFlopsCost);
 			const executed = Math.min(sim.loc, execFlops);
 			sim.cash += executed * cashPerLoc();
 			sim.totalCash += executed * cashPerLoc();
@@ -859,7 +859,7 @@ export function runBalanceSim(
 
 			const totalLocS =
 				effLocPerKey() * cfg.keysPerSec + autoTypeLoc + calcAutoLoc() + aiLoc;
-			const execCap = sim.aiUnlocked ? flops * sim.flopSlider : flops;
+			const execCap = Math.max(0, flops - aiFlopsCost);
 			const bottlenecked = totalLocS > execCap;
 
 			let best: {
@@ -957,15 +957,7 @@ export function runBalanceSim(
 				const m = best.item as AiModel;
 				sim.cash -= best.cost;
 				sim.ownedModels[m.id] = true;
-				const wasAiUnlocked = sim.aiUnlocked;
 				recalcSimStats();
-				if (!wasAiUnlocked && sim.aiUnlocked) {
-					if (cfg.aiStrategy === AiStrategyEnum.exec_heavy)
-						sim.flopSlider = 0.7;
-					else if (cfg.aiStrategy === AiStrategyEnum.ai_heavy)
-						sim.flopSlider = 0.3;
-					else sim.flopSlider = 0.5;
-				}
 				purchases.push({
 					time: t,
 					type: PurchaseTypeEnum.ai,

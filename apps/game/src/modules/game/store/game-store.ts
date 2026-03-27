@@ -44,6 +44,8 @@ export interface GameState {
 	cash: number;
 	totalCash: number;
 	totalExecutedLoc: number;
+	tokens: number;
+	totalTokens: number;
 	flops: number;
 	cpuFlops: number;
 	ramFlops: number;
@@ -76,7 +78,6 @@ export interface GameState {
 	agentMaxBonus: number;
 	llmHostSlots: number;
 	unlockedModels: Record<string, boolean>;
-	flopSlider: number;
 	aiLocAccumulator: number;
 	autoLocAccumulator: number;
 	aiUnlocked: boolean;
@@ -96,6 +97,8 @@ export interface GodModeOverrides {
 	totalLoc?: number;
 	cash?: number;
 	totalCash?: number;
+	tokens?: number;
+	totalTokens?: number;
 	flops?: number;
 	currentTierIndex?: number;
 }
@@ -113,7 +116,6 @@ export interface GameActions {
 	reset: () => void;
 	recalc: () => void;
 	applyEventReward: (cashDelta: number, locDelta: number) => void;
-	setFlopSlider: (value: number) => void;
 }
 
 const initialState: GameState = {
@@ -122,6 +124,8 @@ const initialState: GameState = {
 	cash: core.startingCash,
 	totalCash: 0,
 	totalExecutedLoc: 0,
+	tokens: 0,
+	totalTokens: 0,
 	flops: core.startingFlops,
 	cpuFlops: 0,
 	ramFlops: 0,
@@ -154,7 +158,6 @@ const initialState: GameState = {
 	agentMaxBonus: 0,
 	llmHostSlots: 0,
 	unlockedModels: {},
-	flopSlider: 0.7,
 	aiLocAccumulator: 0,
 	autoLocAccumulator: 0,
 	aiUnlocked: false,
@@ -479,41 +482,66 @@ export const useGameStore = create<GameState & GameActions>()(
 			tick: (dt: number) => {
 				set((s) => {
 					let { loc, totalLoc, cash, totalCash, totalExecutedLoc } = s;
+					let { tokens, totalTokens } = s;
 					const tier = tiers[s.currentTierIndex];
-
-					// ── 1. LoC production (rate-based) ──
-					const autoProduced = s.autoLocPerSec * dt;
-					loc += autoProduced;
-					totalLoc += autoProduced;
-
-					// AI production: models consume FLOPS from the AI budget (slider)
 					const aiUnlocked = s.aiUnlocked;
+
+					// ── 1. Production ──
+					const humanOutput = s.autoLocPerSec * dt;
 					let aiFlopsCost = 0;
 					let aiProduced = 0;
+
 					if (aiUnlocked && s.running) {
-						// flopSlider = % allocated to execution, rest goes to AI
-						const aiFlopsBudget = s.flops * (1 - s.flopSlider);
+						// Get event modifier for token production
+						const eventMods = useEventStore.getState().getEventModifiers();
+						const tokenMultiplier = eventMods.tokenProductionMultiplier;
+
+						const adjustedHumanOutput = humanOutput * tokenMultiplier;
+
+						// Compute AI token demand
 						const activeModels = aiModels
 							.filter((m) => s.unlockedModels[m.id])
 							.sort((a, b) => b.locPerSec - a.locPerSec)
 							.slice(0, s.llmHostSlots);
-						// Per-model FLOPS gating: each model independently capped
-						// so buying a new expensive model never starves existing ones
-						let remainingFlops = aiFlopsBudget;
+
+						let totalTokenDemand = 0;
+						for (const model of activeModels) {
+							totalTokenDemand += model.tokenCost * dt;
+						}
+
+						// Split: tokens first (capped at demand), surplus → direct LoC
+						const tokensProduced = Math.min(
+							adjustedHumanOutput,
+							totalTokenDemand,
+						);
+						const directLoc = adjustedHumanOutput - tokensProduced;
+						const tokenEfficiency =
+							totalTokenDemand > 0 ? tokensProduced / totalTokenDemand : 0;
+
+						// AI LoC output (gated by tokens AND FLOPS)
+						let remainingFlops = s.flops;
 						for (const model of activeModels) {
 							const modelFlops = Math.min(model.flopsCost, remainingFlops);
 							aiFlopsCost += modelFlops;
 							remainingFlops -= modelFlops;
-							const ratio =
+							const flopRatio =
 								model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
-							aiProduced += model.locPerSec * Math.min(1, ratio) * dt;
+							aiProduced +=
+								model.locPerSec * tokenEfficiency * Math.min(1, flopRatio) * dt;
 						}
-					}
-					loc += aiProduced;
-					totalLoc += aiProduced;
 
-					// ── 2. Execution: FLOPS allocated to execution (slider) ──
-					const execFlops = aiUnlocked ? s.flops * s.flopSlider : s.flops;
+						loc += directLoc + aiProduced;
+						totalLoc += directLoc + aiProduced;
+						tokens += tokensProduced;
+						totalTokens += tokensProduced;
+					} else {
+						// Pre-T4: all human output goes to LoC directly
+						loc += humanOutput;
+						totalLoc += humanOutput;
+					}
+
+					// ── 2. Execution ──
+					const execFlops = Math.max(0, s.flops - aiFlopsCost);
 					let manualExecAccum = s.manualExecAccum;
 					let execCapacity: number;
 					if (s.autoExecuteEnabled && s.running) {
@@ -538,7 +566,7 @@ export const useGameStore = create<GameState & GameActions>()(
 
 					// ── 3. Visual block queue (capped, for editor only) ──
 					let blockQueue = s.blockQueue;
-					const visualProduced = Math.floor(autoProduced + aiProduced);
+					const visualProduced = Math.floor(humanOutput + aiProduced);
 					if (visualProduced > 0) {
 						blockQueue = blockQueue.slice(-99);
 						blockQueue.push({ lines: [], loc: visualProduced });
@@ -550,6 +578,8 @@ export const useGameStore = create<GameState & GameActions>()(
 						cash,
 						totalCash,
 						totalExecutedLoc,
+						tokens,
+						totalTokens,
 						blockQueue,
 						manualExecAccum,
 					};
@@ -707,10 +737,6 @@ export const useGameStore = create<GameState & GameActions>()(
 					totalLoc: locDelta > 0 ? s.totalLoc + locDelta : s.totalLoc,
 				}));
 			},
-
-			setFlopSlider: (value: number) => {
-				set({ flopSlider: Math.min(1, Math.max(0, value)) });
-			},
 		}),
 		{
 			name: "flopsed-save",
@@ -719,6 +745,7 @@ export const useGameStore = create<GameState & GameActions>()(
 				totalLoc: state.totalLoc,
 				cash: state.cash,
 				totalCash: state.totalCash,
+				tokens: state.tokens,
 				blockQueue: state.blockQueue.slice(-20).map((b) => ({
 					lines: [],
 					loc: b.loc,
@@ -729,7 +756,6 @@ export const useGameStore = create<GameState & GameActions>()(
 				autoTypeEnabled: state.autoTypeEnabled,
 				autoExecuteEnabled: state.autoExecuteEnabled,
 				reachedMilestones: state.reachedMilestones,
-				flopSlider: state.flopSlider,
 			}),
 			onRehydrateStorage: () => (state) => {
 				if (state) recalcDerivedStats(state);

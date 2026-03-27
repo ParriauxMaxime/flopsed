@@ -51,6 +51,16 @@ const tips: TipDef[] = [
 			"Code piles up. FLOPS burn through it. Cash flows.",
 		],
 	},
+	{
+		id: "ai_lab_tokens",
+		lines: [
+			"$ switch --mode ai-lab",
+			"✓ Workers now produce tokens instead of LoC.",
+			"",
+			"AI models consume tokens + FLOPS → massive LoC.",
+			"More humans = more tokens = more AI output.",
+		],
+	},
 ];
 
 const tipMap = new Map(tips.map((t) => [t.id, t]));
@@ -69,6 +79,10 @@ const triggers: Array<{ id: string; test: (s: GameState) => boolean }> = [
 	{
 		id: "execution_intro",
 		test: (s) => (s.ownedTechNodes.unlock_stats_panel ?? 0) > 0,
+	},
+	{
+		id: "ai_lab_tokens",
+		test: (s) => s.aiUnlocked,
 	},
 ];
 

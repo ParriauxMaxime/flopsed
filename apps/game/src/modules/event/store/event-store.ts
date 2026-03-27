@@ -68,6 +68,9 @@ function applyModifier(
 			// cash multiply acts as cashMultiplier
 			modifiers.cashMultiplier *= e.value;
 		})
+		.with({ type: "tokenProduction", op: "multiply" }, (e) => {
+			modifiers.tokenProductionMultiplier *= e.value;
+		})
 		.with({ type: "disableUpgrade" }, (e) => {
 			disabledUpgrades.push(e.upgradeId);
 		})

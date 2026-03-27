@@ -40,6 +40,8 @@ export function StatusBar() {
 	const cash = useGameStore((s) => s.cash);
 	const loc = useGameStore((s) => s.loc);
 	const flops = useGameStore((s) => s.flops);
+	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
+	const tokens = useGameStore((s) => s.tokens);
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const theme = useIdeTheme();
 
@@ -56,6 +58,9 @@ export function StatusBar() {
 			<div css={leftCss}>
 				<span css={statCss}>⚡ {tier?.name ?? "—"}</span>
 				<span css={statCss}>${formatNumber(cash, true)}</span>
+				{aiUnlocked && (
+					<span css={statCss}>🪙 {formatNumber(tokens)} tokens</span>
+				)}
 				<span css={statCss}>◇ {formatNumber(loc)} LoC</span>
 				<span css={statCss}>⚡ {formatNumber(flops)} FLOPS</span>
 			</div>
