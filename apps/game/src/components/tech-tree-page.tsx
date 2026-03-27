@@ -13,7 +13,7 @@ import {
 	TECH_NODE_HEIGHT,
 	TECH_NODE_WIDTH,
 	TechNodeComponent,
-} from "@agi-rush/design-system";
+} from "@flopsed/design-system";
 import type { TechNode } from "@modules/game";
 import {
 	allTechNodes,

@@ -1,4 +1,4 @@
-import type { TechNode, Upgrade } from "@agi-rush/domain";
+import type { TechNode, Upgrade } from "@flopsed/domain";
 
 interface CostDiscounts {
 	freelancerCostDiscount: number;

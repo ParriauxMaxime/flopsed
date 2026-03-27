@@ -1,13 +1,13 @@
 {
-	"name": "@agi-rush/design-system",
+	"name": "@flopsed/design-system",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"main": "index.ts",
 	"types": "index.ts",
 	"dependencies": {
-		"@agi-rush/domain": "*",
-		"@agi-rush/engine": "*"
+		"@flopsed/domain": "*",
+		"@flopsed/engine": "*"
 	},
 	"peerDependencies": {
 		"@emotion/react": ">=11",

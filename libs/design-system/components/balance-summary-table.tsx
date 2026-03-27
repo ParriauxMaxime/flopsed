@@ -1,6 +1,6 @@
-import { tiers } from "@agi-rush/domain";
-import type { SimResult } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import { tiers } from "@flopsed/domain";
+import type { SimResult } from "@flopsed/engine";
 import { useMemo } from "react";
 import { tierColors } from "../theme";
 

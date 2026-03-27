@@ -14,7 +14,7 @@ const tips: TipDef[] = [
 	{
 		id: "welcome",
 		lines: [
-			"$ init agi-rush",
+			"$ init flopsed",
 			"✓ Loading garage environment...",
 			"",
 			"A keyboard. A dream. Type to write code.",

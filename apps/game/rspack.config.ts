@@ -10,7 +10,7 @@ export default defineConfig({
 	},
 	entry: "./src/main.tsx",
 	output: {
-		publicPath: isProd ? "/incremental-agi-rush/" : "/",
+		publicPath: "/",
 	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".jsx"],

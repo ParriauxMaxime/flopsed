@@ -1,18 +1,18 @@
 {
-	"name": "agi-rush",
+	"name": "flopsed",
 	"private": true,
 	"workspaces": [
 		"libs/*",
 		"apps/*"
 	],
 	"scripts": {
-		"dev": "npm run dev -w @agi-rush/game",
-		"build": "npm run build -w @agi-rush/game",
-		"editor": "npm run dev -w @agi-rush/editor",
+		"dev": "npm run dev -w @flopsed/game",
+		"build": "npm run build -w @flopsed/game",
+		"editor": "npm run dev -w @flopsed/editor",
 		"typecheck": "tsc --noEmit -p apps/game/tsconfig.json && tsc --noEmit -p apps/editor/tsconfig.json",
 		"check": "biome check .",
 		"check:fix": "biome check --fix .",
-		"sim": "npm run start -w @agi-rush/simulation --"
+		"sim": "npm run start -w @flopsed/simulation --"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

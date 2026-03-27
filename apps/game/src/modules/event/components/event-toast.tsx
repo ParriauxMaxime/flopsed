@@ -1,6 +1,6 @@
-import type { EventEffect } from "@agi-rush/domain";
-import { events as allEvents } from "@agi-rush/domain";
 import { css, keyframes } from "@emotion/react";
+import type { EventEffect } from "@flopsed/domain";
+import { events as allEvents } from "@flopsed/domain";
 import { useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { resolveChoiceEffects, useEventStore } from "../store/event-store";

@@ -14,28 +14,28 @@ Restructure into a proper npm workspaces monorepo with `apps/` and `libs/`.
 ## Target Structure
 
 ```
-agi-rush/
+flopsed/
 ├── apps/
 │   ├── game/                    # React game app (from src/)
-│   │   ├── package.json         # @agi-rush/game
+│   │   ├── package.json         # @flopsed/game
 │   │   ├── tsconfig.json
 │   │   ├── rspack.config.ts
 │   │   └── src/
 │   └── editor/                  # Config editor SPA + Express (from tools/editor/)
-│       ├── package.json         # @agi-rush/editor
+│       ├── package.json         # @flopsed/editor
 │       ├── tsconfig.json
 │       ├── rspack.config.ts
 │       ├── server.ts
 │       └── src/
 ├── libs/
 │   ├── domain/                  # JSON data + TypeScript schema types
-│   │   ├── package.json         # @agi-rush/domain
+│   │   ├── package.json         # @flopsed/domain
 │   │   ├── index.ts
 │   │   ├── types/               # One file per entity
 │   │   ├── data/                # JSON files (from specs/data/)
 │   │   └── data.ts              # Typed re-exports of JSON
 │   ├── engine/                  # Pure game math + balance sim
-│   │   ├── package.json         # @agi-rush/engine
+│   │   ├── package.json         # @flopsed/engine
 │   │   ├── index.ts
 │   │   ├── cost.ts              # getUpgradeCost, getEffectiveMax, getTechNodeCost
 │   │   ├── effects.ts           # Shared effect application
@@ -44,7 +44,7 @@ agi-rush/
 │   │   ├── balance-sim.ts       # Balance simulation engine
 │   │   └── types.ts             # Sim-specific types (SimConfig, SimResult)
 │   └── design-system/           # Shared React + Emotion components
-│       ├── package.json         # @agi-rush/design-system
+│       ├── package.json         # @flopsed/design-system
 │       ├── index.ts
 │       ├── theme.ts             # Color tokens, spacing
 │       ├── tech-tree/           # React Flow graph (shared between both apps)
@@ -59,11 +59,11 @@ agi-rush/
 ## Package dependencies
 
 ```
-@agi-rush/domain        → (no internal deps)
-@agi-rush/engine        → @agi-rush/domain
-@agi-rush/design-system → @agi-rush/domain, react, @emotion/react, @xyflow/react
-@agi-rush/game          → @agi-rush/domain, @agi-rush/engine, @agi-rush/design-system
-@agi-rush/editor        → @agi-rush/domain, @agi-rush/engine, @agi-rush/design-system
+@flopsed/domain        → (no internal deps)
+@flopsed/engine        → @flopsed/domain
+@flopsed/design-system → @flopsed/domain, react, @emotion/react, @xyflow/react
+@flopsed/game          → @flopsed/domain, @flopsed/engine, @flopsed/design-system
+@flopsed/editor        → @flopsed/domain, @flopsed/engine, @flopsed/design-system
 ```
 
 ## What goes where
@@ -135,13 +135,13 @@ Shared React + Emotion components used by both apps.
 Current `src/` moves to `apps/game/src/`. Module structure stays the same internally (`modules/editor/`, `modules/game/`, `modules/event/`, `modules/upgrade/`).
 
 **Changes:**
-- `modules/game/types.ts` → deleted (types come from `@agi-rush/domain`)
+- `modules/game/types.ts` → deleted (types come from `@flopsed/domain`)
 - `modules/event/types.ts` → deleted
-- `modules/game/ai-models.ts` → deleted (data comes from `@agi-rush/domain`)
+- `modules/game/ai-models.ts` → deleted (data comes from `@flopsed/domain`)
 - `modules/event/data/events.ts` → deleted
-- `modules/game/store/game-store.ts` → imports cost functions from `@agi-rush/engine`, types from `@agi-rush/domain`
-- `utils/balance-sim.ts` → deleted (use `@agi-rush/engine` directly)
-- `components/tech-tree-page.tsx` → imports `TechTreeGraph` from `@agi-rush/design-system`
+- `modules/game/store/game-store.ts` → imports cost functions from `@flopsed/engine`, types from `@flopsed/domain`
+- `utils/balance-sim.ts` → deleted (use `@flopsed/engine` directly)
+- `components/tech-tree-page.tsx` → imports `TechTreeGraph` from `@flopsed/design-system`
 
 **Path aliases:**
 ```
@@ -155,27 +155,27 @@ Current `src/` moves to `apps/game/src/`. Module structure stays the same intern
 Current `tools/editor/` moves to `apps/editor/`. Internal structure stays the same.
 
 **Changes:**
-- `server.ts` → reads JSON from `@agi-rush/domain` package path (resolved via `require.resolve`)
-- Simulation page → imports `runBalanceSim` from `@agi-rush/engine`
-- Tech tree page → imports shared components from `@agi-rush/design-system`
-- Store types → uses `@agi-rush/domain` types instead of local `unknown[]`
-- Removes `@shared` alias (replaced by `@agi-rush/engine`)
+- `server.ts` → reads JSON from `@flopsed/domain` package path (resolved via `require.resolve`)
+- Simulation page → imports `runBalanceSim` from `@flopsed/engine`
+- Tech tree page → imports shared components from `@flopsed/design-system`
+- Store types → uses `@flopsed/domain` types instead of local `unknown[]`
+- Removes `@shared` alias (replaced by `@flopsed/engine`)
 
 ## Root configuration
 
 ### package.json
 ```json
 {
-  "name": "agi-rush",
+  "name": "flopsed",
   "private": true,
   "workspaces": [
     "libs/*",
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev -w @agi-rush/game",
-    "build": "npm run build -w @agi-rush/game",
-    "editor": "npm run dev -w @agi-rush/editor",
+    "dev": "npm run dev -w @flopsed/game",
+    "build": "npm run build -w @flopsed/game",
+    "editor": "npm run dev -w @flopsed/editor",
     "typecheck": "tsc -b",
     "check": "biome check .",
     "check:fix": "biome check --fix ."
@@ -227,7 +227,7 @@ Big-bang commit. Everything moves at once. Steps:
 
 Design documents only:
 - `specs/DESIGN.md`
-- `specs/balance-check.js` (reads from `@agi-rush/domain` package)
+- `specs/balance-check.js` (reads from `@flopsed/domain` package)
 - `specs/design.html`, `specs/prototype.html`
 - `specs/IDEAS.md`, `specs/feedback.md`
 

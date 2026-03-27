@@ -1,5 +1,5 @@
-import { AiStrategyEnum, type SimConfig } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import { AiStrategyEnum, type SimConfig } from "@flopsed/engine";
 import { useState } from "react";
 
 const controlsCss = css({

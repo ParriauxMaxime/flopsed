@@ -241,7 +241,7 @@ A tree-based upgrade shop with collapsible tier folders + milestones section at 
 
 ```typescript
 import { css } from "@emotion/react";
-import type { Upgrade, UpgradeEffect } from "@agi-rush/domain";
+import type { Upgrade, UpgradeEffect } from "@flopsed/domain";
 import {
 	allMilestones,
 	allUpgrades,

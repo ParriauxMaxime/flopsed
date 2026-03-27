@@ -6,9 +6,9 @@ import {
 	tiers,
 	tiersJson,
 	upgradesJson,
-} from "@agi-rush/domain";
-import type { SimData, SimResult } from "@agi-rush/engine";
-import { runBalanceSim } from "@agi-rush/engine";
+} from "@flopsed/domain";
+import type { SimData, SimResult } from "@flopsed/engine";
+import { runBalanceSim } from "@flopsed/engine";
 
 // ── CLI flags ──
 
@@ -218,7 +218,7 @@ function validateProfile(profile: Profile): ProfileResult {
 // ── Output formatters ──
 
 function printHuman(results: ProfileResult[]): void {
-	console.log("AGI Rush — Balance Check");
+	console.log("Flopsed — Balance Check");
 	console.log("========================");
 
 	for (const r of results) {

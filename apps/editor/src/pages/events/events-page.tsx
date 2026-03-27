@@ -1,5 +1,5 @@
-import { type Column, EditableTable } from "@agi-rush/design-system";
 import { css } from "@emotion/react";
+import { type Column, EditableTable } from "@flopsed/design-system";
 import { useCallback, useMemo } from "react";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useEventsStore } from "../../store/data-store";

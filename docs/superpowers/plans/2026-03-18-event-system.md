@@ -1629,7 +1629,7 @@ In the `reset` action of `game-store.ts`, add:
 ```typescript
 reset: () => {
 	set(initialState);
-	localStorage.removeItem("agi-rush-editor");
+	localStorage.removeItem("flopsed-editor");
 	useEventStore.getState().reset();
 },
 ```

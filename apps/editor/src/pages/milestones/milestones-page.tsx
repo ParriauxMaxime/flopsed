@@ -1,4 +1,4 @@
-import { type Column, EditableTable } from "@agi-rush/design-system";
+import { type Column, EditableTable } from "@flopsed/design-system";
 import { useCallback, useMemo } from "react";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useMilestonesStore } from "../../store/data-store";

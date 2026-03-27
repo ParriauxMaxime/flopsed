@@ -526,7 +526,7 @@ Validate the game still passes balance checks with the new model tree.
 - [ ] **Step 1: Run balance check**
 
 ```bash
-cd /home/maxime/Documents/emergence/agi-rush/specs && node balance-check.js --verbose
+cd /home/maxime/Documents/emergence/flopsed/specs && node balance-check.js --verbose
 ```
 
 Expected: All 3 profiles (casual/average/fast) should pass. If not, note which checks fail.
@@ -559,7 +559,7 @@ Final verification that everything compiles and passes lint.
 - [ ] **Step 1: Run typecheck**
 
 ```bash
-cd /home/maxime/Documents/emergence/agi-rush && npm run typecheck
+cd /home/maxime/Documents/emergence/flopsed && npm run typecheck
 ```
 
 Expected: no errors
@@ -567,7 +567,7 @@ Expected: no errors
 - [ ] **Step 2: Run biome lint**
 
 ```bash
-cd /home/maxime/Documents/emergence/agi-rush && npm run check
+cd /home/maxime/Documents/emergence/flopsed && npm run check
 ```
 
 Expected: no errors (or only pre-existing ones)
@@ -575,7 +575,7 @@ Expected: no errors (or only pre-existing ones)
 - [ ] **Step 3: Run dev server smoke test**
 
 ```bash
-cd /home/maxime/Documents/emergence/agi-rush && npm run build
+cd /home/maxime/Documents/emergence/flopsed && npm run build
 ```
 
 Expected: build succeeds

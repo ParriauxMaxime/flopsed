@@ -1,4 +1,5 @@
-import { BalanceSummaryTable } from "@agi-rush/design-system";
+import { css } from "@emotion/react";
+import { BalanceSummaryTable } from "@flopsed/design-system";
 import {
 	aiModelsJson,
 	balanceJson,
@@ -6,14 +7,13 @@ import {
 	techTreeJson,
 	tiersJson,
 	upgradesJson,
-} from "@agi-rush/domain";
+} from "@flopsed/domain";
 import {
 	runBalanceSim as runBalanceSimCore,
 	type SimConfig,
 	type SimData,
 	type SimResult,
-} from "@agi-rush/engine";
-import { css } from "@emotion/react";
+} from "@flopsed/engine";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PurchaseDensity } from "./purchase-density";
 import { SimChart } from "./sim-chart";

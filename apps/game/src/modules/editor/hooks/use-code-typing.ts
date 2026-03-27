@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { CodeToken } from "../data/code-tokens";
 import { CODE_BLOCKS, tokenizeBlock } from "../data/code-tokens";
 
-const EDITOR_STORAGE_KEY = "agi-rush-editor";
+const EDITOR_STORAGE_KEY = "flopsed-editor";
 
 interface EditorSaveState {
 	blockIndex: number;

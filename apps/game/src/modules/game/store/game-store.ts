@@ -4,7 +4,7 @@ import type {
 	Tier,
 	Upgrade,
 	UpgradeEffect,
-} from "@agi-rush/domain";
+} from "@flopsed/domain";
 import {
 	aiModels,
 	milestones as allMilestonesData,
@@ -12,12 +12,12 @@ import {
 	upgrades as allUpgradesData,
 	balance,
 	tiers as tiersData,
-} from "@agi-rush/domain";
+} from "@flopsed/domain";
 import {
 	getEffectiveMax as engineGetEffectiveMax,
 	getTechNodeCost as engineGetTechNodeCost,
 	getUpgradeCost as engineGetUpgradeCost,
-} from "@agi-rush/engine";
+} from "@flopsed/engine";
 import { useEventStore } from "@modules/event";
 import { match } from "ts-pattern";
 import { create } from "zustand";
@@ -681,7 +681,7 @@ export const useGameStore = create<GameState & GameActions>()(
 
 			reset: () => {
 				set(initialState);
-				localStorage.removeItem("agi-rush-editor");
+				localStorage.removeItem("flopsed-editor");
 				useEventStore.getState().reset();
 			},
 
@@ -718,7 +718,7 @@ export const useGameStore = create<GameState & GameActions>()(
 			},
 		}),
 		{
-			name: "agi-rush-save",
+			name: "flopsed-save",
 			partialize: (state) => ({
 				loc: state.loc,
 				totalLoc: state.totalLoc,

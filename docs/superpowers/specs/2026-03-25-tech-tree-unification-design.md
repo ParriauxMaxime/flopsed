@@ -58,7 +58,7 @@ Editor passes `state: "visible"` for all nodes (or `"owned"` if previewing).
 
 `apps/game/src/components/tech-tree-page.tsx` is rewritten to use React Flow:
 
-- Import `TechNodeComponent` and `useTechTreeFlow` from `@agi-rush/design-system`
+- Import `TechNodeComponent` and `useTechTreeFlow` from `@flopsed/design-system`
 - Map game state to `NodeStateEnum` for each node:
   - `prereqsMet === false` → `locked`
   - `prereqsMet && !canAfford && !maxed` → `visible`

@@ -145,7 +145,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { css } from "@emotion/react";
-import { TechNodeComponent, NodeStateEnum } from "@agi-rush/design-system";
+import { TechNodeComponent, NodeStateEnum } from "@flopsed/design-system";
 import type { TechNode } from "@modules/game";
 import { allTechNodes, getTechNodeCost, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";

@@ -1,5 +1,5 @@
-import type { Upgrade, UpgradeEffect } from "@agi-rush/domain";
 import { css } from "@emotion/react";
+import type { Upgrade, UpgradeEffect } from "@flopsed/domain";
 import type { EditorTheme } from "@modules/editor";
 import {
 	allMilestones,

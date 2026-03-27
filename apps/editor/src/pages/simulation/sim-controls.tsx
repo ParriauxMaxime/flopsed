@@ -1,6 +1,6 @@
-import type { SimConfig } from "@agi-rush/engine";
-import { AiStrategyEnum } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import type { SimConfig } from "@flopsed/engine";
+import { AiStrategyEnum } from "@flopsed/engine";
 import { useState } from "react";
 
 const controlsCss = css({

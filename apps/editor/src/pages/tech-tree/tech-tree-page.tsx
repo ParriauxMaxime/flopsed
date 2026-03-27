@@ -1,14 +1,14 @@
 import { css } from "@emotion/react";
 import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import Dagre from "@dagrejs/dagre";
 import {
 	TECH_NODE_HEIGHT,
 	TECH_NODE_WIDTH,
 	type TechTreeNode as TechNode,
 	TechNodeComponent,
 	useTechTreeFlow,
-} from "@agi-rush/design-system";
-import Dagre from "@dagrejs/dagre";
+} from "@flopsed/design-system";
 import { useCallback, useMemo, useState } from "react";
 import { PageWrapper } from "../../components/shared/page-wrapper";
 import { useTechTreeStore } from "../../store/data-store";

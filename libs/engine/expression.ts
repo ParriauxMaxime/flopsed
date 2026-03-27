@@ -1,4 +1,4 @@
-import type { ExpressionContext } from "@agi-rush/domain";
+import type { ExpressionContext } from "@flopsed/domain";
 
 /**
  * Resolve simple expressions like "currentCash * 0.02" or "currentLocPerSec * 0.8".

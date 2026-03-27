@@ -13,9 +13,7 @@ const PORT = 3737;
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
-const domainDir = path.dirname(
-	require.resolve("@agi-rush/domain/package.json"),
-);
+const domainDir = path.dirname(require.resolve("@flopsed/domain/package.json"));
 const SPECS_DIR = path.join(domainDir, "data");
 const BALANCE_CHECK = path.resolve(__dirname, "../../specs/balance-check.js");
 

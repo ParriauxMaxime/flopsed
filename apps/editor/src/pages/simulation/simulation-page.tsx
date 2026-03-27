@@ -1,6 +1,6 @@
-import type { SimConfig, SimData, SimResult } from "@agi-rush/engine";
-import { runBalanceSim } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import type { SimConfig, SimData, SimResult } from "@flopsed/engine";
+import { runBalanceSim } from "@flopsed/engine";
 import { useCallback, useState } from "react";
 import {
 	type BalanceCheckResult,

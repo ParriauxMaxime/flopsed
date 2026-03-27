@@ -13,12 +13,12 @@ Instructions for AI agents working on this codebase. Read CLAUDE.md first for fu
 ```
 Package                    What it does                                  Key files
 ─────────────────────────  ────────────────────────────────────────────   ─────────────────────────────
-@agi-rush/domain           JSON data + TS types. Source of truth.        types/*.ts, data/*.json, data.ts
-@agi-rush/engine           Pure math. No React, no side effects.         cost.ts, flops.ts, balance-sim.ts
-@agi-rush/design-system    Shared React components + theme.              theme.ts, tech-tree/*.tsx
-@agi-rush/game             Main game SPA (port 3000).                    modules/{game,editor,event,upgrade}/
-@agi-rush/editor           Data editor SPA (3738) + Express API (3737).  pages/*/, server.ts
-@agi-rush/simulation       CLI balance sim runner.                       src/main.ts
+@flopsed/domain           JSON data + TS types. Source of truth.        types/*.ts, data/*.json, data.ts
+@flopsed/engine           Pure math. No React, no side effects.         cost.ts, flops.ts, balance-sim.ts
+@flopsed/design-system    Shared React components + theme.              theme.ts, tech-tree/*.tsx
+@flopsed/game             Main game SPA (port 3000).                    modules/{game,editor,event,upgrade}/
+@flopsed/editor           Data editor SPA (3738) + Express API (3737).  pages/*/, server.ts
+@flopsed/simulation       CLI balance sim runner.                       src/main.ts
 ```
 
 ### Game app structure (`apps/game/src/`)
@@ -86,7 +86,7 @@ npm run check:fix    # Auto-fix biome issues
 - **Emotion `css` prop** for styles, co-located in component files
 - **~100 lines** component smell threshold
 - **No dead code**, no commented-out code
-- Import conventions: `@agi-rush/*` cross-package, `@modules/` / `@components/` / `@utils/` within game app
+- Import conventions: `@flopsed/*` cross-package, `@modules/` / `@components/` / `@utils/` within game app
 
 ### Commits
 Use [gitmoji](https://gitmoji.dev/): `✨` feature, `🐛` fix, `♻️` refactor, `⚖️` balance, `⚡` perf, `🧪` tests, `📝` docs.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Balance variant comparator for AGI Rush.
+Balance variant comparator for Flopsed.
 Tests multiple balance variants side-by-side by modifying data files,
 running the sim trace for each, and producing a comparison table.
 
@@ -209,7 +209,7 @@ def load_data_files():
 def backup_data_files():
     """Create a backup directory with exact copies of all data JSON files.
     Returns the path to the backup directory."""
-    backup_dir = tempfile.mkdtemp(prefix="agi-rush-backup-")
+    backup_dir = tempfile.mkdtemp(prefix="flopsed-backup-")
     for fname in os.listdir(DATA_DIR):
         if fname.endswith(".json"):
             shutil.copy2(os.path.join(DATA_DIR, fname), os.path.join(backup_dir, fname))
@@ -538,7 +538,7 @@ def print_comparison_table(variant_results: dict, detail: bool = False):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Compare balance variants for AGI Rush",
+        description="Compare balance variants for Flopsed",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -578,7 +578,7 @@ def main():
             sys.exit(1)
 
     # Show what we're testing
-    print("AGI Rush — Balance Variant Comparison")
+    print("Flopsed — Balance Variant Comparison")
     print("=" * 40)
     if not args.no_baseline:
         print(f"  baseline: (current data, no changes)")

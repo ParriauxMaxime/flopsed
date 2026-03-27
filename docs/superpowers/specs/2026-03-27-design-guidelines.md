@@ -1,8 +1,8 @@
-# AGI Rush — Design Guidelines
+# Flopsed — Design Guidelines
 
 ## Visual Identity
 
-AGI Rush looks like a real IDE. The entire game UI mimics VS Code's layout, theming, and interaction patterns. Players should feel like they're inside a code editor that happens to be a game.
+Flopsed looks like a real IDE. The entire game UI mimics VS Code's layout, theming, and interaction patterns. Players should feel like they're inside a code editor that happens to be a game.
 
 ## Layout
 

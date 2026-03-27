@@ -5,17 +5,17 @@
 
 ## Problem
 
-`specs/balance-check.js` is a standalone Node script that duplicates game logic. It doesn't use the shared `@agi-rush/engine` or `@agi-rush/domain` packages. When balancing, Claude has to parse human-readable stdout text instead of reading structured data.
+`specs/balance-check.js` is a standalone Node script that duplicates game logic. It doesn't use the shared `@flopsed/engine` or `@flopsed/domain` packages. When balancing, Claude has to parse human-readable stdout text instead of reading structured data.
 
 ## Solution
 
-A new `apps/simulation/` CLI app that imports from `@agi-rush/engine` and `@agi-rush/domain`. Outputs structured JSON or human-readable text. Replaces `specs/balance-check.js`.
+A new `apps/simulation/` CLI app that imports from `@flopsed/engine` and `@flopsed/domain`. Outputs structured JSON or human-readable text. Replaces `specs/balance-check.js`.
 
 ## Structure
 
 ```
 apps/simulation/
-├── package.json       # @agi-rush/simulation
+├── package.json       # @flopsed/simulation
 ├── tsconfig.json
 └── src/
     └── main.ts        # CLI entry point
@@ -25,15 +25,15 @@ apps/simulation/
 
 ```json
 {
-  "name": "@agi-rush/simulation",
+  "name": "@flopsed/simulation",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "tsx src/main.ts"
   },
   "dependencies": {
-    "@agi-rush/domain": "workspace:*",
-    "@agi-rush/engine": "workspace:*"
+    "@flopsed/domain": "workspace:*",
+    "@flopsed/engine": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.19.4",
@@ -120,7 +120,7 @@ Move from hardcoded constants in balance-check.js to `libs/domain/data/balance.j
 ## Root script
 
 ```json
-"sim": "npm run start -w @agi-rush/simulation --"
+"sim": "npm run start -w @flopsed/simulation --"
 ```
 
 ## What gets deleted

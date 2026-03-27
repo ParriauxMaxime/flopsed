@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGI Rush — Design Doc</title>
+<title>Flopsed — Design Doc</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -313,7 +313,7 @@ async function init() {
     `;
   } catch (e) {
     document.getElementById('content').innerHTML = `
-      <h1>AGI Rush — Design Doc</h1>
+      <h1>Flopsed — Design Doc</h1>
       <p style="color: #e06c75;">Could not load DESIGN.md: ${escapeHtml(e.message)}</p>
       <p>Make sure you're serving this from a local server (e.g. <code>python -m http.server</code>),
       not opening the file directly — fetch() needs HTTP.</p>

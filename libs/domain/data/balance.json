@@ -1,5 +1,5 @@
 {
-	"_doc": "Balance config for AGI Rush. All costs/rates derive from these curves. Target: ~35-40 min first playthrough.",
+	"_doc": "Balance config for Flopsed. All costs/rates derive from these curves. Target: ~35-40 min first playthrough.",
 
 	"core": {
 		"targetSessionMinutes": 40,

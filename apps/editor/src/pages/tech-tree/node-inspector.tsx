@@ -1,8 +1,8 @@
+import { css } from "@emotion/react";
 import type {
 	TechTreeNode as TechNode,
 	TechNodeEffect,
-} from "@agi-rush/design-system";
-import { css } from "@emotion/react";
+} from "@flopsed/design-system";
 
 interface NodeInspectorProps {
 	node: TechNode;

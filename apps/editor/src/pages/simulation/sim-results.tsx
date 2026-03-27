@@ -1,6 +1,6 @@
-import { BalanceSummaryTable } from "@agi-rush/design-system";
-import type { SimResult } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import { BalanceSummaryTable } from "@flopsed/design-system";
+import type { SimResult } from "@flopsed/engine";
 import { CashChart } from "./cash-chart";
 import { TierTimeline } from "./tier-timeline";
 

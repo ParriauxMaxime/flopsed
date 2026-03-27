@@ -35,7 +35,7 @@ The data layer — schema types + JSON data + typed exports. Every other package
 
 ```json
 {
-	"name": "@agi-rush/domain",
+	"name": "@flopsed/domain",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
@@ -380,7 +380,7 @@ export {
 
 ### Task 2: Create libs/engine
 
-Pure game math functions + balance sim. Depends on `@agi-rush/domain`.
+Pure game math functions + balance sim. Depends on `@flopsed/domain`.
 
 **Files:**
 - Create: `libs/engine/package.json`
@@ -396,14 +396,14 @@ Pure game math functions + balance sim. Depends on `@agi-rush/domain`.
 
 ```json
 {
-	"name": "@agi-rush/engine",
+	"name": "@flopsed/engine",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"main": "index.ts",
 	"types": "index.ts",
 	"dependencies": {
-		"@agi-rush/domain": "workspace:*"
+		"@flopsed/domain": "workspace:*"
 	}
 }
 ```
@@ -427,7 +427,7 @@ Pure game math functions + balance sim. Depends on `@agi-rush/domain`.
 Extract from `src/modules/game/store/game-store.ts` lines 77-117. These are pure functions that both the game store and sim need:
 
 ```typescript
-import type { Upgrade, TechNode } from "@agi-rush/domain";
+import type { Upgrade, TechNode } from "@flopsed/domain";
 
 interface CostDiscounts {
 	freelancerCostDiscount: number;
@@ -484,7 +484,7 @@ export function getTechNodeCost(node: TechNode, owned: number): number {
 Extract from `src/modules/event/utils/expression-resolver.ts`:
 
 ```typescript
-import type { ExpressionContext } from "@agi-rush/domain";
+import type { ExpressionContext } from "@flopsed/domain";
 
 export function resolveExpression(expr: string | number, ctx: ExpressionContext): number {
 	if (typeof expr === "number") return expr;
@@ -603,8 +603,8 @@ import type { SimConfig, SimData, SimResult, ... } from "./types";
 ```
 To:
 ```typescript
-import { tiers, upgrades, techNodes, aiModels, balance, events, eventConfig } from "@agi-rush/domain";
-import type { Upgrade, TechNode, AiModelData, ... } from "@agi-rush/domain";
+import { tiers, upgrades, techNodes, aiModels, balance, events, eventConfig } from "@flopsed/domain";
+import type { Upgrade, TechNode, AiModelData, ... } from "@flopsed/domain";
 import { getUpgradeCost, getEffectiveMax, getTechNodeCost } from "./cost";
 import { resolveExpression } from "./expression";
 import type { SimConfig, SimResult } from "./types";
@@ -640,7 +640,7 @@ export * from "./types";
 
 ### Task 3: Create libs/design-system
 
-Shared React + Emotion components. Depends on `@agi-rush/domain`.
+Shared React + Emotion components. Depends on `@flopsed/domain`.
 
 **Files:**
 - Create: `libs/design-system/package.json`
@@ -656,14 +656,14 @@ Shared React + Emotion components. Depends on `@agi-rush/domain`.
 
 ```json
 {
-	"name": "@agi-rush/design-system",
+	"name": "@flopsed/design-system",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"main": "index.ts",
 	"types": "index.ts",
 	"dependencies": {
-		"@agi-rush/domain": "workspace:*"
+		"@flopsed/domain": "workspace:*"
 	},
 	"peerDependencies": {
 		"@emotion/react": ">=11",
@@ -727,7 +727,7 @@ git mv tools/editor/src/pages/tech-tree/types.ts libs/design-system/tech-tree/
 git mv tools/editor/src/components/shared/editable-table.tsx libs/design-system/components/
 ```
 
-Update imports in moved files to use `@agi-rush/domain` instead of relative paths. The tech-node.tsx should import `tierColors` from `../theme` instead of hardcoding them.
+Update imports in moved files to use `@flopsed/domain` instead of relative paths. The tech-node.tsx should import `tierColors` from `../theme` instead of hardcoding them.
 
 - [ ] **Step 5: Create index.ts**
 
@@ -756,7 +756,7 @@ Move `src/` → `apps/game/src/` and update all configuration.
 
 ```json
 {
-	"name": "@agi-rush/game",
+	"name": "@flopsed/game",
 	"private": true,
 	"version": "0.0.0",
 	"type": "commonjs",
@@ -765,9 +765,9 @@ Move `src/` → `apps/game/src/` and update all configuration.
 		"build": "rspack build"
 	},
 	"dependencies": {
-		"@agi-rush/domain": "workspace:*",
-		"@agi-rush/engine": "workspace:*",
-		"@agi-rush/design-system": "workspace:*",
+		"@flopsed/domain": "workspace:*",
+		"@flopsed/engine": "workspace:*",
+		"@flopsed/design-system": "workspace:*",
 		"@dagrejs/dagre": "^3.0.0",
 		"@emotion/react": "^11.14.0",
 		"@xyflow/react": "^12.0.0",
@@ -822,7 +822,7 @@ git mv rspack.config.ts apps/game/rspack.config.ts
 Update the `apps/game/rspack.config.ts`:
 - Fix `__dirname` references (now in `apps/game/`)
 - Update path aliases to resolve from new location
-- Add aliases for workspace packages if needed (Rspack needs to know where `@agi-rush/*` packages are)
+- Add aliases for workspace packages if needed (Rspack needs to know where `@flopsed/*` packages are)
 - Entry stays `./src/main.tsx`, HTML template stays `./src/index.html`
 
 Key changes:
@@ -836,7 +836,7 @@ alias: {
 
 - [ ] **Step 5: Update all imports in game app**
 
-Replace all `../../../../specs/data/*.json` imports with `@agi-rush/domain`:
+Replace all `../../../../specs/data/*.json` imports with `@flopsed/domain`:
 
 In `apps/game/src/modules/game/store/game-store.ts`:
 ```typescript
@@ -846,17 +846,17 @@ import tiersData from "../../../../specs/data/tiers.json";
 // etc.
 
 // After
-import { tiers, upgrades, techNodes, milestones, balance } from "@agi-rush/domain";
-import type { Upgrade, TechNode, Tier, Milestone } from "@agi-rush/domain";
-import { getUpgradeCost, getEffectiveMax, getTechNodeCost } from "@agi-rush/engine";
+import { tiers, upgrades, techNodes, milestones, balance } from "@flopsed/domain";
+import type { Upgrade, TechNode, Tier, Milestone } from "@flopsed/domain";
+import { getUpgradeCost, getEffectiveMax, getTechNodeCost } from "@flopsed/engine";
 ```
 
-Delete `apps/game/src/modules/game/types.ts` — types now come from `@agi-rush/domain`.
-Delete `apps/game/src/modules/game/ai-models.ts` — data now comes from `@agi-rush/domain`.
-Delete `apps/game/src/modules/event/types.ts` — types now come from `@agi-rush/domain`.
-Delete `apps/game/src/modules/event/data/events.ts` — data now comes from `@agi-rush/domain`.
-Delete `apps/game/src/modules/event/utils/expression-resolver.ts` — now in `@agi-rush/engine`.
-Delete `apps/game/src/utils/balance-sim.ts` — now in `@agi-rush/engine`.
+Delete `apps/game/src/modules/game/types.ts` — types now come from `@flopsed/domain`.
+Delete `apps/game/src/modules/game/ai-models.ts` — data now comes from `@flopsed/domain`.
+Delete `apps/game/src/modules/event/types.ts` — types now come from `@flopsed/domain`.
+Delete `apps/game/src/modules/event/data/events.ts` — data now comes from `@flopsed/domain`.
+Delete `apps/game/src/modules/event/utils/expression-resolver.ts` — now in `@flopsed/engine`.
+Delete `apps/game/src/utils/balance-sim.ts` — now in `@flopsed/engine`.
 
 Update ALL files that imported from these deleted modules to import from the workspace packages instead. This affects:
 - `modules/game/index.ts` (re-exports)
@@ -896,7 +896,7 @@ rmdir tools  # remove empty directory
 Update `apps/editor/package.json`:
 ```json
 {
-	"name": "@agi-rush/editor",
+	"name": "@flopsed/editor",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
@@ -906,9 +906,9 @@ Update `apps/editor/package.json`:
 		"server": "tsx server.ts"
 	},
 	"dependencies": {
-		"@agi-rush/domain": "workspace:*",
-		"@agi-rush/engine": "workspace:*",
-		"@agi-rush/design-system": "workspace:*",
+		"@flopsed/domain": "workspace:*",
+		"@flopsed/engine": "workspace:*",
+		"@flopsed/design-system": "workspace:*",
 		"@dagrejs/dagre": "^3.0.0",
 		"@emotion/react": "^11.14.0",
 		"@xyflow/react": "^12.0.0",
@@ -964,7 +964,7 @@ The server needs to find the JSON data files. Instead of `../../specs/data`, res
 ```typescript
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
-const domainDir = path.dirname(require.resolve("@agi-rush/domain/package.json"));
+const domainDir = path.dirname(require.resolve("@flopsed/domain/package.json"));
 const DATA_DIR = path.join(domainDir, "data");
 ```
 
@@ -972,17 +972,17 @@ Also update `BALANCE_CHECK` path to `../../specs/balance-check.js`.
 
 - [ ] **Step 6: Update all imports in editor app**
 
-Replace `@shared/*` imports with `@agi-rush/engine`:
-- `simulation-page.tsx`: `import { runBalanceSim } from "@agi-rush/engine"`
-- `sim-controls.tsx`: `import { AiStrategyEnum } from "@agi-rush/engine"`
-- `sim-results.tsx`, `cash-chart.tsx`: `import type { SimResult, SimSnapshot } from "@agi-rush/engine"`
+Replace `@shared/*` imports with `@flopsed/engine`:
+- `simulation-page.tsx`: `import { runBalanceSim } from "@flopsed/engine"`
+- `sim-controls.tsx`: `import { AiStrategyEnum } from "@flopsed/engine"`
+- `sim-results.tsx`, `cash-chart.tsx`: `import type { SimResult, SimSnapshot } from "@flopsed/engine"`
 
-Import shared components from `@agi-rush/design-system`:
-- Tech tree page: `import { TechNodeComponent, useTechTreeFlow } from "@agi-rush/design-system"`
-- Upgrades page: `import { EditableTable } from "@agi-rush/design-system"`
+Import shared components from `@flopsed/design-system`:
+- Tech tree page: `import { TechNodeComponent, useTechTreeFlow } from "@flopsed/design-system"`
+- Upgrades page: `import { EditableTable } from "@flopsed/design-system"`
 - Other pages using EditableTable
 
-Import types from `@agi-rush/domain` instead of local `unknown[]` types:
+Import types from `@flopsed/domain` instead of local `unknown[]` types:
 - Store types can use proper domain types
 
 ---
@@ -994,16 +994,16 @@ Import types from `@agi-rush/domain` instead of local `unknown[]` types:
 Replace root `package.json` with workspaces config:
 ```json
 {
-	"name": "agi-rush",
+	"name": "flopsed",
 	"private": true,
 	"workspaces": [
 		"libs/*",
 		"apps/*"
 	],
 	"scripts": {
-		"dev": "npm run dev -w @agi-rush/game",
-		"build": "npm run build -w @agi-rush/game",
-		"editor": "npm run dev -w @agi-rush/editor",
+		"dev": "npm run dev -w @flopsed/game",
+		"build": "npm run build -w @flopsed/game",
+		"editor": "npm run dev -w @flopsed/editor",
 		"typecheck": "tsc --noEmit -p apps/game/tsconfig.json && tsc --noEmit -p apps/editor/tsconfig.json",
 		"check": "biome check .",
 		"check:fix": "biome check --fix ."

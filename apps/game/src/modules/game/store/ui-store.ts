@@ -124,11 +124,11 @@ export const useUiStore = create<UiState>()(
 					},
 					uiZoom: 100,
 				});
-				localStorage.removeItem("agi-rush-ui");
+				localStorage.removeItem("flopsed-ui");
 			},
 		}),
 		{
-			name: "agi-rush-ui",
+			name: "flopsed-ui",
 			partialize: (state) => ({
 				page: state.page,
 				splitEnabled: state.splitEnabled,

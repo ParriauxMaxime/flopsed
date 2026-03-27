@@ -263,7 +263,7 @@ Create `tools/editor/package.json`:
 
 ```json
 {
-	"name": "agi-rush-editor",
+	"name": "flopsed-editor",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -408,7 +408,7 @@ Create `tools/editor/index.html`:
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>AGI Rush Editor</title>
+	<title>Flopsed Editor</title>
 	<style>
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; }
@@ -442,7 +442,7 @@ export function App() {
 	return (
 		<div css={css`display: flex; height: 100vh;`}>
 			<div css={css`width: 200px; background: #16213e; padding: 16px;`}>
-				<h2 css={css`font-size: 14px; margin-bottom: 16px;`}>AGI Rush Editor</h2>
+				<h2 css={css`font-size: 14px; margin-bottom: 16px;`}>Flopsed Editor</h2>
 				<p css={css`color: #888; font-size: 12px;`}>Pages coming soon</p>
 			</div>
 			<div css={css`flex: 1; padding: 24px;`}>
@@ -867,7 +867,7 @@ export function Sidebar() {
 					margin-bottom: 16px;
 				`}
 			>
-				AGI Rush Editor
+				Flopsed Editor
 			</h2>
 			{pages.map((p) => {
 				const isDirty = p.dirtyStore?.() ?? false;

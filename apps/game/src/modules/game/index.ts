@@ -5,8 +5,8 @@ export type {
 	Tier,
 	Upgrade,
 	UpgradeEffect,
-} from "@agi-rush/domain";
-export { aiModels } from "@agi-rush/domain";
+} from "@flopsed/domain";
+export { aiModels } from "@flopsed/domain";
 export { SingularitySequence } from "./components/singularity-sequence";
 export { useGameLoop } from "./hooks/use-game-loop";
 export type {

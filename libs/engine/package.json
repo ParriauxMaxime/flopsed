@@ -1,11 +1,11 @@
 {
-	"name": "@agi-rush/engine",
+	"name": "@flopsed/engine",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"main": "index.ts",
 	"types": "index.ts",
 	"dependencies": {
-		"@agi-rush/domain": "*"
+		"@flopsed/domain": "*"
 	}
 }

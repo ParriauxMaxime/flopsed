@@ -1,4 +1,4 @@
-# AGI Rush — Tutorial Drafts
+# Flopsed — Tutorial Drafts
 
 Three versions targeting different audiences and tones. Pick one (or mix & match).
 
@@ -52,7 +52,7 @@ Written as an in-game tutorial flow. Short sentences. Action-oriented.
 
 ---
 
-### Welcome to AGI Rush
+### Welcome to Flopsed
 
 You're building the next big tech company. Start by typing.
 

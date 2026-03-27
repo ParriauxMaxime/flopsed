@@ -1,5 +1,5 @@
 {
-	"name": "@agi-rush/simulation",
+	"name": "@flopsed/simulation",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
@@ -7,8 +7,8 @@
 		"start": "tsx src/main.ts"
 	},
 	"dependencies": {
-		"@agi-rush/domain": "*",
-		"@agi-rush/engine": "*"
+		"@flopsed/domain": "*",
+		"@flopsed/engine": "*"
 	},
 	"devDependencies": {
 		"tsx": "^4.19.4",

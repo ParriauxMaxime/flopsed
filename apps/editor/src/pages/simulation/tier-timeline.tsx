@@ -1,5 +1,5 @@
-import type { SimPurchase } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import type { SimPurchase } from "@flopsed/engine";
 import { useMemo, useState } from "react";
 
 const containerCss = css({

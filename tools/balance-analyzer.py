@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Balance analyzer for AGI Rush.
+Balance analyzer for Flopsed.
 Reads --trace output from the sim and produces actionable balance insights.
 
 Usage:
@@ -328,7 +328,7 @@ def print_comparison(traces, tier_name):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Analyze AGI Rush balance trace")
+    parser = argparse.ArgumentParser(description="Analyze Flopsed balance trace")
     parser.add_argument("--tier", help="Focus on specific tier (garage, freelancing, startup, tech_company, ai_lab, agi_race)")
     parser.add_argument("--chart", action="store_true", help="Show ASCII charts")
     parser.add_argument("--all", action="store_true", help="Show all tiers in detail")

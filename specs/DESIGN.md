@@ -1,4 +1,4 @@
-# AGI Rush — Game Design Document
+# Flopsed — Game Design Document
 
 ## Core Concept
 

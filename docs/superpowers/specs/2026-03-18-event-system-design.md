@@ -2,7 +2,7 @@
 
 ## Overview
 
-Add a random event system to AGI Rush. Events fire periodically during gameplay, applying temporary buffs/debuffs, instant effects, or presenting player choices. Events appear as non-blocking toast banners at the bottom of the screen.
+Add a random event system to Flopsed. Events fire periodically during gameplay, applying temporary buffs/debuffs, instant effects, or presenting player choices. Events appear as non-blocking toast banners at the bottom of the screen.
 
 ## Decisions
 

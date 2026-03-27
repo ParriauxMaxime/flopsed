@@ -1,5 +1,5 @@
-import type { SimResult } from "@agi-rush/engine";
 import { css } from "@emotion/react";
+import type { SimResult } from "@flopsed/engine";
 import { formatNumber, formatTime } from "@utils/format";
 
 const gridCss = css({

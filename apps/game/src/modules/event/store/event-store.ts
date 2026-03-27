@@ -4,14 +4,14 @@ import type {
 	EventEffect,
 	EventModifiers,
 	ExpressionContext,
-} from "@agi-rush/domain";
+} from "@flopsed/domain";
 import {
 	events as allEvents,
 	DEFAULT_EVENT_MODIFIERS,
 	eventConfig,
 	TIER_INDEX,
-} from "@agi-rush/domain";
-import { resolveExpression } from "@agi-rush/engine";
+} from "@flopsed/domain";
+import { resolveExpression } from "@flopsed/engine";
 import { match } from "ts-pattern";
 import { create } from "zustand";
 
