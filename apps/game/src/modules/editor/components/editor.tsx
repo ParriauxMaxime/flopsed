@@ -151,12 +151,6 @@ function buildLineList(
 			});
 			lineNumber++;
 		}
-		result.push({
-			key: `sep-${bIdx}`,
-			lineNumber: -1,
-			html: "",
-			isSeparator: true,
-		});
 	}
 
 	for (let i = 0; i < typingLines.length; i++) {
