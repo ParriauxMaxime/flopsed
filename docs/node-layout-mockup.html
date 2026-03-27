@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tech Tree Node — Big Price Variants</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 40px;
+  }
+  h1 { font-size: 20px; margin-bottom: 8px; color: #58a6ff; }
+  .subtitle { color:#f0b232; margin-bottom:40px; font-size:13px; }
+  .variant-group { margin-bottom: 48px; }
+  .variant-title { font-size: 16px; font-weight: 600; color: #c9d1d9; margin-bottom: 6px; }
+  .variant-desc { font-size: 12px; color: #6272a4; margin-bottom: 16px; max-width: 600px; }
+  .row { display: flex; gap: 24px; margin-bottom: 12px; flex-wrap: wrap; }
+  .states-label { font-size: 11px; color: #484f58; margin-bottom: 4px; }
+
+  /* ── Base ── */
+  .node {
+    background: #16213e;
+    border: 2px solid #58a6ff;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+  .node.owned { border-color: #3fb950; opacity: 0.85; }
+  .node.visible { border-color: #1e2630; opacity: 0.6; }
+  .icon { font-size: 16px; flex-shrink: 0; }
+  .name { color: #ccd6f6; font-weight: 600; line-height: 1.2; word-break: break-word; }
+  .effect { color: #7ee787; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .owned-badge { position: absolute; top: 3px; right: 6px; color: #8892b0; font-size: 9px; }
+  .researched { color: #3fb950; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h1>Tech Tree Node — Bold Bottom-Right Price</h1>
+<p class="subtitle">Price is the star: big, bold, bottom-right aligned. Effect stays small top-left area.</p>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- B1: Large price bottom-right, effect under name top-left -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="variant-group">
+  <div class="variant-title">B1 — Large price, bottom-right</div>
+  <div class="variant-desc">
+    Top: icon + name + effect stacked left. Bottom-right: price in 14px bold, currency-colored.
+    Clean diagonal reading flow: info top-left, action bottom-right.
+  </div>
+  <div class="row">
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Better Keyboard</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="text-align:right;">
+        <span style="font-size:14px; font-weight:700; color:#f0b232;">$15</span>
+      </div>
+    </div>
+
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <span class="owned-badge">3/7</span>
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🖥️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">CPU Upgrade</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+2 CPU FLOPS</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="text-align:right;">
+        <span style="font-size:14px; font-weight:700; color:#f0b232;">$1.23K</span>
+      </div>
+    </div>
+
+    <div class="node owned" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Better Keyboard</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="text-align:right;">
+        <span class="researched" style="font-size:12px;">Researched</span>
+      </div>
+    </div>
+
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🤖</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Auto-Type</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">Auto-type</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="text-align:right;">
+        <span style="font-size:14px; font-weight:700; color:#8be9fd;">800 LoC</span>
+      </div>
+    </div>
+
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🏢</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Tier: Startup</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">Tier 2</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="text-align:right;">
+        <span style="font-size:14px; font-weight:700; color:#f0b232;">$2K</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- B2: Even bigger price with tinted band -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="variant-group">
+  <div class="variant-title">B2 — Tinted band + XL price bottom-right</div>
+  <div class="variant-desc">
+    Same layout but the bottom has a tinted background band. Price bumped to 16px.
+    Maximum emphasis on cost.
+  </div>
+  <div class="row">
+    <div class="node" style="width:150px; height:76px;">
+      <div style="padding:5px 8px 3px; display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Better Keyboard</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="background:rgba(240,178,50,0.10); padding:3px 8px; text-align:right;">
+        <span style="font-size:16px; font-weight:700; color:#f0b232;">$15</span>
+      </div>
+    </div>
+
+    <div class="node" style="width:150px; height:76px;">
+      <span class="owned-badge">3/7</span>
+      <div style="padding:5px 8px 3px; display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🖥️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">CPU Upgrade</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+2 CPU FLOPS</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="background:rgba(240,178,50,0.10); padding:3px 8px; text-align:right;">
+        <span style="font-size:16px; font-weight:700; color:#f0b232;">$1.23K</span>
+      </div>
+    </div>
+
+    <div class="node owned" style="width:150px; height:76px;">
+      <div style="padding:5px 8px 3px; display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Better Keyboard</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="background:rgba(63,185,80,0.08); padding:3px 8px; text-align:right;">
+        <span class="researched" style="font-size:13px;">Researched</span>
+      </div>
+    </div>
+
+    <div class="node" style="width:150px; height:76px;">
+      <div style="padding:5px 8px 3px; display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🤖</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Auto-Type</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">Auto-type</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="background:rgba(139,233,253,0.08); padding:3px 8px; text-align:right;">
+        <span style="font-size:16px; font-weight:700; color:#8be9fd;">800 LoC</span>
+      </div>
+    </div>
+
+    <div class="node" style="width:150px; height:76px;">
+      <div style="padding:5px 8px 3px; display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🏢</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Tier: Startup</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">Tier 2</div>
+        </div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="background:rgba(240,178,50,0.10); padding:3px 8px; text-align:right;">
+        <span style="font-size:16px; font-weight:700; color:#f0b232;">$2K</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- B3: Price absolutely positioned bottom-right, no band -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="variant-group">
+  <div class="variant-title">B3 — Floating price, no band</div>
+  <div class="variant-desc">
+    Price is absolutely positioned bottom-right inside the card. No separator or band — just a big bold
+    number floating in the corner. Cleanest look, maximum whitespace.
+  </div>
+  <div class="row">
+    <div class="node" style="width:150px; height:68px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Better Keyboard</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:4px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$15</span>
+    </div>
+
+    <div class="node" style="width:150px; height:68px; padding:6px 8px;">
+      <span class="owned-badge">3/7</span>
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🖥️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">CPU Upgrade</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+2 CPU FLOPS</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:4px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$1.23K</span>
+    </div>
+
+    <div class="node owned" style="width:150px; height:68px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Better Keyboard</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <span class="researched" style="position:absolute; bottom:4px; right:8px; font-size:12px;">Researched</span>
+    </div>
+
+    <div class="node" style="width:150px; height:68px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🤖</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Auto-Type</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">Auto-type</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:4px; right:8px; font-size:14px; font-weight:700; color:#8be9fd;">800 LoC</span>
+    </div>
+
+    <div class="node" style="width:150px; height:68px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🏢</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:11px;">Tier: Startup</div>
+          <div class="effect" style="font-size:9px; margin-top:1px;">Tier 2</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:4px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$2K</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- B4: Floating price + larger, 13px effect -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="variant-group">
+  <div class="variant-title">B4 — Floating price + bigger effect text</div>
+  <div class="variant-desc">
+    Like B3 but with the effect text bumped to 10px for better readability.
+    Name 12px, effect 10px, price 14px bold. Everything reads well at a glance.
+  </div>
+  <div class="row">
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:12px;">Better Keyboard</div>
+          <div class="effect" style="font-size:10px; margin-top:2px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:5px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$15</span>
+    </div>
+
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <span class="owned-badge">3/7</span>
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🖥️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:12px;">CPU Upgrade</div>
+          <div class="effect" style="font-size:10px; margin-top:2px;">+2 CPU FLOPS</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:5px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$1.23K</span>
+    </div>
+
+    <div class="node owned" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">⌨️</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:12px;">Better Keyboard</div>
+          <div class="effect" style="font-size:10px; margin-top:2px;">+3 LoC/key</div>
+        </div>
+      </div>
+      <span class="researched" style="position:absolute; bottom:5px; right:8px; font-size:12px;">Researched</span>
+    </div>
+
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🤖</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:12px;">Auto-Type</div>
+          <div class="effect" style="font-size:10px; margin-top:2px;">Auto-type</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:5px; right:8px; font-size:14px; font-weight:700; color:#8be9fd;">800 LoC</span>
+    </div>
+
+    <div class="node" style="width:150px; height:72px; padding:6px 8px;">
+      <div style="display:flex; gap:6px; align-items:flex-start;">
+        <div class="icon">🏢</div>
+        <div style="flex:1; min-width:0;">
+          <div class="name" style="font-size:12px;">Tier: Startup</div>
+          <div class="effect" style="font-size:10px; margin-top:2px;">Tier 2</div>
+        </div>
+      </div>
+      <span style="position:absolute; bottom:5px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$2K</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- State comparison for B4 -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="variant-group">
+  <div class="variant-title">State comparison (B4)</div>
+  <div class="row">
+    <div>
+      <div class="states-label">Affordable</div>
+      <div class="node" style="width:150px; height:72px; padding:6px 8px; border-color:#58a6ff;">
+        <div style="display:flex; gap:6px; align-items:flex-start;">
+          <div class="icon">⌨️</div>
+          <div><div class="name" style="font-size:12px;">Better Keyboard</div><div class="effect" style="font-size:10px; margin-top:2px;">+3 LoC/key</div></div>
+        </div>
+        <span style="position:absolute; bottom:5px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$15</span>
+      </div>
+    </div>
+    <div>
+      <div class="states-label">Visible</div>
+      <div class="node" style="width:150px; height:72px; padding:6px 8px; border-color:#1e2630; opacity:0.6;">
+        <div style="display:flex; gap:6px; align-items:flex-start;">
+          <div class="icon">⌨️</div>
+          <div><div class="name" style="font-size:12px;">Better Keyboard</div><div class="effect" style="font-size:10px; margin-top:2px;">+3 LoC/key</div></div>
+        </div>
+        <span style="position:absolute; bottom:5px; right:8px; font-size:14px; font-weight:700; color:#f0b232;">$15</span>
+      </div>
+    </div>
+    <div>
+      <div class="states-label">Owned</div>
+      <div class="node" style="width:150px; height:72px; padding:6px 8px; border-color:#3fb950; opacity:0.85;">
+        <div style="display:flex; gap:6px; align-items:flex-start;">
+          <div class="icon">⌨️</div>
+          <div><div class="name" style="font-size:12px;">Better Keyboard</div><div class="effect" style="font-size:10px; margin-top:2px;">+3 LoC/key</div></div>
+        </div>
+        <span class="researched" style="position:absolute; bottom:5px; right:8px; font-size:12px;">Researched</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

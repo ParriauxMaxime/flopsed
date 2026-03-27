@@ -701,7 +701,7 @@
 			"icon": "🧪",
 			"requires": ["tier_tech_company"],
 			"max": 1,
-			"baseCost": 30000000,
+			"baseCost": 50000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -755,8 +755,8 @@
 			"icon": "🎯",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 5000000,
-			"costMultiplier": 1.6,
+			"baseCost": 10000000,
+			"costMultiplier": 1.8,
 			"currency": "cash",
 			"effects": [
 				{
@@ -775,7 +775,7 @@
 			"icon": "💎",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 4000000,
+			"baseCost": 8000000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -795,7 +795,7 @@
 			"icon": "⭐",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 6000000,
+			"baseCost": 12000000,
 			"costMultiplier": 1.6,
 			"currency": "cash",
 			"effects": [
@@ -1029,7 +1029,7 @@
 			"icon": "🔢",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 5000000,
+			"baseCost": 10000000,
 			"costMultiplier": 1.6,
 			"currency": "cash",
 			"effects": [
