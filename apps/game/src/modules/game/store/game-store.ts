@@ -28,8 +28,6 @@ export const allUpgrades: Upgrade[] = allUpgradesData;
 export const allMilestones: Milestone[] = allMilestonesData;
 export const allTechNodes: TechNode[] = allTechNodesData;
 
-const AI_BLOCK_SIZE = 10;
-
 const { core } = balance;
 
 /** A completed code block waiting in the execution queue */
@@ -78,7 +76,9 @@ export interface GameState {
 	ownedUpgrades: Record<string, number>;
 	ownedTechNodes: Record<string, number>;
 	autoTypeEnabled: boolean;
+	autoExecuteEnabled: boolean;
 	running: boolean;
+	manualExecAccum: number;
 	singularity: boolean;
 	reachedMilestones: string[];
 }
@@ -100,6 +100,7 @@ export interface GameActions {
 	researchNode: (node: TechNode) => void;
 	toggleAutoType: () => void;
 	toggleRunning: () => void;
+	executeManual: () => void;
 	godSet: (overrides: GodModeOverrides) => void;
 	reset: () => void;
 	recalc: () => void;
@@ -145,7 +146,9 @@ const initialState: GameState = {
 	ownedUpgrades: {},
 	ownedTechNodes: { computer: 1 },
 	autoTypeEnabled: false,
+	autoExecuteEnabled: false,
 	running: true,
+	manualExecAccum: 0,
 	singularity: false,
 	reachedMilestones: [],
 };
@@ -421,33 +424,18 @@ export const useGameStore = create<GameState & GameActions>()(
 			tick: (dt: number) => {
 				set((s) => {
 					let { loc, totalLoc, cash, totalCash, totalExecutedLoc } = s;
-					let blockQueue = s.blockQueue;
 					const tier = tiers[s.currentTierIndex];
-					let mutated = false;
 
-					let autoLocAccumulator = s.autoLocAccumulator;
-					if (s.autoLocPerSec > 0) {
-						const autoGained = s.autoLocPerSec * dt;
-						loc += autoGained;
-						totalLoc += autoGained;
-						autoLocAccumulator += autoGained;
-						const wholeLines = Math.floor(autoLocAccumulator);
-						if (wholeLines > 0) {
-							autoLocAccumulator -= wholeLines;
-							if (!mutated) {
-								blockQueue = blockQueue.slice();
-								mutated = true;
-							}
-							blockQueue.push({ lines: [], loc: wholeLines });
-						}
-					}
+					// ── 1. LoC production (rate-based) ──
+					const autoProduced = s.autoLocPerSec * dt;
+					loc += autoProduced;
+					totalLoc += autoProduced;
 
+					// AI production: models consume FLOPS from the total pool
 					const aiUnlocked = s.aiUnlocked;
-					const effectiveFlops = aiUnlocked ? s.flops * s.flopSlider : s.flops;
-
-					let aiLocAccumulator = s.aiLocAccumulator;
+					let aiFlopsCost = 0;
+					let aiProduced = 0;
 					if (aiUnlocked && s.running) {
-						const aiFlops = s.flops * (1 - s.flopSlider);
 						let totalAiLoc = 0;
 						let totalAiFlops = 0;
 						for (const model of aiModels) {
@@ -457,82 +445,46 @@ export const useGameStore = create<GameState & GameActions>()(
 							}
 						}
 						if (totalAiFlops > 0) {
-							const effectiveAiLoc =
-								totalAiLoc * Math.min(1, aiFlops / totalAiFlops);
-							aiLocAccumulator += effectiveAiLoc * dt;
+							// AI gets what it needs, capped by available FLOPS
+							aiFlopsCost = Math.min(totalAiFlops, s.flops);
+							const aiEfficiency = aiFlopsCost / totalAiFlops;
+							aiProduced = totalAiLoc * aiEfficiency * dt;
 						}
 					}
+					loc += aiProduced;
+					totalLoc += aiProduced;
 
-					if (s.running && aiLocAccumulator >= AI_BLOCK_SIZE) {
-						const aiLines =
-							Math.floor(aiLocAccumulator / AI_BLOCK_SIZE) * AI_BLOCK_SIZE;
-						aiLocAccumulator -= aiLines;
-						if (!mutated) {
-							blockQueue = blockQueue.slice();
-							mutated = true;
-						}
-						blockQueue.push({ lines: [], loc: aiLines });
-						loc += aiLines;
-						totalLoc += aiLines;
+					// ── 2. Execution: remaining FLOPS after AI ──
+					const execFlops = Math.max(0, s.flops - aiFlopsCost);
+					let manualExecAccum = s.manualExecAccum;
+					let execCapacity: number;
+					if (s.autoExecuteEnabled && s.running) {
+						execCapacity = execFlops * dt;
+					} else if (manualExecAccum > 0) {
+						execCapacity = manualExecAccum;
+						manualExecAccum = 0;
+					} else {
+						execCapacity = 0;
 					}
 
-					let execAccum = s.running
-						? s.executionProgress + effectiveFlops * dt
-						: 0;
-					let remaining = Math.floor(execAccum);
-					execAccum -= remaining;
-
-					if (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
-						if (!mutated) {
-							blockQueue = blockQueue.slice();
-							mutated = true;
-						}
+					const executed = Math.min(execCapacity, loc);
+					if (executed > 0) {
 						const earnRate = tier.cashPerLoc * s.cashMultiplier;
-						while (remaining > 0 && blockQueue.length > 0 && loc >= 1) {
-							const block = blockQueue[0];
-							if (block.loc <= 0 && block.lines.length <= 0) {
-								blockQueue.shift();
-								continue;
-							}
-							if (block.lines.length > 0) {
-								const consume = Math.min(
-									remaining,
-									block.lines.length,
-									Math.floor(loc),
-								);
-								if (consume <= 0) break;
-								cash += earnRate * consume;
-								totalCash += earnRate * consume;
-								loc -= consume;
-								totalExecutedLoc += consume;
-								remaining -= consume;
-								if (consume >= block.lines.length) {
-									blockQueue.shift();
-								} else {
-									blockQueue[0] = {
-										...block,
-										lines: block.lines.slice(consume),
-										loc: block.loc - consume,
-									};
-								}
-							} else {
-								const consume = Math.min(remaining, block.loc, Math.floor(loc));
-								if (consume <= 0) break;
-								cash += earnRate * consume;
-								totalCash += earnRate * consume;
-								loc -= consume;
-								totalExecutedLoc += consume;
-								remaining -= consume;
-								if (consume >= block.loc) {
-									blockQueue.shift();
-								} else {
-									blockQueue[0] = { ...block, loc: block.loc - consume };
-								}
-							}
-						}
+						cash += executed * earnRate;
+						totalCash += executed * earnRate;
+						loc -= executed;
+						totalExecutedLoc += executed;
 					}
 
 					loc = Math.max(0, loc);
+
+					// ── 3. Visual block queue (capped, for editor only) ──
+					let blockQueue = s.blockQueue;
+					const visualProduced = Math.floor(autoProduced + aiProduced);
+					if (visualProduced > 0) {
+						blockQueue = blockQueue.slice(-99);
+						blockQueue.push({ lines: [], loc: visualProduced });
+					}
 
 					const next: Partial<GameState> = {
 						loc,
@@ -541,9 +493,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						totalCash,
 						totalExecutedLoc,
 						blockQueue,
-						executionProgress: Math.min(execAccum, 1),
-						aiLocAccumulator,
-						autoLocAccumulator,
+						manualExecAccum,
 					};
 
 					const newMilestones: string[] = [];
@@ -628,6 +578,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						ownedTechNodes: { ...s.ownedTechNodes, [node.id]: newOwned },
 					};
 					if (node.id === "auto_type") newState.autoTypeEnabled = true;
+					if (node.id === "auto_execute") newState.autoExecuteEnabled = true;
 					recalcDerivedStats(newState);
 					return newState;
 				});
@@ -638,6 +589,20 @@ export const useGameStore = create<GameState & GameActions>()(
 			},
 			toggleRunning: () => {
 				set((s) => ({ running: !s.running }));
+			},
+			executeManual: () => {
+				const s = get();
+				if (s.autoExecuteEnabled || s.flops <= 0) return;
+				// Remaining FLOPS after AI models consume their share
+				let aiFlopsCost = 0;
+				if (s.aiUnlocked) {
+					for (const model of aiModels) {
+						if (s.unlockedModels[model.id]) aiFlopsCost += model.flopsCost;
+					}
+				}
+				const execFlops = Math.max(0, s.flops - Math.min(aiFlopsCost, s.flops));
+				if (execFlops <= 0) return;
+				set({ manualExecAccum: s.manualExecAccum + execFlops });
 			},
 
 			reset: () => {
@@ -685,12 +650,15 @@ export const useGameStore = create<GameState & GameActions>()(
 				totalLoc: state.totalLoc,
 				cash: state.cash,
 				totalCash: state.totalCash,
-				blockQueue: state.blockQueue,
-				executionProgress: state.executionProgress,
+				blockQueue: state.blockQueue.slice(-20).map((b) => ({
+					lines: [],
+					loc: b.loc,
+				})),
 				currentTierIndex: state.currentTierIndex,
 				ownedUpgrades: state.ownedUpgrades,
 				ownedTechNodes: state.ownedTechNodes,
 				autoTypeEnabled: state.autoTypeEnabled,
+				autoExecuteEnabled: state.autoExecuteEnabled,
 				reachedMilestones: state.reachedMilestones,
 				flopSlider: state.flopSlider,
 			}),

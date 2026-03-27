@@ -124,11 +124,12 @@ export function UpgradeList() {
 	);
 
 	const sorted = [...visibleUpgrades].sort((a, b) => {
-		const aMaxed =
-			(state.ownedUpgrades[a.id] ?? 0) >= getEffectiveMax(a, state) ? 1 : 0;
-		const bMaxed =
-			(state.ownedUpgrades[b.id] ?? 0) >= getEffectiveMax(b, state) ? 1 : 0;
-		return aMaxed - bMaxed;
+		const aOwned = state.ownedUpgrades[a.id] ?? 0;
+		const bOwned = state.ownedUpgrades[b.id] ?? 0;
+		const aMaxed = aOwned >= getEffectiveMax(a, state) ? 1 : 0;
+		const bMaxed = bOwned >= getEffectiveMax(b, state) ? 1 : 0;
+		if (aMaxed !== bMaxed) return aMaxed - bMaxed;
+		return getUpgradeCost(a, aOwned, state) - getUpgradeCost(b, bOwned, state);
 	});
 
 	return (

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import type { GodModeOverrides } from "@modules/game";
-import { tiers, useGameStore } from "@modules/game";
+import { tiers, useGameStore, useUiStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useShallow } from "zustand/shallow";
 import { ResourceBar } from "./resource-bar";
@@ -122,6 +122,7 @@ const resourceFields: FieldConfig[] = [
 function CheatsPanel() {
 	const godSet = useGameStore((s) => s.godSet);
 	const reset = useGameStore((s) => s.reset);
+	const resetTips = useUiStore((s) => s.resetTips);
 	const state = useGameStore(
 		useShallow((s) => ({
 			cash: s.cash,
@@ -220,6 +221,7 @@ function CheatsPanel() {
 				type="button"
 				onClick={() => {
 					reset();
+					resetTips();
 					window.location.reload();
 				}}
 			>

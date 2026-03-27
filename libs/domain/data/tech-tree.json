@@ -27,7 +27,7 @@
 			"icon": "🤖",
 			"requires": [],
 			"max": 1,
-			"baseCost": 800,
+			"baseCost": 50,
 			"costMultiplier": 1,
 			"currency": "loc",
 			"effects": [
@@ -39,6 +39,26 @@
 			],
 			"x": 966,
 			"y": 566
+		},
+		{
+			"id": "auto_execute",
+			"name": "Auto-Execute",
+			"description": "FLOPS run your code automatically.",
+			"icon": "⚡",
+			"requires": ["computer"],
+			"max": 1,
+			"baseCost": 15,
+			"costMultiplier": 1,
+			"currency": "cash",
+			"effects": [
+				{
+					"type": "autoExecute",
+					"op": "enable",
+					"value": true
+				}
+			],
+			"x": 880,
+			"y": 380
 		},
 		{
 			"id": "coffee",
@@ -253,7 +273,7 @@
 			"icon": "📖",
 			"requires": ["interns"],
 			"max": 5,
-			"baseCost": 300,
+			"baseCost": 800,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -273,7 +293,7 @@
 			"icon": "🪤",
 			"requires": ["interns"],
 			"max": 5,
-			"baseCost": 250,
+			"baseCost": 600,
 			"costMultiplier": 1.4,
 			"currency": "cash",
 			"effects": [
@@ -293,7 +313,7 @@
 			"icon": "✅",
 			"requires": ["interns"],
 			"max": 3,
-			"baseCost": 400,
+			"baseCost": 1000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -333,7 +353,7 @@
 			"icon": "🔄",
 			"requires": ["tier_startup"],
 			"max": 5,
-			"baseCost": 1500,
+			"baseCost": 4000,
 			"costMultiplier": 1.5,
 			"currency": "loc",
 			"effects": [
@@ -353,7 +373,7 @@
 			"icon": "🌐",
 			"requires": ["ci_cd_pipeline"],
 			"max": 5,
-			"baseCost": 5000,
+			"baseCost": 12000,
 			"costMultiplier": 1.6,
 			"currency": "loc",
 			"effects": [
@@ -373,8 +393,8 @@
 			"icon": "🎓",
 			"requires": ["tier_tech_company"],
 			"max": 5,
-			"baseCost": 3000,
-			"costMultiplier": 1.5,
+			"baseCost": 100000,
+			"costMultiplier": 1.8,
 			"currency": "cash",
 			"effects": [
 				{
@@ -393,8 +413,8 @@
 			"icon": "📋",
 			"requires": ["tier_tech_company"],
 			"max": 5,
-			"baseCost": 2500,
-			"costMultiplier": 1.4,
+			"baseCost": 80000,
+			"costMultiplier": 1.7,
 			"currency": "cash",
 			"effects": [
 				{
@@ -413,7 +433,7 @@
 			"icon": "📏",
 			"requires": ["tier_startup"],
 			"max": 3,
-			"baseCost": 4000,
+			"baseCost": 10000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -453,7 +473,7 @@
 			"icon": "👶",
 			"requires": ["tier_startup"],
 			"max": 1,
-			"baseCost": 100,
+			"baseCost": 300,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -473,7 +493,7 @@
 			"icon": "🏢",
 			"requires": ["tier_startup"],
 			"max": 1,
-			"baseCost": 200000,
+			"baseCost": 100000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -493,7 +513,7 @@
 			"icon": "👥",
 			"requires": ["tier_tech_company"],
 			"max": 1,
-			"baseCost": 20000,
+			"baseCost": 150000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [],
@@ -507,8 +527,8 @@
 			"icon": "📊",
 			"requires": ["teams_gate"],
 			"max": 5,
-			"baseCost": 30000,
-			"costMultiplier": 1.6,
+			"baseCost": 200000,
+			"costMultiplier": 2,
 			"currency": "cash",
 			"effects": [
 				{
@@ -527,8 +547,8 @@
 			"icon": "📉",
 			"requires": ["teams_gate"],
 			"max": 5,
-			"baseCost": 25000,
-			"costMultiplier": 1.5,
+			"baseCost": 180000,
+			"costMultiplier": 1.8,
 			"currency": "cash",
 			"effects": [
 				{
@@ -547,8 +567,8 @@
 			"icon": "🔍",
 			"requires": ["teams_gate"],
 			"max": 3,
-			"baseCost": 40000,
-			"costMultiplier": 1.6,
+			"baseCost": 250000,
+			"costMultiplier": 2,
 			"currency": "cash",
 			"effects": [
 				{
@@ -567,7 +587,7 @@
 			"icon": "👔",
 			"requires": ["tier_tech_company"],
 			"max": 1,
-			"baseCost": 30000,
+			"baseCost": 200000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [],
@@ -581,8 +601,8 @@
 			"icon": "🎯",
 			"requires": ["management_gate"],
 			"max": 5,
-			"baseCost": 50000,
-			"costMultiplier": 1.6,
+			"baseCost": 300000,
+			"costMultiplier": 2,
 			"currency": "cash",
 			"effects": [
 				{
@@ -601,8 +621,8 @@
 			"icon": "📎",
 			"requires": ["management_gate"],
 			"max": 5,
-			"baseCost": 40000,
-			"costMultiplier": 1.5,
+			"baseCost": 250000,
+			"costMultiplier": 1.8,
 			"currency": "cash",
 			"effects": [
 				{
@@ -621,8 +641,8 @@
 			"icon": "📈",
 			"requires": ["management_gate"],
 			"max": 3,
-			"baseCost": 60000,
-			"costMultiplier": 1.7,
+			"baseCost": 400000,
+			"costMultiplier": 2,
 			"currency": "cash",
 			"effects": [
 				{
@@ -641,7 +661,7 @@
 			"icon": "☁️",
 			"requires": ["tier_tech_company"],
 			"max": 5,
-			"baseCost": 100000,
+			"baseCost": 300000,
 			"costMultiplier": 1.7,
 			"currency": "loc",
 			"effects": [
@@ -661,7 +681,7 @@
 			"icon": "🌍",
 			"requires": ["tier_tech_company"],
 			"max": 5,
-			"baseCost": 80000,
+			"baseCost": 250000,
 			"costMultiplier": 1.5,
 			"currency": "loc",
 			"effects": [
@@ -681,7 +701,7 @@
 			"icon": "🧪",
 			"requires": ["tier_tech_company"],
 			"max": 1,
-			"baseCost": 20000000,
+			"baseCost": 30000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -701,7 +721,7 @@
 			"icon": "🌀",
 			"requires": ["tier_ai_lab"],
 			"max": 1,
-			"baseCost": 5000000000,
+			"baseCost": 4000000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -721,7 +741,7 @@
 			"icon": "🧠",
 			"requires": ["tier_ai_lab"],
 			"max": 1,
-			"baseCost": 1000000,
+			"baseCost": 2000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [],
@@ -735,7 +755,7 @@
 			"icon": "🎯",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 2000000,
+			"baseCost": 5000000,
 			"costMultiplier": 1.6,
 			"currency": "cash",
 			"effects": [
@@ -755,7 +775,7 @@
 			"icon": "💎",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 1500000,
+			"baseCost": 4000000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -775,7 +795,7 @@
 			"icon": "⭐",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 3000000,
+			"baseCost": 6000000,
 			"costMultiplier": 1.6,
 			"currency": "cash",
 			"effects": [
@@ -795,7 +815,7 @@
 			"icon": "🖥️",
 			"requires": ["tier_ai_lab"],
 			"max": 5,
-			"baseCost": 500000,
+			"baseCost": 3000000,
 			"costMultiplier": 1.7,
 			"currency": "loc",
 			"effects": [
@@ -815,7 +835,7 @@
 			"icon": "🔗",
 			"requires": ["tier_ai_lab"],
 			"max": 5,
-			"baseCost": 400000,
+			"baseCost": 2500000,
 			"costMultiplier": 1.5,
 			"currency": "loc",
 			"effects": [
@@ -835,7 +855,7 @@
 			"icon": "🤖",
 			"requires": ["tier_agi_race"],
 			"max": 1,
-			"baseCost": 100000000,
+			"baseCost": 50000000,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [],
@@ -849,7 +869,7 @@
 			"icon": "♾️",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 5000000000,
+			"baseCost": 3000000000,
 			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
@@ -869,7 +889,7 @@
 			"icon": "📉",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 150000000,
+			"baseCost": 80000000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -889,7 +909,7 @@
 			"icon": "⚖️",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 10000000000,
+			"baseCost": 5000000000,
 			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
@@ -949,7 +969,7 @@
 			"icon": "📋",
 			"requires": ["interns"],
 			"max": 3,
-			"baseCost": 500,
+			"baseCost": 1200,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -969,8 +989,8 @@
 			"icon": "🏗️",
 			"requires": ["teams_gate"],
 			"max": 5,
-			"baseCost": 40000,
-			"costMultiplier": 1.6,
+			"baseCost": 200000,
+			"costMultiplier": 1.8,
 			"currency": "cash",
 			"effects": [
 				{
@@ -989,8 +1009,8 @@
 			"icon": "👑",
 			"requires": ["management_gate"],
 			"max": 5,
-			"baseCost": 60000,
-			"costMultiplier": 1.7,
+			"baseCost": 350000,
+			"costMultiplier": 2,
 			"currency": "cash",
 			"effects": [
 				{
@@ -1009,7 +1029,7 @@
 			"icon": "🔢",
 			"requires": ["llm_gate"],
 			"max": 5,
-			"baseCost": 3000000,
+			"baseCost": 5000000,
 			"costMultiplier": 1.6,
 			"currency": "cash",
 			"effects": [
@@ -1029,7 +1049,7 @@
 			"icon": "🐝",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 300000000,
+			"baseCost": 150000000,
 			"costMultiplier": 1.7,
 			"currency": "cash",
 			"effects": [
@@ -1049,7 +1069,7 @@
 			"icon": "🌍",
 			"requires": ["tier_freelancing"],
 			"max": 1,
-			"baseCost": 300,
+			"baseCost": 500,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [],
@@ -1063,7 +1083,7 @@
 			"icon": "📖",
 			"requires": ["outsourcing"],
 			"max": 5,
-			"baseCost": 500,
+			"baseCost": 1000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -1083,7 +1103,7 @@
 			"icon": "🤝",
 			"requires": ["outsourcing"],
 			"max": 5,
-			"baseCost": 400,
+			"baseCost": 800,
 			"costMultiplier": 1.4,
 			"currency": "cash",
 			"effects": [
@@ -1103,7 +1123,7 @@
 			"icon": "📇",
 			"requires": ["outsourcing"],
 			"max": 5,
-			"baseCost": 600,
+			"baseCost": 1200,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [

@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { useGameStore } from "@modules/game";
 import { MilestoneList, UpgradeList } from "@modules/upgrade";
 import { useState } from "react";
 import { FlopsSlider } from "./flops-slider";
@@ -53,44 +52,10 @@ const tabContentStyle = css({
 	"&::-webkit-scrollbar-thumb:hover": { background: "#2d3748" },
 });
 
-const runBarCss = css({
-	display: "flex",
-	padding: "8px 12px",
-	borderTop: "1px solid #1e2630",
-	background: "#0d1117",
-	flexShrink: 0,
-});
-
-const runBtnCss = css({
-	flex: 1,
-	padding: "8px 0",
-	fontSize: 12,
-	fontWeight: "bold",
-	fontFamily: "inherit",
-	textTransform: "uppercase",
-	letterSpacing: 1,
-	border: "1px solid #238636",
-	borderRadius: 4,
-	cursor: "pointer",
-	transition: "all 0.15s",
-	background: "#238636",
-	color: "#fff",
-	"&:hover": { background: "#2ea043" },
-});
-
-const stopBtnCss = css(runBtnCss, {
-	background: "#0d1117",
-	color: "#e06c75",
-	borderColor: "#e06c75",
-	"&:hover": { background: "#e06c75", color: "#fff" },
-});
-
 type Tab = "upgrades" | "milestones";
 
 export function Sidebar() {
 	const [activeTab, setActiveTab] = useState<Tab>("upgrades");
-	const running = useGameStore((s) => s.running);
-	const toggleRunning = useGameStore((s) => s.toggleRunning);
 
 	return (
 		<div css={sidebarStyle} data-sidebar>
@@ -117,17 +82,8 @@ export function Sidebar() {
 					Milestones
 				</button>
 			</div>
-			<div css={tabContentStyle}>
+			<div css={tabContentStyle} data-tutorial="shop">
 				{activeTab === "upgrades" ? <UpgradeList /> : <MilestoneList />}
-			</div>
-			<div css={runBarCss}>
-				<button
-					type="button"
-					css={running ? runBtnCss : stopBtnCss}
-					onClick={toggleRunning}
-				>
-					{running ? "▶ Run" : "■ Stop"}
-				</button>
 			</div>
 		</div>
 	);

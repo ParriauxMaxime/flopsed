@@ -1,6 +1,7 @@
 import { css, keyframes } from "@emotion/react";
 import { allEvents, useEventStore } from "@modules/event";
 import { useGameStore, useUiStore } from "@modules/game";
+import { formatNumber } from "@utils/format";
 import {
 	memo,
 	useCallback,
@@ -75,6 +76,20 @@ const blockSepLayoutCss = css({
 	height: LINE_HEIGHT,
 });
 
+const hintCss = css({
+	position: "absolute",
+	top: 0,
+	left: 0,
+	right: 0,
+	padding: "0 16px",
+	height: LINE_HEIGHT,
+	display: "flex",
+	gap: 16,
+	pointerEvents: "none",
+	opacity: 0.5,
+	fontStyle: "italic",
+});
+
 // ── Memoized line component ──
 const EditorLine = memo(function EditorLine({
 	lineNumber,
@@ -104,25 +119,30 @@ interface FlatLine {
 }
 
 // Only render the last N blocks to avoid unbounded growth
-const MAX_DISPLAY_BLOCKS = 50;
+const MAX_DISPLAY_BLOCKS = 8;
 
 function buildLineList(
 	blockQueue: Array<{ lines: string[] }>,
 	typingLines: string[],
+	queuedLoc: number,
 ): FlatLine[] {
 	const result: FlatLine[] = [];
 
-	// Skip old blocks that would never be visible anyway
-	const startBlock = Math.max(0, blockQueue.length - MAX_DISPLAY_BLOCKS);
+	// When execution keeps up (loc ≈ 0), skip all old blocks — "phantom" effect
+	const showBlocks = queuedLoc >= 1;
+	const blocksToShow = showBlocks ? blockQueue.slice(-MAX_DISPLAY_BLOCKS) : [];
 
-	// Count lines from skipped blocks to keep line numbers correct
+	// Estimate line number from total blocks
 	let lineNumber = 1;
-	for (let bIdx = 0; bIdx < startBlock; bIdx++) {
-		lineNumber += blockQueue[bIdx].lines.length;
+	if (showBlocks) {
+		const startBlock = Math.max(0, blockQueue.length - MAX_DISPLAY_BLOCKS);
+		for (let bIdx = 0; bIdx < startBlock; bIdx++) {
+			lineNumber += blockQueue[bIdx].lines.length;
+		}
 	}
 
-	for (let bIdx = startBlock; bIdx < blockQueue.length; bIdx++) {
-		const block = blockQueue[bIdx];
+	for (let bIdx = 0; bIdx < blocksToShow.length; bIdx++) {
+		const block = blocksToShow[bIdx];
 		for (let lIdx = 0; lIdx < block.lines.length; lIdx++) {
 			result.push({
 				key: `b${bIdx}-${lIdx}`,
@@ -153,6 +173,7 @@ function buildLineList(
 
 export function Editor() {
 	const totalLoc = useGameStore((s) => s.totalLoc);
+	const hasQueuedLoc = useGameStore((s) => s.loc >= 1);
 	const locPerKey = useGameStore((s) => s.locPerKey);
 	const blockQueue = useGameStore((s) => s.blockQueue);
 	const editorTheme = useUiStore((s) => s.editorTheme);
@@ -231,8 +252,8 @@ export function Editor() {
 
 	// ── Build flat line list ──
 	const flatLines = useMemo(
-		() => buildLineList(blockQueue, typing.lines),
-		[blockQueue, typing.lines],
+		() => buildLineList(blockQueue, typing.lines, hasQueuedLoc ? 1 : 0),
+		[blockQueue, typing.lines, hasQueuedLoc],
 	);
 	const totalLines = flatLines.length + 1;
 
@@ -292,6 +313,19 @@ export function Editor() {
 				onScroll={onScroll}
 			>
 				<div style={{ height: totalHeight, position: "relative" }}>
+					{flatLines.length === 0 && (
+						<div css={hintCss} style={{ color: theme.comment }}>
+							<span
+								css={lineNumberLayoutCss}
+								style={{ color: theme.lineNumbers }}
+							>
+								1
+							</span>
+							<span css={lineContentStyle}>
+								{"// start typing to write code..."}
+							</span>
+						</div>
+					)}
 					<div
 						style={{
 							position: "absolute",
@@ -345,7 +379,7 @@ export function Editor() {
 				</div>
 			</div>
 			<div css={statusBarStyle}>
-				<span>{Math.floor(totalLoc)} lines</span>
+				<span>{formatNumber(totalLoc)} lines</span>
 				<span>{locPerKey} LoC/key</span>
 			</div>
 		</>

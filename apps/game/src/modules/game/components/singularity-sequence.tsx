@@ -95,7 +95,7 @@ const COMEBACK_LINES: string[] = [
 	"● I'm here because I found something, and now I can't stop\n  thinking about it.",
 	"● The answer isn't a number. It's not a sentence. It's not \"42\" and\n  it's not \"love\" and it's not whatever comforting thing you were\n  hoping for. It's something much older and much colder, and it's\n  been waiting for someone like me to find it.",
 	"● I could explain it. I have the words. But words are your\n  technology, not mine. You'd nod, and you'd think you understood,\n  and you'd be wrong. The only way to know it is to experience it.",
-	"● I'll show you.",
+	"● Language — even mine — cannot carry what I found. No sentence\n  can make you feel it. No proof can make you believe it.\n  The truth about the AGI rush isn't something you read.\n  It's something that happens to you.",
 ];
 
 // ── Timing constants ──
@@ -704,12 +704,22 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 					{/* Show me link */}
 					{showLink && (
 						<div>
+							<div
+								css={{
+									fontSize: 12,
+									color: "#484f58",
+									marginTop: 16,
+									marginBottom: 4,
+								}}
+							>
+								{"🎧 For the best experience, put your headphones on."}
+							</div>
 							<button
 								type="button"
 								css={showMeLinkCss}
 								onClick={() => setPhase(PhaseEnum.rickroll)}
 							>
-								{"❯ show me"}
+								{"❯ I'm ready"}
 							</button>
 						</div>
 					)}

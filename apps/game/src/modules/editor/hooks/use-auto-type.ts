@@ -5,9 +5,11 @@ export function useAutoType(advanceTokens: (count: number) => void) {
 	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
 	const autoTypeEnabled = useGameStore((s) => s.autoTypeEnabled);
 	const locPerKey = useGameStore((s) => s.locPerKey);
+	const singularity = useGameStore((s) => s.singularity);
 	const autoAccumRef = useRef(0);
 
 	useEffect(() => {
+		if (singularity) return;
 		const hasAutoType = autoTypeEnabled;
 		const hasDevs = autoLocPerSec > 0;
 		if (!hasAutoType && !hasDevs) return;
@@ -30,14 +32,14 @@ export function useAutoType(advanceTokens: (count: number) => void) {
 			// Cap keystrokes per frame to prevent CPU spikes at high rates.
 			// advanceTokens already caps visual work internally, but limiting
 			// here avoids the overhead of iterating thousands of tokens in the loop.
-			const toAdd = Math.min(Math.floor(autoAccumRef.current), 40);
+			const toAdd = Math.min(Math.floor(autoAccumRef.current), 10);
 			if (toAdd > 0) {
 				autoAccumRef.current -= toAdd;
 				advanceTokens(toAdd * locPerKey);
 				// Drain any excess accumulation to prevent snowballing
 				// when rate exceeds what we can process per frame
-				if (autoAccumRef.current > 40) {
-					autoAccumRef.current = 40;
+				if (autoAccumRef.current > 10) {
+					autoAccumRef.current = 10;
 				}
 			}
 
@@ -46,5 +48,5 @@ export function useAutoType(advanceTokens: (count: number) => void) {
 
 		rafId = requestAnimationFrame(autoLoop);
 		return () => cancelAnimationFrame(rafId);
-	}, [autoLocPerSec, autoTypeEnabled, locPerKey, advanceTokens]);
+	}, [autoLocPerSec, autoTypeEnabled, locPerKey, advanceTokens, singularity]);
 }

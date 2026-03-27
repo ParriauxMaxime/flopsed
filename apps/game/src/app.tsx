@@ -1,10 +1,12 @@
+import { EditorPanel } from "@components/editor-panel";
 import { GodModePage } from "@components/god-mode-page";
 import { MobileShell } from "@components/mobile-shell";
 import { Sidebar } from "@components/sidebar";
 import { TechTreePage } from "@components/tech-tree-page";
+import { TutorialTip, useTutorialTriggers } from "@components/tutorial-screen";
 import { css, Global, keyframes } from "@emotion/react";
 import type { EditorTheme } from "@modules/editor";
-import { EDITOR_THEMES, Editor, type EditorThemeEnum } from "@modules/editor";
+import { EDITOR_THEMES, type EditorThemeEnum } from "@modules/editor";
 import { EventToast } from "@modules/event/components/event-toast";
 import {
 	PageEnum,
@@ -88,12 +90,6 @@ const panelCss = css({
 	display: "flex",
 	flexDirection: "column",
 	overflow: "hidden",
-});
-
-const editorPanelCss = css(panelCss, {
-	flex: 1,
-	minWidth: 280,
-	borderRight: "1px solid #1e2630",
 });
 
 const middlePanelCss = css(panelCss, {
@@ -224,6 +220,7 @@ function SettingsPage() {
 	const autoTypeEnabled = useGameStore((s) => s.autoTypeEnabled);
 	const toggleAutoType = useGameStore((s) => s.toggleAutoType);
 	const reset = useGameStore((s) => s.reset);
+	const resetTips = useUiStore((s) => s.resetTips);
 	const editorTheme = useUiStore((s) => s.editorTheme);
 	const setEditorTheme = useUiStore((s) => s.setEditorTheme);
 
@@ -287,6 +284,7 @@ function SettingsPage() {
 					}}
 					onClick={() => {
 						reset();
+						resetTips();
 						window.location.reload();
 					}}
 				>
@@ -299,6 +297,7 @@ function SettingsPage() {
 
 export function App() {
 	useGameLoop();
+	useTutorialTriggers();
 	const isMobile = useIsMobile();
 	const page = useUiStore((s) => s.page);
 	const setPage = useUiStore((s) => s.setPage);
@@ -323,6 +322,7 @@ export function App() {
 				<Global styles={globalStyles} />
 				<MobileShell />
 				<EventToast />
+				<TutorialTip />
 				{singularity && <SingularitySequence animate={singularityAnimate} />}
 			</>
 		);
@@ -336,16 +336,7 @@ export function App() {
 				css={[shellCss, singularity && singularityAnimate && shellCollapseCss]}
 			>
 				{/* Panel 1: Code Editor (always visible) */}
-				<div css={editorPanelCss}>
-					<div css={tabBarCss}>
-						<button type="button" css={tabActiveCss}>
-							agi.py
-						</button>
-					</div>
-					<div css={contentCss}>
-						<Editor />
-					</div>
-				</div>
+				<EditorPanel />
 
 				{/* Panel 2: Tech Tree / Settings / God Mode (tab-switched) */}
 				<div css={middlePanelCss}>
@@ -375,6 +366,7 @@ export function App() {
 				<Sidebar />
 			</div>
 			<EventToast />
+			<TutorialTip />
 			{singularity && <SingularitySequence animate={singularityAnimate} />}
 		</>
 	);

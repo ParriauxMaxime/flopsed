@@ -110,6 +110,8 @@ export function runBalanceSim(
 		aiUnlocked: false,
 		flopSlider: flopsAllocation.defaultSplit,
 		autoTypeEnabled: false,
+		autoExecuteEnabled: false,
+		manualExecCooldown: 0,
 	};
 
 	// ── Event simulation state ──
@@ -399,6 +401,8 @@ export function runBalanceSim(
 			}
 			if (e.type === "autoType" && e.op === "enable")
 				sim.autoTypeEnabled = true;
+			if (e.type === "autoExecute" && e.op === "enable")
+				sim.autoExecuteEnabled = true;
 			if (e.type === "tierUnlock" && e.op === "set")
 				tierIndex = Math.max(tierIndex, val);
 			if (e.type === "modelUnlock" && e.op === "enable")
@@ -637,11 +641,23 @@ export function runBalanceSim(
 			sim.cash += executed * cashPerLoc();
 			sim.totalCash += executed * cashPerLoc();
 			sim.loc -= executed;
-		} else {
+		} else if (sim.autoExecuteEnabled) {
 			const executed = Math.min(sim.loc, flops);
 			sim.cash += executed * cashPerLoc();
 			sim.totalCash += executed * cashPerLoc();
 			sim.loc -= executed;
+		} else {
+			// Manual execute: player clicks ~every 1.5-3s depending on skill
+			// Each click executes (flops) LoC, same as game's executeManual()
+			const clickInterval = 3 - cfg.skill * 1.5; // casual=2.1s, avg=1.8s, fast=1.58s
+			sim.manualExecCooldown -= 1;
+			if (sim.manualExecCooldown <= 0 && flops > 0 && sim.loc > 0) {
+				const executed = Math.min(sim.loc, flops);
+				sim.cash += executed * cashPerLoc();
+				sim.totalCash += executed * cashPerLoc();
+				sim.loc -= executed;
+				sim.manualExecCooldown = clickInterval;
+			}
 		}
 		sim.loc = Math.max(0, sim.loc);
 
@@ -716,12 +732,15 @@ export function runBalanceSim(
 					if (e.type === "locProductionSpeed" && e.op === "multiply")
 						val += calcAutoLoc() * (ev - 1) * cashPerLoc();
 					if (e.type === "autoType") val += 5 * effLocPerKey() * cashPerLoc();
+					if (e.type === "autoExecute") val += flops * cashPerLoc() * 10; // high priority: unlocks continuous execution
 					if (
 						e.type === "internLocMultiplier" ||
 						e.type === "devLocMultiplier" ||
-						e.type === "teamLocMultiplier"
+						e.type === "teamLocMultiplier" ||
+						e.type === "freelancerLocMultiplier"
 					)
 						val += calcAutoLoc() * (ev - 1) * cashPerLoc();
+					if (e.type === "freelancerCostDiscount") val += 100;
 					if (e.type === "cashMultiplier")
 						val +=
 							(calcAutoLoc() + effLocPerKey() * cfg.keysPerSec) *
@@ -731,9 +750,25 @@ export function runBalanceSim(
 						e.type === "internCostDiscount" ||
 						e.type === "devCostDiscount" ||
 						e.type === "teamCostDiscount" ||
-						e.type === "managerCostDiscount"
+						e.type === "managerCostDiscount" ||
+						e.type === "llmCostDiscount" ||
+						e.type === "agentCostDiscount"
 					)
 						val += 100;
+					if (e.type === "llmLocMultiplier")
+						val += sim.llmLoc * sim.llmLocMultiplier * (ev - 1) * cashPerLoc();
+					if (e.type === "agentLocMultiplier")
+						val +=
+							sim.agentLoc * sim.agentLocMultiplier * (ev - 1) * cashPerLoc();
+					if (
+						e.type === "llmMaxBonus" ||
+						e.type === "agentMaxBonus" ||
+						e.type === "internMaxBonus" ||
+						e.type === "teamMaxBonus" ||
+						e.type === "managerMaxBonus" ||
+						e.type === "freelancerMaxBonus"
+					)
+						val += calcAutoLoc() * cashPerLoc() * 0.1;
 					if (e.type === "modelUnlock") {
 						const modelId = e.value as string;
 						const model = aiModels.find((x) => x.id === modelId);

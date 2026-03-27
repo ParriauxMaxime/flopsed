@@ -59,6 +59,8 @@ export function useGameLoop() {
 			rafId = requestAnimationFrame(loop);
 		}
 
+		// Recalc derived stats on mount (ensures rehydration is complete)
+		useGameStore.getState().recalc();
 		// Reset event log tracking on mount
 		lastEventLogLenRef.current = useEventStore.getState().eventLog.length;
 

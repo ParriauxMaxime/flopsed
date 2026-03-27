@@ -92,10 +92,10 @@
 		{
 			"id": "dev_team",
 			"tier": "tech_company",
-			"name": "Dev Team (x10)",
+			"name": "Dev Team",
 			"description": "Auto-writes 200 LoC/s",
 			"icon": "👥",
-			"baseCost": 50000,
+			"baseCost": 100000,
 			"costMultiplier": 1.3,
 			"max": 5,
 			"costCategory": "team",
@@ -114,7 +114,7 @@
 			"name": "Manager",
 			"description": "Multiplies all team output by +50%",
 			"icon": "👔",
-			"baseCost": 100000,
+			"baseCost": 200000,
 			"costMultiplier": 1.5,
 			"max": 3,
 			"costCategory": "manager",
@@ -133,7 +133,7 @@
 			"name": "GPU Cluster",
 			"description": "+2,000 FLOPS",
 			"icon": "🎮",
-			"baseCost": 400000,
+			"baseCost": 800000,
 			"costMultiplier": 1.7,
 			"max": 5,
 			"effects": [
@@ -150,7 +150,7 @@
 			"name": "Architect",
 			"description": "LoC execution yields x1.3 cash",
 			"icon": "📐",
-			"baseCost": 200000,
+			"baseCost": 400000,
 			"costMultiplier": 2,
 			"max": 3,
 			"effects": [
@@ -167,7 +167,7 @@
 			"name": "Data Center",
 			"description": "+20,000 FLOPS",
 			"icon": "🏭",
-			"baseCost": 800000,
+			"baseCost": 1500000,
 			"costMultiplier": 1.8,
 			"max": 3,
 			"effects": [
@@ -201,7 +201,7 @@
 			"name": "RLHF Training",
 			"description": "x1.3 LLM output per level",
 			"icon": "🧠",
-			"baseCost": 50000000,
+			"baseCost": 100000000,
 			"costMultiplier": 1.6,
 			"max": 5,
 			"effects": [
@@ -218,7 +218,7 @@
 			"name": "ML Pipeline",
 			"description": "x1.2 cash per LoC",
 			"icon": "🔬",
-			"baseCost": 80000000,
+			"baseCost": 150000000,
 			"costMultiplier": 2,
 			"max": 3,
 			"effects": [

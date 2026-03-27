@@ -177,12 +177,14 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 	const name = node.name as string;
 	const currency = (node.currency as string) ?? "cash";
 	const baseCost = node.baseCost as number;
+	const costMultiplier = (node.costMultiplier as number) ?? 1;
 	const effects = (node.effects as TechNodeEffect[]) ?? [];
 	const max = node.max as number;
 	const state = node.state as NodeStateEnum | undefined;
 	const owned = (node.owned as number | undefined) ?? 0;
 	const style = getStateStyle(state, currency, selected ?? false);
 	const maxed = state ? owned >= max : false;
+	const displayCost = Math.floor(baseCost * costMultiplier ** owned);
 
 	const primaryEffect = effects.find(
 		(e) => e.type !== "modelUnlock" && e.type !== "cashMultiplier",
@@ -236,7 +238,7 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 				</span>
 			) : (
 				<span css={[priceCss, css({ color: getCurrencyColor(currency) })]}>
-					{formatCost(baseCost, currency)}
+					{formatCost(displayCost, currency)}
 				</span>
 			)}
 		</div>
