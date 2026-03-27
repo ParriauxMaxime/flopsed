@@ -65,7 +65,7 @@ export const useUiStore = create<UiState>()(
 			editorTheme: EditorThemeEnum.one_dark,
 			seenTips: [],
 			terminalLog: [],
-			terminalOpen: false,
+			terminalOpen: true,
 			techTreeViewport: {
 				x: -850,
 				y: -200,
@@ -100,7 +100,7 @@ export const useUiStore = create<UiState>()(
 				set({
 					seenTips: [],
 					terminalLog: [],
-					terminalOpen: false,
+					terminalOpen: true,
 					page: PageEnum.game,
 					splitEnabled: false,
 					rightPage: PageEnum.tech_tree,
