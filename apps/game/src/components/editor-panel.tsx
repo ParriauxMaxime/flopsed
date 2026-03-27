@@ -4,12 +4,11 @@ import { useGameStore } from "@modules/game";
 import { AnalyticsDashboard } from "./analytics-dashboard";
 import { CliPrompt } from "./cli-prompt";
 
-const panelCss = css({
+const wrapperCss = css({
 	display: "flex",
 	flexDirection: "column",
+	flex: 1,
 	overflow: "hidden",
-	borderRight: "1px solid #1e2630",
-	transition: "flex 0.5s ease, min-width 0.5s ease",
 });
 
 const sectionCss = css({
@@ -52,25 +51,17 @@ const dividerCss = css({
 	flexShrink: 0,
 });
 
-function getPanelStyle(tierIndex: number): { flex: number; minWidth: number } {
-	if (tierIndex <= 1) return { flex: 5, minWidth: 320 };
-	if (tierIndex <= 3) return { flex: 2, minWidth: 280 };
-	return { flex: 1, minWidth: 240 };
-}
-
 export function EditorPanel() {
 	const tierIndex = useGameStore((s) => s.currentTierIndex);
 	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
 
-	const { flex, minWidth } = getPanelStyle(tierIndex);
 	const showDashboard = autoLocPerSec > 0 || tierIndex >= 2;
 	const showEditor = !aiUnlocked;
 	const showPrompt = aiUnlocked;
 
 	return (
-		<div css={panelCss} style={{ flex, minWidth }} data-tutorial="editor">
-			{/* Dashboard (T2+ or when devs are hired) */}
+		<div css={wrapperCss} data-tutorial="editor">
 			{showDashboard && (
 				<div css={sectionCss} style={{ flex: showEditor ? 2 : 3 }}>
 					<AnalyticsDashboard />
@@ -79,7 +70,6 @@ export function EditorPanel() {
 
 			{showDashboard && (showEditor || showPrompt) && <div css={dividerCss} />}
 
-			{/* Code Editor (T0-T3) */}
 			{showEditor && (
 				<div css={sectionCss} style={{ flex: showDashboard ? 3 : 1 }}>
 					<div css={tabBarCss}>
@@ -91,7 +81,6 @@ export function EditorPanel() {
 				</div>
 			)}
 
-			{/* CLI Prompt (T4+) */}
 			{showPrompt && (
 				<div css={sectionCss} style={{ flex: 2 }}>
 					<CliPrompt />
