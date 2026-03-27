@@ -34,42 +34,34 @@ const slideIn = keyframes({
 
 const toastWrapperCss = css({
 	position: "fixed",
-	bottom: 16,
-	left: "50%",
-	transform: "translateX(-50%)",
+	bottom: 30,
+	right: 12,
 	zIndex: 1000,
 	animation: `${slideIn} 0.2s ease-out`,
 	minWidth: 320,
-	maxWidth: 520,
+	maxWidth: 400,
 });
 
 function toastBodyCss(sentiment: "positive" | "negative" | "neutral") {
-	const bg =
+	const accentBar =
 		sentiment === "positive"
-			? "rgba(88, 166, 255, 0.15)"
+			? "#3794ff"
 			: sentiment === "negative"
-				? "rgba(233, 69, 96, 0.15)"
-				: "rgba(139, 148, 158, 0.15)";
-
-	const border =
-		sentiment === "positive"
-			? "rgba(88, 166, 255, 0.4)"
-			: sentiment === "negative"
-				? "rgba(233, 69, 96, 0.4)"
-				: "rgba(139, 148, 158, 0.4)";
+				? "#f14c4c"
+				: "#cca700";
 
 	return css({
-		background: bg,
-		border: `1px solid ${border}`,
-		borderRadius: 8,
+		background: "#252526",
+		border: "1px solid #454545",
+		borderLeft: `3px solid ${accentBar}`,
+		borderRadius: 3,
 		padding: "10px 14px",
 		display: "flex",
 		alignItems: "flex-start",
 		gap: 10,
-		backdropFilter: "blur(4px)",
-		boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-		fontFamily: "'Courier New', monospace",
-		color: "#c9d1d9",
+		boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+		fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+		color: "#cccccc",
 		fontSize: 13,
 	});
 }
