@@ -97,23 +97,14 @@ export const useUiStore = create<UiState>()(
 					sidebarCollapsed: true,
 					statsPanelCollapsed: true,
 					techTreeViewport: {
-						x: -(1254 - 300) * 2,
-						y: -(566 - 200) * 2,
-						zoom: 2,
+						x: -850,
+						y: -200,
+						zoom: 1,
 					},
 					uiZoom: 100,
 				});
-				// Flush to localStorage synchronously so reload picks it up
-				try {
-					const raw = localStorage.getItem("agi-rush-ui");
-					if (raw) {
-						const parsed = JSON.parse(raw);
-						parsed.state.seenTips = [];
-						localStorage.setItem("agi-rush-ui", JSON.stringify(parsed));
-					}
-				} catch {
-					// ignore
-				}
+				// Remove persisted state so reload picks up fresh defaults
+				localStorage.removeItem("agi-rush-ui");
 			},
 		}),
 		{
