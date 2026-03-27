@@ -434,20 +434,17 @@ export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 					{milestonesOpen ? "▾" : "▸"} Milestones
 				</div>
 				{milestonesOpen &&
-					allMilestones.map((m) => {
-						const reached = reachedMilestones.includes(m.id);
-						return (
+					allMilestones
+						.filter((m) => reachedMilestones.includes(m.id))
+						.map((m) => (
 							<div
 								key={m.id}
 								css={milestoneCss}
-								style={{
-									color: reached ? theme.success : theme.lineNumbers,
-								}}
+								style={{ color: theme.success }}
 							>
-								{reached ? "✓" : "○"} {m.name} — {formatNumber(m.threshold)}
+								✓ {m.name} — {formatNumber(m.threshold)}
 							</div>
-						);
-					})}
+						))}
 			</div>
 		</div>
 	);
