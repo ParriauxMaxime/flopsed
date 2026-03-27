@@ -3,6 +3,7 @@ import type {
 	TechTreeNode as TechNode,
 	TechNodeEffect,
 } from "@flopsed/design-system";
+import { useState } from "react";
 
 interface NodeInspectorProps {
 	node: TechNode;
@@ -428,9 +429,65 @@ export function NodeInspector({
 				onChange={(effects) => set({ effects })}
 			/>
 
+			<JsonView node={node} />
+
 			<button type="button" css={deleteBtnStyle} onClick={onDelete}>
 				Delete Node
 			</button>
+		</div>
+	);
+}
+
+// ── JSON view ──
+
+const jsonToggleStyle = css`
+	background: none;
+	border: none;
+	color: #8892b0;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 600;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	&:hover { color: #ccd6f6; }
+`;
+
+const jsonPreStyle = css`
+	background: #0a0f1e;
+	border: 1px solid #2a2a4a;
+	border-radius: 4px;
+	padding: 10px 12px;
+	font-size: 12px;
+	font-family: 'Courier New', monospace;
+	color: #ccd6f6;
+	overflow-x: auto;
+	white-space: pre;
+	max-height: 400px;
+	overflow-y: auto;
+	line-height: 1.5;
+	margin-top: 6px;
+`;
+
+function JsonView({ node }: { node: TechNode }) {
+	const [open, setOpen] = useState(false);
+
+	// Build a clean object without x/y (layout-only fields)
+	const { ...rest } = node;
+	const json = JSON.stringify(rest, null, 2);
+
+	return (
+		<div css={fieldStyle}>
+			<button
+				type="button"
+				css={jsonToggleStyle}
+				onClick={() => setOpen(!open)}
+			>
+				<span style={{ fontSize: 10, width: 12 }}>{open ? "▾" : "▸"}</span>
+				JSON
+			</button>
+			{open && <pre css={jsonPreStyle}>{json}</pre>}
 		</div>
 	);
 }
