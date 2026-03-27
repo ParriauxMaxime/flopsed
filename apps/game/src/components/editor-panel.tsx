@@ -1,22 +1,22 @@
 import { css } from "@emotion/react";
 import { Editor } from "@modules/editor";
 import { useGameStore } from "@modules/game";
+import { AnalyticsDashboard } from "./analytics-dashboard";
+import { CliPrompt } from "./cli-prompt";
 
 const panelCss = css({
 	display: "flex",
 	flexDirection: "column",
-	flex: 1,
-	minWidth: 280,
-	borderRight: "1px solid #1e2630",
 	overflow: "hidden",
+	borderRight: "1px solid #1e2630",
+	transition: "flex 0.5s ease, min-width 0.5s ease",
 });
 
-const subPanelCss = css({
+const sectionCss = css({
 	display: "flex",
 	flexDirection: "column",
-	flex: 1,
 	overflow: "hidden",
-	minHeight: 0,
+	transition: "flex 0.5s ease",
 });
 
 const tabBarCss = css({
@@ -39,12 +39,6 @@ const tabCss = css({
 	whiteSpace: "nowrap",
 });
 
-const dimTabCss = css(tabCss, {
-	color: "#5c6370",
-	background: "#0d1117",
-	borderBottom: "1px solid #1e2630",
-});
-
 const contentCss = css({
 	flex: 1,
 	overflow: "hidden",
@@ -58,38 +52,55 @@ const dividerCss = css({
 	flexShrink: 0,
 });
 
-const files = ["agi.py", "wasm.rs", "agi.go"];
+function getPanelStyle(tierIndex: number): { flex: number; minWidth: number } {
+	if (tierIndex <= 1) return { flex: 5, minWidth: 320 };
+	if (tierIndex <= 3) return { flex: 2, minWidth: 280 };
+	return { flex: 1, minWidth: 240 };
+}
 
 export function EditorPanel() {
 	const tierIndex = useGameStore((s) => s.currentTierIndex);
-	const hasTeams = tierIndex >= 3;
+	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
+	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
 
-	if (!hasTeams) {
-		return (
-			<div css={panelCss} data-tutorial="editor">
-				<div css={tabBarCss}>
-					<div css={tabCss}>agi.py</div>
-				</div>
-				<div css={contentCss}>
-					<Editor />
-				</div>
-			</div>
-		);
-	}
+	const { flex, minWidth } = getPanelStyle(tierIndex);
+	const showDashboard = autoLocPerSec > 0 || tierIndex >= 2;
+	const showEditor = !aiUnlocked;
+	const showPrompt = aiUnlocked;
 
 	return (
-		<div css={panelCss} data-tutorial="editor">
-			{files.map((file, i) => (
-				<div key={file} css={subPanelCss}>
-					{i > 0 && <div css={dividerCss} />}
+		<div
+			css={panelCss}
+			style={{ flex, minWidth }}
+			data-tutorial="editor"
+		>
+			{/* Dashboard (T2+ or when devs are hired) */}
+			{showDashboard && (
+				<div css={sectionCss} style={{ flex: showEditor ? 2 : 3 }}>
+					<AnalyticsDashboard />
+				</div>
+			)}
+
+			{showDashboard && (showEditor || showPrompt) && <div css={dividerCss} />}
+
+			{/* Code Editor (T0-T3) */}
+			{showEditor && (
+				<div css={sectionCss} style={{ flex: showDashboard ? 3 : 1 }}>
 					<div css={tabBarCss}>
-						<div css={i === 0 ? tabCss : dimTabCss}>{file}</div>
+						<div css={tabCss}>agi.py</div>
 					</div>
 					<div css={contentCss}>
 						<Editor />
 					</div>
 				</div>
-			))}
+			)}
+
+			{/* CLI Prompt (T4+) */}
+			{showPrompt && (
+				<div css={sectionCss} style={{ flex: 2 }}>
+					<CliPrompt />
+				</div>
+			)}
 		</div>
 	);
 }
