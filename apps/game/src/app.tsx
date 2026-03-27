@@ -5,7 +5,7 @@ import { SidebarTree } from "@components/sidebar-tree";
 import { StatsPanel } from "@components/stats-panel";
 import { StatusBar } from "@components/status-bar";
 import { TechTreePage } from "@components/tech-tree-page";
-import { TutorialTip, useTutorialTriggers } from "@components/tutorial-screen";
+import { useTutorialTriggers } from "@components/tutorial-screen";
 import { css, Global, keyframes } from "@emotion/react";
 import type { EditorTheme } from "@modules/editor";
 import { EDITOR_THEMES, type EditorThemeEnum } from "@modules/editor";
@@ -471,7 +471,6 @@ export function App() {
 				<Global styles={globalStyles} />
 				<MobileShell />
 				<EventToast />
-				<TutorialTip />
 				{singularity && <SingularitySequence animate={singularityAnimate} />}
 			</>
 		);
@@ -590,7 +589,6 @@ export function App() {
 				<StatusBar />
 			</div>
 			<EventToast />
-			<TutorialTip />
 			{singularity && <SingularitySequence animate={singularityAnimate} />}
 		</>
 	);

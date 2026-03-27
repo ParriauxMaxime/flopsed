@@ -3,6 +3,7 @@ import { Editor } from "@modules/editor";
 import { useGameStore } from "@modules/game";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { CliPrompt } from "./cli-prompt";
+import { TutorialTip } from "./tutorial-screen";
 
 const wrapperCss = css({
 	display: "flex",
@@ -64,6 +65,9 @@ export function EditorPanel() {
 			<div css={editorAreaCss}>
 				<Editor />
 			</div>
+
+			{/* Tutorial panel (non-blocking, bottom panel style) */}
+			<TutorialTip />
 
 			{/* Terminal panel (appears when AI unlocked) */}
 			{aiUnlocked && (
