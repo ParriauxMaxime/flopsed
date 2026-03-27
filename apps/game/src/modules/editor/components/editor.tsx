@@ -72,10 +72,6 @@ const cursorLayoutCss = css({
 	verticalAlign: "text-bottom",
 });
 
-const blockSepLayoutCss = css({
-	height: LINE_HEIGHT,
-});
-
 const hintCss = css({
 	position: "absolute",
 	top: 0,
@@ -115,37 +111,35 @@ interface FlatLine {
 	key: string;
 	lineNumber: number;
 	html: string;
-	isSeparator?: boolean;
 }
 
 // Only render the last N blocks to avoid unbounded growth
 const MAX_DISPLAY_BLOCKS = 8;
 
+// Global counter for stable keys — never resets, so React never confuses lines
+let globalLineKey = 0;
+
 function buildLineList(
 	blockQueue: Array<{ lines: string[] }>,
 	typingLines: string[],
-	queuedLoc: number,
 ): FlatLine[] {
 	const result: FlatLine[] = [];
 
-	// When execution keeps up (loc ≈ 0), skip all old blocks — "phantom" effect
-	const showBlocks = queuedLoc >= 1;
-	const blocksToShow = showBlocks ? blockQueue.slice(-MAX_DISPLAY_BLOCKS) : [];
+	// Always show blocks (no phantom hide/show that causes flicker)
+	const blocksToShow = blockQueue.slice(-MAX_DISPLAY_BLOCKS);
 
 	// Estimate line number from total blocks
 	let lineNumber = 1;
-	if (showBlocks) {
-		const startBlock = Math.max(0, blockQueue.length - MAX_DISPLAY_BLOCKS);
-		for (let bIdx = 0; bIdx < startBlock; bIdx++) {
-			lineNumber += blockQueue[bIdx].lines.length;
-		}
+	const startBlock = Math.max(0, blockQueue.length - MAX_DISPLAY_BLOCKS);
+	for (let bIdx = 0; bIdx < startBlock; bIdx++) {
+		lineNumber += blockQueue[bIdx].lines.length + 1; // +1 for gap
 	}
 
 	for (let bIdx = 0; bIdx < blocksToShow.length; bIdx++) {
 		const block = blocksToShow[bIdx];
 		for (let lIdx = 0; lIdx < block.lines.length; lIdx++) {
 			result.push({
-				key: `b${bIdx}-${lIdx}`,
+				key: `L${globalLineKey++}`,
 				lineNumber,
 				html: block.lines[lIdx],
 			});
@@ -154,7 +148,7 @@ function buildLineList(
 		// Empty line between blocks for readability
 		if (bIdx < blocksToShow.length - 1) {
 			result.push({
-				key: `gap-${bIdx}`,
+				key: `L${globalLineKey++}`,
 				lineNumber,
 				html: "",
 			});
@@ -176,7 +170,6 @@ function buildLineList(
 
 export function Editor() {
 	const totalLoc = useGameStore((s) => s.totalLoc);
-	const hasQueuedLoc = useGameStore((s) => s.loc >= 1);
 	const locPerKey = useGameStore((s) => s.locPerKey);
 	const blockQueue = useGameStore((s) => s.blockQueue);
 	const editorTheme = useUiStore((s) => s.editorTheme);
@@ -245,19 +238,19 @@ export function Editor() {
 		[theme],
 	);
 
-	const themedBlockSepCss = useMemo(
-		() =>
-			css(blockSepLayoutCss, {
-				borderBottom: `1px solid ${theme.lineNumbers}33`,
-			}),
-		[theme],
-	);
-
 	// ── Build flat line list ──
-	const flatLines = useMemo(
-		() => buildLineList(blockQueue, typing.lines, hasQueuedLoc ? 1 : 0),
-		[blockQueue, typing.lines, hasQueuedLoc],
-	);
+	// Throttle rebuilds: only recompute when block count changes or typing changes
+	const blockCount = blockQueue.length;
+	const prevBlockCount = useRef(blockCount);
+	const cachedLines = useRef<FlatLine[]>([]);
+
+	const flatLines = useMemo(() => {
+		const lines = buildLineList(blockQueue, typing.lines);
+		cachedLines.current = lines;
+		prevBlockCount.current = blockCount;
+		return lines;
+	}, [blockQueue, typing.lines, blockCount]);
+
 	const totalLines = flatLines.length + 1;
 
 	// ── Virtualization state ──
@@ -281,15 +274,15 @@ export function Editor() {
 		return () => ro.disconnect();
 	}, []);
 
-	// Auto-scroll to bottom when new blocks arrive
-	const prevQueueLenRef = useRef(blockQueue.length);
-	if (blockQueue.length !== prevQueueLenRef.current) {
-		prevQueueLenRef.current = blockQueue.length;
+	// Auto-scroll to bottom — only when new blocks are added (not consumed)
+	const prevQueueLen = useRef(blockQueue.length);
+	if (blockQueue.length > prevQueueLen.current) {
 		queueMicrotask(() => {
 			const el = editorRef.current;
 			if (el) el.scrollTop = el.scrollHeight;
 		});
 	}
+	prevQueueLen.current = blockQueue.length;
 
 	// ── Compute visible window ──
 	const contentHeight = totalLines * LINE_HEIGHT;
@@ -299,13 +292,7 @@ export function Editor() {
 
 	const currentLineIdx = flatLines.length;
 	const currentLineNumber =
-		flatLines.length > 0
-			? flatLines[flatLines.length - 1].isSeparator
-				? flatLines.length > 1
-					? flatLines[flatLines.length - 2].lineNumber + 1
-					: 1
-				: flatLines[flatLines.length - 1].lineNumber + 1
-			: 1;
+		flatLines.length > 0 ? flatLines[flatLines.length - 1].lineNumber + 1 : 1;
 
 	return (
 		<>
@@ -363,9 +350,6 @@ export function Editor() {
 
 							if (idx < flatLines.length) {
 								const line = flatLines[idx];
-								if (line.isSeparator) {
-									return <div css={themedBlockSepCss} key={line.key} />;
-								}
 								return (
 									<EditorLine
 										key={line.key}
