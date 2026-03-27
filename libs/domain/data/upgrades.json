@@ -271,8 +271,8 @@
 			"name": "AI Agent",
 			"description": "Autonomous agent — writes 100,000 LoC/s",
 			"icon": "🤖",
-			"baseCost": 20000000000,
-			"costMultiplier": 2.5,
+			"baseCost": 5000000000,
+			"costMultiplier": 1.8,
 			"max": 5,
 			"costCategory": "agent",
 			"effects": [

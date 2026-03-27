@@ -504,10 +504,14 @@ export const useGameStore = create<GameState & GameActions>()(
 							totalAiFlops += model.flopsCost;
 						}
 						if (totalAiFlops > 0) {
-							// AI gets what it needs, capped by its budget
 							aiFlopsCost = Math.min(totalAiFlops, aiFlopsBudget);
-							const aiEfficiency = aiFlopsCost / totalAiFlops;
-							aiProduced = totalAiLoc * aiEfficiency * dt;
+							const baseEfficiency = aiFlopsCost / totalAiFlops;
+							// Excess FLOPS beyond base needs boost AI output (overclock)
+							// sqrt scaling: 4x excess FLOPS = 2x boost
+							const excessRatio = aiFlopsBudget / totalAiFlops;
+							const overclock =
+								excessRatio > 1 ? Math.sqrt(excessRatio) : baseEfficiency;
+							aiProduced = totalAiLoc * overclock * dt;
 						}
 					}
 					loc += aiProduced;
