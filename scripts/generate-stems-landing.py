@@ -250,16 +250,14 @@ def generate_bass():
     out = np.zeros(N_SAMPLES)
 
     # Bass patterns: (beat_offset, note_type, velocity, duration_beats)
-    # Half-time feel — root on 1, color notes on 3. Leaves room for pad/drums.
+    # Minimal: root holds, 5th adds gentle movement
     BASS_PATTERN_A = [
-        (0,   "root", 1.0, 1.2),    # 1 — root, long sustain
-        (2,   "5th",  0.7, 1.0),    # 3 — fifth, movement
-        (3.5, "7th",  0.5, 0.4),    # & of 4 — 7th, tension before next chord
+        (0,   "root", 1.0, 1.8),    # 1 — root, long sustain
+        (2,   "5th",  0.6, 1.5),    # 3 — fifth, gentle lift
     ]
     BASS_PATTERN_B = [
-        (0,   "root", 1.0, 1.2),    # 1 — root
-        (2,   "7th",  0.7, 1.0),    # 3 — lean into the 7th
-        (3.5, "5th",  0.5, 0.4),    # & of 4 — fifth as pickup
+        (0,   "root", 1.0, 2.5),    # 1 — root, extra long
+        (3,   "5th",  0.5, 0.8),    # 4 — fifth as pickup into next chord
     ]
 
     # Interval map: semitones above root for each note type per chord
@@ -305,26 +303,19 @@ def generate_bass():
 
                 t_local = np.linspace(0, actual_n / SAMPLE_RATE, actual_n, endpoint=False)
 
-                # Sub sine for foundation + saw an octave up for air
-                bass_sig = sine(freq, t_local, 0.18 * vel)
-                bass_sig += saw_bl(freq * 2, t_local, 0.10 * vel, harmonics=8)
-                # Gentle high harmonic shimmer
-                bass_sig += sine(freq * 3, t_local, 0.04 * vel)
+                # Clean sine + soft triangle overtone for warmth
+                bass_sig = sine(freq, t_local, 0.28 * vel)
+                # Triangle one octave up — warm character without harshness
+                tri = saw_bl(freq * 2, t_local, 0.08 * vel, harmonics=3)
+                bass_sig += tri
 
-                # Longer, softer envelope — breathes instead of plucks
-                bass_sig *= env_ad(actual_n, attack_s=0.015, decay_s=dur * BEAT * 1.2)
-
-                # Light drive — warmth not grit
-                bass_sig = soft_clip(bass_sig, drive=1.2)
+                # Smooth envelope — gentle attack, long natural decay
+                bass_sig *= env_ad(actual_n, attack_s=0.02, decay_s=dur * BEAT * 0.8)
 
                 out[note_start:end] += bass_sig
 
-    # Open filter — let the upper harmonics through
-    out = lowpass_1pole(out, 3500)
-    # Add space
-    out = simple_reverb(out, decay=0.25, delays_ms=(23, 41, 67))
-    out = delay_effect(out, beat_frac=0.5, feedback=0.12, wet=0.10)
-    return out * 0.55
+    # No filter, no reverb — clean and present
+    return out * 0.6
 
 
 def generate_drums():
