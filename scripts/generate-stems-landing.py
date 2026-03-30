@@ -305,21 +305,26 @@ def generate_bass():
 
                 t_local = np.linspace(0, actual_n / SAMPLE_RATE, actual_n, endpoint=False)
 
-                # Filtered saw for grit + sub sine for weight
-                bass_sig = saw_bl(freq, t_local, 0.22 * vel, harmonics=6)
-                bass_sig += sine(freq, t_local, 0.18 * vel)
+                # Sub sine for foundation + saw an octave up for air
+                bass_sig = sine(freq, t_local, 0.18 * vel)
+                bass_sig += saw_bl(freq * 2, t_local, 0.10 * vel, harmonics=8)
+                # Gentle high harmonic shimmer
+                bass_sig += sine(freq * 3, t_local, 0.04 * vel)
 
-                # Plucky envelope — fast attack, snappy decay
-                bass_sig *= env_ad(actual_n, attack_s=0.005, decay_s=dur * BEAT * 0.6)
+                # Longer, softer envelope — breathes instead of plucks
+                bass_sig *= env_ad(actual_n, attack_s=0.015, decay_s=dur * BEAT * 1.2)
 
-                # Soft drive
-                bass_sig = soft_clip(bass_sig, drive=2.0)
+                # Light drive — warmth not grit
+                bass_sig = soft_clip(bass_sig, drive=1.2)
 
                 out[note_start:end] += bass_sig
 
-    # Filter: keep the body, let some grit through
-    out = lowpass_1pole(out, 1800)
-    return out * 0.6
+    # Open filter — let the upper harmonics through
+    out = lowpass_1pole(out, 3500)
+    # Add space
+    out = simple_reverb(out, decay=0.25, delays_ms=(23, 41, 67))
+    out = delay_effect(out, beat_frac=0.5, feedback=0.12, wet=0.10)
+    return out * 0.55
 
 
 def generate_drums():
