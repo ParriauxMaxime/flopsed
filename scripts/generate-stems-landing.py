@@ -225,11 +225,11 @@ def generate_arp():
                 out[start_idx:end_idx] += note_sig
                 t_pos += note_dur
 
-    out = lowpass_1pole(out, 3000)
-    out = simple_reverb(out, decay=0.3, delays_ms=(19, 37, 59))
-    out = delay_effect(out, beat_frac=0.75, feedback=0.3, wet=0.25)
+    out = lowpass_1pole(out, 2800)
+    out = simple_reverb(out, decay=0.2, delays_ms=(19, 37, 59))
+    out = delay_effect(out, beat_frac=0.5, feedback=0.15, wet=0.10)
 
-    return out * 0.4
+    return out * 0.32
 
 
 def generate_bass():
