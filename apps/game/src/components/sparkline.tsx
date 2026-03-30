@@ -4,7 +4,14 @@ import { useMemo } from "react";
 
 const svgCss = css({ width: "100%", height: 32, display: "block" });
 
-const TIER_COLORS = ["#484f58", "#3fb950", "#58a6ff", "#d2a8ff", "#f0883e", "#f85149"];
+const TIER_COLORS = [
+	"#484f58",
+	"#3fb950",
+	"#58a6ff",
+	"#d2a8ff",
+	"#f0883e",
+	"#f85149",
+];
 
 interface SparklineProps {
 	data: number[];

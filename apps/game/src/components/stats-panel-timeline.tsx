@@ -5,7 +5,14 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
-const TIER_COLORS = ["#484f58", "#3fb950", "#58a6ff", "#d2a8ff", "#f0883e", "#f85149"];
+const TIER_COLORS = [
+	"#484f58",
+	"#3fb950",
+	"#58a6ff",
+	"#d2a8ff",
+	"#f0883e",
+	"#f85149",
+];
 
 const sectionCss = css({ padding: "8px 12px" });
 const labelCss = css({
@@ -66,7 +73,10 @@ export function StatsPanelTimeline() {
 		for (let i = 0; i < tierTransitions.length; i++) {
 			const start = tierTransitions[i].enteredAt;
 			const end = tierTransitions[i + 1]?.enteredAt ?? elapsed;
-			durations.push({ tierIndex: tierTransitions[i].tierIndex, duration: end - start });
+			durations.push({
+				tierIndex: tierTransitions[i].tierIndex,
+				duration: end - start,
+			});
 		}
 		return durations;
 	}, [tierTransitions, elapsed]);
