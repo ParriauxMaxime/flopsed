@@ -38,25 +38,27 @@ export async function initMusic() {
 
 	const basePath = `${window.location.origin}/audio/stems`;
 
-	for (const name of STEM_NAMES) {
-		try {
-			const player = new Tone.Player({
-				url: `${basePath}/${name}.ogg`,
-				loop: true,
-				autostart: false,
-			});
-			const gain = new Tone.Gain(0); // all stems start silent
-			player.connect(gain);
-			gain.toDestination();
-			stems.set(name, { player, gain });
-		} catch {
-			// Stem file not found — skip silently. Engine works with partial stems.
-			console.warn(`[music] stem not found: ${name}.ogg — skipping`);
-		}
-	}
-
-	// Wait for all buffers to load
-	await Tone.loaded();
+	// Load each stem individually — skip any that 404 or fail
+	await Promise.all(
+		STEM_NAMES.map(
+			(name) =>
+				new Promise<void>((resolve) => {
+					const player = new Tone.Player({
+						url: `${basePath}/${name}.ogg`,
+						loop: true,
+						autostart: false,
+						onerror: () => resolve(), // silently skip missing stems
+						onload: () => {
+							const gain = new Tone.Gain(0);
+							player.connect(gain);
+							gain.toDestination();
+							stems.set(name, { player, gain });
+							resolve();
+						},
+					});
+				}),
+		),
+	);
 }
 
 export function startMusic(tierIndex: number) {
