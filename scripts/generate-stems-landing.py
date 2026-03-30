@@ -131,8 +131,8 @@ CHORD_SEQ = [
     (["F3", "Ab3", "C4", "F4"], "F2", 4, 2),
     # G: G B D (the V — lift/release) — 1 bar
     (["G3", "B3", "D4", "G4"], "G2", 6, 1),
-    # Am: A C E (bittersweet landing — vi) — 1 bar
-    (["A3", "C4", "E4", "A4"], "A1", 7, 1),
+    # Em: E G B (iii — dark, mysterious, leads back to Cadd9) — 1 bar
+    (["E3", "G3", "B3", "E4"], "E2", 7, 1),
 ]
 
 # Arp: ascending patterns through chord tones (2 octaves)
@@ -142,7 +142,7 @@ ARP_NOTES = {
     2: (["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"], 2),        # Am7
     4: (["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"], 2),     # Fm
     6: (["G3", "B3", "D4", "G4", "B4", "D5", "G5", "B5"], 1),        # G
-    7: (["A3", "C4", "E4", "A4", "C5", "E5", "A5", "C6"], 1),        # Am
+    7: (["E3", "G3", "B3", "E4", "G4", "B4", "E5", "G5"], 1),        # Em
 }
 
 # Original lead melody — C major, drops to minor for Fm
@@ -155,8 +155,8 @@ LEAD_MELODY = [
     ("Ab4", 10, 2), ("C5", 12, 1.5), ("Ab4", 13.5, 1.5),
     # G (bar 6): lift — rising out of the dark
     ("G4", 15, 1), ("B4", 16, 1.5),
-    # Am (bar 7): bittersweet resolve before the loop
-    ("A4", 17.5, 1.5), ("E4", 19, 1.5),
+    # Em (bar 7): dark, mysterious — pulls you back to Cadd9
+    ("E4", 17.5, 1.5), ("B4", 19, 1.5),
 ]
 
 
@@ -261,7 +261,7 @@ def generate_bass():
         2: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am7: min7 = G
         4: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Fm: min7 = Eb
         6: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # G: dom7 = F
-        7: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am: min7 = G
+        7: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Em: min7 = D
     }
 
     # Short pattern for half-bar chords
