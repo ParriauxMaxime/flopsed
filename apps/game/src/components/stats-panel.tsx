@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { type AiModelData, aiModels, tiers, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { RollingNumber } from "./rolling-number";
 
@@ -122,6 +123,7 @@ interface SourceRow {
 }
 
 export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
+	const { t } = useTranslation();
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
 	const totalLoc = useGameStore((s) => s.totalLoc);
@@ -166,33 +168,33 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 		const rows: SourceRow[] = [];
 		if ((ownedUpgrades.malt_freelancer ?? 0) > 0)
 			rows.push({
-				name: "Freelancers",
+				name: t("malt_freelancer.name", { ns: "upgrades" }),
 				locPerSec: freelancerLocPerSec,
 				color: theme.success,
 				count: ownedUpgrades.malt_freelancer,
 			});
 		if ((ownedUpgrades.intern ?? 0) > 0)
 			rows.push({
-				name: "Interns",
+				name: t("intern.name", { ns: "upgrades" }),
 				locPerSec: internLocPerSec,
 				color: theme.accent,
 				count: ownedUpgrades.intern,
 			});
 		if ((ownedUpgrades.dev_team ?? 0) > 0)
 			rows.push({
-				name: "Dev Teams",
+				name: t("dev_team.name", { ns: "upgrades" }),
 				locPerSec: teamLocPerSec,
 				color: theme.keyword,
 				count: ownedUpgrades.dev_team,
 			});
 		if (devLocPerSec > 0 && (ownedUpgrades.dev_team ?? 0) === 0)
 			rows.push({
-				name: "Devs",
+				name: t("dev_team.name", { ns: "upgrades" }),
 				locPerSec: devLocPerSec,
 				color: theme.accent,
 			});
 		rows.push({
-			name: "You",
+			name: t("stats_panel.you"),
 			locPerSec: locPerKey * 6,
 			color: theme.keyword,
 		});
@@ -205,6 +207,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 		teamLocPerSec,
 		locPerKey,
 		theme,
+		t,
 	]);
 
 	const aiSources = useMemo((): SourceRow[] => {
@@ -411,12 +414,12 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 				}}
 			>
 				<span style={{ fontSize: 13 }}>⚡</span>
-				<span css={{ flex: 1 }}>Stats</span>
+				<span css={{ flex: 1 }}>{t("stats_panel.title")}</span>
 				{onCollapse && (
 					<button
 						type="button"
 						onClick={onCollapse}
-						title="Hide stats"
+						title={t("stats_panel.hide")}
 						css={{
 							background: "none",
 							border: "none",
@@ -444,11 +447,11 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 			{/* Resources (fixed, no scroll) */}
 			<div css={{ padding: "8px 0", flexShrink: 0 }}>
 				<div css={sectionCss}>
-					<div css={sectionLabelCss}>Resources</div>
+					<div css={sectionLabelCss}>{t("stats_panel.resources")}</div>
 
 					<div css={statRowCss}>
 						<div css={statLabelCss}>
-							<span style={{ color: theme.cashColor }}>$</span> Cash
+							<span style={{ color: theme.cashColor }}>$</span> {t("stats_panel.cash")}
 						</div>
 						<div>
 							<div css={statValueCss}>
@@ -462,7 +465,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 
 					<div css={statRowCss}>
 						<div css={statLabelCss}>
-							<span style={{ color: theme.locColor }}>◇</span> LoC
+							<span style={{ color: theme.locColor }}>◇</span> {t("stats_panel.loc")}
 						</div>
 						<div>
 							<div css={statValueCss}>
@@ -476,7 +479,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 
 					<div css={statRowCss}>
 						<div css={statLabelCss}>
-							<span style={{ color: theme.flopsColor }}>⚡</span> FLOPS
+							<span style={{ color: theme.flopsColor }}>⚡</span> {t("stats_panel.flops")}
 						</div>
 						<div>
 							<div css={statValueCss}>
@@ -505,7 +508,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 								}}
 							>
 								<div css={sectionLabelCss}>
-									{aiUnlocked ? "Token Sources" : "LoC Sources"}
+									{aiUnlocked ? t("stats_panel.token_sources") : t("stats_panel.loc_sources")}
 								</div>
 								<span
 									css={{
@@ -523,7 +526,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 												? 0
 												: aiSources.reduce((sum, s) => sum + s.locPerSec, 0)),
 									)}
-									{aiUnlocked ? " tokens/s" : "/s"}
+									{" "}{aiUnlocked ? t("stats_panel.tokens_per_sec") : t("stats_panel.per_sec")}
 								</span>
 							</div>
 							{humanSources.map((s) => (
@@ -547,7 +550,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 										/>
 									</div>
 									<span css={sourceValueCss} style={{ color: s.color }}>
-										{formatNumber(s.locPerSec)}/s
+										{formatNumber(s.locPerSec)}{t("stats_panel.per_sec")}
 									</span>
 								</div>
 							))}
@@ -557,10 +560,10 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 									style={{ fontSize: 9, color: theme.lineNumbers }}
 								>
 									<span css={sourceNameCss} style={{ color: theme.textMuted }}>
-										Managers
+										{t("stats_panel.managers")}
 									</span>
 									<span>
-										+{Math.round((managerBonus - 1) * 100)}% team output
+										{t("stats_panel.manager_bonus", { bonus: Math.round((managerBonus - 1) * 100) })}
 									</span>
 								</div>
 							)}
@@ -591,7 +594,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 												/>
 											</div>
 											<span css={sourceValueCss} style={{ color: s.color }}>
-												{formatNumber(s.locPerSec)}/s
+												{formatNumber(s.locPerSec)}{t("stats_panel.per_sec")}
 											</span>
 										</div>
 									))}
@@ -606,7 +609,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 			<div css={execBarCss}>
 				{autoExec ? (
 					<div css={autoExecLabelCss}>
-						⚡ Auto — +${formatNumber(cashRate, true)}/s
+						{t("stats_panel.auto_exec", { rate: formatNumber(cashRate, true) })}
 					</div>
 				) : (
 					<button
@@ -615,8 +618,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 						onClick={executeManual}
 						disabled={execLoc <= 0}
 					>
-						⚡ Execute {formatNumber(execLoc)} → $
-						{formatNumber(earnPerExec, true)}
+						{t("stats_panel.execute", { loc: formatNumber(execLoc), earn: formatNumber(earnPerExec, true) })}
 					</button>
 				)}
 			</div>

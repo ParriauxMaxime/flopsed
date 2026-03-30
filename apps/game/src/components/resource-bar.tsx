@@ -2,6 +2,7 @@ import { css, keyframes } from "@emotion/react";
 import { aiModels, tiers, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { RollingNumber } from "./rolling-number";
 
@@ -49,6 +50,7 @@ const execPulse = keyframes({
 
 export function ResourceBar() {
 	const theme = useIdeTheme();
+	const { t } = useTranslation();
 
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
@@ -189,9 +191,9 @@ export function ResourceBar() {
 					<div css={valueCss}>
 						<RollingNumber value={formatNumber(loc)} color={theme.accent} />
 					</div>
-					<div css={labelStyle}>Queued</div>
+					<div css={labelStyle}>{t("resource_bar.queued")}</div>
 					<div css={rateStyle}>
-						{locRate > 0.1 ? `${formatNumber(locRate)} loc/s` : ""}
+						{locRate > 0.1 ? t("resource_bar.loc_rate", { rate: formatNumber(locRate) }) : ""}
 					</div>
 				</div>
 
@@ -204,9 +206,9 @@ export function ResourceBar() {
 							color="#d4a574"
 						/>
 					</div>
-					<div css={labelStyle}>Cash</div>
+					<div css={labelStyle}>{t("resource_bar.cash")}</div>
 					<div css={rateStyle}>
-						{cashRate > 0.1 ? `+$${formatNumber(cashRate, true)}/s` : ""}
+						{cashRate > 0.1 ? t("resource_bar.cash_rate", { rate: formatNumber(cashRate, true) }) : ""}
 					</div>
 				</div>
 
@@ -216,16 +218,16 @@ export function ResourceBar() {
 					<div css={valueCss}>
 						<RollingNumber value={formatNumber(flops)} color={theme.keyword} />
 					</div>
-					<div css={labelStyle}>FLOPS</div>
+					<div css={labelStyle}>{t("resource_bar.flops")}</div>
 					<div css={rateStyle}>
-						{execRate > 0.1 ? `${formatNumber(execRate)} loc/s` : ""}
+						{execRate > 0.1 ? t("resource_bar.loc_rate", { rate: formatNumber(execRate) }) : ""}
 					</div>
 				</div>
 			</div>
 			<div css={execBarStyle} data-tutorial="execute">
 				{autoExec ? (
 					<div css={autoExecLabelStyle}>
-						⚡ Auto-Execute — +${formatNumber(cashRate, true)}/s
+						{t("resource_bar.auto_execute", { rate: formatNumber(cashRate, true) })}
 					</div>
 				) : (
 					(() => {
@@ -238,8 +240,7 @@ export function ResourceBar() {
 								onClick={handleExec}
 								disabled={execLoc <= 0}
 							>
-								⚡ Execute {formatNumber(execLoc)} queued → $
-								{formatNumber(earnPerExec, true)}
+								{t("resource_bar.execute", { loc: formatNumber(execLoc), earn: formatNumber(earnPerExec, true) })}
 							</button>
 						);
 					})()
