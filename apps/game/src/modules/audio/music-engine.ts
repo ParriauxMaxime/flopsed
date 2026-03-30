@@ -164,15 +164,34 @@ export function setMusicVolume(volume: number, muted: boolean) {
 
 /** Singularity: vinyl halt — pitch drops slowly while fading out. */
 export function singularityBreakdown() {
-	const duration = 4; // seconds to fully stop
+	const durationMs = 4000;
+	const startTime = performance.now();
+
+	// Animate playback rate from 1 → 0.05 over 4s (manual ramp)
+	const tick = () => {
+		const elapsed = performance.now() - startTime;
+		const progress = Math.min(elapsed / durationMs, 1);
+		// Exponential curve for natural vinyl deceleration
+		const rate = 1 * (0.05 / 1) ** progress; // 1 → 0.05 exponentially
+		for (const [, stem] of stems) {
+			stem.player.playbackRate = rate;
+		}
+		if (progress < 1) {
+			requestAnimationFrame(tick);
+		}
+	};
+	requestAnimationFrame(tick);
+
+	// Fade volume behind the pitch drop
 	for (const [, stem] of stems) {
-		// Ramp playback rate from 1 → 0.05 (pitch drops ~4 octaves)
-		stem.player.playbackRate.rampTo(0.05, duration);
-		// Fade volume slightly — most of the effect is the pitch drop
-		stem.gain.gain.rampTo(0.15, duration * 0.7);
-		stem.gain.gain.rampTo(0, duration * 0.3, `+${duration * 0.7}`);
+		stem.gain.gain.rampTo(0.15, durationMs / 1000 * 0.7);
 	}
-	setTimeout(() => stopMusic(), (duration + 0.5) * 1000);
+	setTimeout(() => {
+		for (const [, stem] of stems) {
+			stem.gain.gain.rampTo(0, 1);
+		}
+	}, durationMs * 0.7);
+	setTimeout(() => stopMusic(), durationMs + 500);
 }
 
 export function stopMusic() {
