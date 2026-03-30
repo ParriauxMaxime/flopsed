@@ -59,7 +59,7 @@ export function runBalanceSim(
 	const upgrades = data.upgrades.upgrades as UpgradeData[];
 	const techNodes = data.techTree.nodes as TechNodeData[];
 	const aiModels: AiModel[] = data.aiModels;
-	const { core, flopsAllocation } = data.balance;
+	const { core } = data.balance;
 
 	const sim = {
 		cash: 0,

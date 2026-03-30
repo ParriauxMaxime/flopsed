@@ -14,14 +14,14 @@ function sliderToGain(volume: number, muted: boolean): number {
 
 // ── Typing sound: mechanical keyboard click + thock ──
 
-let typingIndex = 0;
 let lastTypingTime = 0;
 
 // Pre-generate a reusable noise buffer (1 second at sample rate)
 let noiseBuffer: AudioBuffer | null = null;
 
 function getNoiseBuffer(ac: AudioContext): AudioBuffer {
-	if (noiseBuffer && noiseBuffer.sampleRate === ac.sampleRate) return noiseBuffer;
+	if (noiseBuffer && noiseBuffer.sampleRate === ac.sampleRate)
+		return noiseBuffer;
 	const len = ac.sampleRate; // 1 second
 	noiseBuffer = ac.createBuffer(1, len, ac.sampleRate);
 	const data = noiseBuffer.getChannelData(0);
@@ -39,12 +39,10 @@ export function playTyping(volume: number, muted: boolean) {
 
 	const ac = getCtx();
 	const t = ac.currentTime;
-	typingIndex++;
-
 	// Vary each keystroke slightly
 	const pitch = 3000 + Math.random() * 2000; // 3-5kHz click center
 	const thockPitch = 120 + Math.random() * 60; // 120-180Hz thock body
-	const vol = gain * (0.10 + Math.random() * 0.04); // slight volume variation
+	const vol = gain * (0.1 + Math.random() * 0.04); // slight volume variation
 	const duration = 0.02 + Math.random() * 0.01; // 20-30ms
 
 	// Layer 1: high-frequency click (noise → highpass → bandpass → gain)

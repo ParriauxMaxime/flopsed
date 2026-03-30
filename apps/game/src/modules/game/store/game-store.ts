@@ -662,7 +662,8 @@ export const useGameStore = create<GameState & GameActions>()(
 						const locDelta = totalLoc - s.prevTickTotalLoc;
 						const execDelta = totalExecutedLoc - s.prevTickTotalExecLoc;
 						const dtSnap = elapsed - s.lastSnapshotTime;
-						const flopUtil = s.flops > 0 ? Math.min(1, loc / Math.max(1, s.flops)) : 0;
+						const flopUtil =
+							s.flops > 0 ? Math.min(1, loc / Math.max(1, s.flops)) : 0;
 
 						const snapshot: RateSnapshot = {
 							t: elapsed,
@@ -714,12 +715,15 @@ export const useGameStore = create<GameState & GameActions>()(
 				{
 					const elapsed = (performance.now() - get().sessionStartTime) / 1000;
 					set((s) => ({
-						purchaseLog: [...s.purchaseLog.slice(-49), {
-							id: upgrade.id,
-							name: upgrade.id,
-							cost,
-							time: elapsed,
-						}],
+						purchaseLog: [
+							...s.purchaseLog.slice(-49),
+							{
+								id: upgrade.id,
+								name: upgrade.id,
+								cost,
+								time: elapsed,
+							},
+						],
 					}));
 				}
 			},
@@ -772,12 +776,15 @@ export const useGameStore = create<GameState & GameActions>()(
 				{
 					const elapsed = (performance.now() - get().sessionStartTime) / 1000;
 					set((s) => ({
-						purchaseLog: [...s.purchaseLog.slice(-49), {
-							id: node.id,
-							name: node.id,
-							cost,
-							time: elapsed,
-						}],
+						purchaseLog: [
+							...s.purchaseLog.slice(-49),
+							{
+								id: node.id,
+								name: node.id,
+								cost,
+								time: elapsed,
+							},
+						],
 					}));
 				}
 			},

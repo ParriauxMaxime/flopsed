@@ -1,3 +1,4 @@
+import { MusicStyleEnum, music, useAudioStore } from "@modules/audio";
 import type { GodModeOverrides } from "@modules/game";
 import {
 	allTechNodes,
@@ -7,7 +8,6 @@ import {
 	useGameStore,
 	useUiStore,
 } from "@modules/game";
-import { MusicStyleEnum, music, useAudioStore } from "@modules/audio";
 import { formatNumber } from "@utils/format";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -136,11 +136,13 @@ function StemMixer() {
 	const theme = useIdeTheme();
 	const musicStyle = useAudioStore((s) => s.musicStyle);
 	const packStems = music.getPackStems();
-	const [enabledStems, setEnabledStems] = useState<Record<string, boolean>>(() => {
-		const init: Record<string, boolean> = {};
-		for (const s of packStems) init[s] = false;
-		return init;
-	});
+	const [enabledStems, setEnabledStems] = useState<Record<string, boolean>>(
+		() => {
+			const init: Record<string, boolean> = {};
+			for (const s of packStems) init[s] = false;
+			return init;
+		},
+	);
 
 	const toggle = (name: string) => {
 		const next = !enabledStems[name];
@@ -183,7 +185,9 @@ function StemMixer() {
 							padding: "6px 12px",
 							borderRadius: 4,
 							border: `1px solid ${enabledStems[name] ? theme.accent : theme.border}`,
-							background: enabledStems[name] ? `${theme.accent}18` : "transparent",
+							background: enabledStems[name]
+								? `${theme.accent}18`
+								: "transparent",
 							cursor: "pointer",
 							fontSize: 12,
 							transition: "all 0.15s",
@@ -196,7 +200,11 @@ function StemMixer() {
 							onChange={() => toggle(name)}
 							css={{ accentColor: theme.accent, cursor: "pointer" }}
 						/>
-						<span style={{ color: enabledStems[name] ? theme.foreground : theme.textMuted }}>
+						<span
+							style={{
+								color: enabledStems[name] ? theme.foreground : theme.textMuted,
+							}}
+						>
 							{name}
 						</span>
 					</label>

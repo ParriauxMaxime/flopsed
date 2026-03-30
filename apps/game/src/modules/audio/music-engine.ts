@@ -10,7 +10,8 @@ export const MusicStyleEnum = {
 	landing: "landing",
 } as const;
 
-export type MusicStyleEnum = (typeof MusicStyleEnum)[keyof typeof MusicStyleEnum];
+export type MusicStyleEnum =
+	(typeof MusicStyleEnum)[keyof typeof MusicStyleEnum];
 
 /** Pack definition: stem file names + tier→stem mapping */
 interface StemPack {
@@ -184,7 +185,7 @@ export function singularityBreakdown() {
 
 	// Fade volume behind the pitch drop
 	for (const [, stem] of stems) {
-		stem.gain.gain.rampTo(0.15, durationMs / 1000 * 0.7);
+		stem.gain.gain.rampTo(0.15, (durationMs / 1000) * 0.7);
 	}
 	setTimeout(() => {
 		for (const [, stem] of stems) {

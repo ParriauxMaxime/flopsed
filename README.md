@@ -21,33 +21,18 @@ An incremental idle game where you scale a tech company from a garage to the sin
 
 ## The Game
 
-You start in a garage, typing code on a keyboard. Every keystroke generates **Lines of Code (LoC)**. Your hardware's **FLOPS** execute that code into **Cash**. Cash buys upgrades — better hardware, hired devs, and eventually AI models that write code for you.
+You start in a garage with nothing but a keyboard. Type code, execute it for cash, and figure out the rest. How far can you scale?
 
-The twist: AI models consume FLOPS to generate code, creating a tension between execution and generation. The late game becomes a resource allocation puzzle as you race toward the singularity.
-
-**~35 minutes** for a first playthrough.
-
-## Progression
-
-| Tier | Name | What happens |
-|------|------|-------------|
-| T0 | The Garage | Just you and a keyboard |
-| T1 | Freelancing | Hire freelancers, sell your code |
-| T2 | Startup | Interns, dev teams, cloud servers |
-| T3 | Tech Company | Managers, GPU clusters, data centers |
-| T4 | AI Lab | AI models write code — but eat your FLOPS |
-| T5 | AGI Race | Superintelligent models, the final push |
+**~35 minutes** for a first playthrough. No spoilers here — go play it.
 
 ## Features
 
 - **Typing mechanic** — real keystrokes feed the code pipeline
-- **Tech tree** — 60+ research nodes across 6 tiers
-- **21 AI models** — from Copilot to Claude Universe, each with unique abilities
-- **Dynamic events** — production outages, hackathons, viral tweets
-- **Endgame sequence** — CRT collapse, terminal boot, AGI monologue
+- **Deep tech tree** — unlock new mechanics as you progress
+- **Dynamic events** — surprises that shake up your strategy
 - **8 languages** — EN, FR, IT, DE, ES, PL, ZH, RU
 - **8 editor themes** — Monokai, Dracula, Nord, Solarized, and more
-- **Original soundtrack** — stem-based music that evolves with your tier
+- **Original soundtrack** — music that evolves as you grow
 
 ## Stack
 

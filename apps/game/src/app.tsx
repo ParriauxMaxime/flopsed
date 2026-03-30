@@ -94,9 +94,33 @@ const themeEntries = Object.entries(EDITOR_THEMES) as Array<
 >;
 
 const PREVIEW_LINES = [
-	{ tokens: [{ text: "const ", role: "keyword" as const }, { text: "app", role: "variable" as const }, { text: " = ", role: "operator" as const }, { text: "create", role: "function" as const }, { text: "()", role: "operator" as const }] },
-	{ tokens: [{ text: "let ", role: "keyword" as const }, { text: "port", role: "variable" as const }, { text: " = ", role: "operator" as const }, { text: "3000", role: "number" as const }] },
-	{ tokens: [{ text: "app", role: "variable" as const }, { text: ".", role: "operator" as const }, { text: "get", role: "function" as const }, { text: "(", role: "operator" as const }, { text: '"/api"', role: "string" as const }, { text: ")", role: "operator" as const }] },
+	{
+		tokens: [
+			{ text: "const ", role: "keyword" as const },
+			{ text: "app", role: "variable" as const },
+			{ text: " = ", role: "operator" as const },
+			{ text: "create", role: "function" as const },
+			{ text: "()", role: "operator" as const },
+		],
+	},
+	{
+		tokens: [
+			{ text: "let ", role: "keyword" as const },
+			{ text: "port", role: "variable" as const },
+			{ text: " = ", role: "operator" as const },
+			{ text: "3000", role: "number" as const },
+		],
+	},
+	{
+		tokens: [
+			{ text: "app", role: "variable" as const },
+			{ text: ".", role: "operator" as const },
+			{ text: "get", role: "function" as const },
+			{ text: "(", role: "operator" as const },
+			{ text: '"/api"', role: "string" as const },
+			{ text: ")", role: "operator" as const },
+		],
+	},
 	{ tokens: [{ text: "// ready", role: "comment" as const }] },
 ];
 
@@ -163,7 +187,9 @@ function SettingsPage() {
 			<SectionHeading>{t("settings.language")}</SectionHeading>
 			<div css={{ padding: "4px 20px 16px", display: "flex", gap: 6 }}>
 				{supportedLanguages.map((lang) => {
-					const active = i18n.language === lang.code || i18n.language.startsWith(`${lang.code}-`);
+					const active =
+						i18n.language === lang.code ||
+						i18n.language.startsWith(`${lang.code}-`);
 					return (
 						<button
 							key={lang.code}
@@ -221,13 +247,9 @@ function SettingsPage() {
 								overflow: "hidden",
 								textAlign: "left",
 								transition: "all 0.15s",
-								boxShadow: active
-									? `0 0 8px ${theme.accent}40`
-									: "none",
+								boxShadow: active ? `0 0 8px ${theme.accent}40` : "none",
 								"&:hover": {
-									borderColor: active
-										? theme.accent
-										: theme.textMuted,
+									borderColor: active ? theme.accent : theme.textMuted,
 								},
 							}}
 						>
@@ -271,7 +293,14 @@ function SettingsPage() {
 					);
 				})}
 			</div>
-			<div css={{ padding: "8px 20px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+			<div
+				css={{
+					padding: "8px 20px 16px",
+					display: "flex",
+					alignItems: "center",
+					gap: 10,
+				}}
+			>
 				<span css={{ fontSize: 12, color: theme.textMuted }}>
 					{t("settings.text_size")}
 				</span>
@@ -301,7 +330,14 @@ function SettingsPage() {
 
 			{/* ── Sound ── */}
 			<SectionHeading>{t("settings.sound")}</SectionHeading>
-			<div css={{ padding: "4px 20px 16px", display: "flex", flexDirection: "column", gap: 12 }}>
+			<div
+				css={{
+					padding: "4px 20px 16px",
+					display: "flex",
+					flexDirection: "column",
+					gap: 12,
+				}}
+			>
 				<div css={{ display: "flex", alignItems: "center", gap: 10 }}>
 					<span css={{ fontSize: 12, color: theme.textMuted, width: 40 }}>
 						{t("settings.music")}
@@ -319,7 +355,14 @@ function SettingsPage() {
 							cursor: "pointer",
 						}}
 					/>
-					<span css={{ fontSize: 11, color: theme.textMuted, width: 32, textAlign: "right" }}>
+					<span
+						css={{
+							fontSize: 11,
+							color: theme.textMuted,
+							width: 32,
+							textAlign: "right",
+						}}
+					>
 						{musicVolume}%
 					</span>
 				</div>
@@ -340,7 +383,14 @@ function SettingsPage() {
 							cursor: "pointer",
 						}}
 					/>
-					<span css={{ fontSize: 11, color: theme.textMuted, width: 32, textAlign: "right" }}>
+					<span
+						css={{
+							fontSize: 11,
+							color: theme.textMuted,
+							width: 32,
+							textAlign: "right",
+						}}
+					>
 						{sfxVolume}%
 					</span>
 				</div>
@@ -365,9 +415,7 @@ function SettingsPage() {
 									background:
 										musicStyle === style ? theme.activeBg : "transparent",
 									color:
-										musicStyle === style
-											? theme.foreground
-											: theme.textMuted,
+										musicStyle === style ? theme.foreground : theme.textMuted,
 									cursor: "pointer",
 									fontFamily: "inherit",
 									transition: "all 0.15s",
