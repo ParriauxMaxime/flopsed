@@ -122,25 +122,33 @@ def env_ad(n, attack_s=0.01, decay_s=0.3):
 # Each chord = 2 bars
 
 CHORD_SEQ = [
-    # Cadd9: C D E G (open, airy)
-    (["C3", "D3", "E3", "G3", "C4"], "C2", 0),
-    # Am7: A C E G (melancholic)
-    (["A2", "C3", "E3", "G3", "A3"], "A1", 2),
-    # Fmaj7: F A C E (warm, bright)
-    (["F3", "A3", "C4", "E4"], "F2", 4),
-    # Fm: F Ab C (the gut-punch — borrowed iv from C minor)
-    (["F3", "Ab3", "C4", "F4"], "F2", 6),
+    # (notes, bass_root, bar_start, bar_duration)
+    # Cadd9: C D E G (open, airy) — 2 bars
+    (["C3", "D3", "E3", "G3", "C4"], "C2", 0, 2),
+    # Am7: A C E G (melancholic) — 2 bars
+    (["A2", "C3", "E3", "G3", "A3"], "A1", 2, 2),
+    # Fmaj7: F A C E (warm, bright) — 2 bars
+    (["F3", "A3", "C4", "E4"], "F2", 4, 2),
+    # Fm: F Ab C (gut-punch — borrowed iv) — 1 bar
+    (["F3", "Ab3", "C4", "F4"], "F2", 6, 1),
+    # G: G B D (the V — lift/release) — 1/2 bar
+    (["G3", "B3", "D4", "G4"], "G2", 7, 0.5),
+    # Am: A C E (bittersweet landing — vi) — 1/2 bar
+    (["A3", "C4", "E4", "A4"], "A1", 7.5, 0.5),
 ]
 
 # Arp: ascending patterns through chord tones (2 octaves)
+# Key = bar_start, value = (notes, bar_duration)
 ARP_NOTES = {
-    0: ["C3", "D3", "E3", "G3", "C4", "D4", "E4", "G4"],       # Cadd9
-    2: ["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"],       # Am7
-    4: ["F3", "A3", "C4", "E4", "F4", "A4", "C5", "E5"],       # Fmaj7
-    6: ["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"],    # Fm
+    0:   (["C3", "D3", "E3", "G3", "C4", "D4", "E4", "G4"], 2),        # Cadd9
+    2:   (["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"], 2),        # Am7
+    4:   (["F3", "A3", "C4", "E4", "F4", "A4", "C5", "E5"], 2),        # Fmaj7
+    6:   (["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"], 1),     # Fm
+    7:   (["G3", "B3", "D4", "G4", "B4", "D5", "G5", "B5"], 0.5),      # G
+    7.5: (["A3", "C4", "E4", "A4", "C5", "E5", "A5", "C6"], 0.5),      # Am
 }
 
-# Original lead melody — pentatonic-ish, lives in C major, drops to minor for Fm
+# Original lead melody — pentatonic-ish, lives in C major
 LEAD_MELODY = [
     # Cadd9 section: gentle, floating
     ("E4", 0, 2), ("G4", 2, 1.5), ("C5", 3.5, 1),
@@ -148,10 +156,12 @@ LEAD_MELODY = [
     ("B4", 5, 1.5), ("A4", 6.5, 1), ("G4", 7.5, 2),
     # Fmaj7: rising hope
     ("A4", 10, 1.5), ("C5", 11.5, 1), ("E5", 12.5, 2),
-    # Fm: the turn — Ab is the minor color
-    ("C5", 15, 1), ("Ab4", 16, 2), ("F4", 18, 1.5), ("G4", 19.5, 1.5),
-    # Resolve hint
-    ("E4", 21, 1.5), ("C4", 22.5, 1),
+    # Fm (1 bar): gut-punch — Ab is the minor color
+    ("C5", 15, 0.8), ("Ab4", 15.8, 1.2),
+    # G (1/2 bar): lift — resolve upward
+    ("B4", 17, 0.8),
+    # Am (1/2 bar): bittersweet landing
+    ("A4", 17.8, 0.8),
 ]
 
 
@@ -159,9 +169,9 @@ def generate_pad():
     """Lush detuned saw pad. No vibrato — just width from detuning."""
     out = np.zeros(N_SAMPLES)
 
-    for notes, _, bar_start in CHORD_SEQ:
+    for notes, _, bar_start, bar_dur in CHORD_SEQ:
         start = int(bar_start * BAR * SAMPLE_RATE)
-        dur = int(2 * BAR * SAMPLE_RATE)
+        dur = int(bar_dur * BAR * SAMPLE_RATE)
         end = min(start + dur, N_SAMPLES)
         n = end - start
         t_local = np.linspace(0, n / SAMPLE_RATE, n, endpoint=False)
@@ -202,13 +212,14 @@ def generate_arp():
     out = np.zeros(N_SAMPLES)
     note_dur = BEAT / 6  # sextuplets — slightly different rhythm feel than 32nds
 
-    for bar_start, notes in ARP_NOTES.items():
+    for bar_start, (notes, bar_dur) in ARP_NOTES.items():
         section_start = bar_start * BAR
+        section_end = section_start + bar_dur * BAR
         t_pos = section_start
 
-        while t_pos < section_start + 2 * BAR and t_pos < DURATION:
+        while t_pos < section_end and t_pos < DURATION:
             for note_name in notes:
-                if t_pos >= section_start + 2 * BAR or t_pos >= DURATION:
+                if t_pos >= section_end or t_pos >= DURATION:
                     break
                 freq = nf(note_name)
                 start_idx = int(t_pos * SAMPLE_RATE)
@@ -263,19 +274,35 @@ def generate_bass():
     ]
 
     # Interval map: semitones above root for each note type per chord
-    # 7th: Cadd9→B(maj7=11st), Am7→G(min7=10st), Fmaj7→E(maj7=11st), Fm→Eb(min7=10st)
     CHORD_INTERVALS = {
-        0: {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Cadd9: maj7 = B
-        2: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am7: min7 = G
-        4: {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Fmaj7: maj7 = E
-        6: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Fm: min7 = Eb ← the money note
+        0:   {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Cadd9: maj7 = B
+        2:   {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am7: min7 = G
+        4:   {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Fmaj7: maj7 = E
+        6:   {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Fm: min7 = Eb
+        7:   {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # G: min7 = F (dominant 7)
+        7.5: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am: min7 = G
     }
 
-    for _, root, bar_start in CHORD_SEQ:
+    # Short pattern for half-bar chords
+    BASS_PATTERN_SHORT = [
+        (0,    "root", 1.0, 0.4),
+        (0.5,  "5th",  0.6, 0.3),
+        (1,    "7th",  0.7, 0.35),
+        (1.5,  "oct",  0.5, 0.25),
+    ]
+
+    for _, root, bar_start, bar_dur in CHORD_SEQ:
         root_freq = nf(root)
         intervals = CHORD_INTERVALS[bar_start]
 
-        for bar_offset, pattern in [(0, BASS_PATTERN_A), (1, BASS_PATTERN_B)]:
+        if bar_dur >= 2:
+            patterns = [(0, BASS_PATTERN_A), (1, BASS_PATTERN_B)]
+        elif bar_dur >= 1:
+            patterns = [(0, BASS_PATTERN_A)]
+        else:
+            patterns = [(0, BASS_PATTERN_SHORT)]
+
+        for bar_offset, pattern in patterns:
             bar_abs_start = (bar_start + bar_offset) * BAR
 
             for beat_off, note_type, vel, dur in pattern:
