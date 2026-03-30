@@ -135,14 +135,20 @@ CHORD_SEQ = [
     (["E3", "G3", "B3", "E4"], "E2", 7, 1),
 ]
 
-# Arp: ascending patterns through chord tones (2 octaves)
-# Key = bar_start, value = (notes, bar_duration)
-ARP_NOTES = {
-    0: (["C3", "D3", "E3", "G3", "C4", "D4", "E4", "G4"], 2),        # Cadd9
-    2: (["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"], 2),        # Am7
-    4: (["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"], 2),     # Fm
-    6: (["G3", "B3", "D4", "F4", "G4", "B4", "D5", "F5"], 1),        # G7
-    7: (["E3", "G3", "B3", "E4", "G4", "B4", "E5", "G5"], 1),        # Em
+# Arp: 8th-note patterns with rests. Higher register, sine tone.
+# Each entry: list of (note_or_None, velocity) per 8th note in the section.
+# None = rest. Pattern repeats to fill the bar duration.
+ARP_PATTERNS = {
+    # Cadd9: open, sparkly — root-5th-octave with gaps
+    0: ([("E5", 0.7), ("G5", 0.5), None, ("C6", 0.8), ("G5", 0.4), None, ("E5", 0.6), ("D5", 0.3)], 2),
+    # Am7: descending, wistful
+    2: ([("G5", 0.6), ("E5", 0.7), None, ("C5", 0.5), ("A4", 0.8), None, ("G5", 0.4), None], 2),
+    # Fm: darker, sparser
+    4: ([("Ab5", 0.8), None, ("F5", 0.5), None, ("C5", 0.7), None, ("Ab5", 0.4), ("F5", 0.3)], 2),
+    # G7: rising urgency
+    6: ([("B5", 0.7), ("D5", 0.5), ("F5", 0.6), ("G5", 0.8), None, ("B5", 0.5), None, ("D5", 0.4)], 1),
+    # Em: settle, sparse
+    7: ([("E5", 0.7), None, ("G5", 0.5), None, ("B5", 0.6), None, None, ("E5", 0.3)], 1),
 }
 
 # Lead melody — uses same bar-based timing as bass/pad.
@@ -218,40 +224,46 @@ def generate_pad():
 
 
 def generate_arp():
-    """Ascending arpeggios, lowpassed saw, bright and sparkling."""
+    """Musical arp — 8th-note sine patterns with rests, high register shimmer."""
     out = np.zeros(N_SAMPLES)
-    note_dur = BEAT / 6  # sextuplets — slightly different rhythm feel than 32nds
+    eighth = BEAT / 2  # 8th note duration
 
-    for bar_start, (notes, bar_dur) in ARP_NOTES.items():
+    for bar_start, (pattern, bar_dur) in ARP_PATTERNS.items():
         section_start = bar_start * BAR
         section_end = section_start + bar_dur * BAR
         t_pos = section_start
+        pat_idx = 0
 
         while t_pos < section_end and t_pos < DURATION:
-            for note_name in notes:
-                if t_pos >= section_end or t_pos >= DURATION:
-                    break
+            entry = pattern[pat_idx % len(pattern)]
+            pat_idx += 1
+
+            if entry is not None:
+                note_name, vel = entry
                 freq = nf(note_name)
                 start_idx = int(t_pos * SAMPLE_RATE)
-                n = int(note_dur * SAMPLE_RATE)
+                n = int(eighth * 0.8 * SAMPLE_RATE)  # slightly shorter than grid for space
                 end_idx = min(start_idx + n, N_SAMPLES)
                 actual_n = end_idx - start_idx
-                if actual_n <= 0:
-                    t_pos += note_dur
-                    continue
+                if actual_n > 0:
+                    t_local = np.linspace(0, actual_n / SAMPLE_RATE, actual_n, endpoint=False)
+                    # Pure sine — transparent, won't clash with pad saws
+                    note_sig = sine(freq, t_local, 0.14 * vel)
+                    note_sig += sine(freq * 2, t_local, 0.02 * vel)  # tiny shimmer
+                    note_sig *= env_ad(actual_n, attack_s=0.008, decay_s=eighth * 0.5)
+                    # Anti-click
+                    fadeout_n = min(int(0.005 * SAMPLE_RATE), actual_n)
+                    note_sig[-fadeout_n:] *= np.linspace(1, 0, fadeout_n) ** 2
+                    out[start_idx:end_idx] += note_sig
 
-                t_local = np.linspace(0, actual_n / SAMPLE_RATE, actual_n, endpoint=False)
-                note_sig = saw_bl(freq, t_local, 0.10, harmonics=6)
-                note_sig *= env_ad(actual_n, attack_s=0.003, decay_s=note_dur * 0.7)
-                out[start_idx:end_idx] += note_sig
-                t_pos += note_dur
+            t_pos += eighth
 
-    out = lowpass_1pole(out, 2800)
-    out = simple_reverb(out, decay=0.2, delays_ms=(19, 37, 59))
-    out = delay_effect(out, beat_frac=0.5, feedback=0.15, wet=0.10)
+    # Light reverb + delay for sparkle
+    out = simple_reverb(out, decay=0.25, delays_ms=(23, 43, 71))
+    out = delay_effect(out, beat_frac=0.75, feedback=0.25, wet=0.2)
     out = apply_kick_sidechain(out)
 
-    return out * 0.32
+    return out * 0.35
 
 
 def generate_bass():
@@ -459,7 +471,9 @@ def loop_crossfade(audio, crossfade_s=0.5):
 
 
 def save_ogg(name, audio):
-    audio = loop_crossfade(audio, crossfade_s=2.0)
+    # Drums are percussive — short crossfade. Others need longer for tails.
+    xf = 0.1 if name == "drums" else 2.0
+    audio = loop_crossfade(audio, crossfade_s=xf)
     audio = normalize(audio)
     audio_16 = (audio * 32767).astype(np.int16)
 
