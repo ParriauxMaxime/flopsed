@@ -362,11 +362,11 @@ def generate_drums():
                 t_local = np.linspace(0, 0.04, n, endpoint=False)
                 # Accent pattern: strong on beat, medium on &, soft on e/a
                 if sixteenth == 0:
-                    vel = 0.10
+                    vel = 0.18
                 elif sixteenth == 2:
-                    vel = 0.07
+                    vel = 0.12
                 else:
-                    vel = 0.04
+                    vel = 0.07
                 hh = rng.normal(0, vel, n) * np.exp(-t_local * 40)
                 hh = highpass_1pole(hh, 6000)
                 end = min(hh_start + n, N_SAMPLES)
