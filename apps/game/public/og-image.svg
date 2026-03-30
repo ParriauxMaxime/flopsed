@@ -21,5 +21,5 @@
   <text x="100" y="450" font-family="monospace" font-size="20" fill="#3fb950">// the singularity is near...</text>
   <!-- Title -->
   <text x="600" y="530" font-family="monospace" font-size="48" font-weight="bold" fill="#e6edf3" text-anchor="middle">FLOPSED</text>
-  <text x="600" y="555" font-family="monospace" font-size="16" fill="#8b949e" text-anchor="middle">The incremental game where you code your way to AGI</text>
+  <text x="600" y="555" font-family="monospace" font-size="16" fill="#8b949e" text-anchor="middle">Brace yourselves, AGI's coming</text>
 </svg>
