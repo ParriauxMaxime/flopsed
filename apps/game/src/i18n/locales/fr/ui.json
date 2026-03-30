@@ -76,7 +76,10 @@
 		"language": "Langue",
 		"language_name": "Langue d'affichage",
 		"language_desc": "Définit la langue d'affichage du jeu.",
-		"audio": "Audio", "music_volume": "Volume musique", "sfx_volume": "Volume effets", "mute_all": "Tout couper", "muted": "Coupé", "unmuted": "Activé", "mute": "Couper", "unmute": "Activer"
+		"audio": "Audio", "music_volume": "Volume musique", "sfx_volume": "Volume effets", "mute_all": "Tout couper", "muted": "Coupé", "unmuted": "Activé", "mute": "Couper", "unmute": "Activer",
+		"music_volume_desc": "Controle le volume de la musique de fond.",
+		"sfx_volume_desc": "Controle le volume des effets sonores (frappe, achats, evenements).",
+		"mute_all_desc": "Couper tout l'audio du jeu (musique et effets sonores)."
 	},
 	"editor": {
 		"terminal": "Terminal"

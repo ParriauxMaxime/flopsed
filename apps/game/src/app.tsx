@@ -264,7 +264,7 @@ function SettingsPage() {
 			<SettingItem
 				category={t("settings.audio")}
 				name={t("settings.music_volume")}
-				description="Controls the background music volume."
+				description={t("settings.music_volume_desc")}
 			>
 				<input
 					type="range"
@@ -286,7 +286,7 @@ function SettingsPage() {
 			<SettingItem
 				category={t("settings.audio")}
 				name={t("settings.sfx_volume")}
-				description="Controls the sound effects volume (typing, purchases, events)."
+				description={t("settings.sfx_volume_desc")}
 			>
 				<input
 					type="range"
@@ -308,7 +308,7 @@ function SettingsPage() {
 			<SettingItem
 				category={t("settings.audio")}
 				name={t("settings.mute_all")}
-				description="Mute all game audio (music and sound effects)."
+				description={t("settings.mute_all_desc")}
 			>
 				<label
 					css={{

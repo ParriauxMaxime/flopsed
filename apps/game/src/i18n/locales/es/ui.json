@@ -76,7 +76,10 @@
 		"language": "Idioma",
 		"language_name": "Idioma de visualización",
 		"language_desc": "Especifica el idioma de visualización del juego.",
-		"audio": "Audio", "music_volume": "Volumen música", "sfx_volume": "Volumen efectos", "mute_all": "Silenciar todo", "muted": "Silenciado", "unmuted": "Activado", "mute": "Silenciar", "unmute": "Activar"
+		"audio": "Audio", "music_volume": "Volumen música", "sfx_volume": "Volumen efectos", "mute_all": "Silenciar todo", "muted": "Silenciado", "unmuted": "Activado", "mute": "Silenciar", "unmute": "Activar",
+		"music_volume_desc": "Controla el volumen de la música de fondo.",
+		"sfx_volume_desc": "Controla el volumen de los efectos de sonido (escritura, compras, eventos).",
+		"mute_all_desc": "Silenciar todo el audio del juego (música y efectos de sonido)."
 	},
 	"editor": { "terminal": "Terminal" },
 	"tech_tree": {

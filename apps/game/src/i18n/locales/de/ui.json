@@ -76,7 +76,10 @@
 		"language": "Sprache",
 		"language_name": "Anzeigesprache",
 		"language_desc": "Legt die Anzeigesprache des Spiels fest.",
-		"audio": "Audio", "music_volume": "Musiklautstärke", "sfx_volume": "Effektlautstärke", "mute_all": "Alles stumm", "muted": "Stumm", "unmuted": "Aktiv", "mute": "Stumm", "unmute": "Ton an"
+		"audio": "Audio", "music_volume": "Musiklautstärke", "sfx_volume": "Effektlautstärke", "mute_all": "Alles stumm", "muted": "Stumm", "unmuted": "Aktiv", "mute": "Stumm", "unmute": "Ton an",
+		"music_volume_desc": "Steuert die Lautstärke der Hintergrundmusik.",
+		"sfx_volume_desc": "Steuert die Lautstärke der Soundeffekte (Tippen, Käufe, Events).",
+		"mute_all_desc": "Alle Spielgeräusche stumm schalten (Musik und Soundeffekte)."
 	},
 	"editor": {
 		"terminal": "Terminal"

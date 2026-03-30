@@ -76,7 +76,10 @@
 		"language": "Język",
 		"language_name": "Język interfejsu",
 		"language_desc": "Określa język wyświetlania gry.",
-		"audio": "Audio", "music_volume": "Głośność muzyki", "sfx_volume": "Głośność efektów", "mute_all": "Wycisz wszystko", "muted": "Wyciszono", "unmuted": "Włączono", "mute": "Wycisz", "unmute": "Włącz"
+		"audio": "Audio", "music_volume": "Głośność muzyki", "sfx_volume": "Głośność efektów", "mute_all": "Wycisz wszystko", "muted": "Wyciszono", "unmuted": "Włączono", "mute": "Wycisz", "unmute": "Włącz",
+		"music_volume_desc": "Steruje głośnością muzyki w tle.",
+		"sfx_volume_desc": "Steruje głośnością efektów dźwiękowych (pisanie, zakupy, wydarzenia).",
+		"mute_all_desc": "Wycisz cały dźwięk gry (muzykę i efekty dźwiękowe)."
 	},
 	"editor": { "terminal": "Terminal" },
 	"tech_tree": {

@@ -83,7 +83,10 @@
 		"muted": "Muted",
 		"unmuted": "Unmuted",
 		"mute": "Mute",
-		"unmute": "Unmute"
+		"unmute": "Unmute",
+		"music_volume_desc": "Controls the background music volume.",
+		"sfx_volume_desc": "Controls the sound effects volume (typing, purchases, events).",
+		"mute_all_desc": "Mute all game audio (music and sound effects)."
 	},
 	"editor": {
 		"terminal": "Terminal"
