@@ -1,1 +1,352 @@
-{}
+{
+	"better_keyboard": {
+		"name": "Better Keyboard",
+		"description": "+3 LoC per keystroke"
+	},
+	"auto_type": {
+		"name": "Auto-Type",
+		"description": "Code writes itself. Toggle in settings."
+	},
+	"auto_execute": {
+		"name": "Auto-Execute",
+		"description": "FLOPS run your code automatically."
+	},
+	"coffee": {
+		"name": "Coffee",
+		"description": "+2 LoC per keystroke"
+	},
+	"barista": {
+		"name": "Barista",
+		"description": "+3 LoC per keystroke"
+	},
+	"doppio": {
+		"name": "Doppio",
+		"description": "+5 LoC per keystroke"
+	},
+	"github_actions": {
+		"name": "GitHub Actions",
+		"description": "+3 FLOPS per level"
+	},
+	"cloudflare_workers": {
+		"name": "Cloudflare Workers",
+		"description": "+4 FLOPS per level"
+	},
+	"cpu_upgrade": {
+		"name": "CPU Upgrade",
+		"description": "+2 FLOPS (bottlenecked by RAM)",
+		"level_labels": [
+			"64KHz → 128KHz",
+			"128KHz → 256KHz",
+			"256KHz → 512KHz",
+			"512KHz → 1MHz",
+			"1MHz → 2MHz",
+			"2MHz → 4MHz",
+			"4MHz → 8MHz"
+		]
+	},
+	"ram_upgrade": {
+		"name": "RAM Upgrade",
+		"description": "+2 FLOPS (bottlenecked by CPU)",
+		"level_labels": [
+			"128MB → 256MB",
+			"256MB → 512MB",
+			"512MB → 1GB",
+			"1GB → 2GB",
+			"2GB → 4GB",
+			"4GB → 8GB"
+		]
+	},
+	"storage_upgrade": {
+		"name": "Storage",
+		"description": "+2 FLOPS (no bottleneck)",
+		"level_labels": [
+			"10GB → 20GB",
+			"20GB → 40GB",
+			"40GB → 80GB",
+			"80GB → 160GB",
+			"160GB → 320GB",
+			"320GB → 640GB",
+			"640GB → 1TB"
+		]
+	},
+	"tier_freelancing": {
+		"name": "Freelancing",
+		"description": "Unlock Tier 1 — clients appear, interns become available."
+	},
+	"intern_teaching": {
+		"name": "Teaching",
+		"description": "+20% intern LoC/s per level"
+	},
+	"intern_trap": {
+		"name": "Intern Trap",
+		"description": "-15% intern hiring cost per level"
+	},
+	"intern_quality": {
+		"name": "Code Review 101",
+		"description": "+10% cash per LoC per level"
+	},
+	"tier_startup": {
+		"name": "Startup",
+		"description": "Unlock Tier 2 — hire developers, scale up."
+	},
+	"ci_cd_pipeline": {
+		"name": "CI/CD Pipeline",
+		"description": "+30 FLOPS per level"
+	},
+	"cloud_server": {
+		"name": "Cloud Server",
+		"description": "+100 FLOPS per level"
+	},
+	"dev_mentoring": {
+		"name": "Mentoring",
+		"description": "+20% developer LoC/s per level"
+	},
+	"dev_recruiting": {
+		"name": "Recruiter",
+		"description": "-15% developer hiring cost per level"
+	},
+	"dev_quality": {
+		"name": "Code Standards",
+		"description": "+15% cash per LoC per level"
+	},
+	"computer": {
+		"name": "Computer",
+		"description": "Your first computer. +1 FLOP."
+	},
+	"unlock_sidebar": {
+		"name": "File Explorer",
+		"description": "Unlock the sidebar to browse upgrades and milestones."
+	},
+	"unlock_stats_panel": {
+		"name": "Stats Monitor",
+		"description": "Unlock the stats panel to track resources in real-time."
+	},
+	"unlock_analytics": {
+		"name": "Analytics",
+		"description": "See LoC production breakdown by source."
+	},
+	"interns": {
+		"name": "Interns",
+		"description": "Unlock intern hiring. They're cheap and eager."
+	},
+	"tier_tech_company": {
+		"name": "Tech Company",
+		"description": "Unlock Tier 3 — hire teams, appoint managers."
+	},
+	"teams_gate": {
+		"name": "Team Structure",
+		"description": "Enables hiring full dev teams."
+	},
+	"team_productivity": {
+		"name": "Agile Coaching",
+		"description": "+25% team LoC/s per level"
+	},
+	"team_cost": {
+		"name": "Bulk Hiring",
+		"description": "-15% team hiring cost per level"
+	},
+	"team_quality": {
+		"name": "Code Reviews",
+		"description": "+15% cash per LoC per level"
+	},
+	"management_gate": {
+		"name": "Management",
+		"description": "Unlock the management branch. Managers multiply team output."
+	},
+	"manager_efficiency": {
+		"name": "Leadership Training",
+		"description": "+30% manager effectiveness per level"
+	},
+	"manager_cost": {
+		"name": "HR Department",
+		"description": "-20% manager hiring cost per level"
+	},
+	"manager_scope": {
+		"name": "Delegation",
+		"description": "+20% all auto-LoC per level"
+	},
+	"cloud_infra": {
+		"name": "Cloud Infrastructure",
+		"description": "+1,000 FLOPS per level"
+	},
+	"cdn_network": {
+		"name": "CDN Network",
+		"description": "+2,000 storage FLOPS per level"
+	},
+	"tier_ai_lab": {
+		"name": "AI Lab",
+		"description": "Unlock Tier 4 — AI models, massive compute."
+	},
+	"tier_agi_race": {
+		"name": "AGI Race",
+		"description": "Unlock Tier 5 — the final push."
+	},
+	"llm_gate": {
+		"name": "LLM",
+		"description": "Unlock LLM instances."
+	},
+	"llm_training": {
+		"name": "Fine-Tuning",
+		"description": "+20% LLM output per level"
+	},
+	"llm_cost": {
+		"name": "Model Distillation",
+		"description": "-15% LLM cost per level"
+	},
+	"llm_quality": {
+		"name": "RLHF",
+		"description": "+15% cash per LoC per level"
+	},
+	"gpu_farm": {
+		"name": "GPU Farm",
+		"description": "+500K FLOPS per level"
+	},
+	"fiber_network": {
+		"name": "Fiber Network",
+		"description": "+100K storage FLOPS per level"
+	},
+	"agent_gate": {
+		"name": "Agent Framework",
+		"description": "Unlock autonomous AI agents."
+	},
+	"agent_autonomy": {
+		"name": "Self-Improvement",
+		"description": "x1.5 agent output per level"
+	},
+	"agent_cost": {
+		"name": "Scaling Laws",
+		"description": "-20% agent cost per level"
+	},
+	"agent_alignment": {
+		"name": "Alignment Research",
+		"description": "x1.5 cash per LoC per level"
+	},
+	"quantum_compute": {
+		"name": "Quantum Cluster",
+		"description": "+50M FLOPS per level"
+	},
+	"neural_fabric": {
+		"name": "Neural Fabric",
+		"description": "+10M storage FLOPS per level"
+	},
+	"intern_capacity": {
+		"name": "Intern Program",
+		"description": "+5 max interns per level"
+	},
+	"team_capacity": {
+		"name": "Office Expansion",
+		"description": "+5 max teams per level"
+	},
+	"manager_capacity": {
+		"name": "C-Suite",
+		"description": "+3 max managers per level"
+	},
+	"llm_capacity": {
+		"name": "GPU Allocation",
+		"description": "+5 max LLM instances per level"
+	},
+	"agent_capacity": {
+		"name": "Agent Swarm",
+		"description": "+3 max agents per level"
+	},
+	"outsourcing": {
+		"name": "Outsourcing",
+		"description": "Unlock freelance hiring on Malt."
+	},
+	"freelancer_training": {
+		"name": "Onboarding",
+		"description": "+20% freelancer LoC/s per level"
+	},
+	"freelancer_cost": {
+		"name": "Rate Negotiation",
+		"description": "-10% freelancer cost"
+	},
+	"freelancer_capacity": {
+		"name": "Talent Pool",
+		"description": "+5 max freelancers"
+	},
+	"openai_gpt3": {
+		"name": "GPT-3",
+		"description": "Unlock GPT-3 for deployment."
+	},
+	"openai_gpt35": {
+		"name": "GPT-3.5",
+		"description": "Unlock GPT-3.5 for deployment."
+	},
+	"openai_gpt4": {
+		"name": "GPT-4",
+		"description": "Unlock GPT-4 for deployment."
+	},
+	"openai_gpt41": {
+		"name": "GPT-4.1",
+		"description": "Unlock GPT-4.1 for deployment."
+	},
+	"openai_gpt5": {
+		"name": "GPT-5",
+		"description": "Unlock GPT-5 for deployment."
+	},
+	"anthropic_haiku": {
+		"name": "Claude Haiku",
+		"description": "Unlock Claude Haiku for deployment."
+	},
+	"anthropic_sonnet": {
+		"name": "Claude Sonnet",
+		"description": "Unlock Claude Sonnet for deployment."
+	},
+	"anthropic_opus": {
+		"name": "Claude Opus",
+		"description": "Unlock Claude Opus for deployment."
+	},
+	"github_copilot": {
+		"name": "GitHub Copilot",
+		"description": "Unlock Copilot for deployment."
+	},
+	"google_gemini_pro": {
+		"name": "Gemini Pro",
+		"description": "Unlock Gemini Pro for deployment."
+	},
+	"google_gemini_ultra": {
+		"name": "Gemini Ultra",
+		"description": "Unlock Gemini Ultra for deployment."
+	},
+	"meta_llama_70b": {
+		"name": "Llama 70B",
+		"description": "Unlock Llama 70B for deployment."
+	},
+	"meta_llama_405b": {
+		"name": "Llama 405B",
+		"description": "Unlock Llama 405B for deployment."
+	},
+	"mistral_unlock": {
+		"name": "Mistral Large",
+		"description": "Unlock Mistral Large for deployment."
+	},
+	"xai_grok2": {
+		"name": "Grok 2",
+		"description": "Unlock Grok 2 for deployment."
+	},
+	"xai_grok3": {
+		"name": "Grok 3",
+		"description": "Unlock Grok 3 for deployment."
+	},
+	"openai_gpt6": {
+		"name": "GPT-6",
+		"description": "Unlock GPT-6 for deployment."
+	},
+	"openai_gpt7": {
+		"name": "GPT-7",
+		"description": "Unlock GPT-7 for deployment."
+	},
+	"anthropic_saga": {
+		"name": "Claude Saga",
+		"description": "Unlock Claude Saga for deployment."
+	},
+	"anthropic_universe": {
+		"name": "Claude Universe",
+		"description": "Unlock Claude Universe for deployment."
+	},
+	"google_gemini_supreme": {
+		"name": "Gemini Supreme",
+		"description": "Unlock Gemini Supreme for deployment."
+	}
+}

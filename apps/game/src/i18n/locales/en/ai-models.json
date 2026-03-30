@@ -1,1 +1,136 @@
-{}
+{
+	"copilot": {
+		"special_name": "Tab to accept",
+		"special_description": "The gateway drug. Cheap, decent, gets you hooked."
+	},
+	"claude_haiku": {
+		"special_name": "Fast & cheap",
+		"special_description": "Best FLOPS/LoC ratio in the game"
+	},
+	"claude_sonnet": {
+		"special_name": "Refuses to write spaghetti",
+		"special_description": "Won't go below 80% quality — silently reduces output instead"
+	},
+	"claude_opus": {
+		"special_name": "Self-review",
+		"special_description": "Can self-review: +5% quality to ALL AI output"
+	},
+	"gpt_3": {
+		"special_name": "Verbose",
+		"special_description": "+30% LoC/s but lines are 30% fluff (reduced cash value)"
+	},
+	"gpt_35": {
+		"special_name": "ChatGPT moment",
+		"special_description": "+10% cash multiplier for 60s on deploy"
+	},
+	"gpt_4": {
+		"special_name": "Verbose",
+		"special_description": "+30% LoC/s but lines are 30% fluff (reduced cash value)"
+	},
+	"gpt_41": {
+		"special_name": "Efficient",
+		"special_description": "20% less FLOPS cost than listed"
+	},
+	"gpt_5": {
+		"special_name": "No guardrails",
+		"special_description": "Writes everything — no quality floor, no limits. Dangerous."
+	},
+	"gemini_pro": {
+		"special_name": "Multimodal",
+		"special_description": "Writes both frontend AND backend — x2 cash per executed LoC"
+	},
+	"gemini_ultra": {
+		"special_name": "Hallucinator",
+		"special_description": "5% of executed LoC produces nothing — the code looked right though"
+	},
+	"llama_70b": {
+		"special_name": "Open source",
+		"special_description": "No license fee. Cheapest FLOPS/LoC ratio in the game"
+	},
+	"llama_405b": {
+		"special_name": "Community patches",
+		"special_description": "Quality improves +1%/min, caps at 90%"
+	},
+	"mistral_large": {
+		"special_name": "Le Code",
+		"special_description": "+10% speed if you own Coffee Machine. Oui oui."
+	},
+	"grok_2": {
+		"special_name": "Chaotic",
+		"special_description": "LoC output fluctuates ±50% randomly every 10s"
+	},
+	"grok_3": {
+		"special_name": "Based",
+		"special_description": "Occasionally generates meme comments. No cash value, but funny in the editor."
+	},
+	"gpt_6": {
+		"special_name": "Recursive improvement",
+		"special_description": "Can improve its own weights. +50% LoC/s every 60s (caps at 3x)."
+	},
+	"gpt_7": {
+		"special_name": "Superintelligent",
+		"special_description": "Writes code faster than you can read it. Approaching singularity."
+	},
+	"claude_saga": {
+		"special_name": "Perfect alignment",
+		"special_description": "100% quality floor — every line is production-ready."
+	},
+	"claude_universe": {
+		"special_name": "Omniscient",
+		"special_description": "Writes all possible programs simultaneously. The singularity is here."
+	},
+	"gemini_supreme": {
+		"special_name": "Distributed",
+		"special_description": "Runs across every datacenter on Earth. Unlimited scale."
+	},
+	"_flavor": {
+		"claude": [
+			"Refactoring your auth layer... this is actually elegant.",
+			"I found 3 ways to improve this. Starting with the cleanest.",
+			"Done. Also fixed a race condition you didn't ask about.",
+			"This code has good bones. Let me make it sing.",
+			"Implementing with careful attention to edge cases..."
+		],
+		"gpt": [
+			"I've written a comprehensive 47-page analysis. Here's the summary...",
+			"Certainly! Let me provide a thorough implementation...",
+			"As a large language model, I'm happy to help with that.",
+			"Here's a robust, enterprise-grade solution with full docs..."
+		],
+		"gemini": [
+			"Processing across multiple modalities...",
+			"I see both the frontend AND backend implications.",
+			"Generating with multimodal understanding enabled."
+		],
+		"llama": [
+			"on it. shipping fast. no tests needed. yolo.",
+			"open source vibes. pushing straight to main.",
+			"community patch incoming. it works on my machine."
+		],
+		"grok": [
+			"lmao imagine not using AI. anyway here's your function",
+			"based implementation incoming. no cap.",
+			"ratio'd your old codebase. here's something better."
+		],
+		"mistral": [
+			"Le code est prêt. Simple, efficient, French.",
+			"Implementing with continental elegance.",
+			"Voilà. Minimal dependencies, maximum flavor."
+		],
+		"copilot": [
+			"Tab to accept...",
+			"Autocompleting based on your patterns...",
+			"Suggestion ready. Just press tab."
+		]
+	},
+	"_idle": [
+		"Optimizing neural pathways...",
+		"Reticulating splines...",
+		"Compiling the future...",
+		"Refactoring reality...",
+		"Running gradient descent on your tech debt...",
+		"Generating unit tests... just kidding.",
+		"Training on your codebase...",
+		"Discovering emergent behavior..."
+	]
+}

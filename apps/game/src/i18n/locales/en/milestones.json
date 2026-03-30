@@ -1,1 +1,50 @@
-{}
+{
+	"hello_world": {
+		"name": "Hello World",
+		"description": "Your first 10 lines. Everyone starts somewhere."
+	},
+	"script_kiddie": {
+		"name": "Script Kiddie",
+		"description": "100 LoC. You can copy-paste with the best of them."
+	},
+	"first_dollar": {
+		"name": "First Dollar",
+		"description": "Your code made money. Don't spend it all in one place."
+	},
+	"side_project": {
+		"name": "Side Project",
+		"description": "500 LoC. \"I'll finish it this weekend.\""
+	},
+	"real_dev": {
+		"name": "Real Developer",
+		"description": "1,000 LoC. You now mass-produce bugs professionally."
+	},
+	"yc_application": {
+		"name": "YC Application",
+		"description": "5,000 LoC. \"We're disrupting code.\""
+	},
+	"open_source_fame": {
+		"name": "Open Source Fame",
+		"description": "25K LoC. 3 GitHub stars (one is your alt)."
+	},
+	"big_tech": {
+		"name": "Big Tech",
+		"description": "100K LoC. You have a badge and imposter syndrome."
+	},
+	"ml_paper": {
+		"name": "ML Paper Published",
+		"description": "500K LoC. \"We achieve state-of-the-art results.\""
+	},
+	"llm_training": {
+		"name": "Training Run Started",
+		"description": "2M LoC. The GPUs are warm."
+	},
+	"emergent_behavior": {
+		"name": "Emergent Behavior",
+		"description": "10M LoC. It said something you didn't expect."
+	},
+	"agi": {
+		"name": "AGI Achieved",
+		"description": "200M LoC. \"Hello, world.\" — it said back."
+	}
+}
