@@ -160,7 +160,6 @@ const TRIM_TO = 80;
 export function CliPrompt() {
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
 	const autoPokeEnabled = useGameStore((s) => s.autoPokeEnabled);
-	const addLoc = useGameStore((s) => s.addLoc);
 	const theme = useIdeTheme();
 	const { t: tUi } = useTranslation();
 
@@ -250,10 +249,6 @@ export function CliPrompt() {
 				text: `${diffLinePrefix(line.type)}${line.text}`,
 				diffType: line.type,
 			});
-			// Add LoC for "add" lines
-			if (line.type === "add") {
-				addLoc(1);
-			}
 			setStream((prev) =>
 				prev.phase === "streaming"
 					? { ...prev, lineIdx: prev.lineIdx + 1 }
@@ -262,7 +257,7 @@ export function CliPrompt() {
 		}, delay);
 
 		return () => clearTimeout(timer);
-	}, [stream, addEntry, addLoc]);
+	}, [stream, addEntry]);
 
 	// ── After streaming done, go back to idle (allow auto-poke) ──
 	useEffect(() => {
