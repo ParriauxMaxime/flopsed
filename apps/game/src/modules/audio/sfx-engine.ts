@@ -86,7 +86,7 @@ export function playTyping(volume: number, muted: boolean) {
 	thock.stop(t + 0.05);
 }
 
-// ── Execute sound: subtle digital tick ──
+// ── Execute sound: server processing burst ──
 
 let lastExecTime = 0;
 
@@ -100,18 +100,50 @@ export function playExecute(volume: number, muted: boolean) {
 
 	const ac = getCtx();
 	const t = ac.currentTime;
+	const vol = gain * 0.09;
 
-	const osc = ac.createOscillator();
-	osc.type = "sine";
-	osc.frequency.value = 1200 + Math.random() * 400;
+	// Layer 1: electrical hum (60Hz + harmonic at 120Hz)
+	const hum = ac.createOscillator();
+	hum.type = "sine";
+	hum.frequency.value = 60;
 
-	const g = ac.createGain();
-	g.gain.setValueAtTime(gain * 0.08, t);
-	g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+	const hum2 = ac.createOscillator();
+	hum2.type = "sine";
+	hum2.frequency.value = 120;
 
-	osc.connect(g).connect(ac.destination);
-	osc.start(t);
-	osc.stop(t + 0.04);
+	const humGain = ac.createGain();
+	humGain.gain.setValueAtTime(vol * 0.7, t);
+	humGain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+
+	const hum2Gain = ac.createGain();
+	hum2Gain.gain.setValueAtTime(vol * 0.3, t);
+	hum2Gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+	hum.connect(humGain).connect(ac.destination);
+	hum2.connect(hum2Gain).connect(ac.destination);
+	hum.start(t);
+	hum.stop(t + 0.07);
+	hum2.start(t);
+	hum2.stop(t + 0.06);
+
+	// Layer 2: high-frequency processing whir (filtered noise)
+	const noiseSrc = ac.createBufferSource();
+	noiseSrc.buffer = getNoiseBuffer(ac);
+	noiseSrc.loopStart = Math.random() * 0.8;
+
+	const whirBp = ac.createBiquadFilter();
+	whirBp.type = "bandpass";
+	whirBp.frequency.value = 2500 + Math.random() * 1500; // 2.5-4kHz
+	whirBp.Q.value = 3;
+
+	const whirGain = ac.createGain();
+	whirGain.gain.setValueAtTime(0.001, t);
+	whirGain.gain.linearRampToValueAtTime(vol * 0.5, t + 0.008);
+	whirGain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+	noiseSrc.connect(whirBp).connect(whirGain).connect(ac.destination);
+	noiseSrc.start(t, noiseSrc.loopStart);
+	noiseSrc.stop(t + 0.06);
 }
 
 // ── Purchase sound: two-tone chip confirm ──
