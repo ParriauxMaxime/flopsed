@@ -8,13 +8,14 @@
 		"build": "rspack build"
 	},
 	"dependencies": {
-		"@flopsed/domain": "*",
-		"@flopsed/engine": "*",
-		"@flopsed/design-system": "*",
 		"@dagrejs/dagre": "^2.0.4",
 		"@emotion/react": "^11.14.0",
+		"@flopsed/design-system": "*",
+		"@flopsed/domain": "*",
+		"@flopsed/engine": "*",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
+		"tone": "^15.1.22",
 		"ts-pattern": "^5.9.0",
 		"zustand": "^5.0.11"
 	},
