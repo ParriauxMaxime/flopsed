@@ -129,8 +129,8 @@ CHORD_SEQ = [
     (["A2", "C3", "E3", "G3", "A3"], "A1", 2, 2),
     # Fm: F Ab C (gut-punch — borrowed iv, dramatic jump) — 2 bars
     (["F3", "Ab3", "C4", "F4"], "F2", 4, 2),
-    # G: G B D (the V — lift/release) — 1 bar
-    (["G3", "B3", "D4", "G4"], "G2", 6, 1),
+    # G7: G B D F (dominant 7th — F lingers from Fm, urgency to resolve) — 1 bar
+    (["G3", "B3", "D4", "F4"], "G2", 6, 1),
     # Em: E G B (iii — dark, mysterious, leads back to Cadd9) — 1 bar
     (["E3", "G3", "B3", "E4"], "E2", 7, 1),
 ]
@@ -141,7 +141,7 @@ ARP_NOTES = {
     0: (["C3", "D3", "E3", "G3", "C4", "D4", "E4", "G4"], 2),        # Cadd9
     2: (["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"], 2),        # Am7
     4: (["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"], 2),     # Fm
-    6: (["G3", "B3", "D4", "G4", "B4", "D5", "G5", "B5"], 1),        # G
+    6: (["G3", "B3", "D4", "F4", "G4", "B4", "D5", "F5"], 1),        # G7
     7: (["E3", "G3", "B3", "E4", "G4", "B4", "E5", "G5"], 1),        # Em
 }
 
