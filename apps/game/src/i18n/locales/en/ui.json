@@ -67,26 +67,14 @@
 	},
 	"settings": {
 		"title": "Settings",
-		"appearance": "Appearance",
-		"color_theme": "Color Theme",
-		"color_theme_desc": "Specifies the color theme used in the IDE.",
-		"window": "Window",
-		"zoom_level": "Zoom Level",
-		"zoom_level_desc": "Adjust the zoom level of the IDE. Restart may be needed.",
 		"language": "Language",
-		"language_name": "Display Language",
-		"language_desc": "Specifies the display language for the game.",
-		"audio": "Audio",
-		"music_volume": "Music Volume",
-		"sfx_volume": "SFX Volume",
-		"mute_all": "Mute All",
-		"muted": "Muted",
-		"unmuted": "Unmuted",
+		"appearance": "Appearance",
+		"text_size": "Text Size",
+		"sound": "Sound",
+		"music": "Music",
+		"sfx": "SFX",
 		"mute": "Mute",
-		"unmute": "Unmute",
-		"music_volume_desc": "Controls the background music volume.",
-		"sfx_volume_desc": "Controls the sound effects volume (typing, purchases, events).",
-		"mute_all_desc": "Mute all game audio (music and sound effects)."
+		"unmute": "Unmute"
 	},
 	"editor": {
 		"terminal": "Terminal"

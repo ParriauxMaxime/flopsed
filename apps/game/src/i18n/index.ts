@@ -20,14 +20,14 @@ import zhLocale from "./locales/zh";
 import ruLocale from "./locales/ru";
 
 export const supportedLanguages = [
-	{ code: "en", name: "English" },
-	{ code: "fr", name: "Français" },
-	{ code: "it", name: "Italiano" },
-	{ code: "de", name: "Deutsch" },
-	{ code: "es", name: "Español" },
-	{ code: "pl", name: "Polski" },
-	{ code: "zh", name: "中文" },
-	{ code: "ru", name: "Русский" },
+	{ code: "en", name: "English", flag: "🇬🇧" },
+	{ code: "fr", name: "Français", flag: "🇫🇷" },
+	{ code: "it", name: "Italiano", flag: "🇮🇹" },
+	{ code: "de", name: "Deutsch", flag: "🇩🇪" },
+	{ code: "es", name: "Español", flag: "🇪🇸" },
+	{ code: "pl", name: "Polski", flag: "🇵🇱" },
+	{ code: "zh", name: "中文", flag: "🇨🇳" },
+	{ code: "ru", name: "Русский", flag: "🇷🇺" },
 ] as const;
 
 const enBundles = {

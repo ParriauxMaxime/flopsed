@@ -87,48 +87,34 @@ const middleTabs: TabDef[] = [
 	{ page: PageEnum.god_mode, filename: "godmode.ts" },
 ];
 
-// ── Settings page (inline) ──
-
-// ── Settings page (VS Code style) ──
+// ── Settings page ──
 
 const themeEntries = Object.entries(EDITOR_THEMES) as Array<
 	[EditorThemeEnum, EditorTheme]
 >;
 
-function SettingItem({
-	category,
-	name,
-	description,
-	children,
-}: {
-	category: string;
-	name: string;
-	description: string;
-	children: React.ReactNode;
-}) {
+const PREVIEW_LINES = [
+	{ tokens: [{ text: "const ", role: "keyword" as const }, { text: "app", role: "variable" as const }, { text: " = ", role: "operator" as const }, { text: "create", role: "function" as const }, { text: "()", role: "operator" as const }] },
+	{ tokens: [{ text: "let ", role: "keyword" as const }, { text: "port", role: "variable" as const }, { text: " = ", role: "operator" as const }, { text: "3000", role: "number" as const }] },
+	{ tokens: [{ text: "app", role: "variable" as const }, { text: ".", role: "operator" as const }, { text: "get", role: "function" as const }, { text: "(", role: "operator" as const }, { text: '"/api"', role: "string" as const }, { text: ")", role: "operator" as const }] },
+	{ tokens: [{ text: "// ready", role: "comment" as const }] },
+];
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
 	const theme = useIdeTheme();
 	return (
 		<div
 			css={{
-				padding: "14px 20px",
-				borderLeft: `2px solid transparent`,
-				"&:hover": { borderLeftColor: theme.accent },
+				padding: "18px 20px 8px",
+				fontSize: 11,
+				fontWeight: 600,
+				textTransform: "uppercase",
+				letterSpacing: 1.2,
+				color: theme.textMuted,
+				borderBottom: `1px solid ${theme.border}`,
+				marginBottom: 12,
 			}}
 		>
-			<div css={{ fontSize: 14, marginBottom: 4 }}>
-				<span style={{ color: theme.textMuted }}>{category}: </span>
-				<span style={{ fontWeight: 600 }}>{name}</span>
-			</div>
-			<div
-				css={{
-					fontSize: 13,
-					color: theme.textMuted,
-					marginBottom: 10,
-					lineHeight: 1.5,
-				}}
-			>
-				{description}
-			</div>
 			{children}
 		</div>
 	);
@@ -142,10 +128,8 @@ function SettingsPage() {
 	const setUiZoom = useUiStore((s) => s.setUiZoom);
 	const musicVolume = useAudioStore((s) => s.musicVolume);
 	const sfxVolume = useAudioStore((s) => s.sfxVolume);
-	const muted = useAudioStore((s) => s.muted);
 	const setMusicVolume = useAudioStore((s) => s.setMusicVolume);
 	const setSfxVolume = useAudioStore((s) => s.setSfxVolume);
-	const toggleMute = useAudioStore((s) => s.toggleMute);
 	const theme = useIdeTheme();
 
 	return (
@@ -173,79 +157,131 @@ function SettingsPage() {
 				{t("settings.title")}
 			</div>
 
-			<SettingItem
-				category={t("settings.appearance")}
-				name={t("settings.color_theme")}
-				description={t("settings.color_theme_desc")}
-			>
-				<select
-					css={{
-						fontFamily: "inherit",
-						fontSize: 13,
-						padding: "4px 8px",
-						borderRadius: 3,
-						border: `1px solid ${theme.border}`,
-						background: theme.hoverBg,
-						color: theme.foreground,
-						width: 260,
-						cursor: "pointer",
-						outline: "none",
-						"&:focus": { borderColor: theme.accent },
-					}}
-					value={editorTheme}
-					onChange={(e) => setEditorTheme(e.target.value as EditorThemeEnum)}
-				>
-					{themeEntries.map(([id, t]) => (
-						<option key={id} value={id}>
-							{t.name}
-						</option>
-					))}
-				</select>
-				<div
-					css={{
-						display: "flex",
-						gap: 4,
-						marginTop: 8,
-					}}
-				>
-					{[
-						theme.keyword,
-						theme.function,
-						theme.string,
-						theme.number,
-						theme.type,
-						theme.variable,
-						theme.operator,
-						theme.comment,
-					].map((color) => (
-						<div
-							key={color}
+			{/* ── Language ── */}
+			<SectionHeading>{t("settings.language")}</SectionHeading>
+			<div css={{ padding: "4px 20px 16px", display: "flex", gap: 6 }}>
+				{supportedLanguages.map((lang) => {
+					const active = i18n.language === lang.code || i18n.language.startsWith(`${lang.code}-`);
+					return (
+						<button
+							key={lang.code}
+							type="button"
+							title={lang.name}
+							onClick={() => i18n.changeLanguage(lang.code)}
 							css={{
-								width: 16,
-								height: 16,
-								borderRadius: 2,
-								background: color,
+								fontSize: 22,
+								padding: "6px 8px",
+								borderRadius: 6,
+								border: active
+									? `2px solid ${theme.accent}`
+									: `2px solid transparent`,
+								background: active ? theme.activeBg : "transparent",
+								cursor: "pointer",
+								transition: "all 0.15s",
+								lineHeight: 1,
+								"&:hover": {
+									background: theme.hoverBg,
+									borderColor: active ? theme.accent : theme.border,
+								},
 							}}
-						/>
-					))}
-				</div>
-			</SettingItem>
+						>
+							{lang.flag}
+						</button>
+					);
+				})}
+			</div>
 
-			<SettingItem
-				category={t("settings.window")}
-				name={t("settings.zoom_level")}
-				description={t("settings.zoom_level_desc")}
+			{/* ── Appearance ── */}
+			<SectionHeading>{t("settings.appearance")}</SectionHeading>
+			<div
+				css={{
+					padding: "4px 20px 8px",
+					display: "grid",
+					gridTemplateColumns: "1fr 1fr",
+					gap: 10,
+				}}
 			>
+				{themeEntries.map(([id, th]) => {
+					const active = editorTheme === id;
+					return (
+						<button
+							key={id}
+							type="button"
+							onClick={() => setEditorTheme(id)}
+							css={{
+								padding: 0,
+								borderRadius: 6,
+								border: active
+									? `2px solid ${theme.accent}`
+									: `2px solid ${theme.border}`,
+								background: th.background,
+								cursor: "pointer",
+								overflow: "hidden",
+								textAlign: "left",
+								transition: "all 0.15s",
+								boxShadow: active
+									? `0 0 8px ${theme.accent}40`
+									: "none",
+								"&:hover": {
+									borderColor: active
+										? theme.accent
+										: theme.textMuted,
+								},
+							}}
+						>
+							<div
+								css={{
+									padding: "10px 12px 8px",
+									fontFamily:
+										"'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+									fontSize: 11,
+									lineHeight: 1.6,
+								}}
+							>
+								{PREVIEW_LINES.map((line, i) => (
+									<div key={i}>
+										{line.tokens.map((tok, j) => (
+											<span
+												key={j}
+												style={{
+													color: th[tok.role] ?? th.foreground,
+												}}
+											>
+												{tok.text}
+											</span>
+										))}
+									</div>
+								))}
+							</div>
+							<div
+								css={{
+									padding: "6px 12px",
+									fontSize: 11,
+									color: th.foreground,
+									borderTop: `1px solid ${th.border ?? th.background}`,
+									background: th.sidebarBg ?? th.background,
+									opacity: 0.85,
+								}}
+							>
+								{th.name}
+							</div>
+						</button>
+					);
+				})}
+			</div>
+			<div css={{ padding: "8px 20px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+				<span css={{ fontSize: 12, color: theme.textMuted }}>
+					{t("settings.text_size")}
+				</span>
 				<select
 					css={{
 						fontFamily: "inherit",
-						fontSize: 13,
-						padding: "4px 8px",
+						fontSize: 12,
+						padding: "3px 6px",
 						borderRadius: 3,
 						border: `1px solid ${theme.border}`,
 						background: theme.hoverBg,
 						color: theme.foreground,
-						width: 120,
 						cursor: "pointer",
 						outline: "none",
 						"&:focus": { borderColor: theme.accent },
@@ -259,104 +295,54 @@ function SettingsPage() {
 						</option>
 					))}
 				</select>
-			</SettingItem>
+			</div>
 
-			<SettingItem
-				category={t("settings.audio")}
-				name={t("settings.music_volume")}
-				description={t("settings.music_volume_desc")}
-			>
-				<input
-					type="range"
-					min={0}
-					max={100}
-					value={musicVolume}
-					onChange={(e) => setMusicVolume(Number(e.target.value))}
-					css={{
-						width: 260,
-						accentColor: theme.accent,
-						cursor: "pointer",
-					}}
-				/>
-				<span css={{ marginLeft: 8, fontSize: 12, color: theme.textMuted }}>
-					{musicVolume}%
-				</span>
-			</SettingItem>
-
-			<SettingItem
-				category={t("settings.audio")}
-				name={t("settings.sfx_volume")}
-				description={t("settings.sfx_volume_desc")}
-			>
-				<input
-					type="range"
-					min={0}
-					max={100}
-					value={sfxVolume}
-					onChange={(e) => setSfxVolume(Number(e.target.value))}
-					css={{
-						width: 260,
-						accentColor: theme.accent,
-						cursor: "pointer",
-					}}
-				/>
-				<span css={{ marginLeft: 8, fontSize: 12, color: theme.textMuted }}>
-					{sfxVolume}%
-				</span>
-			</SettingItem>
-
-			<SettingItem
-				category={t("settings.audio")}
-				name={t("settings.mute_all")}
-				description={t("settings.mute_all_desc")}
-			>
-				<label
-					css={{
-						display: "flex",
-						alignItems: "center",
-						gap: 8,
-						cursor: "pointer",
-					}}
-				>
+			{/* ── Sound ── */}
+			<SectionHeading>{t("settings.sound")}</SectionHeading>
+			<div css={{ padding: "4px 20px 16px", display: "flex", flexDirection: "column", gap: 12 }}>
+				<div css={{ display: "flex", alignItems: "center", gap: 10 }}>
+					<span css={{ fontSize: 12, color: theme.textMuted, width: 40 }}>
+						{t("settings.music")}
+					</span>
 					<input
-						type="checkbox"
-						checked={muted}
-						onChange={toggleMute}
-						css={{ accentColor: theme.accent, cursor: "pointer" }}
+						type="range"
+						min={0}
+						max={100}
+						value={musicVolume}
+						onChange={(e) => setMusicVolume(Number(e.target.value))}
+						css={{
+							flex: 1,
+							maxWidth: 200,
+							accentColor: theme.accent,
+							cursor: "pointer",
+						}}
 					/>
-					<span css={{ fontSize: 13 }}>{muted ? t("settings.muted") : t("settings.unmuted")}</span>
-				</label>
-			</SettingItem>
-
-			<SettingItem
-				category={t("settings.language")}
-				name={t("settings.language_name")}
-				description={t("settings.language_desc")}
-			>
-				<select
-					css={{
-						fontFamily: "inherit",
-						fontSize: 13,
-						padding: "4px 8px",
-						borderRadius: 3,
-						border: `1px solid ${theme.border}`,
-						background: theme.hoverBg,
-						color: theme.foreground,
-						width: 260,
-						cursor: "pointer",
-						outline: "none",
-						"&:focus": { borderColor: theme.accent },
-					}}
-					value={i18n.language}
-					onChange={(e) => i18n.changeLanguage(e.target.value)}
-				>
-					{supportedLanguages.map((lang) => (
-						<option key={lang.code} value={lang.code}>
-							{lang.name}
-						</option>
-					))}
-				</select>
-			</SettingItem>
+					<span css={{ fontSize: 11, color: theme.textMuted, width: 32, textAlign: "right" }}>
+						{musicVolume}%
+					</span>
+				</div>
+				<div css={{ display: "flex", alignItems: "center", gap: 10 }}>
+					<span css={{ fontSize: 12, color: theme.textMuted, width: 40 }}>
+						{t("settings.sfx")}
+					</span>
+					<input
+						type="range"
+						min={0}
+						max={100}
+						value={sfxVolume}
+						onChange={(e) => setSfxVolume(Number(e.target.value))}
+						css={{
+							flex: 1,
+							maxWidth: 200,
+							accentColor: theme.accent,
+							cursor: "pointer",
+						}}
+					/>
+					<span css={{ fontSize: 11, color: theme.textMuted, width: 32, textAlign: "right" }}>
+						{sfxVolume}%
+					</span>
+				</div>
+			</div>
 		</div>
 	);
 }

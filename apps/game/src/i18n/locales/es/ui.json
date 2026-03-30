@@ -67,21 +67,18 @@
 	},
 	"settings": {
 		"title": "Configuración",
-		"appearance": "Apariencia",
-		"color_theme": "Tema de color",
-		"color_theme_desc": "Especifica el tema de color usado en el IDE.",
-		"window": "Ventana",
-		"zoom_level": "Nivel de zoom",
-		"zoom_level_desc": "Ajusta el nivel de zoom del IDE. Puede requerirse reinicio.",
 		"language": "Idioma",
-		"language_name": "Idioma de visualización",
-		"language_desc": "Especifica el idioma de visualización del juego.",
-		"audio": "Audio", "music_volume": "Volumen música", "sfx_volume": "Volumen efectos", "mute_all": "Silenciar todo", "muted": "Silenciado", "unmuted": "Activado", "mute": "Silenciar", "unmute": "Activar",
-		"music_volume_desc": "Controla el volumen de la música de fondo.",
-		"sfx_volume_desc": "Controla el volumen de los efectos de sonido (escritura, compras, eventos).",
-		"mute_all_desc": "Silenciar todo el audio del juego (música y efectos de sonido)."
+		"appearance": "Apariencia",
+		"text_size": "Tamaño de texto",
+		"sound": "Sonido",
+		"music": "Música",
+		"sfx": "Efectos",
+		"mute": "Silenciar",
+		"unmute": "Activar"
 	},
-	"editor": { "terminal": "Terminal" },
+	"editor": {
+		"terminal": "Terminal"
+	},
 	"tech_tree": {
 		"level": "Nivel {{owned}}/{{max}}",
 		"cost_cash": "Coste: ${{cost}}",
@@ -99,8 +96,13 @@
 		"cost": "${{cost}}",
 		"count": "{{owned}}/{{max}}"
 	},
-	"milestones": { "unknown": "???", "reached_prefix": "> " },
-	"events": { "bonus": "+${{amount}} de bonus" },
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} de bonus"
+	},
 	"god_mode": {
 		"title": "Modo Dios",
 		"resources": "Recursos",

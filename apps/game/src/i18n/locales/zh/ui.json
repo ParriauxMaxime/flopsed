@@ -67,21 +67,18 @@
 	},
 	"settings": {
 		"title": "设置",
-		"appearance": "外观",
-		"color_theme": "颜色主题",
-		"color_theme_desc": "指定 IDE 使用的颜色主题。",
-		"window": "窗口",
-		"zoom_level": "缩放级别",
-		"zoom_level_desc": "调整 IDE 的缩放级别。可能需要重启。",
 		"language": "语言",
-		"language_name": "显示语言",
-		"language_desc": "指定游戏的显示语言。",
-		"audio": "音频", "music_volume": "音乐音量", "sfx_volume": "音效音量", "mute_all": "全部静音", "muted": "已静音", "unmuted": "已开启", "mute": "静音", "unmute": "取消静音",
-		"music_volume_desc": "控制背景音乐音量。",
-		"sfx_volume_desc": "控制音效音量（打字、购买、事件）。",
-		"mute_all_desc": "静音所有游戏音频（音乐和音效）。"
+		"appearance": "外观",
+		"text_size": "文字大小",
+		"sound": "声音",
+		"music": "音乐",
+		"sfx": "音效",
+		"mute": "静音",
+		"unmute": "取消静音"
 	},
-	"editor": { "terminal": "终端" },
+	"editor": {
+		"terminal": "终端"
+	},
 	"tech_tree": {
 		"level": "等级 {{owned}}/{{max}}",
 		"cost_cash": "费用：${{cost}}",
@@ -99,8 +96,13 @@
 		"cost": "${{cost}}",
 		"count": "{{owned}}/{{max}}"
 	},
-	"milestones": { "unknown": "???", "reached_prefix": "> " },
-	"events": { "bonus": "+${{amount}} 奖励" },
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} 奖励"
+	},
 	"god_mode": {
 		"title": "上帝模式",
 		"resources": "资源",

@@ -67,19 +67,14 @@
 	},
 	"settings": {
 		"title": "Impostazioni",
-		"appearance": "Aspetto",
-		"color_theme": "Tema colori",
-		"color_theme_desc": "Specifica il tema colori usato nell'IDE.",
-		"window": "Finestra",
-		"zoom_level": "Livello di zoom",
-		"zoom_level_desc": "Regola il livello di zoom dell'IDE. Potrebbe essere necessario riavviare.",
 		"language": "Lingua",
-		"language_name": "Lingua di visualizzazione",
-		"language_desc": "Specifica la lingua di visualizzazione del gioco.",
-		"audio": "Audio", "music_volume": "Volume musica", "sfx_volume": "Volume effetti", "mute_all": "Silenzia tutto", "muted": "Silenziato", "unmuted": "Attivato", "mute": "Silenzia", "unmute": "Riattiva",
-		"music_volume_desc": "Controlla il volume della musica di sottofondo.",
-		"sfx_volume_desc": "Controlla il volume degli effetti sonori (digitazione, acquisti, eventi).",
-		"mute_all_desc": "Disattiva tutto l'audio del gioco (musica ed effetti sonori)."
+		"appearance": "Aspetto",
+		"text_size": "Dimensione testo",
+		"sound": "Audio",
+		"music": "Musica",
+		"sfx": "Effetti",
+		"mute": "Silenzia",
+		"unmute": "Riattiva"
 	},
 	"editor": {
 		"terminal": "Terminale"

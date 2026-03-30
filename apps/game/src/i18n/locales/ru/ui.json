@@ -67,21 +67,18 @@
 	},
 	"settings": {
 		"title": "Настройки",
-		"appearance": "Внешний вид",
-		"color_theme": "Цветовая тема",
-		"color_theme_desc": "Задаёт цветовую тему IDE.",
-		"window": "Окно",
-		"zoom_level": "Масштаб",
-		"zoom_level_desc": "Настройте масштаб IDE. Может потребоваться перезапуск.",
 		"language": "Язык",
-		"language_name": "Язык интерфейса",
-		"language_desc": "Задаёт язык интерфейса игры.",
-		"audio": "Аудио", "music_volume": "Громкость музыки", "sfx_volume": "Громкость эффектов", "mute_all": "Отключить звук", "muted": "Отключено", "unmuted": "Включено", "mute": "Выключить", "unmute": "Включить",
-		"music_volume_desc": "Управляет громкостью фоновой музыки.",
-		"sfx_volume_desc": "Управляет громкостью звуковых эффектов (набор текста, покупки, события).",
-		"mute_all_desc": "Отключить весь звук в игре (музыку и звуковые эффекты)."
+		"appearance": "Оформление",
+		"text_size": "Размер текста",
+		"sound": "Звук",
+		"music": "Музыка",
+		"sfx": "Эффекты",
+		"mute": "Выключить",
+		"unmute": "Включить"
 	},
-	"editor": { "terminal": "Терминал" },
+	"editor": {
+		"terminal": "Терминал"
+	},
 	"tech_tree": {
 		"level": "Уровень {{owned}}/{{max}}",
 		"cost_cash": "Стоимость: ${{cost}}",
@@ -99,8 +96,13 @@
 		"cost": "${{cost}}",
 		"count": "{{owned}}/{{max}}"
 	},
-	"milestones": { "unknown": "???", "reached_prefix": "> " },
-	"events": { "bonus": "+${{amount}} бонус" },
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} бонус"
+	},
 	"god_mode": {
 		"title": "Режим бога",
 		"resources": "Ресурсы",
