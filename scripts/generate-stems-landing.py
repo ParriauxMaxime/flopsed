@@ -236,41 +236,51 @@ def generate_bass():
     """Groovy synth bass — filtered saw, octave jumps, syncopated 8th-note pattern."""
     out = np.zeros(N_SAMPLES)
 
-    # Bass patterns per chord: list of (beat_offset, octave_shift, velocity, duration_beats)
-    # Octave_shift: 0 = root octave, 1 = octave up
-    # This gives a bouncy, syncopated feel with ghost notes
+    # Bass patterns: (beat_offset, note_type, velocity, duration_beats)
+    # note_type: "root", "oct" (octave up), "7th", "5th"
     BASS_PATTERN_A = [
-        # beat, oct, vel, dur — syncopated groove with octave jumps
-        (0,    0, 1.0, 0.4),    # 1 — root, strong
-        (0.5,  1, 0.5, 0.3),    # &  — octave up, ghost
-        (1,    0, 0.8, 0.4),    # 2 — root
-        (1.75, 1, 0.4, 0.2),    # e of 2 — push (syncopation)
-        (2,    0, 1.0, 0.4),    # 3 — root, strong
-        (2.5,  1, 0.6, 0.3),    # &  — octave up
-        (3,    0, 0.7, 0.35),   # 4
-        (3.5,  1, 0.5, 0.25),   # &  — octave up
-        (3.75, 0, 0.3, 0.2),    # a of 4 — chromatic approach
+        # beat, note, vel, dur — syncopated groove with octave jumps
+        (0,    "root", 1.0, 0.4),    # 1 — root, strong
+        (0.5,  "oct",  0.5, 0.3),    # &  — octave up, ghost
+        (1,    "root", 0.8, 0.4),    # 2 — root
+        (1.75, "oct",  0.4, 0.2),    # e of 2 — push
+        (2,    "root", 1.0, 0.4),    # 3 — root, strong
+        (2.5,  "5th",  0.6, 0.3),    # &  — fifth for movement
+        (3,    "root", 0.7, 0.35),   # 4
+        (3.5,  "7th",  0.6, 0.3),    # &  — the 7th! tension before next chord
+        (3.75, "root", 0.3, 0.2),    # a of 4 — resolve hint
     ]
     BASS_PATTERN_B = [
-        # Variation for second bar of each chord
-        (0,    0, 1.0, 0.5),    # 1 — longer root
-        (0.75, 1, 0.4, 0.2),    # push
-        (1,    0, 0.7, 0.35),   # 2
-        (1.5,  1, 0.6, 0.3),    # &
-        (2,    0, 0.9, 0.4),    # 3
-        (2.5,  0, 0.5, 0.3),    # & — stay low
-        (3,    1, 0.8, 0.4),    # 4 — jump up
-        (3.5,  0, 0.6, 0.3),    # & — back down
+        # Variation for second bar — lean into the 7th more
+        (0,    "root", 1.0, 0.5),    # 1 — longer root
+        (0.75, "oct",  0.4, 0.2),    # push
+        (1,    "root", 0.7, 0.35),   # 2
+        (1.5,  "7th",  0.5, 0.3),    # & — 7th color
+        (2,    "root", 0.9, 0.4),    # 3
+        (2.5,  "5th",  0.5, 0.3),    # & — fifth
+        (3,    "7th",  0.8, 0.4),    # 4 — 7th strong, yearning before change
+        (3.5,  "oct",  0.6, 0.3),    # & — octave up
     ]
+
+    # Interval map: semitones above root for each note type per chord
+    # 7th: Cadd9→B(maj7=11st), Am7→G(min7=10st), Fmaj7→E(maj7=11st), Fm→Eb(min7=10st)
+    CHORD_INTERVALS = {
+        0: {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Cadd9: maj7 = B
+        2: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am7: min7 = G
+        4: {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Fmaj7: maj7 = E
+        6: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Fm: min7 = Eb ← the money note
+    }
 
     for _, root, bar_start in CHORD_SEQ:
         root_freq = nf(root)
+        intervals = CHORD_INTERVALS[bar_start]
 
         for bar_offset, pattern in [(0, BASS_PATTERN_A), (1, BASS_PATTERN_B)]:
             bar_abs_start = (bar_start + bar_offset) * BAR
 
-            for beat_off, oct, vel, dur in pattern:
-                freq = root_freq * (2 ** oct)
+            for beat_off, note_type, vel, dur in pattern:
+                semitones = intervals[note_type]
+                freq = root_freq * (2 ** (semitones / 12))
                 note_start = int((bar_abs_start + beat_off * BEAT) * SAMPLE_RATE)
                 n = int(dur * BEAT * SAMPLE_RATE)
                 end = min(note_start + n, N_SAMPLES)
