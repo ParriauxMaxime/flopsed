@@ -1,14 +1,50 @@
 {
-	"hello_world": { "name": "Hello World", "description": "Twoje pierwsze 10 linii. Każdy gdzieś zaczynał." },
-	"script_kiddie": { "name": "Script Kiddie", "description": "100 LoC. Kopiujesz i wklejasz jak mistrz." },
-	"first_dollar": { "name": "Pierwszy dolar", "description": "Twój kod zarobił pieniądze. Nie wydawaj wszystkiego naraz." },
-	"side_project": { "name": "Projekt poboczny", "description": "500 LoC. \"Skończę to w ten weekend.\"" },
-	"real_dev": { "name": "Prawdziwy developer", "description": "1 000 LoC. Teraz produkujesz bugi zawodowo." },
-	"yc_application": { "name": "Aplikacja do YC", "description": "5 000 LoC. \"Disrupcjonujemy kod.\"" },
-	"open_source_fame": { "name": "Sława open source", "description": "25K LoC. 3 gwiazdki na GitHubie (jedna to twoje konto poboczne)." },
-	"big_tech": { "name": "Wielka tech", "description": "100K LoC. Masz identyfikator i syndrom oszusta." },
-	"ml_paper": { "name": "Opublikowany artykuł ML", "description": "500K LoC. \"Osiągamy wyniki state-of-the-art.\"" },
-	"llm_training": { "name": "Trening rozpoczęty", "description": "2M LoC. GPU są gorące." },
-	"emergent_behavior": { "name": "Zachowanie emergentne", "description": "10M LoC. Powiedział coś, czego się nie spodziewałeś." },
-	"agi": { "name": "AGI osiągnięte", "description": "200M LoC. „Hello, world." — odpowiedział." }
+	"hello_world": {
+		"name": "Hello World",
+		"description": "Twoje pierwsze 10 linii. Każdy gdzieś zaczynał."
+	},
+	"script_kiddie": {
+		"name": "Script Kiddie",
+		"description": "100 LoC. Kopiujesz i wklejasz jak mistrz."
+	},
+	"first_dollar": {
+		"name": "Pierwszy dolar",
+		"description": "Twój kod zarobił pieniądze. Nie wydawaj wszystkiego naraz."
+	},
+	"side_project": {
+		"name": "Projekt poboczny",
+		"description": "500 LoC. \"Skończę to w ten weekend.\""
+	},
+	"real_dev": {
+		"name": "Prawdziwy developer",
+		"description": "1 000 LoC. Teraz produkujesz bugi zawodowo."
+	},
+	"yc_application": {
+		"name": "Aplikacja do YC",
+		"description": "5 000 LoC. \"Disrupcjonujemy kod.\""
+	},
+	"open_source_fame": {
+		"name": "Sława open source",
+		"description": "25K LoC. 3 gwiazdki na GitHubie (jedna to twoje konto poboczne)."
+	},
+	"big_tech": {
+		"name": "Wielka tech",
+		"description": "100K LoC. Masz identyfikator i syndrom oszusta."
+	},
+	"ml_paper": {
+		"name": "Opublikowany artykuł ML",
+		"description": "500K LoC. \"Osiągamy wyniki state-of-the-art.\""
+	},
+	"llm_training": {
+		"name": "Trening rozpoczęty",
+		"description": "2M LoC. GPU są gorące."
+	},
+	"emergent_behavior": {
+		"name": "Zachowanie emergentne",
+		"description": "10M LoC. Powiedział coś, czego się nie spodziewałeś."
+	},
+	"agi": {
+		"name": "AGI osiągnięte",
+		"description": "200M LoC. Hello, world. — odpowiedział."
+	}
 }

@@ -1,9 +1,9 @@
-import { css, keyframes } from "@emotion/react";
+import { css } from "@emotion/react";
 import { useGameStore, useUiStore } from "@modules/game";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n";
 import { useIdeTheme } from "../hooks/use-ide-theme";
+import i18n from "../i18n";
 
 // ── Tip ID → translation key mapping ──
 
@@ -45,7 +45,9 @@ export function useTutorialTriggers() {
 		const getTipLines = (id: string): string[] | undefined => {
 			const translationKey = tipTranslationKeys[id];
 			if (!translationKey) return undefined;
-			const result = tTutorial(translationKey, { returnObjects: true }) as string[];
+			const result = tTutorial(translationKey, {
+				returnObjects: true,
+			}) as string[];
 			return result;
 		};
 

@@ -1,18 +1,139 @@
 {
-	"resource_bar": { "queued": "W kolejce", "cash": "Gotówka", "flops": "FLOPS", "loc_rate": "{{rate}} loc/s", "cash_rate": "+${{rate}}/s", "auto_execute": "⚡ Auto-Wykonanie — +${{rate}}/s", "execute": "⚡ Wykonaj {{loc}} w kolejce → ${{earn}}" },
-	"stats_panel": { "title": "Statystyki", "hide": "Ukryj statystyki", "resources": "Zasoby", "cash": "Gotówka", "loc": "LoC", "flops": "FLOPS", "token_sources": "Źródła tokenów", "loc_sources": "Źródła LoC", "you": "Ty", "tokens_per_sec": "tokenów/s", "per_sec": "/s", "managers": "Menedżerowie", "manager_bonus": "+{{bonus}}% wydajności zespołu", "auto_exec": "⚡ Auto — +${{rate}}/s", "execute": "⚡ Wykonaj {{loc}} → ${{earn}}" },
-	"status_bar": { "tokens": "🪙 {{count}} tokenów", "loc": "◇ {{count}} LoC", "flops": "⚡ {{count}} FLOPS", "cash_per_loc": "${{rate}}/loc", "python": "Python", "utf8": "UTF-8" },
-	"hardware": { "title": "Sprzęt", "cpu": "CPU", "ram": "RAM", "disk": "Dysk", "cpu_bottleneck": "⚠ Wąskie gardło CPU", "ram_bottleneck": "⚠ Wąskie gardło RAM", "formula": "— min({{cpu}}, {{ram}}) + {{storage}}", "flops_bottleneck": "⚠ Wąskie gardło FLOPS", "flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s" },
-	"flops_slider": { "exec_flops": "Wyk. {{count}} FLOPS", "ai_flops": "AI {{count}} FLOPS", "exec_rate": "{{count}} loc/s wyk.", "ai_rate": "{{count}} loc/s gen." },
-	"sidebar": { "title": "Eksplorator", "hide": "Ukryj pasek boczny", "show": "Pokaż pasek boczny", "open_editors": "Otwarte edytory", "upgrades": "Ulepszenia", "milestones": "Kamienie milowe", "milestone_item": "✓ {{name}} — {{threshold}}" },
-	"tabs": { "split_editor": "Podziel edytor", "close_split": "Zamknij podział", "show_stats": "Pokaż statystyki", "unlock_tech_tree": "Odblokuj w drzewie technologii" },
-	"settings": { "title": "Ustawienia", "appearance": "Wygląd", "color_theme": "Motyw kolorystyczny", "color_theme_desc": "Określa motyw kolorystyczny używany w IDE.", "window": "Okno", "zoom_level": "Poziom powiększenia", "zoom_level_desc": "Dostosuj poziom powiększenia IDE. Może wymagać restartu.", "language": "Język", "language_name": "Język interfejsu", "language_desc": "Określa język wyświetlania gry." },
+	"resource_bar": {
+		"queued": "W kolejce",
+		"cash": "Gotówka",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Auto-Wykonanie — +${{rate}}/s",
+		"execute": "⚡ Wykonaj {{loc}} w kolejce → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Statystyki",
+		"hide": "Ukryj statystyki",
+		"resources": "Zasoby",
+		"cash": "Gotówka",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Źródła tokenów",
+		"loc_sources": "Źródła LoC",
+		"you": "Ty",
+		"tokens_per_sec": "tokenów/s",
+		"per_sec": "/s",
+		"managers": "Menedżerowie",
+		"manager_bonus": "+{{bonus}}% wydajności zespołu",
+		"auto_exec": "⚡ Auto — +${{rate}}/s",
+		"execute": "⚡ Wykonaj {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} tokenów",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Sprzęt",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Dysk",
+		"cpu_bottleneck": "⚠ Wąskie gardło CPU",
+		"ram_bottleneck": "⚠ Wąskie gardło RAM",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ Wąskie gardło FLOPS",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Wyk. {{count}} FLOPS",
+		"ai_flops": "AI {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s wyk.",
+		"ai_rate": "{{count}} loc/s gen."
+	},
+	"sidebar": {
+		"title": "Eksplorator",
+		"hide": "Ukryj pasek boczny",
+		"show": "Pokaż pasek boczny",
+		"open_editors": "Otwarte edytory",
+		"upgrades": "Ulepszenia",
+		"milestones": "Kamienie milowe",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Podziel edytor",
+		"close_split": "Zamknij podział",
+		"show_stats": "Pokaż statystyki",
+		"unlock_tech_tree": "Odblokuj w drzewie technologii"
+	},
+	"settings": {
+		"title": "Ustawienia",
+		"appearance": "Wygląd",
+		"color_theme": "Motyw kolorystyczny",
+		"color_theme_desc": "Określa motyw kolorystyczny używany w IDE.",
+		"window": "Okno",
+		"zoom_level": "Poziom powiększenia",
+		"zoom_level_desc": "Dostosuj poziom powiększenia IDE. Może wymagać restartu.",
+		"language": "Język",
+		"language_name": "Język interfejsu",
+		"language_desc": "Określa język wyświetlania gry."
+	},
 	"editor": { "terminal": "Terminal" },
-	"tech_tree": { "level": "Poziom {{owned}}/{{max}}", "cost_cash": "Koszt: ${{cost}}", "cost_loc": "Koszt: {{cost}} LoC", "requires": "Wymaga: {{nodes}}", "researched": "Zbadany", "maxed": "Maksymalny", "click_to_research": "Kliknij, aby zbadać", "not_enough_cash": "Za mało gotówki", "not_enough_loc": "Za mało LoC", "locked": "Zablokowany" },
-	"upgrades": { "maxed": "MAKS.", "cost": "${{cost}}", "count": "{{owned}}/{{max}}" },
+	"tech_tree": {
+		"level": "Poziom {{owned}}/{{max}}",
+		"cost_cash": "Koszt: ${{cost}}",
+		"cost_loc": "Koszt: {{cost}} LoC",
+		"requires": "Wymaga: {{nodes}}",
+		"researched": "Zbadany",
+		"maxed": "Maksymalny",
+		"click_to_research": "Kliknij, aby zbadać",
+		"not_enough_cash": "Za mało gotówki",
+		"not_enough_loc": "Za mało LoC",
+		"locked": "Zablokowany"
+	},
+	"upgrades": {
+		"maxed": "MAKS.",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
 	"milestones": { "unknown": "???", "reached_prefix": "> " },
 	"events": { "bonus": "+${{amount}} premii" },
-	"god_mode": { "title": "Tryb Boga", "resources": "Zasoby", "cash": "Gotówka", "total_cash": "Łączna gotówka", "loc": "LoC", "total_loc": "Łączny LoC", "flops": "FLOPS", "tokens": "Tokeny", "tier": "Poziom", "current": "Aktualny:", "ai_models": "Modele AI", "grant": "Przyznaj", "tools": "Narzędzia", "data_editor": "Edytor danych", "danger_zone": "Strefa zagrożenia", "reset_game": "Resetuj grę", "trigger_singularity": "Wywołaj osobliwość", "unlock_all_tech": "Odblokuj całą technologię", "max_all_upgrades": "Maksymalizuj wszystkie ulepszenia" },
-	"mobile": { "code": "Kod", "tree": "Drzewo", "shop": "Sklep", "upgrades": "Ulepszenia", "milestones": "Kamienie", "settings": "Ustawienia", "theme": "Motyw", "auto_type": "Auto-pisanie", "on": "WŁ.", "off": "WYŁ.", "reset_game": "Resetuj grę" },
-	"cli": { "header": "$ ai-lab --interactive", "loaded": "✓ Modele załadowane. Wpisz prompt lub obserwuj ich pracę.", "placeholder": "Wpisz prompt..." }
+	"god_mode": {
+		"title": "Tryb Boga",
+		"resources": "Zasoby",
+		"cash": "Gotówka",
+		"total_cash": "Łączna gotówka",
+		"loc": "LoC",
+		"total_loc": "Łączny LoC",
+		"flops": "FLOPS",
+		"tokens": "Tokeny",
+		"tier": "Poziom",
+		"current": "Aktualny:",
+		"ai_models": "Modele AI",
+		"grant": "Przyznaj",
+		"tools": "Narzędzia",
+		"data_editor": "Edytor danych",
+		"danger_zone": "Strefa zagrożenia",
+		"reset_game": "Resetuj grę",
+		"trigger_singularity": "Wywołaj osobliwość",
+		"unlock_all_tech": "Odblokuj całą technologię",
+		"max_all_upgrades": "Maksymalizuj wszystkie ulepszenia"
+	},
+	"mobile": {
+		"code": "Kod",
+		"tree": "Drzewo",
+		"shop": "Sklep",
+		"upgrades": "Ulepszenia",
+		"milestones": "Kamienie",
+		"settings": "Ustawienia",
+		"theme": "Motyw",
+		"auto_type": "Auto-pisanie",
+		"on": "WŁ.",
+		"off": "WYŁ.",
+		"reset_game": "Resetuj grę"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Modele załadowane. Wpisz prompt lub obserwuj ich pracę.",
+		"placeholder": "Wpisz prompt..."
+	}
 }

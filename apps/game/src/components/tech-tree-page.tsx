@@ -82,7 +82,7 @@ interface EdgeDef {
 function buildEdgeDefs(
 	flowNodes: Node[],
 	techNodes: TechNode[],
-	ownedTechNodes: Record<string, number>,
+	_ownedTechNodes: Record<string, number>,
 ): EdgeDef[] {
 	const posMap = new Map(flowNodes.map((n) => [n.id, n.position]));
 	const edges: EdgeDef[] = [];
@@ -110,7 +110,7 @@ function buildEdgeDefs(
 function findBlockingNode(
 	sx: number,
 	sy: number,
-	tx: number,
+	_tx: number,
 	ty: number,
 	nodePositions: Map<string, { x: number; y: number }>,
 	excludeIds: Set<string>,
@@ -136,7 +136,7 @@ function findBlockingNode(
 function buildBundledPaths(
 	edges: EdgeDef[],
 	nodePositions: Map<string, { x: number; y: number }>,
-	color: string,
+	_color: string,
 ): Array<{ d: string; strokeWidth: number; opacity: number }> {
 	const bySource = new Map<string, EdgeDef[]>();
 	for (const e of edges) {
@@ -354,7 +354,12 @@ function NodePopover({ node, x, y }: PopoverProps) {
 					{t("tech_tree.requires", {
 						nodes: node.requires
 							.filter((id) => (ownedTechNodes[id] ?? 0) === 0)
-							.map((id) => tTech(`${id}.name`, { defaultValue: allTechNodes.find((n) => n.id === id)?.name ?? id }))
+							.map((id) =>
+								tTech(`${id}.name`, {
+									defaultValue:
+										allTechNodes.find((n) => n.id === id)?.name ?? id,
+								}),
+							)
 							.join(", "),
 					})}
 				</div>
@@ -371,7 +376,9 @@ function NodePopover({ node, x, y }: PopoverProps) {
 			)}
 			{!maxed && prereqsMet && !canAfford && (
 				<div css={{ fontSize: 11, color: "#e94560", marginTop: 4 }}>
-					{useLoc ? t("tech_tree.not_enough_loc") : t("tech_tree.not_enough_cash")}
+					{useLoc
+						? t("tech_tree.not_enough_loc")
+						: t("tech_tree.not_enough_cash")}
 				</div>
 			)}
 			{!maxed && !prereqsMet && (

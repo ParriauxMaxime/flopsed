@@ -96,13 +96,6 @@ const effectCss = css({
 	flex: 1,
 });
 
-const priceBadgeCss = css({
-	fontSize: 10,
-	padding: "1px 5px",
-	borderRadius: 3,
-	flexShrink: 0,
-});
-
 const milestoneCss = css({
 	padding: "2px 12px 2px 20px",
 	fontSize: 12,
@@ -460,7 +453,10 @@ export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 								css={milestoneCss}
 								style={{ color: theme.success }}
 							>
-								{t("sidebar.milestone_item", { name: t(`${m.id}.name`, { ns: "milestones" }), threshold: formatNumber(m.threshold) })}
+								{t("sidebar.milestone_item", {
+									name: t(`${m.id}.name`, { ns: "milestones" }),
+									threshold: formatNumber(m.threshold),
+								})}
 							</div>
 						))}
 			</div>

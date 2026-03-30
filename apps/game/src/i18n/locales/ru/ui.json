@@ -1,18 +1,139 @@
 {
-	"resource_bar": { "queued": "В очереди", "cash": "Деньги", "flops": "FLOPS", "loc_rate": "{{rate}} loc/s", "cash_rate": "+${{rate}}/s", "auto_execute": "⚡ Авто-выполнение — +${{rate}}/s", "execute": "⚡ Выполнить {{loc}} в очереди → ${{earn}}" },
-	"stats_panel": { "title": "Статистика", "hide": "Скрыть статистику", "resources": "Ресурсы", "cash": "Деньги", "loc": "LoC", "flops": "FLOPS", "token_sources": "Источники токенов", "loc_sources": "Источники LoC", "you": "Вы", "tokens_per_sec": "токенов/с", "per_sec": "/с", "managers": "Менеджеры", "manager_bonus": "+{{bonus}}% выработки команды", "auto_exec": "⚡ Авто — +${{rate}}/s", "execute": "⚡ Выполнить {{loc}} → ${{earn}}" },
-	"status_bar": { "tokens": "🪙 {{count}} токенов", "loc": "◇ {{count}} LoC", "flops": "⚡ {{count}} FLOPS", "cash_per_loc": "${{rate}}/loc", "python": "Python", "utf8": "UTF-8" },
-	"hardware": { "title": "Железо", "cpu": "CPU", "ram": "RAM", "disk": "Диск", "cpu_bottleneck": "⚠ Узкое место: CPU", "ram_bottleneck": "⚠ Узкое место: RAM", "formula": "— min({{cpu}}, {{ram}}) + {{storage}}", "flops_bottleneck": "⚠ Узкое место: FLOPS", "flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s" },
-	"flops_slider": { "exec_flops": "Выполн. {{count}} FLOPS", "ai_flops": "AI {{count}} FLOPS", "exec_rate": "{{count}} loc/s выполн.", "ai_rate": "{{count}} loc/s генер." },
-	"sidebar": { "title": "Проводник", "hide": "Скрыть боковую панель", "show": "Показать боковую панель", "open_editors": "Открытые редакторы", "upgrades": "Улучшения", "milestones": "Достижения", "milestone_item": "✓ {{name}} — {{threshold}}" },
-	"tabs": { "split_editor": "Разделить редактор", "close_split": "Закрыть разделение", "show_stats": "Показать статистику", "unlock_tech_tree": "Разблокировать в дереве технологий" },
-	"settings": { "title": "Настройки", "appearance": "Внешний вид", "color_theme": "Цветовая тема", "color_theme_desc": "Задаёт цветовую тему IDE.", "window": "Окно", "zoom_level": "Масштаб", "zoom_level_desc": "Настройте масштаб IDE. Может потребоваться перезапуск.", "language": "Язык", "language_name": "Язык интерфейса", "language_desc": "Задаёт язык интерфейса игры." },
+	"resource_bar": {
+		"queued": "В очереди",
+		"cash": "Деньги",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Авто-выполнение — +${{rate}}/s",
+		"execute": "⚡ Выполнить {{loc}} в очереди → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Статистика",
+		"hide": "Скрыть статистику",
+		"resources": "Ресурсы",
+		"cash": "Деньги",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Источники токенов",
+		"loc_sources": "Источники LoC",
+		"you": "Вы",
+		"tokens_per_sec": "токенов/с",
+		"per_sec": "/с",
+		"managers": "Менеджеры",
+		"manager_bonus": "+{{bonus}}% выработки команды",
+		"auto_exec": "⚡ Авто — +${{rate}}/s",
+		"execute": "⚡ Выполнить {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} токенов",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Железо",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Диск",
+		"cpu_bottleneck": "⚠ Узкое место: CPU",
+		"ram_bottleneck": "⚠ Узкое место: RAM",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ Узкое место: FLOPS",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Выполн. {{count}} FLOPS",
+		"ai_flops": "AI {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s выполн.",
+		"ai_rate": "{{count}} loc/s генер."
+	},
+	"sidebar": {
+		"title": "Проводник",
+		"hide": "Скрыть боковую панель",
+		"show": "Показать боковую панель",
+		"open_editors": "Открытые редакторы",
+		"upgrades": "Улучшения",
+		"milestones": "Достижения",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Разделить редактор",
+		"close_split": "Закрыть разделение",
+		"show_stats": "Показать статистику",
+		"unlock_tech_tree": "Разблокировать в дереве технологий"
+	},
+	"settings": {
+		"title": "Настройки",
+		"appearance": "Внешний вид",
+		"color_theme": "Цветовая тема",
+		"color_theme_desc": "Задаёт цветовую тему IDE.",
+		"window": "Окно",
+		"zoom_level": "Масштаб",
+		"zoom_level_desc": "Настройте масштаб IDE. Может потребоваться перезапуск.",
+		"language": "Язык",
+		"language_name": "Язык интерфейса",
+		"language_desc": "Задаёт язык интерфейса игры."
+	},
 	"editor": { "terminal": "Терминал" },
-	"tech_tree": { "level": "Уровень {{owned}}/{{max}}", "cost_cash": "Стоимость: ${{cost}}", "cost_loc": "Стоимость: {{cost}} LoC", "requires": "Требует: {{nodes}}", "researched": "Исследовано", "maxed": "Макс.", "click_to_research": "Нажмите для исследования", "not_enough_cash": "Недостаточно денег", "not_enough_loc": "Недостаточно LoC", "locked": "Заблокировано" },
-	"upgrades": { "maxed": "МАКСИМУМ", "cost": "${{cost}}", "count": "{{owned}}/{{max}}" },
+	"tech_tree": {
+		"level": "Уровень {{owned}}/{{max}}",
+		"cost_cash": "Стоимость: ${{cost}}",
+		"cost_loc": "Стоимость: {{cost}} LoC",
+		"requires": "Требует: {{nodes}}",
+		"researched": "Исследовано",
+		"maxed": "Макс.",
+		"click_to_research": "Нажмите для исследования",
+		"not_enough_cash": "Недостаточно денег",
+		"not_enough_loc": "Недостаточно LoC",
+		"locked": "Заблокировано"
+	},
+	"upgrades": {
+		"maxed": "МАКСИМУМ",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
 	"milestones": { "unknown": "???", "reached_prefix": "> " },
 	"events": { "bonus": "+${{amount}} бонус" },
-	"god_mode": { "title": "Режим бога", "resources": "Ресурсы", "cash": "Деньги", "total_cash": "Всего денег", "loc": "LoC", "total_loc": "Всего LoC", "flops": "FLOPS", "tokens": "Токены", "tier": "Уровень", "current": "Текущий:", "ai_models": "AI-модели", "grant": "Выдать", "tools": "Инструменты", "data_editor": "Редактор данных", "danger_zone": "Опасная зона", "reset_game": "Сбросить игру", "trigger_singularity": "Запустить сингулярность", "unlock_all_tech": "Разблокировать все технологии", "max_all_upgrades": "Максимизировать все улучшения" },
-	"mobile": { "code": "Код", "tree": "Дерево", "shop": "Магазин", "upgrades": "Улучшения", "milestones": "Достижения", "settings": "Настройки", "theme": "Тема", "auto_type": "Авто-ввод", "on": "ВКЛ", "off": "ВЫКЛ", "reset_game": "Сбросить игру" },
-	"cli": { "header": "$ ai-lab --interactive", "loaded": "✓ Модели загружены. Введите запрос или наблюдайте за работой.", "placeholder": "Введите запрос..." }
+	"god_mode": {
+		"title": "Режим бога",
+		"resources": "Ресурсы",
+		"cash": "Деньги",
+		"total_cash": "Всего денег",
+		"loc": "LoC",
+		"total_loc": "Всего LoC",
+		"flops": "FLOPS",
+		"tokens": "Токены",
+		"tier": "Уровень",
+		"current": "Текущий:",
+		"ai_models": "AI-модели",
+		"grant": "Выдать",
+		"tools": "Инструменты",
+		"data_editor": "Редактор данных",
+		"danger_zone": "Опасная зона",
+		"reset_game": "Сбросить игру",
+		"trigger_singularity": "Запустить сингулярность",
+		"unlock_all_tech": "Разблокировать все технологии",
+		"max_all_upgrades": "Максимизировать все улучшения"
+	},
+	"mobile": {
+		"code": "Код",
+		"tree": "Дерево",
+		"shop": "Магазин",
+		"upgrades": "Улучшения",
+		"milestones": "Достижения",
+		"settings": "Настройки",
+		"theme": "Тема",
+		"auto_type": "Авто-ввод",
+		"on": "ВКЛ",
+		"off": "ВЫКЛ",
+		"reset_game": "Сбросить игру"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Модели загружены. Введите запрос или наблюдайте за работой.",
+		"placeholder": "Введите запрос..."
+	}
 }

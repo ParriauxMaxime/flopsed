@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import type { GodModeOverrides } from "@modules/game";
 import {
 	allTechNodes,
@@ -165,14 +164,24 @@ export function GodModePage() {
 		color: string;
 		bumps: number[];
 	}> = [
-		{ key: "cash", label: t("god_mode.cash"), color: theme.cashColor, bumps: stdBumps },
+		{
+			key: "cash",
+			label: t("god_mode.cash"),
+			color: theme.cashColor,
+			bumps: stdBumps,
+		},
 		{
 			key: "totalCash",
 			label: t("god_mode.total_cash"),
 			color: theme.cashColor,
 			bumps: stdBumps,
 		},
-		{ key: "loc", label: t("god_mode.loc"), color: theme.locColor, bumps: stdBumps },
+		{
+			key: "loc",
+			label: t("god_mode.loc"),
+			color: theme.locColor,
+			bumps: stdBumps,
+		},
 		{
 			key: "totalLoc",
 			label: t("god_mode.total_loc"),

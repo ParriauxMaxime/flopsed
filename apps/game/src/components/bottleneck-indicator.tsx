@@ -166,9 +166,15 @@ export function BottleneckIndicator() {
 						<div
 							css={[bottleneckCss, { background: "#2d2000", color: "#e5c07b" }]}
 						>
-							{cpuBottleneck ? t("hardware.cpu_bottleneck") : t("hardware.ram_bottleneck")}
+							{cpuBottleneck
+								? t("hardware.cpu_bottleneck")
+								: t("hardware.ram_bottleneck")}
 							<span css={{ fontWeight: "normal", color: "#8b949e" }}>
-								{t("hardware.formula", { cpu: formatNumber(cpuFlops), ram: formatNumber(ramFlops), storage: formatNumber(storageFlops) })}
+								{t("hardware.formula", {
+									cpu: formatNumber(cpuFlops),
+									ram: formatNumber(ramFlops),
+									storage: formatNumber(storageFlops),
+								})}
 							</span>
 						</div>
 					)}
@@ -184,7 +190,10 @@ export function BottleneckIndicator() {
 				>
 					{t("hardware.flops_bottleneck")}
 					<span css={{ fontWeight: "normal", color: "#8b949e" }}>
-						{t("hardware.flops_detail", { flops: formatNumber(flops), locPerSec: formatNumber(estLocPerSec) })}
+						{t("hardware.flops_detail", {
+							flops: formatNumber(flops),
+							locPerSec: formatNumber(estLocPerSec),
+						})}
 					</span>
 				</div>
 			)}

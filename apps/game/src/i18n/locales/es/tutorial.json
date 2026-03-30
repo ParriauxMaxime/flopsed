@@ -1,9 +1,49 @@
 {
-	"welcome": { "lines": ["$ init flopsed", "✓ Cargando entorno del garaje...", "", "Un teclado. Un sueño. Escribe para crear código.", "Cada pulsación = Líneas de Código."] },
-	"tech_tree": { "lines": ["$ open tech-tree.svg", "✓ Árbol tecnológico cargado →", "", "Investiga mejoras aquí. Gasta dinero y LoC.", "Empieza por lo básico. Ve avanzando."] },
-	"sidebar": { "lines": ["$ ls upgrades/", "✓ Explorador de archivos desbloqueado ←", "", "Navega y compra mejoras por nivel.", "Más FLOPS = ejecución más rápida. Más devs = más código."] },
-	"execution": { "lines": ["$ cat README.md", "", "  escribir → cola → ejecutar → $$$", "", "El código se acumula. Los FLOPS lo queman. El dinero fluye."] },
-	"ai_lab": { "lines": ["$ switch --mode ai-lab", "✓ Los trabajadores ahora producen tokens en lugar de LoC.", "", "Los modelos de IA consumen tokens + FLOPS → LoC masivo.", "Más humanos = más tokens = más producción de IA."] },
+	"welcome": {
+		"lines": [
+			"$ init flopsed",
+			"✓ Cargando entorno del garaje...",
+			"",
+			"Un teclado. Un sueño. Escribe para crear código.",
+			"Cada pulsación = Líneas de Código."
+		]
+	},
+	"tech_tree": {
+		"lines": [
+			"$ open tech-tree.svg",
+			"✓ Árbol tecnológico cargado →",
+			"",
+			"Investiga mejoras aquí. Gasta dinero y LoC.",
+			"Empieza por lo básico. Ve avanzando."
+		]
+	},
+	"sidebar": {
+		"lines": [
+			"$ ls upgrades/",
+			"✓ Explorador de archivos desbloqueado ←",
+			"",
+			"Navega y compra mejoras por nivel.",
+			"Más FLOPS = ejecución más rápida. Más devs = más código."
+		]
+	},
+	"execution": {
+		"lines": [
+			"$ cat README.md",
+			"",
+			"  escribir → cola → ejecutar → $$$",
+			"",
+			"El código se acumula. Los FLOPS lo queman. El dinero fluye."
+		]
+	},
+	"ai_lab": {
+		"lines": [
+			"$ switch --mode ai-lab",
+			"✓ Los trabajadores ahora producen tokens en lugar de LoC.",
+			"",
+			"Los modelos de IA consumen tokens + FLOPS → LoC masivo.",
+			"Más humanos = más tokens = más producción de IA."
+		]
+	},
 	"loading": "$ cargando tech-tree.svg ...",
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",

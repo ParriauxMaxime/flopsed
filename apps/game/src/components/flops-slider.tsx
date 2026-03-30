@@ -95,8 +95,12 @@ export function FlopsSlider() {
 				<div css={aiSegCss} style={{ width: `${aiPct}%` }} />
 			</div>
 			<div css={ratesCss}>
-				<span css={rateCss}>{t("flops_slider.exec_rate", { count: formatNumber(execFlops) })}</span>
-				<span css={rateCss}>{t("flops_slider.ai_rate", { count: formatNumber(aiLocPerSec) })}</span>
+				<span css={rateCss}>
+					{t("flops_slider.exec_rate", { count: formatNumber(execFlops) })}
+				</span>
+				<span css={rateCss}>
+					{t("flops_slider.ai_rate", { count: formatNumber(aiLocPerSec) })}
+				</span>
 			</div>
 		</div>
 	);

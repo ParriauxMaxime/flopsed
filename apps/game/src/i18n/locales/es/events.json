@@ -1,17 +1,64 @@
 {
-	"production_down": { "name": "¡Producción caída!", "description": "FLOPS reducidos a la mitad durante 30s. Pulsa teclas para arreglarlo más rápido (cada tecla -1s)." },
-	"hackathon": { "name": "¡Hackathon!", "description": "Producción de LoC duplicada durante 20s. ¡Envíalo!" },
-	"investor_demo": { "name": "Demo para inversores", "description": "Si LoC/s > umbral: bonus de dinero. Si no: nada ocurre (incómodo)." },
-	"stackoverflow_down": { "name": "Stack Overflow está caído", "description": "Velocidad de tecleo reducida a la mitad durante 15s. ¿Cómo programas así?" },
-	"github_star": { "name": "Estrella en GitHub", "description": "¡Alguien ha marcado tu repositorio con una estrella! Pequeño bonus de dinero." },
-	"coffee_spill": { "name": "Café derramado", "description": "Derramaste café en el teclado. -50% velocidad de tecleo durante 10s." },
-	"npm_install": { "name": "npm install", "description": "Instalando dependencias... FLOPS consumidos por node_modules durante 20s." },
-	"viral_tweet": { "name": "Tweet viral", "description": "Tu opinión controvertida se volvió viral. Los devs acuden a tu proyecto. +100% LoC automático durante 15s." },
-	"ai_hallucination": { "name": "Alucinación de IA", "description": "Uno de tus modelos de IA se volvió loco. Escribió 10K LoC de basura. Calidad -10%." },
-	"security_audit": { "name": "Auditoría de seguridad", "description": "Los auditores encontraron vulnerabilidades. Paga el 5% del dinero o pierde el 20% de calidad.", "options": { "pay_fine": "Pagar multa", "ignore_it": "Ignorarlo" } },
-	"power_outage": { "name": "Apagón", "description": "El centro de datos se quedó sin luz. Sin FLOPS durante 15s. El tecleo manual sigue funcionando." },
-	"acquihire_offer": { "name": "Oferta de adquisición", "description": "Una gran tecnológica quiere comprarte. ¿Te llevas el dinero o sigues en la lucha?", "options": { "sell_out": "Vender", "stay_indie": "Seguir independiente" } },
-	"dev_burnout": { "name": "Agotamiento del equipo", "description": "Tus desarrolladores están exhaustos. Producción de tokens -50% durante 30s." },
-	"prompt_fatigue": { "name": "Fatiga de prompts", "description": "Prompts de baja calidad. Producción de tokens -30% durante 20s." },
-	"prompt_breakthrough": { "name": "Prompt perfecto", "description": "¡Prompt perfecto! Producción de tokens ×3 durante 15s." }
+	"production_down": {
+		"name": "¡Producción caída!",
+		"description": "FLOPS reducidos a la mitad durante 30s. Pulsa teclas para arreglarlo más rápido (cada tecla -1s)."
+	},
+	"hackathon": {
+		"name": "¡Hackathon!",
+		"description": "Producción de LoC duplicada durante 20s. ¡Envíalo!"
+	},
+	"investor_demo": {
+		"name": "Demo para inversores",
+		"description": "Si LoC/s > umbral: bonus de dinero. Si no: nada ocurre (incómodo)."
+	},
+	"stackoverflow_down": {
+		"name": "Stack Overflow está caído",
+		"description": "Velocidad de tecleo reducida a la mitad durante 15s. ¿Cómo programas así?"
+	},
+	"github_star": {
+		"name": "Estrella en GitHub",
+		"description": "¡Alguien ha marcado tu repositorio con una estrella! Pequeño bonus de dinero."
+	},
+	"coffee_spill": {
+		"name": "Café derramado",
+		"description": "Derramaste café en el teclado. -50% velocidad de tecleo durante 10s."
+	},
+	"npm_install": {
+		"name": "npm install",
+		"description": "Instalando dependencias... FLOPS consumidos por node_modules durante 20s."
+	},
+	"viral_tweet": {
+		"name": "Tweet viral",
+		"description": "Tu opinión controvertida se volvió viral. Los devs acuden a tu proyecto. +100% LoC automático durante 15s."
+	},
+	"ai_hallucination": {
+		"name": "Alucinación de IA",
+		"description": "Uno de tus modelos de IA se volvió loco. Escribió 10K LoC de basura. Calidad -10%."
+	},
+	"security_audit": {
+		"name": "Auditoría de seguridad",
+		"description": "Los auditores encontraron vulnerabilidades. Paga el 5% del dinero o pierde el 20% de calidad.",
+		"options": { "pay_fine": "Pagar multa", "ignore_it": "Ignorarlo" }
+	},
+	"power_outage": {
+		"name": "Apagón",
+		"description": "El centro de datos se quedó sin luz. Sin FLOPS durante 15s. El tecleo manual sigue funcionando."
+	},
+	"acquihire_offer": {
+		"name": "Oferta de adquisición",
+		"description": "Una gran tecnológica quiere comprarte. ¿Te llevas el dinero o sigues en la lucha?",
+		"options": { "sell_out": "Vender", "stay_indie": "Seguir independiente" }
+	},
+	"dev_burnout": {
+		"name": "Agotamiento del equipo",
+		"description": "Tus desarrolladores están exhaustos. Producción de tokens -50% durante 30s."
+	},
+	"prompt_fatigue": {
+		"name": "Fatiga de prompts",
+		"description": "Prompts de baja calidad. Producción de tokens -30% durante 20s."
+	},
+	"prompt_breakthrough": {
+		"name": "Prompt perfecto",
+		"description": "¡Prompt perfecto! Producción de tokens ×3 durante 15s."
+	}
 }

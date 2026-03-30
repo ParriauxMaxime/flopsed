@@ -13,7 +13,7 @@
 	},
 	"side_project": {
 		"name": "副业项目",
-		"description": "500 LoC。"这周末我就能搞完。""
+		"description": "500 LoC。这周末我就能搞完。"
 	},
 	"real_dev": {
 		"name": "真正的开发者",
@@ -21,7 +21,7 @@
 	},
 	"yc_application": {
 		"name": "YC 申请",
-		"description": "5,000 LoC。"我们正在颠覆编程。""
+		"description": "5,000 LoC。我们正在颠覆编程。"
 	},
 	"open_source_fame": {
 		"name": "开源名声",
@@ -33,7 +33,7 @@
 	},
 	"ml_paper": {
 		"name": "ML 论文发表",
-		"description": "500K LoC。"我们取得了最先进的结果。""
+		"description": "500K LoC。我们取得了最先进的结果。"
 	},
 	"llm_training": {
 		"name": "训练开始",
@@ -45,6 +45,6 @@
 	},
 	"agi": {
 		"name": "AGI 实现",
-		"description": "200M LoC。"你好，世界。"——它回应道。"
+		"description": "200M LoC。你好，世界。——它回应道。"
 	}
 }

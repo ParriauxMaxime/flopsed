@@ -1,18 +1,139 @@
 {
-	"resource_bar": { "queued": "En cola", "cash": "Dinero", "flops": "FLOPS", "loc_rate": "{{rate}} loc/s", "cash_rate": "+${{rate}}/s", "auto_execute": "⚡ Ejecución automática — +${{rate}}/s", "execute": "⚡ Ejecutar {{loc}} en cola → ${{earn}}" },
-	"stats_panel": { "title": "Estadísticas", "hide": "Ocultar estadísticas", "resources": "Recursos", "cash": "Dinero", "loc": "LoC", "flops": "FLOPS", "token_sources": "Fuentes de tokens", "loc_sources": "Fuentes de LoC", "you": "Tú", "tokens_per_sec": "tokens/s", "per_sec": "/s", "managers": "Gestores", "manager_bonus": "+{{bonus}}% producción del equipo", "auto_exec": "⚡ Auto — +${{rate}}/s", "execute": "⚡ Ejecutar {{loc}} → ${{earn}}" },
-	"status_bar": { "tokens": "🪙 {{count}} tokens", "loc": "◇ {{count}} LoC", "flops": "⚡ {{count}} FLOPS", "cash_per_loc": "${{rate}}/loc", "python": "Python", "utf8": "UTF-8" },
-	"hardware": { "title": "Hardware", "cpu": "CPU", "ram": "RAM", "disk": "Disco", "cpu_bottleneck": "⚠ Cuello de botella CPU", "ram_bottleneck": "⚠ Cuello de botella RAM", "formula": "— min({{cpu}}, {{ram}}) + {{storage}}", "flops_bottleneck": "⚠ Cuello de botella FLOPS", "flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s" },
-	"flops_slider": { "exec_flops": "Ejec. {{count}} FLOPS", "ai_flops": "IA {{count}} FLOPS", "exec_rate": "{{count}} loc/s ejec.", "ai_rate": "{{count}} loc/s gen." },
-	"sidebar": { "title": "Explorador", "hide": "Ocultar barra lateral", "show": "Mostrar barra lateral", "open_editors": "Editores abiertos", "upgrades": "Mejoras", "milestones": "Hitos", "milestone_item": "✓ {{name}} — {{threshold}}" },
-	"tabs": { "split_editor": "Editor dividido", "close_split": "Cerrar división", "show_stats": "Mostrar estadísticas", "unlock_tech_tree": "Desbloquear en el árbol tecnológico" },
-	"settings": { "title": "Configuración", "appearance": "Apariencia", "color_theme": "Tema de color", "color_theme_desc": "Especifica el tema de color usado en el IDE.", "window": "Ventana", "zoom_level": "Nivel de zoom", "zoom_level_desc": "Ajusta el nivel de zoom del IDE. Puede requerirse reinicio.", "language": "Idioma", "language_name": "Idioma de visualización", "language_desc": "Especifica el idioma de visualización del juego." },
+	"resource_bar": {
+		"queued": "En cola",
+		"cash": "Dinero",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Ejecución automática — +${{rate}}/s",
+		"execute": "⚡ Ejecutar {{loc}} en cola → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Estadísticas",
+		"hide": "Ocultar estadísticas",
+		"resources": "Recursos",
+		"cash": "Dinero",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Fuentes de tokens",
+		"loc_sources": "Fuentes de LoC",
+		"you": "Tú",
+		"tokens_per_sec": "tokens/s",
+		"per_sec": "/s",
+		"managers": "Gestores",
+		"manager_bonus": "+{{bonus}}% producción del equipo",
+		"auto_exec": "⚡ Auto — +${{rate}}/s",
+		"execute": "⚡ Ejecutar {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} tokens",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Hardware",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Disco",
+		"cpu_bottleneck": "⚠ Cuello de botella CPU",
+		"ram_bottleneck": "⚠ Cuello de botella RAM",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ Cuello de botella FLOPS",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Ejec. {{count}} FLOPS",
+		"ai_flops": "IA {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s ejec.",
+		"ai_rate": "{{count}} loc/s gen."
+	},
+	"sidebar": {
+		"title": "Explorador",
+		"hide": "Ocultar barra lateral",
+		"show": "Mostrar barra lateral",
+		"open_editors": "Editores abiertos",
+		"upgrades": "Mejoras",
+		"milestones": "Hitos",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Editor dividido",
+		"close_split": "Cerrar división",
+		"show_stats": "Mostrar estadísticas",
+		"unlock_tech_tree": "Desbloquear en el árbol tecnológico"
+	},
+	"settings": {
+		"title": "Configuración",
+		"appearance": "Apariencia",
+		"color_theme": "Tema de color",
+		"color_theme_desc": "Especifica el tema de color usado en el IDE.",
+		"window": "Ventana",
+		"zoom_level": "Nivel de zoom",
+		"zoom_level_desc": "Ajusta el nivel de zoom del IDE. Puede requerirse reinicio.",
+		"language": "Idioma",
+		"language_name": "Idioma de visualización",
+		"language_desc": "Especifica el idioma de visualización del juego."
+	},
 	"editor": { "terminal": "Terminal" },
-	"tech_tree": { "level": "Nivel {{owned}}/{{max}}", "cost_cash": "Coste: ${{cost}}", "cost_loc": "Coste: {{cost}} LoC", "requires": "Requiere: {{nodes}}", "researched": "Investigado", "maxed": "Al máximo", "click_to_research": "Clic para investigar", "not_enough_cash": "Dinero insuficiente", "not_enough_loc": "LoC insuficiente", "locked": "Bloqueado" },
-	"upgrades": { "maxed": "MÁXIMO", "cost": "${{cost}}", "count": "{{owned}}/{{max}}" },
+	"tech_tree": {
+		"level": "Nivel {{owned}}/{{max}}",
+		"cost_cash": "Coste: ${{cost}}",
+		"cost_loc": "Coste: {{cost}} LoC",
+		"requires": "Requiere: {{nodes}}",
+		"researched": "Investigado",
+		"maxed": "Al máximo",
+		"click_to_research": "Clic para investigar",
+		"not_enough_cash": "Dinero insuficiente",
+		"not_enough_loc": "LoC insuficiente",
+		"locked": "Bloqueado"
+	},
+	"upgrades": {
+		"maxed": "MÁXIMO",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
 	"milestones": { "unknown": "???", "reached_prefix": "> " },
 	"events": { "bonus": "+${{amount}} de bonus" },
-	"god_mode": { "title": "Modo Dios", "resources": "Recursos", "cash": "Dinero", "total_cash": "Dinero total", "loc": "LoC", "total_loc": "LoC total", "flops": "FLOPS", "tokens": "Tokens", "tier": "Nivel", "current": "Actual:", "ai_models": "Modelos de IA", "grant": "Conceder", "tools": "Herramientas", "data_editor": "Editor de datos", "danger_zone": "Zona peligrosa", "reset_game": "Reiniciar juego", "trigger_singularity": "Activar singularidad", "unlock_all_tech": "Desbloquear toda la tecnología", "max_all_upgrades": "Maximizar todas las mejoras" },
-	"mobile": { "code": "Código", "tree": "Árbol", "shop": "Tienda", "upgrades": "Mejoras", "milestones": "Hitos", "settings": "Ajustes", "theme": "Tema", "auto_type": "Escritura auto", "on": "ON", "off": "OFF", "reset_game": "Reiniciar juego" },
-	"cli": { "header": "$ ai-lab --interactive", "loaded": "✓ Modelos cargados. Escribe un prompt o déjalos trabajar.", "placeholder": "Escribe un prompt..." }
+	"god_mode": {
+		"title": "Modo Dios",
+		"resources": "Recursos",
+		"cash": "Dinero",
+		"total_cash": "Dinero total",
+		"loc": "LoC",
+		"total_loc": "LoC total",
+		"flops": "FLOPS",
+		"tokens": "Tokens",
+		"tier": "Nivel",
+		"current": "Actual:",
+		"ai_models": "Modelos de IA",
+		"grant": "Conceder",
+		"tools": "Herramientas",
+		"data_editor": "Editor de datos",
+		"danger_zone": "Zona peligrosa",
+		"reset_game": "Reiniciar juego",
+		"trigger_singularity": "Activar singularidad",
+		"unlock_all_tech": "Desbloquear toda la tecnología",
+		"max_all_upgrades": "Maximizar todas las mejoras"
+	},
+	"mobile": {
+		"code": "Código",
+		"tree": "Árbol",
+		"shop": "Tienda",
+		"upgrades": "Mejoras",
+		"milestones": "Hitos",
+		"settings": "Ajustes",
+		"theme": "Tema",
+		"auto_type": "Escritura auto",
+		"on": "ON",
+		"off": "OFF",
+		"reset_game": "Reiniciar juego"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Modelos cargados. Escribe un prompt o déjalos trabajar.",
+		"placeholder": "Escribe un prompt..."
+	}
 }

@@ -193,7 +193,9 @@ export function ResourceBar() {
 					</div>
 					<div css={labelStyle}>{t("resource_bar.queued")}</div>
 					<div css={rateStyle}>
-						{locRate > 0.1 ? t("resource_bar.loc_rate", { rate: formatNumber(locRate) }) : ""}
+						{locRate > 0.1
+							? t("resource_bar.loc_rate", { rate: formatNumber(locRate) })
+							: ""}
 					</div>
 				</div>
 
@@ -208,7 +210,11 @@ export function ResourceBar() {
 					</div>
 					<div css={labelStyle}>{t("resource_bar.cash")}</div>
 					<div css={rateStyle}>
-						{cashRate > 0.1 ? t("resource_bar.cash_rate", { rate: formatNumber(cashRate, true) }) : ""}
+						{cashRate > 0.1
+							? t("resource_bar.cash_rate", {
+									rate: formatNumber(cashRate, true),
+								})
+							: ""}
 					</div>
 				</div>
 
@@ -220,14 +226,18 @@ export function ResourceBar() {
 					</div>
 					<div css={labelStyle}>{t("resource_bar.flops")}</div>
 					<div css={rateStyle}>
-						{execRate > 0.1 ? t("resource_bar.loc_rate", { rate: formatNumber(execRate) }) : ""}
+						{execRate > 0.1
+							? t("resource_bar.loc_rate", { rate: formatNumber(execRate) })
+							: ""}
 					</div>
 				</div>
 			</div>
 			<div css={execBarStyle} data-tutorial="execute">
 				{autoExec ? (
 					<div css={autoExecLabelStyle}>
-						{t("resource_bar.auto_execute", { rate: formatNumber(cashRate, true) })}
+						{t("resource_bar.auto_execute", {
+							rate: formatNumber(cashRate, true),
+						})}
 					</div>
 				) : (
 					(() => {
@@ -240,7 +250,10 @@ export function ResourceBar() {
 								onClick={handleExec}
 								disabled={execLoc <= 0}
 							>
-								{t("resource_bar.execute", { loc: formatNumber(execLoc), earn: formatNumber(earnPerExec, true) })}
+								{t("resource_bar.execute", {
+									loc: formatNumber(execLoc),
+									earn: formatNumber(earnPerExec, true),
+								})}
 							</button>
 						);
 					})()

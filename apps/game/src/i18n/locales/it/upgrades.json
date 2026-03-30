@@ -1,20 +1,53 @@
 {
-	"malt_freelancer": { "name": "Freelance", "description": "Dev remoto — scrive 5 LoC/s" },
+	"malt_freelancer": {
+		"name": "Freelance",
+		"description": "Dev remoto — scrive 5 LoC/s"
+	},
 	"desktop_pc": { "name": "PC Desktop", "description": "+50 FLOPS" },
 	"second_monitor": { "name": "Secondo monitor", "description": "+25 FLOPS" },
 	"server_rack": { "name": "Rack server", "description": "+200 FLOPS" },
-	"intern": { "name": "Stagista", "description": "Scrive automaticamente 15 LoC/s" },
-	"dev_team": { "name": "Team dev", "description": "Scrive automaticamente 200 LoC/s" },
-	"manager": { "name": "Manager", "description": "Moltiplica l'output di tutto il team del +50%" },
+	"intern": {
+		"name": "Stagista",
+		"description": "Scrive automaticamente 15 LoC/s"
+	},
+	"dev_team": {
+		"name": "Team dev",
+		"description": "Scrive automaticamente 200 LoC/s"
+	},
+	"manager": {
+		"name": "Manager",
+		"description": "Moltiplica l'output di tutto il team del +50%"
+	},
 	"gpu_cluster": { "name": "Cluster GPU", "description": "+2.000 FLOPS" },
-	"architect": { "name": "Architetto", "description": "L'esecuzione di LoC genera x1.3 cash" },
+	"architect": {
+		"name": "Architetto",
+		"description": "L'esecuzione di LoC genera x1.3 cash"
+	},
 	"data_center": { "name": "Data center", "description": "+20.000 FLOPS" },
-	"series_a": { "name": "Finanziamento Serie A", "description": "Iniezione immediata di 10M$ in cash" },
-	"rlhf": { "name": "Training RLHF", "description": "x1.3 output LLM per livello" },
+	"series_a": {
+		"name": "Finanziamento Serie A",
+		"description": "Iniezione immediata di 10M$ in cash"
+	},
+	"rlhf": {
+		"name": "Training RLHF",
+		"description": "x1.3 output LLM per livello"
+	},
 	"ml_pipeline": { "name": "Pipeline ML", "description": "x1.2 cash per LoC" },
-	"llm": { "name": "LLM", "description": "Ospita 1 modello IA — sceglie automaticamente il migliore disponibile" },
-	"series_b": { "name": "Finanziamento Serie B", "description": "Iniezione immediata di 500M$ in cash" },
-	"ai_agent": { "name": "Agente IA", "description": "Agente autonomo — scrive 100.000 LoC/s" },
+	"llm": {
+		"name": "LLM",
+		"description": "Ospita 1 modello IA — sceglie automaticamente il migliore disponibile"
+	},
+	"series_b": {
+		"name": "Finanziamento Serie B",
+		"description": "Iniezione immediata di 500M$ in cash"
+	},
+	"ai_agent": {
+		"name": "Agente IA",
+		"description": "Agente autonomo — scrive 100.000 LoC/s"
+	},
 	"supercomputer": { "name": "Supercomputer", "description": "+20M FLOPS" },
-	"the_singularity": { "name": "La Singolarità", "description": "Hai vinto. O forse no?" }
+	"the_singularity": {
+		"name": "La Singolarità",
+		"description": "Hai vinto. O forse no?"
+	}
 }

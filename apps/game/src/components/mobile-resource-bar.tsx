@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
-import { useCallback, useState } from "react";
 
 interface MobileResourceBarProps {
 	onOpenSettings: () => void;
@@ -43,54 +42,6 @@ const gearButtonCss = css({
 	cursor: "pointer",
 	padding: 0,
 	lineHeight: 1,
-});
-
-const sliderRowCss = css({
-	display: "flex",
-	alignItems: "center",
-	gap: 8,
-	padding: "6px 12px 8px",
-	borderTop: "1px solid #1e2630",
-});
-
-const sliderLabelCss = css({
-	fontSize: 10,
-	color: "#8b949e",
-	whiteSpace: "nowrap",
-});
-
-const sliderInputCss = css({
-	flex: 1,
-	height: 6,
-	appearance: "none",
-	background: "transparent",
-	cursor: "pointer",
-	"&::-webkit-slider-runnable-track": {
-		height: 6,
-		borderRadius: 3,
-		background: "linear-gradient(90deg, #3fb950, #c678dd)",
-	},
-	"&::-webkit-slider-thumb": {
-		appearance: "none",
-		width: 14,
-		height: 14,
-		borderRadius: "50%",
-		background: "#fff",
-		border: "2px solid #c678dd",
-		marginTop: -4,
-	},
-	"&::-moz-range-track": {
-		height: 6,
-		borderRadius: 3,
-		background: "linear-gradient(90deg, #3fb950, #c678dd)",
-	},
-	"&::-moz-range-thumb": {
-		width: 14,
-		height: 14,
-		borderRadius: "50%",
-		background: "#fff",
-		border: "2px solid #c678dd",
-	},
 });
 
 export function MobileResourceBar({ onOpenSettings }: MobileResourceBarProps) {

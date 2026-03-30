@@ -256,6 +256,26 @@ If any check fails, adjust the data files and re-run until all pass. The same si
 
 **Key balance insight:** The game applies `multiply` effects as `val ** owned`. This means x2 stacking 3 times = 8x (not 6x). When a tier feels too fast, check compounding multipliers from the previous tier.
 
+## Internationalization (i18n)
+
+The game is internationalized into 8 languages: English, French, Italian, German, Spanish, Polish, Simplified Chinese, Russian.
+
+**Stack:** `i18next` + `react-i18next` + `i18next-browser-languagedetector`
+
+**Translation files:** `apps/game/src/i18n/locales/{en,fr,it,de,es,pl,zh,ru}/`
+
+**Namespaces:** `ui`, `upgrades`, `tech-tree`, `tiers`, `events`, `milestones`, `ai-models`, `tutorial`
+
+### Rules
+
+- **All user-facing strings** in game components must use `t()` from `useTranslation()` — no hardcoded English text in JSX.
+- **Domain entity text** (upgrade names, descriptions, etc.) is rendered via translation keys, not from the domain JSON directly. The domain JSON keeps English text as documentation only.
+- **English is the fallback** — missing keys in other languages gracefully fall back to English.
+- **Non-English locales are lazy-loaded** — only English is bundled statically.
+- **When adding a new user-facing string:** add the key to `en/ui.json` (or the appropriate namespace), then add translations to all 7 other locale files.
+- **When adding a new domain entity** (upgrade, tech node, event, etc.): add translation keys to the English namespace file, then to all other locales.
+- **What stays in English:** singularity sequence, AI model product names, code editor tokens, CLI prompt cosmetic output, file tab names (agi.py, etc.).
+
 ## Workflow
 
 ### Commits

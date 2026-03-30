@@ -61,13 +61,21 @@ export function StatusBar() {
 				<span css={statCss}>⚡ {tier?.name ?? "—"}</span>
 				<span css={statCss}>${formatNumber(cash, true)}</span>
 				{aiUnlocked && (
-					<span css={statCss}>{t("status_bar.tokens", { count: formatNumber(tokens) })}</span>
+					<span css={statCss}>
+						{t("status_bar.tokens", { count: formatNumber(tokens) })}
+					</span>
 				)}
-				<span css={statCss}>{t("status_bar.loc", { count: formatNumber(loc) })}</span>
-				<span css={statCss}>{t("status_bar.flops", { count: formatNumber(flops) })}</span>
+				<span css={statCss}>
+					{t("status_bar.loc", { count: formatNumber(loc) })}
+				</span>
+				<span css={statCss}>
+					{t("status_bar.flops", { count: formatNumber(flops) })}
+				</span>
 			</div>
 			<div css={rightCss}>
-				<span>{t("status_bar.cash_per_loc", { rate: tier?.cashPerLoc ?? 0 })}</span>
+				<span>
+					{t("status_bar.cash_per_loc", { rate: tier?.cashPerLoc ?? 0 })}
+				</span>
 				<span>{t("status_bar.python")}</span>
 				<span>{t("status_bar.utf8")}</span>
 			</div>

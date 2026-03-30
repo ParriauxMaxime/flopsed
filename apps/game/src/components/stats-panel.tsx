@@ -66,10 +66,6 @@ const statValueCss = css({
 	fontVariantNumeric: "tabular-nums",
 });
 
-const sliderWrapperCss = css({
-	padding: "4px 0 8px",
-});
-
 const sourceRowCss = css({
 	display: "flex",
 	alignItems: "center",
@@ -126,9 +122,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 	const { t } = useTranslation();
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
-	const totalLoc = useGameStore((s) => s.totalLoc);
 	const totalCash = useGameStore((s) => s.totalCash);
-	const totalExecutedLoc = useGameStore((s) => s.totalExecutedLoc);
 	const flops = useGameStore((s) => s.flops);
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const cashMultiplier = useGameStore((s) => s.cashMultiplier);
@@ -282,17 +276,6 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 		[theme.textMuted],
 	);
 
-	const statRateCss = useMemo(
-		() =>
-			css({
-				fontSize: 11,
-				color: theme.success,
-				textAlign: "right",
-				minHeight: 14,
-			}),
-		[theme.success],
-	);
-
 	const dividerCss = useMemo(
 		() =>
 			css({
@@ -375,27 +358,6 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 		[theme.success],
 	);
 
-	const sliderLabelCss = useMemo(
-		() =>
-			css({
-				fontSize: 11,
-				color: theme.textMuted,
-				display: "flex",
-				justifyContent: "space-between",
-				marginBottom: 4,
-			}),
-		[theme.textMuted],
-	);
-
-	const sliderCss = useMemo(
-		() =>
-			css({
-				width: "100%",
-				accentColor: theme.accent,
-			}),
-		[theme.accent],
-	);
-
 	return (
 		<div
 			css={panelCss}
@@ -451,7 +413,8 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 
 					<div css={statRowCss}>
 						<div css={statLabelCss}>
-							<span style={{ color: theme.cashColor }}>$</span> {t("stats_panel.cash")}
+							<span style={{ color: theme.cashColor }}>$</span>{" "}
+							{t("stats_panel.cash")}
 						</div>
 						<div>
 							<div css={statValueCss}>
@@ -465,7 +428,8 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 
 					<div css={statRowCss}>
 						<div css={statLabelCss}>
-							<span style={{ color: theme.locColor }}>◇</span> {t("stats_panel.loc")}
+							<span style={{ color: theme.locColor }}>◇</span>{" "}
+							{t("stats_panel.loc")}
 						</div>
 						<div>
 							<div css={statValueCss}>
@@ -479,7 +443,8 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 
 					<div css={statRowCss}>
 						<div css={statLabelCss}>
-							<span style={{ color: theme.flopsColor }}>⚡</span> {t("stats_panel.flops")}
+							<span style={{ color: theme.flopsColor }}>⚡</span>{" "}
+							{t("stats_panel.flops")}
 						</div>
 						<div>
 							<div css={statValueCss}>
@@ -508,7 +473,9 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 								}}
 							>
 								<div css={sectionLabelCss}>
-									{aiUnlocked ? t("stats_panel.token_sources") : t("stats_panel.loc_sources")}
+									{aiUnlocked
+										? t("stats_panel.token_sources")
+										: t("stats_panel.loc_sources")}
 								</div>
 								<span
 									css={{
@@ -525,8 +492,10 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 											(aiUnlocked
 												? 0
 												: aiSources.reduce((sum, s) => sum + s.locPerSec, 0)),
-									)}
-									{" "}{aiUnlocked ? t("stats_panel.tokens_per_sec") : t("stats_panel.per_sec")}
+									)}{" "}
+									{aiUnlocked
+										? t("stats_panel.tokens_per_sec")
+										: t("stats_panel.per_sec")}
 								</span>
 							</div>
 							{humanSources.map((s) => (
@@ -550,7 +519,8 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 										/>
 									</div>
 									<span css={sourceValueCss} style={{ color: s.color }}>
-										{formatNumber(s.locPerSec)}{t("stats_panel.per_sec")}
+										{formatNumber(s.locPerSec)}
+										{t("stats_panel.per_sec")}
 									</span>
 								</div>
 							))}
@@ -563,7 +533,9 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 										{t("stats_panel.managers")}
 									</span>
 									<span>
-										{t("stats_panel.manager_bonus", { bonus: Math.round((managerBonus - 1) * 100) })}
+										{t("stats_panel.manager_bonus", {
+											bonus: Math.round((managerBonus - 1) * 100),
+										})}
 									</span>
 								</div>
 							)}
@@ -594,7 +566,8 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 												/>
 											</div>
 											<span css={sourceValueCss} style={{ color: s.color }}>
-												{formatNumber(s.locPerSec)}{t("stats_panel.per_sec")}
+												{formatNumber(s.locPerSec)}
+												{t("stats_panel.per_sec")}
 											</span>
 										</div>
 									))}
@@ -618,7 +591,10 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 						onClick={executeManual}
 						disabled={execLoc <= 0}
 					>
-						{t("stats_panel.execute", { loc: formatNumber(execLoc), earn: formatNumber(earnPerExec, true) })}
+						{t("stats_panel.execute", {
+							loc: formatNumber(execLoc),
+							earn: formatNumber(earnPerExec, true),
+						})}
 					</button>
 				)}
 			</div>

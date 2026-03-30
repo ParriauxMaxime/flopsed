@@ -1,14 +1,50 @@
 {
-	"hello_world": { "name": "Hello World", "description": "Vos 10 premières lignes. Tout le monde commence quelque part." },
-	"script_kiddie": { "name": "Script Kiddie", "description": "100 LoC. Vous maîtrisez le copier-coller." },
-	"first_dollar": { "name": "Premier Dollar", "description": "Votre code a rapporté de l'argent. Ne le dépensez pas d'un coup." },
-	"side_project": { "name": "Projet perso", "description": "500 LoC. \"Je le finis ce week-end.\"" },
-	"real_dev": { "name": "Vrai Développeur", "description": "1 000 LoC. Vous produisez désormais des bugs à l'échelle industrielle." },
-	"yc_application": { "name": "Dossier YC", "description": "5 000 LoC. \"On disrupte le code.\"" },
-	"open_source_fame": { "name": "Gloire Open Source", "description": "25K LoC. 3 étoiles GitHub (dont une de votre compte perso)." },
-	"big_tech": { "name": "Big Tech", "description": "100K LoC. Vous avez un badge et le syndrome de l'imposteur." },
-	"ml_paper": { "name": "Papier ML publié", "description": "500K LoC. \"Nos résultats sont à l'état de l'art.\"" },
-	"llm_training": { "name": "Run d'entraînement lancé", "description": "2M LoC. Les GPU chauffent." },
-	"emergent_behavior": { "name": "Comportement émergent", "description": "10M LoC. Il a dit quelque chose que vous n'attendiez pas." },
-	"agi": { "name": "AGI Atteinte", "description": "200M LoC. \"Bonjour, monde.\" — il a répondu." }
+	"hello_world": {
+		"name": "Hello World",
+		"description": "Vos 10 premières lignes. Tout le monde commence quelque part."
+	},
+	"script_kiddie": {
+		"name": "Script Kiddie",
+		"description": "100 LoC. Vous maîtrisez le copier-coller."
+	},
+	"first_dollar": {
+		"name": "Premier Dollar",
+		"description": "Votre code a rapporté de l'argent. Ne le dépensez pas d'un coup."
+	},
+	"side_project": {
+		"name": "Projet perso",
+		"description": "500 LoC. \"Je le finis ce week-end.\""
+	},
+	"real_dev": {
+		"name": "Vrai Développeur",
+		"description": "1 000 LoC. Vous produisez désormais des bugs à l'échelle industrielle."
+	},
+	"yc_application": {
+		"name": "Dossier YC",
+		"description": "5 000 LoC. \"On disrupte le code.\""
+	},
+	"open_source_fame": {
+		"name": "Gloire Open Source",
+		"description": "25K LoC. 3 étoiles GitHub (dont une de votre compte perso)."
+	},
+	"big_tech": {
+		"name": "Big Tech",
+		"description": "100K LoC. Vous avez un badge et le syndrome de l'imposteur."
+	},
+	"ml_paper": {
+		"name": "Papier ML publié",
+		"description": "500K LoC. \"Nos résultats sont à l'état de l'art.\""
+	},
+	"llm_training": {
+		"name": "Run d'entraînement lancé",
+		"description": "2M LoC. Les GPU chauffent."
+	},
+	"emergent_behavior": {
+		"name": "Comportement émergent",
+		"description": "10M LoC. Il a dit quelque chose que vous n'attendiez pas."
+	},
+	"agi": {
+		"name": "AGI Atteinte",
+		"description": "200M LoC. \"Bonjour, monde.\" — il a répondu."
+	}
 }

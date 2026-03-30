@@ -22,7 +22,10 @@ export const supportedLanguages = [
 	{ code: "ru", name: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" },
 ] as const;
 
-const lazyLocales: Record<string, () => Promise<{ default: Record<string, Record<string, unknown>> }>> = {
+const lazyLocales: Record<
+	string,
+	() => Promise<{ default: Record<string, Record<string, unknown>> }>
+> = {
 	fr: () => import("./locales/fr"),
 	it: () => import("./locales/it"),
 	de: () => import("./locales/de"),
@@ -32,7 +35,16 @@ const lazyLocales: Record<string, () => Promise<{ default: Record<string, Record
 	ru: () => import("./locales/ru"),
 };
 
-const namespaces = ["ui", "upgrades", "tech-tree", "tiers", "events", "milestones", "ai-models", "tutorial"] as const;
+const namespaces = [
+	"ui",
+	"upgrades",
+	"tech-tree",
+	"tiers",
+	"events",
+	"milestones",
+	"ai-models",
+	"tutorial",
+] as const;
 
 i18n
 	.use(LanguageDetector)
@@ -54,7 +66,10 @@ i18n
 			},
 		},
 		interpolation: { escapeValue: false },
-		detection: { order: ["localStorage", "navigator"], caches: ["localStorage"] },
+		detection: {
+			order: ["localStorage", "navigator"],
+			caches: ["localStorage"],
+		},
 	});
 
 i18n.on("languageChanged", async (lng: string) => {

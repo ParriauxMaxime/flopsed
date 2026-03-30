@@ -1,17 +1,64 @@
 {
-	"production_down": { "name": "Produkcja padła!", "description": "FLOPS zmniejszone o połowę na 30s. Klikaj klawisze, żeby naprawić szybciej (każdy klawisz -1s)." },
-	"hackathon": { "name": "Hackathon!", "description": "Podwójna produkcja LoC przez 20s. Wysyłaj!" },
-	"investor_demo": { "name": "Demo dla inwestorów", "description": "Jeśli LoC/s > próg: premia gotówkowa. Jeśli nie: nic się nie dzieje (niezręcznie)." },
-	"stackoverflow_down": { "name": "Stack Overflow nie działa", "description": "Prędkość pisania zmniejszona o połowę na 15s. Jak w ogóle kodujesz?" },
-	"github_star": { "name": "Gwiazdka na GitHubie", "description": "Ktoś oznaczył twoje repo gwiazdką! Mała premia gotówkowa." },
-	"coffee_spill": { "name": "Rozlana kawa", "description": "Rozlałeś kawę na klawiaturę. -50% prędkości pisania przez 10s." },
-	"npm_install": { "name": "npm install", "description": "Instalowanie zależności... FLOPS pochłonięte przez node_modules przez 20s." },
-	"viral_tweet": { "name": "Viralowy tweet", "description": "Twoja gorąca opinia poszła w świat. Devsi napływają do projektu. +100% auto-LoC przez 15s." },
-	"ai_hallucination": { "name": "Halucynacja AI", "description": "Jeden z twoich modeli AI oszalał. Napisał 10K LoC bzdur. Jakość -10%." },
-	"security_audit": { "name": "Audyt bezpieczeństwa", "description": "Audytorzy znaleźli luki. Zapłać 5% gotówki albo stracić 20% jakości.", "options": { "pay_fine": "Zapłać karę", "ignore_it": "Zignoruj" } },
-	"power_outage": { "name": "Przerwa w zasilaniu", "description": "Centrum danych zgasło. Brak FLOPS przez 15s. Ręczne pisanie nadal działa." },
-	"acquihire_offer": { "name": "Oferta przejęcia", "description": "Wielka firma technologiczna chce cię kupić. Brać gotówkę czy dalej walczyć?", "options": { "sell_out": "Sprzedaj się", "stay_indie": "Zostań niezależny" } },
-	"dev_burnout": { "name": "Wypalenie deweloperów", "description": "Twoi programiści są wyczerpani. Produkcja tokenów -50% przez 30s." },
-	"prompt_fatigue": { "name": "Zmęczenie promptami", "description": "Prompty niskiej jakości. Produkcja tokenów -30% przez 20s." },
-	"prompt_breakthrough": { "name": "Przełom w promptach", "description": "Idealny prompt! Produkcja tokenów ×3 przez 15s." }
+	"production_down": {
+		"name": "Produkcja padła!",
+		"description": "FLOPS zmniejszone o połowę na 30s. Klikaj klawisze, żeby naprawić szybciej (każdy klawisz -1s)."
+	},
+	"hackathon": {
+		"name": "Hackathon!",
+		"description": "Podwójna produkcja LoC przez 20s. Wysyłaj!"
+	},
+	"investor_demo": {
+		"name": "Demo dla inwestorów",
+		"description": "Jeśli LoC/s > próg: premia gotówkowa. Jeśli nie: nic się nie dzieje (niezręcznie)."
+	},
+	"stackoverflow_down": {
+		"name": "Stack Overflow nie działa",
+		"description": "Prędkość pisania zmniejszona o połowę na 15s. Jak w ogóle kodujesz?"
+	},
+	"github_star": {
+		"name": "Gwiazdka na GitHubie",
+		"description": "Ktoś oznaczył twoje repo gwiazdką! Mała premia gotówkowa."
+	},
+	"coffee_spill": {
+		"name": "Rozlana kawa",
+		"description": "Rozlałeś kawę na klawiaturę. -50% prędkości pisania przez 10s."
+	},
+	"npm_install": {
+		"name": "npm install",
+		"description": "Instalowanie zależności... FLOPS pochłonięte przez node_modules przez 20s."
+	},
+	"viral_tweet": {
+		"name": "Viralowy tweet",
+		"description": "Twoja gorąca opinia poszła w świat. Devsi napływają do projektu. +100% auto-LoC przez 15s."
+	},
+	"ai_hallucination": {
+		"name": "Halucynacja AI",
+		"description": "Jeden z twoich modeli AI oszalał. Napisał 10K LoC bzdur. Jakość -10%."
+	},
+	"security_audit": {
+		"name": "Audyt bezpieczeństwa",
+		"description": "Audytorzy znaleźli luki. Zapłać 5% gotówki albo stracić 20% jakości.",
+		"options": { "pay_fine": "Zapłać karę", "ignore_it": "Zignoruj" }
+	},
+	"power_outage": {
+		"name": "Przerwa w zasilaniu",
+		"description": "Centrum danych zgasło. Brak FLOPS przez 15s. Ręczne pisanie nadal działa."
+	},
+	"acquihire_offer": {
+		"name": "Oferta przejęcia",
+		"description": "Wielka firma technologiczna chce cię kupić. Brać gotówkę czy dalej walczyć?",
+		"options": { "sell_out": "Sprzedaj się", "stay_indie": "Zostań niezależny" }
+	},
+	"dev_burnout": {
+		"name": "Wypalenie deweloperów",
+		"description": "Twoi programiści są wyczerpani. Produkcja tokenów -50% przez 30s."
+	},
+	"prompt_fatigue": {
+		"name": "Zmęczenie promptami",
+		"description": "Prompty niskiej jakości. Produkcja tokenów -30% przez 20s."
+	},
+	"prompt_breakthrough": {
+		"name": "Przełom w promptach",
+		"description": "Idealny prompt! Produkcja tokenów ×3 przez 15s."
+	}
 }

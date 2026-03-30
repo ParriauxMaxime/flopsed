@@ -1,8 +1,23 @@
 {
 	"garage": { "name": "Le Garage", "tagline": "Un clavier et un rêve." },
-	"freelancing": { "name": "Freelancing", "tagline": "Vous vendez votre code. Les clients arrivent." },
-	"startup": { "name": "Startup", "tagline": "Vous avez une boîte maintenant. Il faut recruter." },
-	"tech_company": { "name": "Tech Company", "tagline": "Le produit imprime du fric." },
-	"ai_lab": { "name": "Labo IA", "tagline": "Le code commence à s'écrire tout seul — mais il dévore votre compute." },
-	"agi_race": { "name": "Course à l'AGI", "tagline": "Vous n'écrivez plus de code. L'IA le fait." }
+	"freelancing": {
+		"name": "Freelancing",
+		"tagline": "Vous vendez votre code. Les clients arrivent."
+	},
+	"startup": {
+		"name": "Startup",
+		"tagline": "Vous avez une boîte maintenant. Il faut recruter."
+	},
+	"tech_company": {
+		"name": "Tech Company",
+		"tagline": "Le produit imprime du fric."
+	},
+	"ai_lab": {
+		"name": "Labo IA",
+		"tagline": "Le code commence à s'écrire tout seul — mais il dévore votre compute."
+	},
+	"agi_race": {
+		"name": "Course à l'AGI",
+		"tagline": "Vous n'écrivez plus de code. L'IA le fait."
+	}
 }

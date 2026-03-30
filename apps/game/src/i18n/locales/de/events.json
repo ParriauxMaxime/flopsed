@@ -1,17 +1,64 @@
 {
-	"production_down": { "name": "Produktion ausgefallen!", "description": "FLOPS für 30s halbiert. Hämmere Tasten um den Fix zu beschleunigen (jede Taste = -1s)." },
-	"hackathon": { "name": "Hackathon!", "description": "Doppelte LoC-Produktion für 20s. Rausschicken!" },
-	"investor_demo": { "name": "Investor-Demo", "description": "Wenn LoC/s > Schwellenwert: Cash-Bonus. Sonst: nichts passiert (peinlich)." },
-	"stackoverflow_down": { "name": "Stack Overflow ist down", "description": "Halbe Tippgeschwindigkeit für 15s. Wie programmierst du überhaupt?" },
-	"github_star": { "name": "GitHub-Stern", "description": "Jemand hat dein Repo gestarrt! Kleiner Cash-Bonus." },
-	"coffee_spill": { "name": "Kaffee verschüttet", "description": "Du hast Kaffee auf die Tastatur gekippt. -50% Tippgeschwindigkeit für 10s." },
-	"npm_install": { "name": "npm install", "description": "Abhängigkeiten werden installiert... FLOPS von node_modules verbraucht für 20s." },
-	"viral_tweet": { "name": "Viraler Tweet", "description": "Deine heiße These wurde viral. Devs strömen zu deinem Projekt. +100% auto-LoC für 15s." },
-	"ai_hallucination": { "name": "KI-Halluzination", "description": "Eines deiner KI-Modelle ist ausgerastet. Es hat 10K LoC Unsinn geschrieben. Qualität -10%." },
-	"security_audit": { "name": "Sicherheitsaudit", "description": "Prüfer haben Schwachstellen gefunden. Zahle 5% des Cashs oder verliere 20% Qualität.", "options": { "pay_fine": "Bußgeld zahlen", "ignore_it": "Ignorieren" } },
-	"power_outage": { "name": "Stromausfall", "description": "Das Rechenzentrum ist ausgefallen. Keine FLOPS für 15s. Manuelles Tippen funktioniert noch." },
-	"acquihire_offer": { "name": "Acqui-hire-Angebot", "description": "Ein Tech-Gigant will dich aufkaufen. Cash nehmen oder weitermachen?", "options": { "sell_out": "Verkaufen", "stay_indie": "Indie bleiben" } },
-	"dev_burnout": { "name": "Entwickler-Burnout", "description": "Deine Entwickler sind erschöpft. Token-Produktion -50% für 30s." },
-	"prompt_fatigue": { "name": "Prompt-Ermüdung", "description": "Schlechte Prompt-Qualität. Token-Produktion -30% für 20s." },
-	"prompt_breakthrough": { "name": "Prompt-Durchbruch", "description": "Perfekter Prompt! Token-Produktion ×3 für 15s." }
+	"production_down": {
+		"name": "Produktion ausgefallen!",
+		"description": "FLOPS für 30s halbiert. Hämmere Tasten um den Fix zu beschleunigen (jede Taste = -1s)."
+	},
+	"hackathon": {
+		"name": "Hackathon!",
+		"description": "Doppelte LoC-Produktion für 20s. Rausschicken!"
+	},
+	"investor_demo": {
+		"name": "Investor-Demo",
+		"description": "Wenn LoC/s > Schwellenwert: Cash-Bonus. Sonst: nichts passiert (peinlich)."
+	},
+	"stackoverflow_down": {
+		"name": "Stack Overflow ist down",
+		"description": "Halbe Tippgeschwindigkeit für 15s. Wie programmierst du überhaupt?"
+	},
+	"github_star": {
+		"name": "GitHub-Stern",
+		"description": "Jemand hat dein Repo gestarrt! Kleiner Cash-Bonus."
+	},
+	"coffee_spill": {
+		"name": "Kaffee verschüttet",
+		"description": "Du hast Kaffee auf die Tastatur gekippt. -50% Tippgeschwindigkeit für 10s."
+	},
+	"npm_install": {
+		"name": "npm install",
+		"description": "Abhängigkeiten werden installiert... FLOPS von node_modules verbraucht für 20s."
+	},
+	"viral_tweet": {
+		"name": "Viraler Tweet",
+		"description": "Deine heiße These wurde viral. Devs strömen zu deinem Projekt. +100% auto-LoC für 15s."
+	},
+	"ai_hallucination": {
+		"name": "KI-Halluzination",
+		"description": "Eines deiner KI-Modelle ist ausgerastet. Es hat 10K LoC Unsinn geschrieben. Qualität -10%."
+	},
+	"security_audit": {
+		"name": "Sicherheitsaudit",
+		"description": "Prüfer haben Schwachstellen gefunden. Zahle 5% des Cashs oder verliere 20% Qualität.",
+		"options": { "pay_fine": "Bußgeld zahlen", "ignore_it": "Ignorieren" }
+	},
+	"power_outage": {
+		"name": "Stromausfall",
+		"description": "Das Rechenzentrum ist ausgefallen. Keine FLOPS für 15s. Manuelles Tippen funktioniert noch."
+	},
+	"acquihire_offer": {
+		"name": "Acqui-hire-Angebot",
+		"description": "Ein Tech-Gigant will dich aufkaufen. Cash nehmen oder weitermachen?",
+		"options": { "sell_out": "Verkaufen", "stay_indie": "Indie bleiben" }
+	},
+	"dev_burnout": {
+		"name": "Entwickler-Burnout",
+		"description": "Deine Entwickler sind erschöpft. Token-Produktion -50% für 30s."
+	},
+	"prompt_fatigue": {
+		"name": "Prompt-Ermüdung",
+		"description": "Schlechte Prompt-Qualität. Token-Produktion -30% für 20s."
+	},
+	"prompt_breakthrough": {
+		"name": "Prompt-Durchbruch",
+		"description": "Perfekter Prompt! Token-Produktion ×3 für 15s."
+	}
 }

@@ -24,9 +24,9 @@ import {
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { match } from "ts-pattern";
-import { supportedLanguages } from "./i18n";
 import { useIdeTheme } from "./hooks/use-ide-theme";
 import { useIsMobile } from "./hooks/use-is-mobile";
+import { supportedLanguages } from "./i18n";
 
 const globalStyles = css({
 	"*": {
@@ -554,7 +554,9 @@ export function App() {
 								cursor: sidebarUnlocked ? "pointer" : "default",
 							}}
 							onClick={sidebarUnlocked ? toggleSidebar : undefined}
-							title={sidebarUnlocked ? t("sidebar.show") : t("tabs.unlock_tech_tree")}
+							title={
+								sidebarUnlocked ? t("sidebar.show") : t("tabs.unlock_tech_tree")
+							}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<rect
@@ -626,7 +628,11 @@ export function App() {
 								cursor: statsPanelUnlocked ? "pointer" : "default",
 							}}
 							onClick={statsPanelUnlocked ? toggleStatsPanel : undefined}
-							title={statsPanelUnlocked ? t("tabs.show_stats") : t("tabs.unlock_tech_tree")}
+							title={
+								statsPanelUnlocked
+									? t("tabs.show_stats")
+									: t("tabs.unlock_tech_tree")
+							}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<rect

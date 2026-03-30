@@ -80,7 +80,9 @@ export function CliPrompt() {
 
 	const getFlavorResponse = useCallback(
 		(family: string): string => {
-			const responses = flavorResponses[family as keyof typeof flavorResponses] ?? flavorResponses.gpt;
+			const responses =
+				flavorResponses[family as keyof typeof flavorResponses] ??
+				flavorResponses.gpt;
 			return responses[Math.floor(Math.random() * responses.length)];
 		},
 		[flavorResponses],
