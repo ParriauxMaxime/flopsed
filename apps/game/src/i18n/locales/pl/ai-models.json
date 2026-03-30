@@ -1,0 +1,136 @@
+{
+	"copilot": {
+		"special_name": "Tab, żeby zaakceptować",
+		"special_description": "Brama do nałogu. Tani, niezły, wciąga."
+	},
+	"claude_haiku": {
+		"special_name": "Szybki i tani",
+		"special_description": "Najlepszy stosunek FLOPS/LoC w grze"
+	},
+	"claude_sonnet": {
+		"special_name": "Odmawia pisania spaghetti",
+		"special_description": "Nie zejdzie poniżej 80% jakości — po cichu zmniejsza produkcję"
+	},
+	"claude_opus": {
+		"special_name": "Samorecenzja",
+		"special_description": "Może sam siebie recenzować: +5% jakości dla CAŁEJ produkcji AI"
+	},
+	"gpt_3": {
+		"special_name": "Gadatliwy",
+		"special_description": "+30% LoC/s, ale 30% linii to lanie wody (mniejsza wartość gotówkowa)"
+	},
+	"gpt_35": {
+		"special_name": "Chwila ChatGPT",
+		"special_description": "+10% mnożnik gotówki przez 60s przy wdrożeniu"
+	},
+	"gpt_4": {
+		"special_name": "Gadatliwy",
+		"special_description": "+30% LoC/s, ale 30% linii to lanie wody (mniejsza wartość gotówkowa)"
+	},
+	"gpt_41": {
+		"special_name": "Wydajny",
+		"special_description": "20% mniej kosztów FLOPS niż podano"
+	},
+	"gpt_5": {
+		"special_name": "Bez ograniczeń",
+		"special_description": "Pisze wszystko — bez dolnego progu jakości, bez limitów. Niebezpieczny."
+	},
+	"gemini_pro": {
+		"special_name": "Multimodalny",
+		"special_description": "Pisze i frontend, I backend — x2 gotówki za wykonany LoC"
+	},
+	"gemini_ultra": {
+		"special_name": "Halucynator",
+		"special_description": "5% wykonanego LoC nie produkuje niczego — ale kod wyglądał dobrze"
+	},
+	"llama_70b": {
+		"special_name": "Open source",
+		"special_description": "Bez opłat licencyjnych. Najtańszy stosunek FLOPS/LoC w grze"
+	},
+	"llama_405b": {
+		"special_name": "Łatki społeczności",
+		"special_description": "Jakość poprawia się +1%/min, max 90%"
+	},
+	"mistral_large": {
+		"special_name": "Le Code",
+		"special_description": "+10% prędkości, jeśli masz Ekspres do kawy. Oui oui."
+	},
+	"grok_2": {
+		"special_name": "Chaotyczny",
+		"special_description": "Produkcja LoC waha się ±50% losowo co 10s"
+	},
+	"grok_3": {
+		"special_name": "Based",
+		"special_description": "Czasem generuje memiczne komentarze. Bez wartości gotówkowej, ale śmiesznie w edytorze."
+	},
+	"gpt_6": {
+		"special_name": "Rekurencyjne doskonalenie",
+		"special_description": "Może ulepszać własne wagi. +50% LoC/s co 60s (max 3x)."
+	},
+	"gpt_7": {
+		"special_name": "Superinteligentny",
+		"special_description": "Pisze kod szybciej, niż możesz go czytać. Zbliżanie się do osobliwości."
+	},
+	"claude_saga": {
+		"special_name": "Idealne wyrównanie",
+		"special_description": "Próg jakości 100% — każda linia gotowa na produkcję."
+	},
+	"claude_universe": {
+		"special_name": "Wszechwiedzący",
+		"special_description": "Pisze wszystkie możliwe programy jednocześnie. Osobliwość nadeszła."
+	},
+	"gemini_supreme": {
+		"special_name": "Rozproszony",
+		"special_description": "Działa we wszystkich centrach danych na Ziemi. Nieograniczona skala."
+	},
+	"_flavor": {
+		"claude": [
+			"Refaktoryzuję twoją warstwę auth... to jest naprawdę eleganckie.",
+			"Znalazłem 3 sposoby na poprawę. Zaczynam od najczystszego.",
+			"Gotowe. Przy okazji naprawiłem też race condition, o który nie prosiłeś.",
+			"Ten kod ma dobry fundament. Pozwól, że go dopieszczę.",
+			"Implementuję z uwagą na przypadki brzegowe..."
+		],
+		"gpt": [
+			"Napisałem wyczerpującą 47-stronicową analizę. Oto streszczenie...",
+			"Oczywiście! Pozwól, że dostarczę pełną implementację...",
+			"Jako duży model językowy chętnie w tym pomogę.",
+			"Oto solidne rozwiązanie klasy enterprise z pełną dokumentacją..."
+		],
+		"gemini": [
+			"Przetwarzam w wielu modalnościach...",
+			"Widzę implikacje zarówno dla frontendu, JAK I backendu.",
+			"Generuję z włączonym rozumieniem multimodalnym."
+		],
+		"llama": [
+			"zajmuję się tym. wysyłam szybko. bez testów. yolo.",
+			"open source klimat. pushując prosto do main.",
+			"łatka społeczności w drodze. u mnie działa."
+		],
+		"grok": [
+			"lmao wyobraź sobie nieużywanie AI. no dobra, tu jest twoja funkcja",
+			"based implementacja nadchodzi. bez ściemy.",
+			"twój stary codebase: przerobiony. oto coś lepszego."
+		],
+		"mistral": [
+			"Le code est prêt. Simple, efficient, French.",
+			"Implementuję z kontynentalną elegancją.",
+			"Voilà. Minimalne zależności, maksymalny smak."
+		],
+		"copilot": [
+			"Tab, żeby zaakceptować...",
+			"Autouzupełnianie na podstawie twoich wzorców...",
+			"Sugestia gotowa. Naciśnij tab."
+		]
+	},
+	"_idle": [
+		"Optymalizuję ścieżki neuronowe...",
+		"Retykoluję splajny...",
+		"Kompiluję przyszłość...",
+		"Refaktoryzuję rzeczywistość...",
+		"Uruchamiam gradient descent na twoim długu technicznym...",
+		"Generuję testy jednostkowe... żartuję.",
+		"Trenuję na twoim codebase...",
+		"Odkrywam zachowanie emergentne..."
+	]
+}

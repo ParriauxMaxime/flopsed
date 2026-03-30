@@ -1,0 +1,146 @@
+{
+	"resource_bar": {
+		"queued": "En attente",
+		"cash": "Cash",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Auto-Exécution — +${{rate}}/s",
+		"execute": "⚡ Exécuter {{loc}} en attente → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Stats",
+		"hide": "Masquer les stats",
+		"resources": "Ressources",
+		"cash": "Cash",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Sources de tokens",
+		"loc_sources": "Sources de LoC",
+		"you": "Vous",
+		"tokens_per_sec": "tokens/s",
+		"per_sec": "/s",
+		"managers": "Managers",
+		"manager_bonus": "+{{bonus}}% sortie équipe",
+		"auto_exec": "⚡ Auto — +${{rate}}/s",
+		"execute": "⚡ Exécuter {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} tokens",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Matériel",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Disque",
+		"cpu_bottleneck": "⚠ Goulot CPU",
+		"ram_bottleneck": "⚠ Goulot RAM",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ Goulot FLOPS",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Exec {{count}} FLOPS",
+		"ai_flops": "IA {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s exéc.",
+		"ai_rate": "{{count}} loc/s gén."
+	},
+	"sidebar": {
+		"title": "Explorateur",
+		"hide": "Masquer la barre latérale",
+		"show": "Afficher la barre latérale",
+		"open_editors": "Éditeurs ouverts",
+		"upgrades": "Améliorations",
+		"milestones": "Jalons",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Éditeur divisé",
+		"close_split": "Fermer la division",
+		"show_stats": "Afficher les stats",
+		"unlock_tech_tree": "Débloquer dans l'arbre technologique"
+	},
+	"settings": {
+		"title": "Paramètres",
+		"appearance": "Apparence",
+		"color_theme": "Thème de couleur",
+		"color_theme_desc": "Définit le thème de couleur utilisé dans l'IDE.",
+		"window": "Fenêtre",
+		"zoom_level": "Niveau de zoom",
+		"zoom_level_desc": "Ajuste le niveau de zoom de l'IDE. Un redémarrage peut être nécessaire.",
+		"language": "Langue",
+		"language_name": "Langue d'affichage",
+		"language_desc": "Définit la langue d'affichage du jeu."
+	},
+	"editor": {
+		"terminal": "Terminal"
+	},
+	"tech_tree": {
+		"level": "Niveau {{owned}}/{{max}}",
+		"cost_cash": "Coût : ${{cost}}",
+		"cost_loc": "Coût : {{cost}} LoC",
+		"requires": "Nécessite : {{nodes}}",
+		"researched": "Recherché",
+		"maxed": "Maximum",
+		"click_to_research": "Cliquer pour rechercher",
+		"not_enough_cash": "Cash insuffisant",
+		"not_enough_loc": "LoC insuffisants",
+		"locked": "Verrouillé"
+	},
+	"upgrades": {
+		"maxed": "MAX",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} bonus"
+	},
+	"god_mode": {
+		"title": "Mode Dieu",
+		"resources": "Ressources",
+		"cash": "Cash",
+		"total_cash": "Cash total",
+		"loc": "LoC",
+		"total_loc": "LoC total",
+		"flops": "FLOPS",
+		"tokens": "Tokens",
+		"tier": "Palier",
+		"current": "Actuel :",
+		"ai_models": "Modèles IA",
+		"grant": "Accorder",
+		"tools": "Outils",
+		"data_editor": "Éditeur de données",
+		"danger_zone": "Zone dangereuse",
+		"reset_game": "Réinitialiser le jeu",
+		"trigger_singularity": "Déclencher la singularité",
+		"unlock_all_tech": "Débloquer toutes les techs",
+		"max_all_upgrades": "Maximiser toutes les améliorations"
+	},
+	"mobile": {
+		"code": "Code",
+		"tree": "Arbre",
+		"shop": "Boutique",
+		"upgrades": "Améliorations",
+		"milestones": "Jalons",
+		"settings": "Paramètres",
+		"theme": "Thème",
+		"auto_type": "Frappe auto",
+		"on": "ON",
+		"off": "OFF",
+		"reset_game": "Réinitialiser le jeu"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Modèles chargés. Tapez un prompt ou regardez-les travailler.",
+		"placeholder": "Tapez un prompt..."
+	}
+}

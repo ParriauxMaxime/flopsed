@@ -1,0 +1,70 @@
+{
+	"production_down": {
+		"name": "生产环境崩了！",
+		"description": "FLOPS 减半 30 秒。疯狂敲键盘可加速修复（每次按键 -1 秒）。"
+	},
+	"hackathon": {
+		"name": "黑客松！",
+		"description": "LoC 产出翻倍 20 秒。赶紧上线！"
+	},
+	"investor_demo": {
+		"name": "投资人演示",
+		"description": "若 LoC/s 超过阈值：获得奖励现金。若未达到：什么都没发生（好尴尬）。"
+	},
+	"stackoverflow_down": {
+		"name": "Stack Overflow 挂了",
+		"description": "打字速度减半 15 秒。你到底怎么写代码？"
+	},
+	"github_star": {
+		"name": "GitHub Star",
+		"description": "有人给你的仓库点了星！小额现金奖励。"
+	},
+	"coffee_spill": {
+		"name": "咖啡洒了",
+		"description": "你把咖啡洒在键盘上了。打字速度 -50%，持续 10 秒。"
+	},
+	"npm_install": {
+		"name": "npm install",
+		"description": "正在安装依赖……node_modules 占用了 FLOPS，持续 20 秒。"
+	},
+	"viral_tweet": {
+		"name": "推文爆火",
+		"description": "你的犀利观点火了。开发者涌向你的项目。自动 LoC +100%，持续 15 秒。"
+	},
+	"ai_hallucination": {
+		"name": "AI 幻觉",
+		"description": "你的一个 AI 模型失控了。它写了 1 万行废话。质量 -10%。"
+	},
+	"security_audit": {
+		"name": "安全审计",
+		"description": "审计人员发现了漏洞。支付 5% 现金或损失 20% 质量。",
+		"options": {
+			"pay_fine": "支付罚款",
+			"ignore_it": "无视它"
+		}
+	},
+	"power_outage": {
+		"name": "停电",
+		"description": "数据中心断电了。15 秒内没有 FLOPS。手动打字仍然有效。"
+	},
+	"acquihire_offer": {
+		"name": "收购邀约",
+		"description": "大厂想买断你。接受现金还是继续拼搏？",
+		"options": {
+			"sell_out": "卖掉",
+			"stay_indie": "保持独立"
+		}
+	},
+	"dev_burnout": {
+		"name": "开发者倦怠",
+		"description": "你的开发者精疲力竭了。代币产出 -50%，持续 30 秒。"
+	},
+	"prompt_fatigue": {
+		"name": "提示词疲劳",
+		"description": "提示词质量低下。代币产出 -30%，持续 20 秒。"
+	},
+	"prompt_breakthrough": {
+		"name": "提示词突破",
+		"description": "完美提示词！代币产出 ×3，持续 15 秒。"
+	}
+}

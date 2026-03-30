@@ -1,0 +1,8 @@
+{
+	"garage": { "name": "车库", "tagline": "一个键盘，一个梦想。" },
+	"freelancing": { "name": "自由职业", "tagline": "你在出售代码。客户出现了。" },
+	"startup": { "name": "创业公司", "tagline": "你现在有公司了。该招人了。" },
+	"tech_company": { "name": "科技公司", "tagline": "产品在印钱。" },
+	"ai_lab": { "name": "AI 实验室", "tagline": "代码开始自己写自己——但它吃掉你的算力。" },
+	"agi_race": { "name": "AGI 竞赛", "tagline": "你不再写代码了。AI 在写。" }
+}

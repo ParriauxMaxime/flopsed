@@ -1,0 +1,146 @@
+{
+	"resource_bar": {
+		"queued": "In coda",
+		"cash": "Cash",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Auto-Esecuzione — +${{rate}}/s",
+		"execute": "⚡ Esegui {{loc}} in coda → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Statistiche",
+		"hide": "Nascondi statistiche",
+		"resources": "Risorse",
+		"cash": "Cash",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Fonti di token",
+		"loc_sources": "Fonti di LoC",
+		"you": "Tu",
+		"tokens_per_sec": "token/s",
+		"per_sec": "/s",
+		"managers": "Manager",
+		"manager_bonus": "+{{bonus}}% output del team",
+		"auto_exec": "⚡ Auto — +${{rate}}/s",
+		"execute": "⚡ Esegui {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} token",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Hardware",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Disco",
+		"cpu_bottleneck": "⚠ Collo di bottiglia CPU",
+		"ram_bottleneck": "⚠ Collo di bottiglia RAM",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ Collo di bottiglia FLOPS",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Exec {{count}} FLOPS",
+		"ai_flops": "IA {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s esec.",
+		"ai_rate": "{{count}} loc/s gen."
+	},
+	"sidebar": {
+		"title": "Esplora",
+		"hide": "Nascondi barra laterale",
+		"show": "Mostra barra laterale",
+		"open_editors": "Editor aperti",
+		"upgrades": "Potenziamenti",
+		"milestones": "Traguardi",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Editor diviso",
+		"close_split": "Chiudi divisione",
+		"show_stats": "Mostra statistiche",
+		"unlock_tech_tree": "Sblocca nell'albero tecnologico"
+	},
+	"settings": {
+		"title": "Impostazioni",
+		"appearance": "Aspetto",
+		"color_theme": "Tema colori",
+		"color_theme_desc": "Specifica il tema colori usato nell'IDE.",
+		"window": "Finestra",
+		"zoom_level": "Livello di zoom",
+		"zoom_level_desc": "Regola il livello di zoom dell'IDE. Potrebbe essere necessario riavviare.",
+		"language": "Lingua",
+		"language_name": "Lingua di visualizzazione",
+		"language_desc": "Specifica la lingua di visualizzazione del gioco."
+	},
+	"editor": {
+		"terminal": "Terminale"
+	},
+	"tech_tree": {
+		"level": "Livello {{owned}}/{{max}}",
+		"cost_cash": "Costo: ${{cost}}",
+		"cost_loc": "Costo: {{cost}} LoC",
+		"requires": "Richiede: {{nodes}}",
+		"researched": "Ricercato",
+		"maxed": "Massimo",
+		"click_to_research": "Clicca per ricercare",
+		"not_enough_cash": "Cash insufficiente",
+		"not_enough_loc": "LoC insufficienti",
+		"locked": "Bloccato"
+	},
+	"upgrades": {
+		"maxed": "MAX",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} bonus"
+	},
+	"god_mode": {
+		"title": "Modalità Dio",
+		"resources": "Risorse",
+		"cash": "Cash",
+		"total_cash": "Cash totale",
+		"loc": "LoC",
+		"total_loc": "LoC totale",
+		"flops": "FLOPS",
+		"tokens": "Token",
+		"tier": "Livello",
+		"current": "Attuale:",
+		"ai_models": "Modelli IA",
+		"grant": "Concedi",
+		"tools": "Strumenti",
+		"data_editor": "Editor dati",
+		"danger_zone": "Zona pericolosa",
+		"reset_game": "Reimposta gioco",
+		"trigger_singularity": "Attiva singolarità",
+		"unlock_all_tech": "Sblocca tutta la tecnologia",
+		"max_all_upgrades": "Massimizza tutti i potenziamenti"
+	},
+	"mobile": {
+		"code": "Codice",
+		"tree": "Albero",
+		"shop": "Negozio",
+		"upgrades": "Potenziamenti",
+		"milestones": "Traguardi",
+		"settings": "Impostazioni",
+		"theme": "Tema",
+		"auto_type": "Scrittura automatica",
+		"on": "ON",
+		"off": "OFF",
+		"reset_game": "Reimposta gioco"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Modelli caricati. Digita un prompt o guardali lavorare.",
+		"placeholder": "Digita un prompt..."
+	}
+}

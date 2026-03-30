@@ -1,0 +1,17 @@
+{
+	"production_down": { "name": "La prod est en carafe !", "description": "FLOPS divisés par 2 pendant 30s. Tapez comme un forcené pour accélérer le correctif (chaque touche = -1s)." },
+	"hackathon": { "name": "Hackathon !", "description": "Production de LoC doublée pendant 20s. Livrez !" },
+	"investor_demo": { "name": "Démo investisseur", "description": "Si LoC/s > seuil : bonus cash. Sinon : rien ne se passe (c'est gênant)." },
+	"stackoverflow_down": { "name": "Stack Overflow est down", "description": "Vitesse de frappe divisée par 2 pendant 15s. Comment vous codez, là ?" },
+	"github_star": { "name": "GitHub Star", "description": "Quelqu'un a starifié votre repo ! Petit bonus de cash." },
+	"coffee_spill": { "name": "Café renversé", "description": "Vous avez renversé votre café sur le clavier. -50% vitesse de frappe pendant 10s." },
+	"npm_install": { "name": "npm install", "description": "Installation des dépendances... FLOPS absorbés par node_modules pendant 20s." },
+	"viral_tweet": { "name": "Tweet viral", "description": "Votre prise de position a enflammé la Fachosphère tech. Les devs affluent. +100% auto-LoC pendant 15s." },
+	"ai_hallucination": { "name": "Hallucination IA", "description": "Un de vos modèles a disjoncté. Il a pondu 10K LoC de charabia. Qualité -10%." },
+	"security_audit": { "name": "Audit de sécurité", "description": "Les auditeurs ont trouvé des failles. Payez 5% de votre cash ou perdez 20% de qualité.", "options": { "pay_fine": "Payer l'amende", "ignore_it": "Ignorer" } },
+	"power_outage": { "name": "Coupure de courant", "description": "Le datacenter s'est éteint. Plus de FLOPS pendant 15s. La frappe manuelle fonctionne encore." },
+	"acquihire_offer": { "name": "Offre d'acqui-hire", "description": "Un géant du web veut vous racheter. Prenez le cash ou continuez à galérer ?", "options": { "sell_out": "Vendre", "stay_indie": "Rester indie" } },
+	"dev_burnout": { "name": "Burn-out dev", "description": "Vos développeurs sont épuisés. Production de tokens -50% pendant 30s." },
+	"prompt_fatigue": { "name": "Fatigue des prompts", "description": "Prompts de mauvaise qualité. Production de tokens -30% pendant 20s." },
+	"prompt_breakthrough": { "name": "Prompt parfait", "description": "Prompt parfait ! Production de tokens ×3 pendant 15s." }
+}

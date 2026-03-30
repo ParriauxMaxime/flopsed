@@ -1,0 +1,352 @@
+{
+	"better_keyboard": {
+		"name": "更好的键盘",
+		"description": "每次按键 +3 LoC"
+	},
+	"auto_type": {
+		"name": "自动输入",
+		"description": "代码自动写。在设置中切换。"
+	},
+	"auto_execute": {
+		"name": "自动执行",
+		"description": "FLOPS 自动运行你的代码。"
+	},
+	"coffee": {
+		"name": "咖啡",
+		"description": "每次按键 +2 LoC"
+	},
+	"barista": {
+		"name": "咖啡师",
+		"description": "每次按键 +3 LoC"
+	},
+	"doppio": {
+		"name": "双份浓缩",
+		"description": "每次按键 +5 LoC"
+	},
+	"github_actions": {
+		"name": "GitHub Actions",
+		"description": "每级 +3 FLOPS"
+	},
+	"cloudflare_workers": {
+		"name": "Cloudflare Workers",
+		"description": "每级 +4 FLOPS"
+	},
+	"cpu_upgrade": {
+		"name": "CPU 升级",
+		"description": "+2 FLOPS（受 RAM 瓶颈制约）",
+		"level_labels": [
+			"64KHz → 128KHz",
+			"128KHz → 256KHz",
+			"256KHz → 512KHz",
+			"512KHz → 1MHz",
+			"1MHz → 2MHz",
+			"2MHz → 4MHz",
+			"4MHz → 8MHz"
+		]
+	},
+	"ram_upgrade": {
+		"name": "RAM 升级",
+		"description": "+2 FLOPS（受 CPU 瓶颈制约）",
+		"level_labels": [
+			"128MB → 256MB",
+			"256MB → 512MB",
+			"512MB → 1GB",
+			"1GB → 2GB",
+			"2GB → 4GB",
+			"4GB → 8GB"
+		]
+	},
+	"storage_upgrade": {
+		"name": "存储",
+		"description": "+2 FLOPS（无瓶颈）",
+		"level_labels": [
+			"10GB → 20GB",
+			"20GB → 40GB",
+			"40GB → 80GB",
+			"80GB → 160GB",
+			"160GB → 320GB",
+			"320GB → 640GB",
+			"640GB → 1TB"
+		]
+	},
+	"tier_freelancing": {
+		"name": "自由职业",
+		"description": "解锁第 1 层——客户出现，实习生可招募。"
+	},
+	"intern_teaching": {
+		"name": "教学",
+		"description": "每级实习生 LoC/s +20%"
+	},
+	"intern_trap": {
+		"name": "实习生陷阱",
+		"description": "每级实习生雇佣成本 -15%"
+	},
+	"intern_quality": {
+		"name": "代码审查 101",
+		"description": "每级每 LoC 现金 +10%"
+	},
+	"tier_startup": {
+		"name": "创业公司",
+		"description": "解锁第 2 层——雇佣开发者，扩大规模。"
+	},
+	"ci_cd_pipeline": {
+		"name": "CI/CD 流水线",
+		"description": "每级 +30 FLOPS"
+	},
+	"cloud_server": {
+		"name": "云服务器",
+		"description": "每级 +100 FLOPS"
+	},
+	"dev_mentoring": {
+		"name": "导师制",
+		"description": "每级开发者 LoC/s +20%"
+	},
+	"dev_recruiting": {
+		"name": "招聘专员",
+		"description": "每级开发者雇佣成本 -15%"
+	},
+	"dev_quality": {
+		"name": "代码规范",
+		"description": "每级每 LoC 现金 +15%"
+	},
+	"computer": {
+		"name": "电脑",
+		"description": "你的第一台电脑。+1 FLOP。"
+	},
+	"unlock_sidebar": {
+		"name": "文件资源管理器",
+		"description": "解锁侧边栏以浏览升级和里程碑。"
+	},
+	"unlock_stats_panel": {
+		"name": "统计监控",
+		"description": "解锁统计面板以实时追踪资源。"
+	},
+	"unlock_analytics": {
+		"name": "分析",
+		"description": "按来源查看 LoC 生产明细。"
+	},
+	"interns": {
+		"name": "实习生",
+		"description": "解锁实习生招募。他们便宜又积极。"
+	},
+	"tier_tech_company": {
+		"name": "科技公司",
+		"description": "解锁第 3 层——雇佣团队，任命管理者。"
+	},
+	"teams_gate": {
+		"name": "团队架构",
+		"description": "允许雇佣完整开发团队。"
+	},
+	"team_productivity": {
+		"name": "敏捷教练",
+		"description": "每级团队 LoC/s +25%"
+	},
+	"team_cost": {
+		"name": "批量招聘",
+		"description": "每级团队雇佣成本 -15%"
+	},
+	"team_quality": {
+		"name": "代码审查",
+		"description": "每级每 LoC 现金 +15%"
+	},
+	"management_gate": {
+		"name": "管理",
+		"description": "解锁管理分支。管理者倍增团队产出。"
+	},
+	"manager_efficiency": {
+		"name": "领导力培训",
+		"description": "每级管理者效能 +30%"
+	},
+	"manager_cost": {
+		"name": "人力资源部",
+		"description": "每级管理者雇佣成本 -20%"
+	},
+	"manager_scope": {
+		"name": "授权委托",
+		"description": "每级所有自动 LoC +20%"
+	},
+	"cloud_infra": {
+		"name": "云基础设施",
+		"description": "每级 +1,000 FLOPS"
+	},
+	"cdn_network": {
+		"name": "CDN 网络",
+		"description": "每级 +2,000 存储 FLOPS"
+	},
+	"tier_ai_lab": {
+		"name": "AI 实验室",
+		"description": "解锁第 4 层——AI 模型，海量算力。"
+	},
+	"tier_agi_race": {
+		"name": "AGI 竞赛",
+		"description": "解锁第 5 层——最终冲刺。"
+	},
+	"llm_gate": {
+		"name": "LLM",
+		"description": "解锁 LLM 实例。"
+	},
+	"llm_training": {
+		"name": "微调",
+		"description": "每级 LLM 产出 +20%"
+	},
+	"llm_cost": {
+		"name": "模型蒸馏",
+		"description": "每级 LLM 成本 -15%"
+	},
+	"llm_quality": {
+		"name": "RLHF",
+		"description": "每级每 LoC 现金 +15%"
+	},
+	"gpu_farm": {
+		"name": "GPU 农场",
+		"description": "每级 +500K FLOPS"
+	},
+	"fiber_network": {
+		"name": "光纤网络",
+		"description": "每级 +100K 存储 FLOPS"
+	},
+	"agent_gate": {
+		"name": "代理框架",
+		"description": "解锁自主 AI 代理。"
+	},
+	"agent_autonomy": {
+		"name": "自我提升",
+		"description": "每级代理产出 x1.5"
+	},
+	"agent_cost": {
+		"name": "规模法则",
+		"description": "每级代理成本 -20%"
+	},
+	"agent_alignment": {
+		"name": "对齐研究",
+		"description": "每级每 LoC 现金 x1.5"
+	},
+	"quantum_compute": {
+		"name": "量子集群",
+		"description": "每级 +50M FLOPS"
+	},
+	"neural_fabric": {
+		"name": "神经织物",
+		"description": "每级 +10M 存储 FLOPS"
+	},
+	"intern_capacity": {
+		"name": "实习生计划",
+		"description": "每级最大实习生 +5"
+	},
+	"team_capacity": {
+		"name": "办公室扩张",
+		"description": "每级最大团队 +5"
+	},
+	"manager_capacity": {
+		"name": "C 级高管",
+		"description": "每级最大管理者 +3"
+	},
+	"llm_capacity": {
+		"name": "GPU 分配",
+		"description": "每级最大 LLM 实例 +5"
+	},
+	"agent_capacity": {
+		"name": "代理集群",
+		"description": "每级最大代理 +3"
+	},
+	"outsourcing": {
+		"name": "外包",
+		"description": "在 Malt 解锁自由职业者招募。"
+	},
+	"freelancer_training": {
+		"name": "入职培训",
+		"description": "每级自由职业者 LoC/s +20%"
+	},
+	"freelancer_cost": {
+		"name": "费率谈判",
+		"description": "自由职业者成本 -10%"
+	},
+	"freelancer_capacity": {
+		"name": "人才库",
+		"description": "最大自由职业者 +5"
+	},
+	"openai_gpt3": {
+		"name": "GPT-3",
+		"description": "解锁 GPT-3 以部署。"
+	},
+	"openai_gpt35": {
+		"name": "GPT-3.5",
+		"description": "解锁 GPT-3.5 以部署。"
+	},
+	"openai_gpt4": {
+		"name": "GPT-4",
+		"description": "解锁 GPT-4 以部署。"
+	},
+	"openai_gpt41": {
+		"name": "GPT-4.1",
+		"description": "解锁 GPT-4.1 以部署。"
+	},
+	"openai_gpt5": {
+		"name": "GPT-5",
+		"description": "解锁 GPT-5 以部署。"
+	},
+	"anthropic_haiku": {
+		"name": "Claude Haiku",
+		"description": "解锁 Claude Haiku 以部署。"
+	},
+	"anthropic_sonnet": {
+		"name": "Claude Sonnet",
+		"description": "解锁 Claude Sonnet 以部署。"
+	},
+	"anthropic_opus": {
+		"name": "Claude Opus",
+		"description": "解锁 Claude Opus 以部署。"
+	},
+	"github_copilot": {
+		"name": "GitHub Copilot",
+		"description": "解锁 Copilot 以部署。"
+	},
+	"google_gemini_pro": {
+		"name": "Gemini Pro",
+		"description": "解锁 Gemini Pro 以部署。"
+	},
+	"google_gemini_ultra": {
+		"name": "Gemini Ultra",
+		"description": "解锁 Gemini Ultra 以部署。"
+	},
+	"meta_llama_70b": {
+		"name": "Llama 70B",
+		"description": "解锁 Llama 70B 以部署。"
+	},
+	"meta_llama_405b": {
+		"name": "Llama 405B",
+		"description": "解锁 Llama 405B 以部署。"
+	},
+	"mistral_unlock": {
+		"name": "Mistral Large",
+		"description": "解锁 Mistral Large 以部署。"
+	},
+	"xai_grok2": {
+		"name": "Grok 2",
+		"description": "解锁 Grok 2 以部署。"
+	},
+	"xai_grok3": {
+		"name": "Grok 3",
+		"description": "解锁 Grok 3 以部署。"
+	},
+	"openai_gpt6": {
+		"name": "GPT-6",
+		"description": "解锁 GPT-6 以部署。"
+	},
+	"openai_gpt7": {
+		"name": "GPT-7",
+		"description": "解锁 GPT-7 以部署。"
+	},
+	"anthropic_saga": {
+		"name": "Claude Saga",
+		"description": "解锁 Claude Saga 以部署。"
+	},
+	"anthropic_universe": {
+		"name": "Claude Universe",
+		"description": "解锁 Claude Universe 以部署。"
+	},
+	"google_gemini_supreme": {
+		"name": "Gemini Supreme",
+		"description": "解锁 Gemini Supreme 以部署。"
+	}
+}

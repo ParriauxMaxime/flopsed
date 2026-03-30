@@ -1,0 +1,14 @@
+{
+	"hello_world": { "name": "Hello World", "description": "Le tue prime 10 righe. Tutti iniziano da qualche parte." },
+	"script_kiddie": { "name": "Script Kiddie", "description": "100 LoC. Sai copiare e incollare come i migliori." },
+	"first_dollar": { "name": "Primo Dollaro", "description": "Il tuo codice ha fatto soldi. Non sperperarlo tutto in una volta." },
+	"side_project": { "name": "Progetto personale", "description": "500 LoC. \"Lo finisco questo weekend.\"" },
+	"real_dev": { "name": "Sviluppatore Vero", "description": "1.000 LoC. Ora produci bug su scala industriale." },
+	"yc_application": { "name": "Candidatura YC", "description": "5.000 LoC. \"Stiamo disruppando il codice.\"" },
+	"open_source_fame": { "name": "Fama Open Source", "description": "25K LoC. 3 stelle GitHub (una è il tuo account fake)." },
+	"big_tech": { "name": "Big Tech", "description": "100K LoC. Hai un badge e la sindrome dell'impostore." },
+	"ml_paper": { "name": "Paper ML Pubblicato", "description": "500K LoC. \"Raggiungiamo risultati allo stato dell'arte.\"" },
+	"llm_training": { "name": "Training Avviato", "description": "2M LoC. Le GPU sono calde." },
+	"emergent_behavior": { "name": "Comportamento Emergente", "description": "10M LoC. Ha detto qualcosa che non ti aspettavi." },
+	"agi": { "name": "AGI Raggiunta", "description": "200M LoC. \"Ciao, mondo.\" — ha risposto." }
+}

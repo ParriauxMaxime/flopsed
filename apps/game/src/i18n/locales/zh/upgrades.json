@@ -1,0 +1,20 @@
+{
+	"malt_freelancer": { "name": "自由职业者", "description": "远程开发者——每秒写 5 LoC" },
+	"desktop_pc": { "name": "台式电脑", "description": "+50 FLOPS" },
+	"second_monitor": { "name": "第二台显示器", "description": "+25 FLOPS" },
+	"server_rack": { "name": "服务器机架", "description": "+200 FLOPS" },
+	"intern": { "name": "实习生", "description": "自动写代码，每秒 15 LoC" },
+	"dev_team": { "name": "开发团队", "description": "自动写代码，每秒 200 LoC" },
+	"manager": { "name": "管理者", "description": "所有团队产出乘以 +50%" },
+	"gpu_cluster": { "name": "GPU 集群", "description": "+2,000 FLOPS" },
+	"architect": { "name": "架构师", "description": "LoC 执行产出 x1.3 现金" },
+	"data_center": { "name": "数据中心", "description": "+20,000 FLOPS" },
+	"series_a": { "name": "A 轮融资", "description": "立即注入 $10M 现金" },
+	"rlhf": { "name": "RLHF 训练", "description": "每级 LLM 产出 x1.3" },
+	"ml_pipeline": { "name": "ML 流水线", "description": "每 LoC 现金 x1.2" },
+	"llm": { "name": "LLM", "description": "托管 1 个 AI 模型——自动选择最优可用模型" },
+	"series_b": { "name": "B 轮融资", "description": "立即注入 $500M 现金" },
+	"ai_agent": { "name": "AI 代理", "description": "自主代理——每秒写 100,000 LoC" },
+	"supercomputer": { "name": "超级计算机", "description": "+20M FLOPS" },
+	"the_singularity": { "name": "奇点", "description": "你赢了。还是说你赢了？" }
+}
