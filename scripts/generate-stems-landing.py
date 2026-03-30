@@ -424,7 +424,23 @@ def normalize(audio, peak=0.8):
     return audio
 
 
+def loop_crossfade(audio, crossfade_s=0.5):
+    """Crossfade the tail into the head for seamless looping."""
+    xf_n = int(crossfade_s * SAMPLE_RATE)
+    if xf_n >= len(audio) // 2:
+        return audio
+    # Equal-power crossfade curve
+    fade_out = np.cos(np.linspace(0, np.pi / 2, xf_n)) ** 2
+    fade_in = np.sin(np.linspace(0, np.pi / 2, xf_n)) ** 2
+    # Blend tail into head
+    audio[:xf_n] = audio[:xf_n] * fade_in + audio[-xf_n:] * fade_out
+    # Fade the very end to meet the new blended start
+    audio[-xf_n:] *= fade_out
+    return audio
+
+
 def save_ogg(name, audio):
+    audio = loop_crossfade(audio, crossfade_s=0.4)
     audio = normalize(audio)
     audio_16 = (audio * 32767).astype(np.int16)
 
