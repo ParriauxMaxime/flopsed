@@ -188,8 +188,8 @@ def generate_pad():
             freq = nf(note_name)
             # Two detuned oscillators (+10 cents apart)
             detune_factor = 2 ** (10 / 1200)  # 10 cents
-            # Slow vibrato LFO at ~2.5 Hz
-            vibrato = 1 + 0.004 * np.sin(2 * np.pi * 2.5 * t_local)
+            # Very subtle vibrato LFO — gentle shimmer, not wobble
+            vibrato = 1 + 0.001 * np.sin(2 * np.pi * 1.5 * t_local)
             osc1 = saw_bl(freq * vibrato, t_local, 0.12)
             osc2 = saw_bl(freq * detune_factor * vibrato, t_local, 0.12)
             chord_sig += osc1 + osc2
