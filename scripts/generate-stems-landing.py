@@ -161,45 +161,52 @@ LEAD_MELODY = [
 
 
 def generate_pad():
-    """Lush detuned saw pad. No vibrato — just width from detuning."""
+    """Lush detuned saw pad with long release tails — chords overlap and bleed."""
     out = np.zeros(N_SAMPLES)
+
+    # Release tail: chords ring 1.5 bars past their boundary
+    RELEASE_BARS = 1.5
 
     for notes, _, bar_start, bar_dur in CHORD_SEQ:
         start = int(bar_start * BAR * SAMPLE_RATE)
-        dur = int(bar_dur * BAR * SAMPLE_RATE)
-        end = min(start + dur, N_SAMPLES)
+        # Render longer than the chord's duration — let it ring
+        render_dur = (bar_dur + RELEASE_BARS) * BAR
+        render_n = int(render_dur * SAMPLE_RATE)
+        end = min(start + render_n, N_SAMPLES)
         n = end - start
         t_local = np.linspace(0, n / SAMPLE_RATE, n, endpoint=False)
 
         chord_sig = np.zeros(n)
         for note_name in notes:
             freq = nf(note_name)
-            # Two detuned oscillators (+8 cents) — width, no wobble
             detune = 2 ** (8 / 1200)
             osc1 = saw_bl(freq * 0.999, t_local, 0.10, harmonics=10)
             osc2 = saw_bl(freq * detune, t_local, 0.10, harmonics=10)
             chord_sig += osc1 + osc2
 
-        # Gentle attack/release
+        # Envelope: gentle attack, sustain through the chord, long exponential release
         env = np.ones(n)
-        att = int(0.4 * SAMPLE_RATE)
-        rel = int(0.6 * SAMPLE_RATE)
+        att = int(0.3 * SAMPLE_RATE)
+        sustain_end = int(bar_dur * BAR * SAMPLE_RATE)
         if att < n:
             env[:att] = np.linspace(0, 1, att)
-        if rel < n:
-            env[-rel:] = np.linspace(1, 0.2, rel)
+        # After the chord's actual duration, fade out with long tail
+        if sustain_end < n:
+            release_n = n - sustain_end
+            t_rel = np.arange(release_n) / SAMPLE_RATE
+            env[sustain_end:] = np.exp(-t_rel / (RELEASE_BARS * BAR * 0.5))
 
         chord_sig *= env
         out[start:end] += chord_sig
 
-    # Gentle high-end taming only
+    # Gentle high-end taming
     out = lowpass_1pole(out, 7000)
-    # Spacious reverb
-    out = simple_reverb(out, decay=0.35, delays_ms=(29, 47, 73, 109, 151))
-    # Subtle delay
-    out = delay_effect(out, beat_frac=0.5, feedback=0.15, wet=0.12)
+    # Lush reverb — longer decay for that wash
+    out = simple_reverb(out, decay=0.45, delays_ms=(29, 47, 73, 109, 151, 197))
+    # Delay adds more space
+    out = delay_effect(out, beat_frac=0.5, feedback=0.2, wet=0.15)
 
-    return out * 0.65
+    return out * 0.6
 
 
 def generate_arp():
