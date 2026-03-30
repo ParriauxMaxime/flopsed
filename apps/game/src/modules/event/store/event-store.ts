@@ -133,6 +133,7 @@ export function resolveChoiceEffects(
 // ---------------------------------------------------------------------------
 
 interface MilestoneToast {
+	id: string;
 	name: string;
 	description: string;
 	cashBonus: number;
@@ -160,6 +161,7 @@ interface EventActions {
 	getEventModifiers(): EventModifiers;
 	getActiveInteractiveEvent(): ActiveEvent | null;
 	showMilestoneToast(
+		id: string,
 		name: string,
 		description: string,
 		cashBonus: number,
@@ -484,12 +486,13 @@ export const useEventStore = create<EventState & EventActions>()(
 		},
 
 		showMilestoneToast(
+			id: string,
 			name: string,
 			description: string,
 			cashBonus: number,
 		): void {
 			set({
-				milestoneToast: { name, description, cashBonus },
+				milestoneToast: { id, name, description, cashBonus },
 				milestoneDismissCountdown: 5,
 			});
 		},

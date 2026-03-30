@@ -602,7 +602,7 @@ export const useGameStore = create<GameState & GameActions>()(
 								next.totalCash = (next.totalCash ?? totalCash) + m.cashBonus;
 								useEventStore
 									.getState()
-									.showMilestoneToast(m.name, m.description, m.cashBonus);
+									.showMilestoneToast(m.id, m.name, m.description, m.cashBonus);
 							}
 						}
 					}

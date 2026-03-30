@@ -23,6 +23,7 @@ import {
 } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { useIsMobile } from "../hooks/use-is-mobile";
 
@@ -277,6 +278,8 @@ interface PopoverProps {
 }
 
 function NodePopover({ node, x, y }: PopoverProps) {
+	const { t } = useTranslation();
+	const { t: tTech } = useTranslation("tech-tree");
 	const theme = useIdeTheme();
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
@@ -325,9 +328,9 @@ function NodePopover({ node, x, y }: PopoverProps) {
 	return (
 		<div css={popoverStyle} style={{ left: x, top: y }}>
 			<div css={popoverNameStyle}>
-				{node.icon} {node.name}
+				{node.icon} {tTech(`${node.id}.name`)}
 			</div>
-			<div css={popoverDescStyle}>{node.description}</div>
+			<div css={popoverDescStyle}>{tTech(`${node.id}.description`)}</div>
 			{node.effects.length > 0 && (
 				<div css={popoverDetailStyle}>
 					{node.effects.map((e) => formatEffect(e)).join(", ")}
@@ -336,42 +339,44 @@ function NodePopover({ node, x, y }: PopoverProps) {
 			{levelLabel && !maxed && <div css={popoverDetailStyle}>{levelLabel}</div>}
 			{node.max > 1 && (
 				<div css={popoverDetailStyle}>
-					Level {owned}/{node.max}
+					{t("tech_tree.level", { owned, max: node.max })}
 				</div>
 			)}
 			{!maxed && (
 				<div css={popoverDetailStyle}>
-					Cost:{" "}
-					{useLoc ? `${formatNumber(cost)} LoC` : `$${formatNumber(cost)}`}
+					{useLoc
+						? t("tech_tree.cost_loc", { cost: formatNumber(cost) })
+						: t("tech_tree.cost_cash", { cost: formatNumber(cost) })}
 				</div>
 			)}
 			{!prereqsMet && !maxed && (
 				<div css={[popoverDetailStyle, { color: "#e94560" }]}>
-					Requires:{" "}
-					{node.requires
-						.filter((id) => (ownedTechNodes[id] ?? 0) === 0)
-						.map((id) => allTechNodes.find((n) => n.id === id)?.name ?? id)
-						.join(", ")}
+					{t("tech_tree.requires", {
+						nodes: node.requires
+							.filter((id) => (ownedTechNodes[id] ?? 0) === 0)
+							.map((id) => tTech(`${id}.name`, { defaultValue: allTechNodes.find((n) => n.id === id)?.name ?? id }))
+							.join(", "),
+					})}
 				</div>
 			)}
 			{maxed && (
 				<div css={{ fontSize: 12, color: theme.success, fontWeight: "bold" }}>
-					{node.max === 1 ? "Researched" : "Maxed"}
+					{node.max === 1 ? t("tech_tree.researched") : t("tech_tree.maxed")}
 				</div>
 			)}
 			{!maxed && prereqsMet && canAfford && (
 				<div css={{ fontSize: 11, color: theme.accent, marginTop: 4 }}>
-					Click to research
+					{t("tech_tree.click_to_research")}
 				</div>
 			)}
 			{!maxed && prereqsMet && !canAfford && (
 				<div css={{ fontSize: 11, color: "#e94560", marginTop: 4 }}>
-					Not enough {useLoc ? "LoC" : "cash"}
+					{useLoc ? t("tech_tree.not_enough_loc") : t("tech_tree.not_enough_cash")}
 				</div>
 			)}
 			{!maxed && !prereqsMet && (
 				<div css={{ fontSize: 11, color: theme.lineNumbers, marginTop: 4 }}>
-					Locked
+					{t("tech_tree.locked")}
 				</div>
 			)}
 		</div>

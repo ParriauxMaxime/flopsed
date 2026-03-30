@@ -3,6 +3,7 @@ import type { EventEffect } from "@flopsed/domain";
 import { events as allEvents } from "@flopsed/domain";
 import { useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useTranslation } from "react-i18next";
 import { resolveChoiceEffects, useEventStore } from "../store/event-store";
 
 // ---------------------------------------------------------------------------
@@ -157,6 +158,8 @@ const milestoneBonusCss = css({
 });
 
 function MilestoneToastCard() {
+	const { t } = useTranslation();
+	const { t: tMilestones } = useTranslation("milestones");
 	const milestoneToast = useEventStore((s) => s.milestoneToast);
 	if (!milestoneToast) return null;
 
@@ -164,10 +167,14 @@ function MilestoneToastCard() {
 		<div css={milestoneToastCss}>
 			<div css={iconCss}>🏆</div>
 			<div css={contentCss}>
-				<div css={nameCss}>{milestoneToast.name}</div>
-				<div css={descCss}>{milestoneToast.description}</div>
+				<div css={nameCss}>{tMilestones(`${milestoneToast.id}.name`)}</div>
+				<div css={descCss}>
+					{tMilestones(`${milestoneToast.id}.description`)}
+				</div>
 				<div css={milestoneBonusCss}>
-					+${formatNumber(milestoneToast.cashBonus)} bonus
+					{t("events.bonus", {
+						amount: formatNumber(milestoneToast.cashBonus),
+					})}
 				</div>
 			</div>
 		</div>
@@ -175,6 +182,7 @@ function MilestoneToastCard() {
 }
 
 export function EventToast() {
+	const { t: tEvents } = useTranslation("events");
 	const activeEvents = useEventStore((s) => s.activeEvents);
 	const toastEvent = useEventStore((s) => s.toastEvent);
 	const milestoneToast = useEventStore((s) => s.milestoneToast);
@@ -219,8 +227,8 @@ export function EventToast() {
 						<div css={toastBodyCss(sentiment)}>
 							<div css={iconCss}>{def.icon}</div>
 							<div css={contentCss}>
-								<div css={nameCss}>{def.name}</div>
-								<div css={descCss}>{def.description}</div>
+								<div css={nameCss}>{tEvents(`${def.id}.name`)}</div>
+								<div css={descCss}>{tEvents(`${def.id}.description`)}</div>
 								{isChoice && choiceEffect.type === "choice" && (
 									<div css={choiceRowCss}>
 										{choiceEffect.options.map((opt, i) => (
@@ -237,7 +245,10 @@ export function EventToast() {
 													applyEventReward(cashDelta, locDelta);
 												}}
 											>
-												{opt.label}
+												{tEvents(
+													`${def.id}.options.${opt.label.toLowerCase().replace(/ /g, "_")}`,
+													{ defaultValue: opt.label },
+												)}
 											</button>
 										))}
 									</div>
