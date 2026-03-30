@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { useAudioStore } from "@modules/audio";
 import { tiers, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useIdeTheme } from "../hooks/use-ide-theme";
@@ -36,6 +37,17 @@ const statCss = css({
 	fontVariantNumeric: "tabular-nums",
 });
 
+const muteBtnCss = css({
+	background: "none",
+	border: "none",
+	color: "inherit",
+	cursor: "pointer",
+	padding: "0 2px",
+	fontSize: 12,
+	opacity: 0.7,
+	"&:hover": { opacity: 1 },
+});
+
 export function StatusBar() {
 	const cash = useGameStore((s) => s.cash);
 	const loc = useGameStore((s) => s.loc);
@@ -43,6 +55,8 @@ export function StatusBar() {
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
 	const tokens = useGameStore((s) => s.tokens);
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
+	const muted = useAudioStore((s) => s.muted);
+	const toggleMute = useAudioStore((s) => s.toggleMute);
 	const theme = useIdeTheme();
 
 	const tier = tiers[currentTierIndex];
@@ -66,6 +80,9 @@ export function StatusBar() {
 			</div>
 			<div css={rightCss}>
 				<span>${tier?.cashPerLoc ?? 0}/loc</span>
+				<button css={muteBtnCss} onClick={toggleMute} title={muted ? "Unmute" : "Mute"}>
+					{muted ? "🔇" : "🔊"}
+				</button>
 				<span>Python</span>
 				<span>UTF-8</span>
 			</div>
