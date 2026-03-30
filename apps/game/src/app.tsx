@@ -24,6 +24,7 @@ import {
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { match } from "ts-pattern";
+import { supportedLanguages } from "./i18n";
 import { useIdeTheme } from "./hooks/use-ide-theme";
 import { useIsMobile } from "./hooks/use-is-mobile";
 
@@ -132,7 +133,7 @@ function SettingItem({
 }
 
 function SettingsPage() {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const editorTheme = useUiStore((s) => s.editorTheme);
 	const setEditorTheme = useUiStore((s) => s.setEditorTheme);
 	const uiZoom = useUiStore((s) => s.uiZoom);
@@ -247,6 +248,36 @@ function SettingsPage() {
 					{[75, 80, 90, 100, 110, 125, 150].map((v) => (
 						<option key={v} value={v}>
 							{v}%
+						</option>
+					))}
+				</select>
+			</SettingItem>
+
+			<SettingItem
+				category={t("settings.language")}
+				name={t("settings.language_name")}
+				description={t("settings.language_desc")}
+			>
+				<select
+					css={{
+						fontFamily: "inherit",
+						fontSize: 13,
+						padding: "4px 8px",
+						borderRadius: 3,
+						border: `1px solid ${theme.border}`,
+						background: theme.hoverBg,
+						color: theme.foreground,
+						width: 260,
+						cursor: "pointer",
+						outline: "none",
+						"&:focus": { borderColor: theme.accent },
+					}}
+					value={i18n.language}
+					onChange={(e) => i18n.changeLanguage(e.target.value)}
+				>
+					{supportedLanguages.map((lang) => (
+						<option key={lang.code} value={lang.code}>
+							{lang.name}
 						</option>
 					))}
 				</select>
