@@ -70,6 +70,26 @@ const cursorCss = css({
 	animation: `${blink} 1s step-end infinite`,
 });
 
+const spin = keyframes({
+	"0%": { content: '"⠋"' },
+	"10%": { content: '"⠙"' },
+	"20%": { content: '"⠹"' },
+	"30%": { content: '"⠸"' },
+	"40%": { content: '"⠼"' },
+	"50%": { content: '"⠴"' },
+	"60%": { content: '"⠦"' },
+	"70%": { content: '"⠧"' },
+	"80%": { content: '"⠇"' },
+	"90%": { content: '"⠏"' },
+});
+
+const spinnerCss = css({
+	"&::before": {
+		content: '"⠋"',
+		animation: `${spin} 0.8s steps(1) infinite`,
+	},
+});
+
 // ── Prompt suggestions ──
 
 const PROMPT_SUGGESTIONS = [
@@ -256,12 +276,15 @@ export function CliPrompt() {
 		return () => clearTimeout(timer);
 	}, [stream.phase]);
 
-	// ── Auto-poke: automatically submit prompts ──
+	// ── Auto-prompt: AI models always produce when active ──
+	// Auto-poke tech node makes the delay shorter (more responsive)
 	useEffect(() => {
-		if (!autoPokeEnabled || stream.phase !== "idle") return;
+		if (stream.phase !== "idle") return;
 		if (activeModels.length === 0) return;
 
-		const delay = 2000 + Math.random() * 3000;
+		const delay = autoPokeEnabled
+			? 500 + Math.random() * 1000
+			: 3000 + Math.random() * 4000;
 		const timer = setTimeout(() => {
 			startPrompt(pickPrompt());
 		}, delay);
@@ -303,26 +326,29 @@ export function CliPrompt() {
 					<div key={i}>
 						{entry.kind === "prompt" && (
 							<>
-								<span style={{ color: theme.success }}>{"❯ "}</span>
+								<span style={{ color: theme.textMuted }}>{"$ "}</span>
 								<span style={{ color: theme.foreground }}>{entry.text}</span>
 							</>
 						)}
 						{entry.kind === "model-header" && (
-							<span
-								style={{
-									color: entry.color,
-									fontSize: 12,
-									fontWeight: "bold",
-								}}
-							>
-								{entry.text} ›
-							</span>
+							<>
+								<span css={spinnerCss} style={{ color: entry.color }} />{" "}
+								<span
+									style={{
+										color: entry.color,
+										fontWeight: "bold",
+									}}
+								>
+									{entry.text}
+								</span>
+								<span style={{ color: theme.textMuted }}> editing...</span>
+							</>
 						)}
 						{entry.kind === "file-header" && (
 							<span
 								style={{
 									color: theme.accent,
-									fontSize: 11,
+									fontSize: 12,
 									opacity: 0.7,
 								}}
 							>
@@ -337,7 +363,7 @@ export function CliPrompt() {
 									fontSize: 12,
 								}}
 							>
-								{"  "}
+								{"    "}
 								{entry.text}
 							</span>
 						)}
@@ -359,9 +385,9 @@ export function CliPrompt() {
 			>
 				<span
 					css={{ fontSize: 13, userSelect: "none" }}
-					style={{ color: theme.success }}
+					style={{ color: theme.textMuted }}
 				>
-					{"❯"}
+					{"$"}
 				</span>
 				<input
 					css={{
