@@ -125,43 +125,38 @@ CHORD_SEQ = [
     # (notes, bass_root, bar_start, bar_duration)
     # Cadd9: C D E G (open, airy) — 2 bars
     (["C3", "D3", "E3", "G3", "C4"], "C2", 0, 2),
-    # Am7: A C E G (melancholic) — 2 bars
+    # Am7: A C E G (wistful) — 2 bars
     (["A2", "C3", "E3", "G3", "A3"], "A1", 2, 2),
-    # Fmaj7: F A C E (warm, bright) — 2 bars
-    (["F3", "A3", "C4", "E4"], "F2", 4, 2),
-    # Fm: F Ab C (gut-punch — borrowed iv) — 1 bar
-    (["F3", "Ab3", "C4", "F4"], "F2", 6, 1),
-    # G: G B D (the V — lift/release) — 1/2 bar
-    (["G3", "B3", "D4", "G4"], "G2", 7, 0.5),
-    # Am: A C E (bittersweet landing — vi) — 1/2 bar
-    (["A3", "C4", "E4", "A4"], "A1", 7.5, 0.5),
+    # Fm: F Ab C (gut-punch — borrowed iv, dramatic jump) — 2 bars
+    (["F3", "Ab3", "C4", "F4"], "F2", 4, 2),
+    # G: G B D (the V — lift/release) — 1 bar
+    (["G3", "B3", "D4", "G4"], "G2", 6, 1),
+    # Am: A C E (bittersweet landing — vi) — 1 bar
+    (["A3", "C4", "E4", "A4"], "A1", 7, 1),
 ]
 
 # Arp: ascending patterns through chord tones (2 octaves)
 # Key = bar_start, value = (notes, bar_duration)
 ARP_NOTES = {
-    0:   (["C3", "D3", "E3", "G3", "C4", "D4", "E4", "G4"], 2),        # Cadd9
-    2:   (["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"], 2),        # Am7
-    4:   (["F3", "A3", "C4", "E4", "F4", "A4", "C5", "E5"], 2),        # Fmaj7
-    6:   (["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"], 1),     # Fm
-    7:   (["G3", "B3", "D4", "G4", "B4", "D5", "G5", "B5"], 0.5),      # G
-    7.5: (["A3", "C4", "E4", "A4", "C5", "E5", "A5", "C6"], 0.5),      # Am
+    0: (["C3", "D3", "E3", "G3", "C4", "D4", "E4", "G4"], 2),        # Cadd9
+    2: (["A2", "C3", "E3", "G3", "A3", "C4", "E4", "G4"], 2),        # Am7
+    4: (["F3", "Ab3", "C4", "F4", "Ab4", "C5", "F5", "Ab5"], 2),     # Fm
+    6: (["G3", "B3", "D4", "G4", "B4", "D5", "G5", "B5"], 1),        # G
+    7: (["A3", "C4", "E4", "A4", "C5", "E5", "A5", "C6"], 1),        # Am
 }
 
-# Original lead melody — pentatonic-ish, lives in C major
+# Original lead melody — C major, drops to minor for Fm
 LEAD_MELODY = [
-    # Cadd9 section: gentle, floating
+    # Cadd9 (bars 0-1): gentle, floating
     ("E4", 0, 2), ("G4", 2, 1.5), ("C5", 3.5, 1),
-    # Am7: descending, wistful
+    # Am7 (bars 2-3): descending, wistful
     ("B4", 5, 1.5), ("A4", 6.5, 1), ("G4", 7.5, 2),
-    # Fmaj7: rising hope
-    ("A4", 10, 1.5), ("C5", 11.5, 1), ("E5", 12.5, 2),
-    # Fm (1 bar): gut-punch — Ab is the minor color
-    ("C5", 15, 0.8), ("Ab4", 15.8, 1.2),
-    # G (1/2 bar): lift — resolve upward
-    ("B4", 17, 0.8),
-    # Am (1/2 bar): bittersweet landing
-    ("A4", 17.8, 0.8),
+    # Fm (bars 4-5): the darkness — Ab is the minor color, dramatic
+    ("Ab4", 10, 2), ("C5", 12, 1.5), ("Ab4", 13.5, 1.5),
+    # G (bar 6): lift — rising out of the dark
+    ("G4", 15, 1), ("B4", 16, 1.5),
+    # Am (bar 7): bittersweet resolve before the loop
+    ("A4", 17.5, 1.5), ("E4", 19, 1.5),
 ]
 
 
@@ -275,12 +270,11 @@ def generate_bass():
 
     # Interval map: semitones above root for each note type per chord
     CHORD_INTERVALS = {
-        0:   {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Cadd9: maj7 = B
-        2:   {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am7: min7 = G
-        4:   {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Fmaj7: maj7 = E
-        6:   {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Fm: min7 = Eb
-        7:   {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # G: min7 = F (dominant 7)
-        7.5: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am: min7 = G
+        0: {"root": 0, "oct": 12, "5th": 7, "7th": 11},   # Cadd9: maj7 = B
+        2: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am7: min7 = G
+        4: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Fm: min7 = Eb
+        6: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # G: dom7 = F
+        7: {"root": 0, "oct": 12, "5th": 7, "7th": 10},   # Am: min7 = G
     }
 
     # Short pattern for half-bar chords
