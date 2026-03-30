@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { useAudioStore } from "@modules/audio";
 import { tiers, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
 const barCss = css({
@@ -58,6 +59,7 @@ export function StatusBar() {
 	const muted = useAudioStore((s) => s.muted);
 	const toggleMute = useAudioStore((s) => s.toggleMute);
 	const theme = useIdeTheme();
+	const { t } = useTranslation();
 
 	const tier = tiers[currentTierIndex];
 
@@ -73,13 +75,21 @@ export function StatusBar() {
 				<span css={statCss}>⚡ {tier?.name ?? "—"}</span>
 				<span css={statCss}>${formatNumber(cash, true)}</span>
 				{aiUnlocked && (
-					<span css={statCss}>🪙 {formatNumber(tokens)} tokens</span>
+					<span css={statCss}>
+						{t("status_bar.tokens", { count: formatNumber(tokens) })}
+					</span>
 				)}
-				<span css={statCss}>◇ {formatNumber(loc)} LoC</span>
-				<span css={statCss}>⚡ {formatNumber(flops)} FLOPS</span>
+				<span css={statCss}>
+					{t("status_bar.loc", { count: formatNumber(loc) })}
+				</span>
+				<span css={statCss}>
+					{t("status_bar.flops", { count: formatNumber(flops) })}
+				</span>
 			</div>
 			<div css={rightCss}>
-				<span>${tier?.cashPerLoc ?? 0}/loc</span>
+				<span>
+					{t("status_bar.cash_per_loc", { rate: tier?.cashPerLoc ?? 0 })}
+				</span>
 				<button
 					type="button"
 					css={muteBtnCss}
@@ -88,8 +98,8 @@ export function StatusBar() {
 				>
 					{muted ? "🔇" : "🔊"}
 				</button>
-				<span>Python</span>
-				<span>UTF-8</span>
+				<span>{t("status_bar.python")}</span>
+				<span>{t("status_bar.utf8")}</span>
 			</div>
 		</div>
 	);

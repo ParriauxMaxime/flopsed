@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { allMilestones, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useTranslation } from "react-i18next";
 
 const milestoneStyle = css({
 	padding: "10px 12px",
@@ -31,6 +32,8 @@ const descStyle = css({
 });
 
 export function MilestoneList() {
+	const { t } = useTranslation();
+	const { t: tMilestones } = useTranslation("milestones");
 	const reachedMilestones = useGameStore((s) => s.reachedMilestones);
 
 	return (
@@ -40,10 +43,14 @@ export function MilestoneList() {
 				return (
 					<div key={m.id} css={[milestoneStyle, reached && reachedStyle]}>
 						<div css={[nameStyle, reached && reachedNameStyle]}>
-							{reached ? "> " : ""}
-							{m.name} — {formatNumber(m.threshold)}
+							{reached ? t("milestones.reached_prefix") : ""}
+							{tMilestones(`${m.id}.name`)} — {formatNumber(m.threshold)}
 						</div>
-						<div css={descStyle}>{reached ? m.description : "???"}</div>
+						<div css={descStyle}>
+							{reached
+								? tMilestones(`${m.id}.description`)
+								: t("milestones.unknown")}
+						</div>
 					</div>
 				);
 			})}

@@ -8,6 +8,7 @@ import {
 	useGameStore,
 } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useTranslation } from "react-i18next";
 
 const upgradeStyle = css({
 	display: "block",
@@ -68,6 +69,8 @@ const ownedStyle = css({
 });
 
 function UpgradeCard({ upgrade }: { upgrade: Upgrade }) {
+	const { t } = useTranslation();
+	const { t: tUpgrades } = useTranslation("upgrades");
 	const cash = useGameStore((s) => s.cash);
 	const owned = useGameStore((s) => s.ownedUpgrades[upgrade.id] ?? 0);
 	const buyUpgrade = useGameStore((s) => s.buyUpgrade);
@@ -92,16 +95,20 @@ function UpgradeCard({ upgrade }: { upgrade: Upgrade }) {
 			disabled={maxed || !canAfford}
 		>
 			<div css={nameStyle}>
-				{upgrade.icon} {upgrade.name}
+				{upgrade.icon} {tUpgrades(`${upgrade.id}.name`)}
 			</div>
-			<div css={descStyle}>{upgrade.description}</div>
-			<div css={costStyle}>{maxed ? "MAXED" : `$${formatNumber(cost)}`}</div>
+			<div css={descStyle}>{tUpgrades(`${upgrade.id}.description`)}</div>
+			<div css={costStyle}>
+				{maxed
+					? t("upgrades.maxed")
+					: t("upgrades.cost", { cost: formatNumber(cost) })}
+			</div>
 			<div css={ownedStyle}>
 				{effectiveMax === 1
 					? owned > 0
 						? "✓"
 						: ""
-					: `${owned}/${effectiveMax}`}
+					: t("upgrades.count", { owned, max: effectiveMax })}
 			</div>
 		</button>
 	);

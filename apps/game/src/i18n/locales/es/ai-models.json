@@ -1,0 +1,136 @@
+{
+	"copilot": {
+		"special_name": "Tab para aceptar",
+		"special_description": "La puerta de entrada. Barato, decente, te engancha."
+	},
+	"claude_haiku": {
+		"special_name": "Rápido y barato",
+		"special_description": "Mejor ratio FLOPS/LoC del juego"
+	},
+	"claude_sonnet": {
+		"special_name": "Se niega a escribir espagueti",
+		"special_description": "No baja del 80% de calidad — reduce la producción en silencio"
+	},
+	"claude_opus": {
+		"special_name": "Autorrevisión",
+		"special_description": "Puede autorevisar: +5% de calidad a TODA la producción de IA"
+	},
+	"gpt_3": {
+		"special_name": "Verboso",
+		"special_description": "+30% LoC/s pero el 30% de las líneas son relleno (valor en dinero reducido)"
+	},
+	"gpt_35": {
+		"special_name": "Momento ChatGPT",
+		"special_description": "+10% multiplicador de dinero durante 60s al desplegar"
+	},
+	"gpt_4": {
+		"special_name": "Verboso",
+		"special_description": "+30% LoC/s pero el 30% de las líneas son relleno (valor en dinero reducido)"
+	},
+	"gpt_41": {
+		"special_name": "Eficiente",
+		"special_description": "20% menos coste en FLOPS del indicado"
+	},
+	"gpt_5": {
+		"special_name": "Sin restricciones",
+		"special_description": "Escribe de todo — sin suelo de calidad, sin límites. Peligroso."
+	},
+	"gemini_pro": {
+		"special_name": "Multimodal",
+		"special_description": "Escribe tanto frontend COMO backend — x2 dinero por LoC ejecutado"
+	},
+	"gemini_ultra": {
+		"special_name": "Alucinador",
+		"special_description": "El 5% del LoC ejecutado no produce nada — pero el código tenía buena pinta"
+	},
+	"llama_70b": {
+		"special_name": "Código abierto",
+		"special_description": "Sin tarifa de licencia. Ratio FLOPS/LoC más barato del juego"
+	},
+	"llama_405b": {
+		"special_name": "Parches de la comunidad",
+		"special_description": "La calidad mejora +1%/min, tope en 90%"
+	},
+	"mistral_large": {
+		"special_name": "Le Code",
+		"special_description": "+10% velocidad si tienes Máquina de café. Oui oui."
+	},
+	"grok_2": {
+		"special_name": "Caótico",
+		"special_description": "La producción de LoC fluctúa ±50% aleatoriamente cada 10s"
+	},
+	"grok_3": {
+		"special_name": "Based",
+		"special_description": "Genera comentarios meme ocasionalmente. Sin valor en dinero, pero gracioso en el editor."
+	},
+	"gpt_6": {
+		"special_name": "Mejora recursiva",
+		"special_description": "Puede mejorar sus propios pesos. +50% LoC/s cada 60s (tope en 3x)."
+	},
+	"gpt_7": {
+		"special_name": "Superinteligente",
+		"special_description": "Escribe código más rápido de lo que puedes leerlo. Aproximándose a la singularidad."
+	},
+	"claude_saga": {
+		"special_name": "Alineación perfecta",
+		"special_description": "Suelo de calidad al 100% — cada línea está lista para producción."
+	},
+	"claude_universe": {
+		"special_name": "Omnisciente",
+		"special_description": "Escribe todos los programas posibles simultáneamente. La singularidad está aquí."
+	},
+	"gemini_supreme": {
+		"special_name": "Distribuido",
+		"special_description": "Se ejecuta en todos los centros de datos del planeta. Escala ilimitada."
+	},
+	"_flavor": {
+		"claude": [
+			"Refactorizando tu capa de autenticación... esto es bastante elegante.",
+			"Encontré 3 formas de mejorar esto. Empezando por la más limpia.",
+			"Hecho. También arreglé una condición de carrera que no pediste.",
+			"Este código tiene buena estructura. Déjame que lo haga brillar.",
+			"Implementando con atención cuidadosa a los casos límite..."
+		],
+		"gpt": [
+			"He escrito un análisis exhaustivo de 47 páginas. Aquí el resumen...",
+			"¡Por supuesto! Permíteme proporcionar una implementación completa...",
+			"Como modelo de lenguaje de gran escala, me alegra ayudar con eso.",
+			"Aquí tienes una solución robusta de nivel empresarial con documentación completa..."
+		],
+		"gemini": [
+			"Procesando en múltiples modalidades...",
+			"Veo las implicaciones tanto del frontend COMO del backend.",
+			"Generando con comprensión multimodal activada."
+		],
+		"llama": [
+			"en ello. enviando rápido. sin tests. yolo.",
+			"rollo código abierto. pusheando directo a main.",
+			"parche comunitario en camino. en mi máquina funciona."
+		],
+		"grok": [
+			"jaja imagínate no usar IA. bueno, aquí está tu función",
+			"implementación based en camino. sin mentiras.",
+			"tu codebase antiguo ya es historia. aquí algo mejor."
+		],
+		"mistral": [
+			"Le code est prêt. Simple, efficient, French.",
+			"Implementando con elegancia continental.",
+			"Voilà. Dependencias mínimas, sabor máximo."
+		],
+		"copilot": [
+			"Tab para aceptar...",
+			"Autocompletando según tus patrones...",
+			"Sugerencia lista. Solo pulsa tab."
+		]
+	},
+	"_idle": [
+		"Optimizando rutas neuronales...",
+		"Reticulando splines...",
+		"Compilando el futuro...",
+		"Refactorizando la realidad...",
+		"Ejecutando descenso de gradiente en tu deuda técnica...",
+		"Generando tests unitarios... era broma.",
+		"Entrenando con tu codebase...",
+		"Descubriendo comportamiento emergente..."
+	]
+}

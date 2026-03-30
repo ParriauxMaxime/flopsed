@@ -1,0 +1,23 @@
+{
+	"garage": { "name": "Die Garage", "tagline": "Eine Tastatur und ein Traum." },
+	"freelancing": {
+		"name": "Freelancing",
+		"tagline": "Du verkaufst deinen Code. Kunden tauchen auf."
+	},
+	"startup": {
+		"name": "Startup",
+		"tagline": "Du hast jetzt eine Firma. Zeit einzustellen."
+	},
+	"tech_company": {
+		"name": "Tech Company",
+		"tagline": "Das Produkt druckt Geld."
+	},
+	"ai_lab": {
+		"name": "KI-Labor",
+		"tagline": "Der Code fängt an sich selbst zu schreiben — aber er frisst deinen Compute."
+	},
+	"agi_race": {
+		"name": "AGI-Rennen",
+		"tagline": "Du schreibst keinen Code mehr. Die KI erledigt das."
+	}
+}

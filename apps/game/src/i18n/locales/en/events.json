@@ -1,0 +1,70 @@
+{
+	"production_down": {
+		"name": "Production is down!",
+		"description": "FLOPS halved for 30s. Mash keys to fix it faster (each key -1s)."
+	},
+	"hackathon": {
+		"name": "Hackathon!",
+		"description": "Double LoC production for 20s. Ship it!"
+	},
+	"investor_demo": {
+		"name": "Investor Demo",
+		"description": "If LoC/s > threshold: bonus cash. If not: nothing happens (awkward)."
+	},
+	"stackoverflow_down": {
+		"name": "Stack Overflow is down",
+		"description": "Half typing speed for 15s. How do you even code?"
+	},
+	"github_star": {
+		"name": "GitHub Star",
+		"description": "Someone starred your repo! Small cash bonus."
+	},
+	"coffee_spill": {
+		"name": "Coffee Spill",
+		"description": "You spilled coffee on your keyboard. -50% typing speed for 10s."
+	},
+	"npm_install": {
+		"name": "npm install",
+		"description": "Installing dependencies... FLOPS consumed by node_modules for 20s."
+	},
+	"viral_tweet": {
+		"name": "Viral Tweet",
+		"description": "Your hot take went viral. Devs flock to your project. +100% auto-LoC for 15s."
+	},
+	"ai_hallucination": {
+		"name": "AI Hallucination",
+		"description": "One of your AI models went rogue. It wrote 10K LoC of nonsense. Quality -10%."
+	},
+	"security_audit": {
+		"name": "Security Audit",
+		"description": "Auditors found vulnerabilities. Pay 5% of cash or lose 20% quality.",
+		"options": {
+			"pay_fine": "Pay fine",
+			"ignore_it": "Ignore it"
+		}
+	},
+	"power_outage": {
+		"name": "Power Outage",
+		"description": "Data center went dark. No FLOPS for 15s. Manual typing still works."
+	},
+	"acquihire_offer": {
+		"name": "Acqui-hire Offer",
+		"description": "Big Tech wants to buy you out. Take the cash or keep grinding?",
+		"options": {
+			"sell_out": "Sell out",
+			"stay_indie": "Stay indie"
+		}
+	},
+	"dev_burnout": {
+		"name": "Dev Burnout",
+		"description": "Your developers are exhausted. Token production -50% for 30s."
+	},
+	"prompt_fatigue": {
+		"name": "Prompt Fatigue",
+		"description": "Low-quality prompts. Token production -30% for 20s."
+	},
+	"prompt_breakthrough": {
+		"name": "Prompt Breakthrough",
+		"description": "Perfect prompt! Token production ×3 for 15s."
+	}
+}

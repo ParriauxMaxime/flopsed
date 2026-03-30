@@ -1,0 +1,59 @@
+{
+	"malt_freelancer": {
+		"name": "Freelancer",
+		"description": "Dev remoto — escribe 5 LoC/s"
+	},
+	"desktop_pc": { "name": "PC de escritorio", "description": "+50 FLOPS" },
+	"second_monitor": { "name": "Segundo monitor", "description": "+25 FLOPS" },
+	"server_rack": {
+		"name": "Bastidor de servidores",
+		"description": "+200 FLOPS"
+	},
+	"intern": {
+		"name": "Becario",
+		"description": "Escribe automáticamente 15 LoC/s"
+	},
+	"dev_team": {
+		"name": "Equipo de desarrollo",
+		"description": "Escribe automáticamente 200 LoC/s"
+	},
+	"manager": {
+		"name": "Gestor",
+		"description": "Multiplica la producción del equipo en +50%"
+	},
+	"gpu_cluster": { "name": "Clúster de GPU", "description": "+2.000 FLOPS" },
+	"architect": {
+		"name": "Arquitecto",
+		"description": "La ejecución de LoC genera x1,3 de dinero"
+	},
+	"data_center": { "name": "Centro de datos", "description": "+20.000 FLOPS" },
+	"series_a": {
+		"name": "Financiación Serie A",
+		"description": "Inyección inmediata de $10M de dinero"
+	},
+	"rlhf": {
+		"name": "Entrenamiento RLHF",
+		"description": "x1,3 de producción LLM por nivel"
+	},
+	"ml_pipeline": {
+		"name": "Pipeline de ML",
+		"description": "x1,2 de dinero por LoC"
+	},
+	"llm": {
+		"name": "LLM",
+		"description": "Aloja 1 modelo de IA — elige automáticamente el mejor disponible"
+	},
+	"series_b": {
+		"name": "Financiación Serie B",
+		"description": "Inyección inmediata de $500M de dinero"
+	},
+	"ai_agent": {
+		"name": "Agente de IA",
+		"description": "Agente autónomo — escribe 100.000 LoC/s"
+	},
+	"supercomputer": { "name": "Superordenador", "description": "+20M FLOPS" },
+	"the_singularity": {
+		"name": "La Singularidad",
+		"description": "Ganas. ¿O no?"
+	}
+}

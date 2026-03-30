@@ -1,0 +1,53 @@
+{
+	"malt_freelancer": {
+		"name": "Freelancer",
+		"description": "Remote-Entwickler — schreibt 5 LoC/s"
+	},
+	"desktop_pc": { "name": "Desktop-PC", "description": "+50 FLOPS" },
+	"second_monitor": { "name": "Zweiter Monitor", "description": "+25 FLOPS" },
+	"server_rack": { "name": "Server-Rack", "description": "+200 FLOPS" },
+	"intern": {
+		"name": "Praktikant",
+		"description": "Schreibt automatisch 15 LoC/s"
+	},
+	"dev_team": {
+		"name": "Entwicklerteam",
+		"description": "Schreibt automatisch 200 LoC/s"
+	},
+	"manager": {
+		"name": "Manager",
+		"description": "Multipliziert den gesamten Team-Output um +50%"
+	},
+	"gpu_cluster": { "name": "GPU-Cluster", "description": "+2.000 FLOPS" },
+	"architect": {
+		"name": "Architekt",
+		"description": "LoC-Ausführung bringt x1.3 Cash"
+	},
+	"data_center": { "name": "Rechenzentrum", "description": "+20.000 FLOPS" },
+	"series_a": {
+		"name": "Serie-A-Finanzierung",
+		"description": "Sofortige Cash-Spritze von 10M$"
+	},
+	"rlhf": {
+		"name": "RLHF-Training",
+		"description": "x1.3 LLM-Output pro Stufe"
+	},
+	"ml_pipeline": { "name": "ML-Pipeline", "description": "x1.2 Cash pro LoC" },
+	"llm": {
+		"name": "LLM",
+		"description": "Hostet 1 KI-Modell — wählt automatisch das beste verfügbare"
+	},
+	"series_b": {
+		"name": "Serie-B-Finanzierung",
+		"description": "Sofortige Cash-Spritze von 500M$"
+	},
+	"ai_agent": {
+		"name": "KI-Agent",
+		"description": "Autonomer Agent — schreibt 100.000 LoC/s"
+	},
+	"supercomputer": { "name": "Supercomputer", "description": "+20M FLOPS" },
+	"the_singularity": {
+		"name": "Die Singularität",
+		"description": "Du gewinnst. Oder doch nicht?"
+	}
+}

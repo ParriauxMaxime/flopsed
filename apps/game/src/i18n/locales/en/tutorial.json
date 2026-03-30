@@ -1,0 +1,51 @@
+{
+	"welcome": {
+		"lines": [
+			"$ init flopsed",
+			"✓ Loading garage environment...",
+			"",
+			"A keyboard. A dream. Type to write code.",
+			"Every keystroke = Lines of Code."
+		]
+	},
+	"tech_tree": {
+		"lines": [
+			"$ open tech-tree.svg",
+			"✓ Tech tree loaded →",
+			"",
+			"Research upgrades here. Spend cash and LoC.",
+			"Start with the basics. Work your way up."
+		]
+	},
+	"sidebar": {
+		"lines": [
+			"$ ls upgrades/",
+			"✓ File explorer unlocked ←",
+			"",
+			"Browse and buy upgrades by tier.",
+			"More FLOPS = faster execution. More devs = more code."
+		]
+	},
+	"execution": {
+		"lines": [
+			"$ cat README.md",
+			"",
+			"  type → queue → execute → $$$",
+			"",
+			"Code piles up. FLOPS burn through it. Cash flows."
+		]
+	},
+	"ai_lab": {
+		"lines": [
+			"$ switch --mode ai-lab",
+			"✓ Workers now produce tokens instead of LoC.",
+			"",
+			"AI models consume tokens + FLOPS → massive LoC.",
+			"More humans = more tokens = more AI output."
+		]
+	},
+	"loading": "$ loading tech-tree.svg ...",
+	"terminal_label": "Terminal",
+	"terminal_shortcut": "Ctrl+T",
+	"close_terminal": "Close terminal (Ctrl+T)"
+}

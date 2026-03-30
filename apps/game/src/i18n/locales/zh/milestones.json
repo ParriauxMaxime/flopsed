@@ -1,0 +1,50 @@
+{
+	"hello_world": {
+		"name": "Hello World",
+		"description": "你的前 10 行代码。每个人都有个起点。"
+	},
+	"script_kiddie": {
+		"name": "脚本小子",
+		"description": "100 LoC。你的复制粘贴技术已炉火纯青。"
+	},
+	"first_dollar": {
+		"name": "第一美元",
+		"description": "你的代码赚钱了。别一次花光。"
+	},
+	"side_project": {
+		"name": "副业项目",
+		"description": "500 LoC。这周末我就能搞完。"
+	},
+	"real_dev": {
+		"name": "真正的开发者",
+		"description": "1,000 LoC。你现在以专业水准批量生产 bug 了。"
+	},
+	"yc_application": {
+		"name": "YC 申请",
+		"description": "5,000 LoC。我们正在颠覆编程。"
+	},
+	"open_source_fame": {
+		"name": "开源名声",
+		"description": "25K LoC。3 个 GitHub Star（其中一个是你的小号）。"
+	},
+	"big_tech": {
+		"name": "大厂",
+		"description": "100K LoC。你有了工牌和冒名顶替综合症。"
+	},
+	"ml_paper": {
+		"name": "ML 论文发表",
+		"description": "500K LoC。我们取得了最先进的结果。"
+	},
+	"llm_training": {
+		"name": "训练开始",
+		"description": "2M LoC。GPU 热了。"
+	},
+	"emergent_behavior": {
+		"name": "涌现行为",
+		"description": "10M LoC。它说了一些你没料到的话。"
+	},
+	"agi": {
+		"name": "AGI 实现",
+		"description": "200M LoC。你好，世界。——它回应道。"
+	}
+}

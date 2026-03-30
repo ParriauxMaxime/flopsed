@@ -1,0 +1,139 @@
+{
+	"resource_bar": {
+		"queued": "队列",
+		"cash": "现金",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ 自动执行 — +${{rate}}/s",
+		"execute": "⚡ 执行 {{loc}} 队列 → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "统计",
+		"hide": "隐藏统计",
+		"resources": "资源",
+		"cash": "现金",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "代币来源",
+		"loc_sources": "LoC 来源",
+		"you": "你",
+		"tokens_per_sec": "代币/秒",
+		"per_sec": "/秒",
+		"managers": "管理者",
+		"manager_bonus": "+{{bonus}}% 团队产出",
+		"auto_exec": "⚡ 自动 — +${{rate}}/s",
+		"execute": "⚡ 执行 {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} 代币",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "硬件",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "磁盘",
+		"cpu_bottleneck": "⚠ CPU 瓶颈",
+		"ram_bottleneck": "⚠ RAM 瓶颈",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ FLOPS 瓶颈",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "执行 {{count}} FLOPS",
+		"ai_flops": "AI {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s 执行",
+		"ai_rate": "{{count}} loc/s 生成"
+	},
+	"sidebar": {
+		"title": "资源管理器",
+		"hide": "隐藏侧边栏",
+		"show": "显示侧边栏",
+		"open_editors": "打开的编辑器",
+		"upgrades": "升级",
+		"milestones": "里程碑",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "拆分编辑器",
+		"close_split": "关闭拆分",
+		"show_stats": "显示统计",
+		"unlock_tech_tree": "在科技树中解锁"
+	},
+	"settings": {
+		"title": "设置",
+		"appearance": "外观",
+		"color_theme": "颜色主题",
+		"color_theme_desc": "指定 IDE 使用的颜色主题。",
+		"window": "窗口",
+		"zoom_level": "缩放级别",
+		"zoom_level_desc": "调整 IDE 的缩放级别。可能需要重启。",
+		"language": "语言",
+		"language_name": "显示语言",
+		"language_desc": "指定游戏的显示语言。"
+	},
+	"editor": { "terminal": "终端" },
+	"tech_tree": {
+		"level": "等级 {{owned}}/{{max}}",
+		"cost_cash": "费用：${{cost}}",
+		"cost_loc": "费用：{{cost}} LoC",
+		"requires": "需要：{{nodes}}",
+		"researched": "已研究",
+		"maxed": "已满级",
+		"click_to_research": "点击研究",
+		"not_enough_cash": "现金不足",
+		"not_enough_loc": "LoC 不足",
+		"locked": "已锁定"
+	},
+	"upgrades": {
+		"maxed": "已满级",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
+	"milestones": { "unknown": "???", "reached_prefix": "> " },
+	"events": { "bonus": "+${{amount}} 奖励" },
+	"god_mode": {
+		"title": "上帝模式",
+		"resources": "资源",
+		"cash": "现金",
+		"total_cash": "累计现金",
+		"loc": "LoC",
+		"total_loc": "累计 LoC",
+		"flops": "FLOPS",
+		"tokens": "代币",
+		"tier": "层级",
+		"current": "当前：",
+		"ai_models": "AI 模型",
+		"grant": "授予",
+		"tools": "工具",
+		"data_editor": "数据编辑器",
+		"danger_zone": "危险区域",
+		"reset_game": "重置游戏",
+		"trigger_singularity": "触发奇点",
+		"unlock_all_tech": "解锁所有科技",
+		"max_all_upgrades": "所有升级满级"
+	},
+	"mobile": {
+		"code": "代码",
+		"tree": "科技树",
+		"shop": "商店",
+		"upgrades": "升级",
+		"milestones": "里程碑",
+		"settings": "设置",
+		"theme": "主题",
+		"auto_type": "自动输入",
+		"on": "开",
+		"off": "关",
+		"reset_game": "重置游戏"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ 模型已加载。输入提示词或静待其工作。",
+		"placeholder": "输入提示词..."
+	}
+}

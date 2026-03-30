@@ -1,0 +1,64 @@
+{
+	"production_down": {
+		"name": "La produzione è giù!",
+		"description": "FLOPS dimezzati per 30s. Martella i tasti per riparare più in fretta (ogni tasto = -1s)."
+	},
+	"hackathon": {
+		"name": "Hackathon!",
+		"description": "Produzione LoC raddoppiata per 20s. Spedisci!"
+	},
+	"investor_demo": {
+		"name": "Demo investitori",
+		"description": "Se LoC/s > soglia: cash bonus. Altrimenti: non succede niente (imbarazzante)."
+	},
+	"stackoverflow_down": {
+		"name": "Stack Overflow è giù",
+		"description": "Velocità di digitazione dimezzata per 15s. Come codi, adesso?"
+	},
+	"github_star": {
+		"name": "GitHub Star",
+		"description": "Qualcuno ha messo una stella alla tua repo! Piccolo bonus in cash."
+	},
+	"coffee_spill": {
+		"name": "Caffè rovesciato",
+		"description": "Hai rovesciato il caffè sulla tastiera. -50% velocità di digitazione per 10s."
+	},
+	"npm_install": {
+		"name": "npm install",
+		"description": "Installazione dipendenze... FLOPS consumati da node_modules per 20s."
+	},
+	"viral_tweet": {
+		"name": "Tweet virale",
+		"description": "La tua opinione controversa è diventata virale. Dev accorrono al tuo progetto. +100% auto-LoC per 15s."
+	},
+	"ai_hallucination": {
+		"name": "Allucinazione IA",
+		"description": "Uno dei tuoi modelli è impazzito. Ha scritto 10K LoC di sciocchezze. Qualità -10%."
+	},
+	"security_audit": {
+		"name": "Audit di sicurezza",
+		"description": "Gli auditor hanno trovato vulnerabilità. Paga il 5% del cash o perdi il 20% di qualità.",
+		"options": { "pay_fine": "Paga la multa", "ignore_it": "Ignora" }
+	},
+	"power_outage": {
+		"name": "Interruzione di corrente",
+		"description": "Il data center si è spento. Nessun FLOP per 15s. La digitazione manuale funziona ancora."
+	},
+	"acquihire_offer": {
+		"name": "Offerta di acqui-hire",
+		"description": "Un big tech vuole comprarti. Prendi i soldi o continui a sgobbare?",
+		"options": { "sell_out": "Vendi", "stay_indie": "Resto indie" }
+	},
+	"dev_burnout": {
+		"name": "Burnout dev",
+		"description": "I tuoi sviluppatori sono esausti. Produzione token -50% per 30s."
+	},
+	"prompt_fatigue": {
+		"name": "Fatica da prompt",
+		"description": "Prompt di scarsa qualità. Produzione token -30% per 20s."
+	},
+	"prompt_breakthrough": {
+		"name": "Prompt perfetto",
+		"description": "Prompt perfetto! Produzione token ×3 per 15s."
+	}
+}

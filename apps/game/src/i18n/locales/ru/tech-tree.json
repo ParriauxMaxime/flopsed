@@ -1,0 +1,352 @@
+{
+	"better_keyboard": {
+		"name": "Лучшая клавиатура",
+		"description": "+3 LoC за нажатие"
+	},
+	"auto_type": {
+		"name": "Авто-ввод",
+		"description": "Код пишет себя сам. Переключи в настройках."
+	},
+	"auto_execute": {
+		"name": "Авто-выполнение",
+		"description": "FLOPS запускают твой код автоматически."
+	},
+	"coffee": {
+		"name": "Кофе",
+		"description": "+2 LoC за нажатие"
+	},
+	"barista": {
+		"name": "Бариста",
+		"description": "+3 LoC за нажатие"
+	},
+	"doppio": {
+		"name": "Доппио",
+		"description": "+5 LoC за нажатие"
+	},
+	"github_actions": {
+		"name": "GitHub Actions",
+		"description": "+3 FLOPS за уровень"
+	},
+	"cloudflare_workers": {
+		"name": "Cloudflare Workers",
+		"description": "+4 FLOPS за уровень"
+	},
+	"cpu_upgrade": {
+		"name": "Апгрейд CPU",
+		"description": "+2 FLOPS (узкое место: RAM)",
+		"level_labels": [
+			"64KHz → 128KHz",
+			"128KHz → 256KHz",
+			"256KHz → 512KHz",
+			"512KHz → 1MHz",
+			"1MHz → 2MHz",
+			"2MHz → 4MHz",
+			"4MHz → 8MHz"
+		]
+	},
+	"ram_upgrade": {
+		"name": "Апгрейд RAM",
+		"description": "+2 FLOPS (узкое место: CPU)",
+		"level_labels": [
+			"128MB → 256MB",
+			"256MB → 512MB",
+			"512MB → 1GB",
+			"1GB → 2GB",
+			"2GB → 4GB",
+			"4GB → 8GB"
+		]
+	},
+	"storage_upgrade": {
+		"name": "Хранилище",
+		"description": "+2 FLOPS (без узкого места)",
+		"level_labels": [
+			"10GB → 20GB",
+			"20GB → 40GB",
+			"40GB → 80GB",
+			"80GB → 160GB",
+			"160GB → 320GB",
+			"320GB → 640GB",
+			"640GB → 1TB"
+		]
+	},
+	"tier_freelancing": {
+		"name": "Фриланс",
+		"description": "Разблокировать уровень 1 — появляются клиенты, можно нанимать стажёров."
+	},
+	"intern_teaching": {
+		"name": "Обучение",
+		"description": "+20% LoC/s стажёров за уровень"
+	},
+	"intern_trap": {
+		"name": "Стажёрская ловушка",
+		"description": "-15% стоимости найма стажёров за уровень"
+	},
+	"intern_quality": {
+		"name": "Код-ревью 101",
+		"description": "+10% денег за LoC за уровень"
+	},
+	"tier_startup": {
+		"name": "Стартап",
+		"description": "Разблокировать уровень 2 — нанимай разработчиков, масштабируйся."
+	},
+	"ci_cd_pipeline": {
+		"name": "CI/CD пайплайн",
+		"description": "+30 FLOPS за уровень"
+	},
+	"cloud_server": {
+		"name": "Облачный сервер",
+		"description": "+100 FLOPS за уровень"
+	},
+	"dev_mentoring": {
+		"name": "Наставничество",
+		"description": "+20% LoC/s разработчиков за уровень"
+	},
+	"dev_recruiting": {
+		"name": "Рекрутер",
+		"description": "-15% стоимости найма разработчиков за уровень"
+	},
+	"dev_quality": {
+		"name": "Стандарты кода",
+		"description": "+15% денег за LoC за уровень"
+	},
+	"computer": {
+		"name": "Компьютер",
+		"description": "Твой первый компьютер. +1 FLOP."
+	},
+	"unlock_sidebar": {
+		"name": "Проводник",
+		"description": "Разблокировать боковую панель для просмотра улучшений и достижений."
+	},
+	"unlock_stats_panel": {
+		"name": "Монитор статистики",
+		"description": "Разблокировать панель статистики для отслеживания ресурсов в реальном времени."
+	},
+	"unlock_analytics": {
+		"name": "Аналитика",
+		"description": "Смотри разбивку производства LoC по источникам."
+	},
+	"interns": {
+		"name": "Стажёры",
+		"description": "Разблокировать найм стажёров. Дёшево и энергично."
+	},
+	"tier_tech_company": {
+		"name": "Технологическая компания",
+		"description": "Разблокировать уровень 3 — нанимай команды, назначай менеджеров."
+	},
+	"teams_gate": {
+		"name": "Структура команд",
+		"description": "Позволяет нанимать полноценные команды разработчиков."
+	},
+	"team_productivity": {
+		"name": "Agile-коучинг",
+		"description": "+25% LoC/s команд за уровень"
+	},
+	"team_cost": {
+		"name": "Массовый найм",
+		"description": "-15% стоимости найма команд за уровень"
+	},
+	"team_quality": {
+		"name": "Код-ревью",
+		"description": "+15% денег за LoC за уровень"
+	},
+	"management_gate": {
+		"name": "Менеджмент",
+		"description": "Разблокировать ветку менеджмента. Менеджеры умножают выработку команд."
+	},
+	"manager_efficiency": {
+		"name": "Тренинг лидерства",
+		"description": "+30% эффективности менеджеров за уровень"
+	},
+	"manager_cost": {
+		"name": "HR-отдел",
+		"description": "-20% стоимости найма менеджеров за уровень"
+	},
+	"manager_scope": {
+		"name": "Делегирование",
+		"description": "+20% всего авто-LoC за уровень"
+	},
+	"cloud_infra": {
+		"name": "Облачная инфраструктура",
+		"description": "+1,000 FLOPS за уровень"
+	},
+	"cdn_network": {
+		"name": "CDN-сеть",
+		"description": "+2,000 FLOPS хранилища за уровень"
+	},
+	"tier_ai_lab": {
+		"name": "AI-лаборатория",
+		"description": "Разблокировать уровень 4 — AI-модели, огромные вычисления."
+	},
+	"tier_agi_race": {
+		"name": "Гонка AGI",
+		"description": "Разблокировать уровень 5 — финальный рывок."
+	},
+	"llm_gate": {
+		"name": "LLM",
+		"description": "Разблокировать LLM-экземпляры."
+	},
+	"llm_training": {
+		"name": "Файн-тюнинг",
+		"description": "+20% выхода LLM за уровень"
+	},
+	"llm_cost": {
+		"name": "Дистилляция моделей",
+		"description": "-15% стоимости LLM за уровень"
+	},
+	"llm_quality": {
+		"name": "RLHF",
+		"description": "+15% денег за LoC за уровень"
+	},
+	"gpu_farm": {
+		"name": "GPU-ферма",
+		"description": "+500K FLOPS за уровень"
+	},
+	"fiber_network": {
+		"name": "Оптоволоконная сеть",
+		"description": "+100K FLOPS хранилища за уровень"
+	},
+	"agent_gate": {
+		"name": "Фреймворк агентов",
+		"description": "Разблокировать автономных AI-агентов."
+	},
+	"agent_autonomy": {
+		"name": "Само-улучшение",
+		"description": "x1.5 выработки агентов за уровень"
+	},
+	"agent_cost": {
+		"name": "Законы масштабирования",
+		"description": "-20% стоимости агентов за уровень"
+	},
+	"agent_alignment": {
+		"name": "Исследование выравнивания",
+		"description": "x1.5 денег за LoC за уровень"
+	},
+	"quantum_compute": {
+		"name": "Квантовый кластер",
+		"description": "+50M FLOPS за уровень"
+	},
+	"neural_fabric": {
+		"name": "Нейронная ткань",
+		"description": "+10M FLOPS хранилища за уровень"
+	},
+	"intern_capacity": {
+		"name": "Программа стажировки",
+		"description": "+5 максимум стажёров за уровень"
+	},
+	"team_capacity": {
+		"name": "Расширение офиса",
+		"description": "+5 максимум команд за уровень"
+	},
+	"manager_capacity": {
+		"name": "C-suite",
+		"description": "+3 максимум менеджеров за уровень"
+	},
+	"llm_capacity": {
+		"name": "Распределение GPU",
+		"description": "+5 максимум LLM-экземпляров за уровень"
+	},
+	"agent_capacity": {
+		"name": "Рой агентов",
+		"description": "+3 максимум агентов за уровень"
+	},
+	"outsourcing": {
+		"name": "Аутсорсинг",
+		"description": "Разблокировать найм фрилансеров на Malt."
+	},
+	"freelancer_training": {
+		"name": "Онбординг",
+		"description": "+20% LoC/s фрилансеров за уровень"
+	},
+	"freelancer_cost": {
+		"name": "Переговоры о ставке",
+		"description": "-10% стоимости фрилансеров"
+	},
+	"freelancer_capacity": {
+		"name": "Пул талантов",
+		"description": "+5 максимум фрилансеров"
+	},
+	"openai_gpt3": {
+		"name": "GPT-3",
+		"description": "Разблокировать GPT-3 для деплоя."
+	},
+	"openai_gpt35": {
+		"name": "GPT-3.5",
+		"description": "Разблокировать GPT-3.5 для деплоя."
+	},
+	"openai_gpt4": {
+		"name": "GPT-4",
+		"description": "Разблокировать GPT-4 для деплоя."
+	},
+	"openai_gpt41": {
+		"name": "GPT-4.1",
+		"description": "Разблокировать GPT-4.1 для деплоя."
+	},
+	"openai_gpt5": {
+		"name": "GPT-5",
+		"description": "Разблокировать GPT-5 для деплоя."
+	},
+	"anthropic_haiku": {
+		"name": "Claude Haiku",
+		"description": "Разблокировать Claude Haiku для деплоя."
+	},
+	"anthropic_sonnet": {
+		"name": "Claude Sonnet",
+		"description": "Разблокировать Claude Sonnet для деплоя."
+	},
+	"anthropic_opus": {
+		"name": "Claude Opus",
+		"description": "Разблокировать Claude Opus для деплоя."
+	},
+	"github_copilot": {
+		"name": "GitHub Copilot",
+		"description": "Разблокировать Copilot для деплоя."
+	},
+	"google_gemini_pro": {
+		"name": "Gemini Pro",
+		"description": "Разблокировать Gemini Pro для деплоя."
+	},
+	"google_gemini_ultra": {
+		"name": "Gemini Ultra",
+		"description": "Разблокировать Gemini Ultra для деплоя."
+	},
+	"meta_llama_70b": {
+		"name": "Llama 70B",
+		"description": "Разблокировать Llama 70B для деплоя."
+	},
+	"meta_llama_405b": {
+		"name": "Llama 405B",
+		"description": "Разблокировать Llama 405B для деплоя."
+	},
+	"mistral_unlock": {
+		"name": "Mistral Large",
+		"description": "Разблокировать Mistral Large для деплоя."
+	},
+	"xai_grok2": {
+		"name": "Grok 2",
+		"description": "Разблокировать Grok 2 для деплоя."
+	},
+	"xai_grok3": {
+		"name": "Grok 3",
+		"description": "Разблокировать Grok 3 для деплоя."
+	},
+	"openai_gpt6": {
+		"name": "GPT-6",
+		"description": "Разблокировать GPT-6 для деплоя."
+	},
+	"openai_gpt7": {
+		"name": "GPT-7",
+		"description": "Разблокировать GPT-7 для деплоя."
+	},
+	"anthropic_saga": {
+		"name": "Claude Saga",
+		"description": "Разблокировать Claude Saga для деплоя."
+	},
+	"anthropic_universe": {
+		"name": "Claude Universe",
+		"description": "Разблокировать Claude Universe для деплоя."
+	},
+	"google_gemini_supreme": {
+		"name": "Gemini Supreme",
+		"description": "Разблокировать Gemini Supreme для деплоя."
+	}
+}

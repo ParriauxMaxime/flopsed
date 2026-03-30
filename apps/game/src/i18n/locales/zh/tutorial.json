@@ -1,0 +1,51 @@
+{
+	"welcome": {
+		"lines": [
+			"$ init flopsed",
+			"✓ 正在加载车库环境……",
+			"",
+			"一个键盘。一个梦想。输入即写代码。",
+			"每次按键 = 代码行数。"
+		]
+	},
+	"tech_tree": {
+		"lines": [
+			"$ open tech-tree.svg",
+			"✓ 科技树已加载 →",
+			"",
+			"在这里研究升级。花费现金和 LoC。",
+			"从基础开始。逐步向上。"
+		]
+	},
+	"sidebar": {
+		"lines": [
+			"$ ls upgrades/",
+			"✓ 文件资源管理器已解锁 ←",
+			"",
+			"按层级浏览和购买升级。",
+			"更多 FLOPS = 更快执行。更多开发者 = 更多代码。"
+		]
+	},
+	"execution": {
+		"lines": [
+			"$ cat README.md",
+			"",
+			"  输入 → 队列 → 执行 → $$$",
+			"",
+			"代码堆积。FLOPS 消耗代码。现金流入。"
+		]
+	},
+	"ai_lab": {
+		"lines": [
+			"$ switch --mode ai-lab",
+			"✓ 工人现在生产代币而非 LoC。",
+			"",
+			"AI 模型消耗代币 + FLOPS → 大量 LoC。",
+			"更多人类 = 更多代币 = 更多 AI 产出。"
+		]
+	},
+	"loading": "$ loading tech-tree.svg ...",
+	"terminal_label": "终端",
+	"terminal_shortcut": "Ctrl+T",
+	"close_terminal": "关闭终端 (Ctrl+T)"
+}

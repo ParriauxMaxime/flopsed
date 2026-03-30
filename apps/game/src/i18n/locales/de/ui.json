@@ -1,0 +1,146 @@
+{
+	"resource_bar": {
+		"queued": "In Warteschlange",
+		"cash": "Cash",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Auto-Ausführung — +${{rate}}/s",
+		"execute": "⚡ Ausführen {{loc}} in Warteschlange → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Statistiken",
+		"hide": "Statistiken ausblenden",
+		"resources": "Ressourcen",
+		"cash": "Cash",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Token-Quellen",
+		"loc_sources": "LoC-Quellen",
+		"you": "Du",
+		"tokens_per_sec": "Token/s",
+		"per_sec": "/s",
+		"managers": "Manager",
+		"manager_bonus": "+{{bonus}}% Team-Output",
+		"auto_exec": "⚡ Auto — +${{rate}}/s",
+		"execute": "⚡ Ausführen {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} Token",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Hardware",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Festplatte",
+		"cpu_bottleneck": "⚠ CPU-Flaschenhals",
+		"ram_bottleneck": "⚠ RAM-Flaschenhals",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ FLOPS-Flaschenhals",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Exec {{count}} FLOPS",
+		"ai_flops": "KI {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s Ausf.",
+		"ai_rate": "{{count}} loc/s Gen."
+	},
+	"sidebar": {
+		"title": "Explorer",
+		"hide": "Seitenleiste ausblenden",
+		"show": "Seitenleiste einblenden",
+		"open_editors": "Geöffnete Editoren",
+		"upgrades": "Upgrades",
+		"milestones": "Meilensteine",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Editor teilen",
+		"close_split": "Teilung schließen",
+		"show_stats": "Statistiken anzeigen",
+		"unlock_tech_tree": "Im Technologiebaum freischalten"
+	},
+	"settings": {
+		"title": "Einstellungen",
+		"appearance": "Erscheinungsbild",
+		"color_theme": "Farbthema",
+		"color_theme_desc": "Legt das im IDE verwendete Farbthema fest.",
+		"window": "Fenster",
+		"zoom_level": "Zoomstufe",
+		"zoom_level_desc": "Passt die Zoomstufe der IDE an. Möglicherweise ist ein Neustart erforderlich.",
+		"language": "Sprache",
+		"language_name": "Anzeigesprache",
+		"language_desc": "Legt die Anzeigesprache des Spiels fest."
+	},
+	"editor": {
+		"terminal": "Terminal"
+	},
+	"tech_tree": {
+		"level": "Stufe {{owned}}/{{max}}",
+		"cost_cash": "Kosten: ${{cost}}",
+		"cost_loc": "Kosten: {{cost}} LoC",
+		"requires": "Benötigt: {{nodes}}",
+		"researched": "Erforscht",
+		"maxed": "Maximum",
+		"click_to_research": "Zum Erforschen klicken",
+		"not_enough_cash": "Nicht genug Cash",
+		"not_enough_loc": "Nicht genug LoC",
+		"locked": "Gesperrt"
+	},
+	"upgrades": {
+		"maxed": "MAX",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} Bonus"
+	},
+	"god_mode": {
+		"title": "Gottmodus",
+		"resources": "Ressourcen",
+		"cash": "Cash",
+		"total_cash": "Gesamt-Cash",
+		"loc": "LoC",
+		"total_loc": "Gesamt-LoC",
+		"flops": "FLOPS",
+		"tokens": "Token",
+		"tier": "Stufe",
+		"current": "Aktuell:",
+		"ai_models": "KI-Modelle",
+		"grant": "Gewähren",
+		"tools": "Werkzeuge",
+		"data_editor": "Dateneditor",
+		"danger_zone": "Gefahrenzone",
+		"reset_game": "Spiel zurücksetzen",
+		"trigger_singularity": "Singularität auslösen",
+		"unlock_all_tech": "Alle Technologien freischalten",
+		"max_all_upgrades": "Alle Upgrades maximieren"
+	},
+	"mobile": {
+		"code": "Code",
+		"tree": "Baum",
+		"shop": "Shop",
+		"upgrades": "Upgrades",
+		"milestones": "Meilensteine",
+		"settings": "Einstellungen",
+		"theme": "Thema",
+		"auto_type": "Auto-Tippen",
+		"on": "AN",
+		"off": "AUS",
+		"reset_game": "Spiel zurücksetzen"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Modelle geladen. Gib einen Prompt ein oder schau zu wie sie arbeiten.",
+		"placeholder": "Prompt eingeben..."
+	}
+}

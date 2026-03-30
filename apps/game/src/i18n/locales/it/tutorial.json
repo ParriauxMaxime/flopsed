@@ -1,0 +1,51 @@
+{
+	"welcome": {
+		"lines": [
+			"$ init flopsed",
+			"✓ Caricamento ambiente garage...",
+			"",
+			"Una tastiera. Un sogno. Digita per scrivere codice.",
+			"Ogni tasto = Righe di Codice."
+		]
+	},
+	"tech_tree": {
+		"lines": [
+			"$ open tech-tree.svg",
+			"✓ Albero tecnologico caricato →",
+			"",
+			"Ricerca potenziamenti qui. Spendi cash e LoC.",
+			"Inizia dalle basi. Sali progressivamente."
+		]
+	},
+	"sidebar": {
+		"lines": [
+			"$ ls upgrades/",
+			"✓ Esplora file sbloccato ←",
+			"",
+			"Sfoglia e acquista potenziamenti per livello.",
+			"Più FLOPS = esecuzione più rapida. Più dev = più codice."
+		]
+	},
+	"execution": {
+		"lines": [
+			"$ cat README.md",
+			"",
+			"  digita → coda → esegui → $$$",
+			"",
+			"Il codice si accumula. I FLOPS lo bruciano. Il cash scorre."
+		]
+	},
+	"ai_lab": {
+		"lines": [
+			"$ switch --mode ai-lab",
+			"✓ I lavoratori ora producono token invece di LoC.",
+			"",
+			"I modelli IA consumano token + FLOPS → LoC massicci.",
+			"Più umani = più token = più output IA."
+		]
+	},
+	"loading": "$ caricamento tech-tree.svg ...",
+	"terminal_label": "Terminale",
+	"terminal_shortcut": "Ctrl+T",
+	"close_terminal": "Chiudi terminale (Ctrl+T)"
+}

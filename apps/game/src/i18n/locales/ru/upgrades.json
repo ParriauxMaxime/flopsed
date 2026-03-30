@@ -1,0 +1,50 @@
+{
+	"malt_freelancer": {
+		"name": "Фрилансер",
+		"description": "Удалённый разработчик — пишет 5 LoC/s"
+	},
+	"desktop_pc": { "name": "Настольный ПК", "description": "+50 FLOPS" },
+	"second_monitor": { "name": "Второй монитор", "description": "+25 FLOPS" },
+	"server_rack": { "name": "Серверная стойка", "description": "+200 FLOPS" },
+	"intern": { "name": "Стажёр", "description": "Автоматически пишет 15 LoC/s" },
+	"dev_team": {
+		"name": "Команда разработчиков",
+		"description": "Автоматически пишет 200 LoC/s"
+	},
+	"manager": {
+		"name": "Менеджер",
+		"description": "Умножает выработку всех команд на +50%"
+	},
+	"gpu_cluster": { "name": "GPU-кластер", "description": "+2,000 FLOPS" },
+	"architect": {
+		"name": "Архитектор",
+		"description": "Выполнение LoC приносит x1.3 денег"
+	},
+	"data_center": { "name": "Дата-центр", "description": "+20,000 FLOPS" },
+	"series_a": {
+		"name": "Раунд A",
+		"description": "Мгновенное вливание $10M наличными"
+	},
+	"rlhf": {
+		"name": "RLHF-обучение",
+		"description": "x1.3 выход LLM за уровень"
+	},
+	"ml_pipeline": { "name": "ML-пайплайн", "description": "x1.2 денег за LoC" },
+	"llm": {
+		"name": "LLM",
+		"description": "Разместить 1 AI-модель — автоматически выбирает лучшую доступную"
+	},
+	"series_b": {
+		"name": "Раунд B",
+		"description": "Мгновенное вливание $500M наличными"
+	},
+	"ai_agent": {
+		"name": "AI-агент",
+		"description": "Автономный агент — пишет 100,000 LoC/s"
+	},
+	"supercomputer": { "name": "Суперкомпьютер", "description": "+20M FLOPS" },
+	"the_singularity": {
+		"name": "Сингулярность",
+		"description": "Ты победил. Или нет?"
+	}
+}

@@ -1,0 +1,74 @@
+{
+	"malt_freelancer": {
+		"name": "Freelancer",
+		"description": "Remote dev — writes 5 LoC/s"
+	},
+	"desktop_pc": {
+		"name": "Desktop PC",
+		"description": "+50 FLOPS"
+	},
+	"second_monitor": {
+		"name": "Second Monitor",
+		"description": "+25 FLOPS"
+	},
+	"server_rack": {
+		"name": "Server Rack",
+		"description": "+200 FLOPS"
+	},
+	"intern": {
+		"name": "Intern",
+		"description": "Auto-writes 15 LoC/s"
+	},
+	"dev_team": {
+		"name": "Dev Team",
+		"description": "Auto-writes 200 LoC/s"
+	},
+	"manager": {
+		"name": "Manager",
+		"description": "Multiplies all team output by +50%"
+	},
+	"gpu_cluster": {
+		"name": "GPU Cluster",
+		"description": "+2,000 FLOPS"
+	},
+	"architect": {
+		"name": "Architect",
+		"description": "LoC execution yields x1.3 cash"
+	},
+	"data_center": {
+		"name": "Data Center",
+		"description": "+20,000 FLOPS"
+	},
+	"series_a": {
+		"name": "Series A Funding",
+		"description": "Immediate $10M cash injection"
+	},
+	"rlhf": {
+		"name": "RLHF Training",
+		"description": "x1.3 LLM output per level"
+	},
+	"ml_pipeline": {
+		"name": "ML Pipeline",
+		"description": "x1.2 cash per LoC"
+	},
+	"llm": {
+		"name": "LLM",
+		"description": "Host 1 AI model — auto-picks the best available"
+	},
+	"series_b": {
+		"name": "Series B Funding",
+		"description": "Immediate $500M cash injection"
+	},
+	"ai_agent": {
+		"name": "AI Agent",
+		"description": "Autonomous agent — writes 100,000 LoC/s"
+	},
+	"supercomputer": {
+		"name": "Supercomputer",
+		"description": "+20M FLOPS"
+	},
+	"the_singularity": {
+		"name": "The Singularity",
+		"description": "You win. Or do you?"
+	}
+}

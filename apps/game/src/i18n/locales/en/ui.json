@@ -1,0 +1,146 @@
+{
+	"resource_bar": {
+		"queued": "Queued",
+		"cash": "Cash",
+		"flops": "FLOPS",
+		"loc_rate": "{{rate}} loc/s",
+		"cash_rate": "+${{rate}}/s",
+		"auto_execute": "⚡ Auto-Execute — +${{rate}}/s",
+		"execute": "⚡ Execute {{loc}} queued → ${{earn}}"
+	},
+	"stats_panel": {
+		"title": "Stats",
+		"hide": "Hide stats",
+		"resources": "Resources",
+		"cash": "Cash",
+		"loc": "LoC",
+		"flops": "FLOPS",
+		"token_sources": "Token Sources",
+		"loc_sources": "LoC Sources",
+		"you": "You",
+		"tokens_per_sec": "tokens/s",
+		"per_sec": "/s",
+		"managers": "Managers",
+		"manager_bonus": "+{{bonus}}% team output",
+		"auto_exec": "⚡ Auto — +${{rate}}/s",
+		"execute": "⚡ Execute {{loc}} → ${{earn}}"
+	},
+	"status_bar": {
+		"tokens": "🪙 {{count}} tokens",
+		"loc": "◇ {{count}} LoC",
+		"flops": "⚡ {{count}} FLOPS",
+		"cash_per_loc": "${{rate}}/loc",
+		"python": "Python",
+		"utf8": "UTF-8"
+	},
+	"hardware": {
+		"title": "Hardware",
+		"cpu": "CPU",
+		"ram": "RAM",
+		"disk": "Disk",
+		"cpu_bottleneck": "⚠ CPU bottleneck",
+		"ram_bottleneck": "⚠ RAM bottleneck",
+		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
+		"flops_bottleneck": "⚠ FLOPS bottleneck",
+		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
+	},
+	"flops_slider": {
+		"exec_flops": "Exec {{count}} FLOPS",
+		"ai_flops": "AI {{count}} FLOPS",
+		"exec_rate": "{{count}} loc/s exec",
+		"ai_rate": "{{count}} loc/s gen"
+	},
+	"sidebar": {
+		"title": "Explorer",
+		"hide": "Hide sidebar",
+		"show": "Show sidebar",
+		"open_editors": "Open Editors",
+		"upgrades": "Upgrades",
+		"milestones": "Milestones",
+		"milestone_item": "✓ {{name}} — {{threshold}}"
+	},
+	"tabs": {
+		"split_editor": "Split editor",
+		"close_split": "Close split",
+		"show_stats": "Show stats",
+		"unlock_tech_tree": "Unlock in tech tree"
+	},
+	"settings": {
+		"title": "Settings",
+		"appearance": "Appearance",
+		"color_theme": "Color Theme",
+		"color_theme_desc": "Specifies the color theme used in the IDE.",
+		"window": "Window",
+		"zoom_level": "Zoom Level",
+		"zoom_level_desc": "Adjust the zoom level of the IDE. Restart may be needed.",
+		"language": "Language",
+		"language_name": "Display Language",
+		"language_desc": "Specifies the display language for the game."
+	},
+	"editor": {
+		"terminal": "Terminal"
+	},
+	"tech_tree": {
+		"level": "Level {{owned}}/{{max}}",
+		"cost_cash": "Cost: ${{cost}}",
+		"cost_loc": "Cost: {{cost}} LoC",
+		"requires": "Requires: {{nodes}}",
+		"researched": "Researched",
+		"maxed": "Maxed",
+		"click_to_research": "Click to research",
+		"not_enough_cash": "Not enough cash",
+		"not_enough_loc": "Not enough LoC",
+		"locked": "Locked"
+	},
+	"upgrades": {
+		"maxed": "MAXED",
+		"cost": "${{cost}}",
+		"count": "{{owned}}/{{max}}"
+	},
+	"milestones": {
+		"unknown": "???",
+		"reached_prefix": "> "
+	},
+	"events": {
+		"bonus": "+${{amount}} bonus"
+	},
+	"god_mode": {
+		"title": "God Mode",
+		"resources": "Resources",
+		"cash": "Cash",
+		"total_cash": "Total Cash",
+		"loc": "LoC",
+		"total_loc": "Total LoC",
+		"flops": "FLOPS",
+		"tokens": "Tokens",
+		"tier": "Tier",
+		"current": "Current:",
+		"ai_models": "AI Models",
+		"grant": "Grant",
+		"tools": "Tools",
+		"data_editor": "Data Editor",
+		"danger_zone": "Danger Zone",
+		"reset_game": "Reset Game",
+		"trigger_singularity": "Trigger Singularity",
+		"unlock_all_tech": "Unlock All Tech",
+		"max_all_upgrades": "Max All Upgrades"
+	},
+	"mobile": {
+		"code": "Code",
+		"tree": "Tree",
+		"shop": "Shop",
+		"upgrades": "Upgrades",
+		"milestones": "Milestones",
+		"settings": "Settings",
+		"theme": "Theme",
+		"auto_type": "Auto-type",
+		"on": "ON",
+		"off": "OFF",
+		"reset_game": "Reset Game"
+	},
+	"cli": {
+		"header": "$ ai-lab --interactive",
+		"loaded": "✓ Models loaded. Type a prompt or watch them work.",
+		"placeholder": "Type a prompt..."
+	}
+}

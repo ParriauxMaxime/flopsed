@@ -1,0 +1,352 @@
+{
+	"better_keyboard": {
+		"name": "Lepsza klawiatura",
+		"description": "+3 LoC za naciśnięcie klawisza"
+	},
+	"auto_type": {
+		"name": "Auto-pisanie",
+		"description": "Kod pisze się sam. Przełącz w ustawieniach."
+	},
+	"auto_execute": {
+		"name": "Auto-wykonanie",
+		"description": "FLOPS uruchamiają twój kod automatycznie."
+	},
+	"coffee": {
+		"name": "Kawa",
+		"description": "+2 LoC za naciśnięcie klawisza"
+	},
+	"barista": {
+		"name": "Barista",
+		"description": "+3 LoC za naciśnięcie klawisza"
+	},
+	"doppio": {
+		"name": "Doppio",
+		"description": "+5 LoC za naciśnięcie klawisza"
+	},
+	"github_actions": {
+		"name": "GitHub Actions",
+		"description": "+3 FLOPS za poziom"
+	},
+	"cloudflare_workers": {
+		"name": "Cloudflare Workers",
+		"description": "+4 FLOPS za poziom"
+	},
+	"cpu_upgrade": {
+		"name": "Ulepszenie CPU",
+		"description": "+2 FLOPS (ograniczone przez RAM)",
+		"level_labels": [
+			"64KHz → 128KHz",
+			"128KHz → 256KHz",
+			"256KHz → 512KHz",
+			"512KHz → 1MHz",
+			"1MHz → 2MHz",
+			"2MHz → 4MHz",
+			"4MHz → 8MHz"
+		]
+	},
+	"ram_upgrade": {
+		"name": "Ulepszenie RAM",
+		"description": "+2 FLOPS (ograniczone przez CPU)",
+		"level_labels": [
+			"128MB → 256MB",
+			"256MB → 512MB",
+			"512MB → 1GB",
+			"1GB → 2GB",
+			"2GB → 4GB",
+			"4GB → 8GB"
+		]
+	},
+	"storage_upgrade": {
+		"name": "Magazyn",
+		"description": "+2 FLOPS (bez wąskiego gardła)",
+		"level_labels": [
+			"10GB → 20GB",
+			"20GB → 40GB",
+			"40GB → 80GB",
+			"80GB → 160GB",
+			"160GB → 320GB",
+			"320GB → 640GB",
+			"640GB → 1TB"
+		]
+	},
+	"tier_freelancing": {
+		"name": "Freelancing",
+		"description": "Odblokuj Poziom 1 — pojawiają się klienci, stażyści stają się dostępni."
+	},
+	"intern_teaching": {
+		"name": "Szkolenie",
+		"description": "+20% LoC/s stażystów za poziom"
+	},
+	"intern_trap": {
+		"name": "Pułapka na stażystów",
+		"description": "-15% koszt zatrudnienia stażystów za poziom"
+	},
+	"intern_quality": {
+		"name": "Przegląd kodu 101",
+		"description": "+10% gotówki za LoC za poziom"
+	},
+	"tier_startup": {
+		"name": "Startup",
+		"description": "Odblokuj Poziom 2 — zatrudniaj deweloperów, skaluj w górę."
+	},
+	"ci_cd_pipeline": {
+		"name": "Pipeline CI/CD",
+		"description": "+30 FLOPS za poziom"
+	},
+	"cloud_server": {
+		"name": "Serwer w chmurze",
+		"description": "+100 FLOPS za poziom"
+	},
+	"dev_mentoring": {
+		"name": "Mentoring",
+		"description": "+20% LoC/s deweloperów za poziom"
+	},
+	"dev_recruiting": {
+		"name": "Rekruter",
+		"description": "-15% koszt zatrudnienia deweloperów za poziom"
+	},
+	"dev_quality": {
+		"name": "Standardy kodu",
+		"description": "+15% gotówki za LoC za poziom"
+	},
+	"computer": {
+		"name": "Komputer",
+		"description": "Twój pierwszy komputer. +1 FLOP."
+	},
+	"unlock_sidebar": {
+		"name": "Eksplorator plików",
+		"description": "Odblokuj pasek boczny, aby przeglądać ulepszenia i kamienie milowe."
+	},
+	"unlock_stats_panel": {
+		"name": "Monitor statystyk",
+		"description": "Odblokuj panel statystyk, aby śledzić zasoby w czasie rzeczywistym."
+	},
+	"unlock_analytics": {
+		"name": "Analityka",
+		"description": "Sprawdź podział produkcji LoC według źródeł."
+	},
+	"interns": {
+		"name": "Stażyści",
+		"description": "Odblokuj zatrudnianie stażystów. Są tani i chętni."
+	},
+	"tier_tech_company": {
+		"name": "Firma technologiczna",
+		"description": "Odblokuj Poziom 3 — zatrudniaj zespoły, mianuj menedżerów."
+	},
+	"teams_gate": {
+		"name": "Struktura zespołów",
+		"description": "Umożliwia zatrudnianie pełnych zespołów deweloperów."
+	},
+	"team_productivity": {
+		"name": "Coaching agile",
+		"description": "+25% LoC/s zespołu za poziom"
+	},
+	"team_cost": {
+		"name": "Masowe zatrudnienie",
+		"description": "-15% koszt zatrudnienia zespołów za poziom"
+	},
+	"team_quality": {
+		"name": "Przeglądy kodu",
+		"description": "+15% gotówki za LoC za poziom"
+	},
+	"management_gate": {
+		"name": "Zarządzanie",
+		"description": "Odblokuj gałąź zarządzania. Menedżerowie mnożą wydajność zespołu."
+	},
+	"manager_efficiency": {
+		"name": "Szkolenie przywódcze",
+		"description": "+30% skuteczności menedżera za poziom"
+	},
+	"manager_cost": {
+		"name": "Dział HR",
+		"description": "-20% koszt zatrudnienia menedżerów za poziom"
+	},
+	"manager_scope": {
+		"name": "Delegowanie",
+		"description": "+20% całego auto-LoC za poziom"
+	},
+	"cloud_infra": {
+		"name": "Infrastruktura chmurowa",
+		"description": "+1 000 FLOPS za poziom"
+	},
+	"cdn_network": {
+		"name": "Sieć CDN",
+		"description": "+2 000 FLOPS magazynowania za poziom"
+	},
+	"tier_ai_lab": {
+		"name": "Laboratorium AI",
+		"description": "Odblokuj Poziom 4 — modele AI, ogromne obliczenia."
+	},
+	"tier_agi_race": {
+		"name": "Wyścig do AGI",
+		"description": "Odblokuj Poziom 5 — ostatni sprint."
+	},
+	"llm_gate": {
+		"name": "LLM",
+		"description": "Odblokuj instancje LLM."
+	},
+	"llm_training": {
+		"name": "Dostrajanie",
+		"description": "+20% wydajności LLM za poziom"
+	},
+	"llm_cost": {
+		"name": "Destylacja modeli",
+		"description": "-15% koszt LLM za poziom"
+	},
+	"llm_quality": {
+		"name": "RLHF",
+		"description": "+15% gotówki za LoC za poziom"
+	},
+	"gpu_farm": {
+		"name": "Farma GPU",
+		"description": "+500K FLOPS za poziom"
+	},
+	"fiber_network": {
+		"name": "Sieć światłowodowa",
+		"description": "+100K FLOPS magazynowania za poziom"
+	},
+	"agent_gate": {
+		"name": "Framework agentów",
+		"description": "Odblokuj autonomiczne agenty AI."
+	},
+	"agent_autonomy": {
+		"name": "Samodoskonalenie",
+		"description": "x1,5 wydajności agenta za poziom"
+	},
+	"agent_cost": {
+		"name": "Prawa skalowania",
+		"description": "-20% kosztu agenta za poziom"
+	},
+	"agent_alignment": {
+		"name": "Badania nad wyrównaniem",
+		"description": "x1,5 gotówki za LoC za poziom"
+	},
+	"quantum_compute": {
+		"name": "Klaster kwantowy",
+		"description": "+50M FLOPS za poziom"
+	},
+	"neural_fabric": {
+		"name": "Tkanina neuronowa",
+		"description": "+10M FLOPS magazynowania za poziom"
+	},
+	"intern_capacity": {
+		"name": "Program stażowy",
+		"description": "+5 maksymalnych stażystów za poziom"
+	},
+	"team_capacity": {
+		"name": "Rozbudowa biura",
+		"description": "+5 maksymalnych zespołów za poziom"
+	},
+	"manager_capacity": {
+		"name": "Zarząd",
+		"description": "+3 maksymalnych menedżerów za poziom"
+	},
+	"llm_capacity": {
+		"name": "Przydział GPU",
+		"description": "+5 maksymalnych instancji LLM za poziom"
+	},
+	"agent_capacity": {
+		"name": "Rój agentów",
+		"description": "+3 maksymalnych agentów za poziom"
+	},
+	"outsourcing": {
+		"name": "Outsourcing",
+		"description": "Odblokuj zatrudnianie freelancerów na Malt."
+	},
+	"freelancer_training": {
+		"name": "Onboarding",
+		"description": "+20% LoC/s freelancerów za poziom"
+	},
+	"freelancer_cost": {
+		"name": "Negocjacje stawek",
+		"description": "-10% koszt freelancera"
+	},
+	"freelancer_capacity": {
+		"name": "Pula talentów",
+		"description": "+5 maksymalnych freelancerów"
+	},
+	"openai_gpt3": {
+		"name": "GPT-3",
+		"description": "Odblokuj GPT-3 do wdrożenia."
+	},
+	"openai_gpt35": {
+		"name": "GPT-3.5",
+		"description": "Odblokuj GPT-3.5 do wdrożenia."
+	},
+	"openai_gpt4": {
+		"name": "GPT-4",
+		"description": "Odblokuj GPT-4 do wdrożenia."
+	},
+	"openai_gpt41": {
+		"name": "GPT-4.1",
+		"description": "Odblokuj GPT-4.1 do wdrożenia."
+	},
+	"openai_gpt5": {
+		"name": "GPT-5",
+		"description": "Odblokuj GPT-5 do wdrożenia."
+	},
+	"anthropic_haiku": {
+		"name": "Claude Haiku",
+		"description": "Odblokuj Claude Haiku do wdrożenia."
+	},
+	"anthropic_sonnet": {
+		"name": "Claude Sonnet",
+		"description": "Odblokuj Claude Sonnet do wdrożenia."
+	},
+	"anthropic_opus": {
+		"name": "Claude Opus",
+		"description": "Odblokuj Claude Opus do wdrożenia."
+	},
+	"github_copilot": {
+		"name": "GitHub Copilot",
+		"description": "Odblokuj Copilot do wdrożenia."
+	},
+	"google_gemini_pro": {
+		"name": "Gemini Pro",
+		"description": "Odblokuj Gemini Pro do wdrożenia."
+	},
+	"google_gemini_ultra": {
+		"name": "Gemini Ultra",
+		"description": "Odblokuj Gemini Ultra do wdrożenia."
+	},
+	"meta_llama_70b": {
+		"name": "Llama 70B",
+		"description": "Odblokuj Llama 70B do wdrożenia."
+	},
+	"meta_llama_405b": {
+		"name": "Llama 405B",
+		"description": "Odblokuj Llama 405B do wdrożenia."
+	},
+	"mistral_unlock": {
+		"name": "Mistral Large",
+		"description": "Odblokuj Mistral Large do wdrożenia."
+	},
+	"xai_grok2": {
+		"name": "Grok 2",
+		"description": "Odblokuj Grok 2 do wdrożenia."
+	},
+	"xai_grok3": {
+		"name": "Grok 3",
+		"description": "Odblokuj Grok 3 do wdrożenia."
+	},
+	"openai_gpt6": {
+		"name": "GPT-6",
+		"description": "Odblokuj GPT-6 do wdrożenia."
+	},
+	"openai_gpt7": {
+		"name": "GPT-7",
+		"description": "Odblokuj GPT-7 do wdrożenia."
+	},
+	"anthropic_saga": {
+		"name": "Claude Saga",
+		"description": "Odblokuj Claude Saga do wdrożenia."
+	},
+	"anthropic_universe": {
+		"name": "Claude Universe",
+		"description": "Odblokuj Claude Universe do wdrożenia."
+	},
+	"google_gemini_supreme": {
+		"name": "Gemini Supreme",
+		"description": "Odblokuj Gemini Supreme do wdrożenia."
+	}
+}

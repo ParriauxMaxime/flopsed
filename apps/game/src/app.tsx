@@ -24,9 +24,11 @@ import {
 	useUiStore,
 } from "@modules/game";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { match } from "ts-pattern";
 import { useIdeTheme } from "./hooks/use-ide-theme";
 import { useIsMobile } from "./hooks/use-is-mobile";
+import { supportedLanguages } from "./i18n";
 
 const globalStyles = css({
 	"*": {
@@ -133,6 +135,7 @@ function SettingItem({
 }
 
 function SettingsPage() {
+	const { t, i18n } = useTranslation();
 	const editorTheme = useUiStore((s) => s.editorTheme);
 	const setEditorTheme = useUiStore((s) => s.setEditorTheme);
 	const uiZoom = useUiStore((s) => s.uiZoom);
@@ -167,13 +170,13 @@ function SettingsPage() {
 					fontWeight: 300,
 				}}
 			>
-				Settings
+				{t("settings.title")}
 			</div>
 
 			<SettingItem
-				category="Appearance"
-				name="Color Theme"
-				description="Specifies the color theme used in the IDE."
+				category={t("settings.appearance")}
+				name={t("settings.color_theme")}
+				description={t("settings.color_theme_desc")}
 			>
 				<select
 					css={{
@@ -229,9 +232,9 @@ function SettingsPage() {
 			</SettingItem>
 
 			<SettingItem
-				category="Window"
-				name="Zoom Level"
-				description="Adjust the zoom level of the IDE. Restart may be needed."
+				category={t("settings.window")}
+				name={t("settings.zoom_level")}
+				description={t("settings.zoom_level_desc")}
 			>
 				<select
 					css={{
@@ -324,6 +327,36 @@ function SettingsPage() {
 					<span css={{ fontSize: 13 }}>{muted ? "Muted" : "Unmuted"}</span>
 				</label>
 			</SettingItem>
+
+			<SettingItem
+				category={t("settings.language")}
+				name={t("settings.language_name")}
+				description={t("settings.language_desc")}
+			>
+				<select
+					css={{
+						fontFamily: "inherit",
+						fontSize: 13,
+						padding: "4px 8px",
+						borderRadius: 3,
+						border: `1px solid ${theme.border}`,
+						background: theme.hoverBg,
+						color: theme.foreground,
+						width: 260,
+						cursor: "pointer",
+						outline: "none",
+						"&:focus": { borderColor: theme.accent },
+					}}
+					value={i18n.language}
+					onChange={(e) => i18n.changeLanguage(e.target.value)}
+				>
+					{supportedLanguages.map((lang) => (
+						<option key={lang.code} value={lang.code}>
+							{lang.name}
+						</option>
+					))}
+				</select>
+			</SettingItem>
 		</div>
 	);
 }
@@ -415,6 +448,7 @@ function TabbedPane({
 	onToggleSplit?: () => void;
 }) {
 	const theme = useIdeTheme();
+	const { t } = useTranslation();
 
 	return (
 		<div css={[panelCss, { flex: 1 }]}>
@@ -481,7 +515,7 @@ function TabbedPane({
 							color: splitActive ? "#58a6ff" : theme.textMuted,
 						}}
 						onClick={onToggleSplit}
-						title={splitActive ? "Close split" : "Split editor"}
+						title={splitActive ? t("tabs.close_split") : t("tabs.split_editor")}
 					>
 						<SplitIcon active={splitActive} />
 					</button>
@@ -499,6 +533,7 @@ export function App() {
 	useAudioEvents();
 	useTutorialTriggers();
 	useKeyboardShortcuts();
+	const { t } = useTranslation();
 	const isMobile = useIsMobile();
 	const page = useUiStore((s) => s.page);
 	const setPage = useUiStore((s) => s.setPage);
@@ -595,7 +630,9 @@ export function App() {
 								cursor: sidebarUnlocked ? "pointer" : "default",
 							}}
 							onClick={sidebarUnlocked ? toggleSidebar : undefined}
-							title={sidebarUnlocked ? "Show sidebar" : "Unlock in tech tree"}
+							title={
+								sidebarUnlocked ? t("sidebar.show") : t("tabs.unlock_tech_tree")
+							}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<rect
@@ -667,7 +704,11 @@ export function App() {
 								cursor: statsPanelUnlocked ? "pointer" : "default",
 							}}
 							onClick={statsPanelUnlocked ? toggleStatsPanel : undefined}
-							title={statsPanelUnlocked ? "Show stats" : "Unlock in tech tree"}
+							title={
+								statsPanelUnlocked
+									? t("tabs.show_stats")
+									: t("tabs.unlock_tech_tree")
+							}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<rect

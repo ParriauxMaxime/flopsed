@@ -1,0 +1,136 @@
+{
+	"copilot": {
+		"special_name": "Tab 接受",
+		"special_description": "入门毒品。便宜、够用、让你上瘾。"
+	},
+	"claude_haiku": {
+		"special_name": "快速又便宜",
+		"special_description": "游戏中最优的 FLOPS/LoC 比率"
+	},
+	"claude_sonnet": {
+		"special_name": "拒绝写意大利面代码",
+		"special_description": "质量不低于 80%——静默减少产出而不降质"
+	},
+	"claude_opus": {
+		"special_name": "自我审查",
+		"special_description": "可自我审查：所有 AI 产出质量 +5%"
+	},
+	"gpt_3": {
+		"special_name": "话痨",
+		"special_description": "LoC/s +30%，但代码有 30% 是废话（降低现金价值）"
+	},
+	"gpt_35": {
+		"special_name": "ChatGPT 时刻",
+		"special_description": "部署时 60 秒现金乘数 +10%"
+	},
+	"gpt_4": {
+		"special_name": "话痨",
+		"special_description": "LoC/s +30%，但代码有 30% 是废话（降低现金价值）"
+	},
+	"gpt_41": {
+		"special_name": "高效",
+		"special_description": "FLOPS 消耗比标注少 20%"
+	},
+	"gpt_5": {
+		"special_name": "无护栏",
+		"special_description": "什么都写——没有质量底线，没有限制。危险。"
+	},
+	"gemini_pro": {
+		"special_name": "多模态",
+		"special_description": "同时写前端和后端——每执行 LoC 现金 x2"
+	},
+	"gemini_ultra": {
+		"special_name": "幻觉专家",
+		"special_description": "5% 的执行 LoC 什么都不产出——代码看起来没问题"
+	},
+	"llama_70b": {
+		"special_name": "开源",
+		"special_description": "无许可费。游戏中最低的 FLOPS/LoC 比率"
+	},
+	"llama_405b": {
+		"special_name": "社区补丁",
+		"special_description": "质量每分钟 +1%，上限 90%"
+	},
+	"mistral_large": {
+		"special_name": "Le Code",
+		"special_description": "拥有咖啡机时速度 +10%。Oui oui。"
+	},
+	"grok_2": {
+		"special_name": "混乱",
+		"special_description": "LoC 产出每 10 秒随机波动 ±50%"
+	},
+	"grok_3": {
+		"special_name": "Based",
+		"special_description": "偶尔生成梗图注释。没有现金价值，但在编辑器里挺好笑。"
+	},
+	"gpt_6": {
+		"special_name": "递归自我提升",
+		"special_description": "可改进自身权重。每 60 秒 LoC/s +50%（上限 3 倍）。"
+	},
+	"gpt_7": {
+		"special_name": "超级智能",
+		"special_description": "写代码比你读代码还快。接近奇点。"
+	},
+	"claude_saga": {
+		"special_name": "完美对齐",
+		"special_description": "质量底线 100%——每一行都生产就绪。"
+	},
+	"claude_universe": {
+		"special_name": "全知",
+		"special_description": "同时编写所有可能的程序。奇点已至。"
+	},
+	"gemini_supreme": {
+		"special_name": "分布式",
+		"special_description": "在地球上每个数据中心运行。无限扩展。"
+	},
+	"_flavor": {
+		"claude": [
+			"正在重构你的认证层……这其实挺优雅的。",
+			"我找到了 3 种改进方式。从最干净的开始。",
+			"完成了。顺便修了一个你没让我修的竞态条件。",
+			"这代码底子不错。让我让它唱歌。",
+			"正在细心处理边界情况……"
+		],
+		"gpt": [
+			"我写了一份详尽的 47 页分析报告。这是摘要……",
+			"当然！让我提供一个详细的实现……",
+			"作为大型语言模型，我很乐意帮忙。",
+			"这是一个健壮的企业级解决方案，附带完整文档……"
+		],
+		"gemini": [
+			"正在跨多个模态处理……",
+			"我看到了前端和后端的双重影响。",
+			"启用多模态理解生成中。"
+		],
+		"llama": [
+			"搞定。快速交付。不需要测试。yolo。",
+			"开源气质。直接推到主分支。",
+			"社区补丁来了。在我机器上能跑。"
+		],
+		"grok": [
+			"lmao 想象一下不用 AI。不管了，这是你要的函数",
+			"Based 实现来袭。不骗你。",
+			"你的旧代码库被碾压了。这是更好的东西。"
+		],
+		"mistral": [
+			"Le code est prêt. 简洁、高效、法式。",
+			"用大陆式优雅实现。",
+			"Voilà. 最少依赖，最大风味。"
+		],
+		"copilot": [
+			"Tab 接受……",
+			"基于你的模式自动补全……",
+			"建议已就绪。按 Tab 即可。"
+		]
+	},
+	"_idle": [
+		"优化神经通路中……",
+		"正在样条曲线细化……",
+		"编译未来中……",
+		"重构现实中……",
+		"对你的技术债务进行梯度下降……",
+		"生成单元测试……开玩笑的。",
+		"在你的代码库上训练中……",
+		"发现涌现行为中……"
+	]
+}
