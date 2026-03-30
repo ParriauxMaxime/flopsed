@@ -34,14 +34,14 @@ const PACKS: Record<MusicStyleEnum, StemPack> = {
 	},
 	landing: {
 		dir: "stems/landing",
-		stems: ["bass", "drums", "pad", "lead", "arp"],
+		stems: ["bass", "drums", "lead", "pad", "arp"],
 		tiers: {
 			0: ["bass"],
 			1: ["bass", "drums"],
-			2: ["bass", "drums", "pad"],
-			3: ["bass", "drums", "pad", "lead"],
-			4: ["bass", "drums", "pad", "lead", "arp"],
-			5: ["bass", "drums", "pad", "lead", "arp"],
+			2: ["bass", "drums", "lead"],
+			3: ["bass", "drums", "lead", "pad"],
+			4: ["bass", "drums", "lead", "pad", "arp"],
+			5: ["bass", "drums", "lead", "pad", "arp"],
 		},
 	},
 };

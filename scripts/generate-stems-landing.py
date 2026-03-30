@@ -145,19 +145,19 @@ ARP_NOTES = {
     7: (["E3", "G3", "B3", "E4", "G4", "B4", "E5", "G5"], 1),        # Em
 }
 
-# Lead melody — long sustained notes, delay fills the space.
-# Fewer notes = more emotion. Each note sings over its chord.
+# Lead melody — call and response phrases, breathing between.
+# Each chord gets a short melodic phrase then silence.
 LEAD_MELODY = [
-    # Cadd9 (bars 0-1): one note, let it ring
-    ("E5", 1, 6),
-    # Am7 (bars 2-3): step down gently
-    ("C5", 8, 4),
-    # Fm (bars 4-5): Ab — the emotional peak, hang on it
-    ("Ab4", 13, 5),
-    # G7 (bar 6): resolve up through F
-    ("F4", 19, 2),
-    # Em (bar 7): land on B, yearns back to C
-    ("B4", 22, 4),
+    # Cadd9 (bars 0-1): ascending call — hopeful
+    ("C5", 0.5, 1), ("D5", 1.8, 0.8), ("E5", 3, 2),
+    # Am7 (bars 2-3): answer — descending, reflective
+    ("E5", 8, 0.8), ("D5", 9, 0.8), ("C5", 10, 1.5),
+    # Fm (bars 4-5): the minor turn — Ab stands alone, stark
+    ("Ab4", 16, 1.5), ("C5", 18, 1), ("Ab4", 19.5, 2),
+    # G7 (bar 6): quick upward push
+    ("G4", 24, 0.8), ("B4", 25, 1.2),
+    # Em (bar 7): resolve down, settle
+    ("G4", 27, 1), ("E4", 28.5, 2),
 ]
 
 
@@ -381,7 +381,7 @@ def generate_drums():
 
 
 def generate_lead():
-    """Sustained singing lead — few notes, long tails, delay does the rhythm."""
+    """Call-and-response melody — short phrases with space between."""
     out = np.zeros(N_SAMPLES)
 
     for note_name, beat_start, beat_dur in LEAD_MELODY:
@@ -394,24 +394,24 @@ def generate_lead():
             continue
 
         t_local = np.linspace(0, actual_n / SAMPLE_RATE, actual_n, endpoint=False)
-        # Soft square + sine blend — warm, not harsh
-        lead_sig = square_bl(freq, t_local, 0.12, harmonics=3)
-        lead_sig += sine(freq, t_local, 0.08)
-        # Slow attack, very long decay — notes bloom and fade
-        lead_sig *= env_ad(actual_n, attack_s=0.15, decay_s=beat_dur * BEAT * 0.8)
+        # Triangle + sine — soft, clear, not buzzy
+        lead_sig = saw_bl(freq, t_local, 0.10, harmonics=3)
+        lead_sig += sine(freq, t_local, 0.10)
+        # Medium attack, natural decay
+        lead_sig *= env_ad(actual_n, attack_s=0.05, decay_s=beat_dur * BEAT * 0.6)
         # Anti-click fadeout
-        fadeout_n = min(int(0.02 * SAMPLE_RATE), actual_n)
+        fadeout_n = min(int(0.015 * SAMPLE_RATE), actual_n)
         lead_sig[-fadeout_n:] *= np.linspace(1, 0, fadeout_n) ** 2
         out[start:end] += lead_sig
 
-    out = highpass_1pole(out, 800)
-    # Heavy delay — the echoes become the rhythm
-    out = delay_effect(out, beat_frac=0.75, feedback=0.45, wet=0.45)
-    # Lush reverb
-    out = simple_reverb(out, decay=0.5, delays_ms=(31, 59, 97, 139, 191))
+    out = highpass_1pole(out, 700)
+    # Moderate delay — adds tail but doesn't wash out
+    out = delay_effect(out, beat_frac=0.75, feedback=0.3, wet=0.25)
+    # Reverb for space
+    out = simple_reverb(out, decay=0.35, delays_ms=(31, 59, 97, 139))
     out = apply_kick_sidechain(out)
 
-    return out * 0.35
+    return out * 0.4
 
 
 def apply_kick_sidechain(out, depth=0.55, attack_s=0.005, release_s=0.18):
