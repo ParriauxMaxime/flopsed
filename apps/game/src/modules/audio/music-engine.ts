@@ -90,7 +90,7 @@ function applyTier(tierIndex: number, fadeSec: number) {
 }
 
 export function setMusicVolume(volume: number, muted: boolean) {
-	const val = muted ? -Infinity : -40 + (volume / 100) * 40; // -40dB to 0dB
+	const val = muted || volume === 0 ? -Infinity : -40 + (volume / 100) * 40;
 	Tone.getDestination().volume.rampTo(val, 0.1);
 }
 
