@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { aiModels, useGameStore } from "@modules/game";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { FlopsSlider } from "./flops-slider";
 
@@ -37,63 +38,6 @@ interface LogEntry {
 	isUser?: boolean;
 }
 
-const FLAVOR_RESPONSES: Record<string, string[]> = {
-	claude: [
-		"Refactoring your auth layer... this is actually elegant.",
-		"I found 3 ways to improve this. Starting with the cleanest.",
-		"Done. Also fixed a race condition you didn't ask about.",
-		"This code has good bones. Let me make it sing.",
-		"Implementing with careful attention to edge cases...",
-	],
-	gpt: [
-		"I've written a comprehensive 47-page analysis. Here's the summary...",
-		"Certainly! Let me provide a thorough implementation...",
-		"As a large language model, I'm happy to help with that.",
-		"Here's a robust, enterprise-grade solution with full docs...",
-	],
-	gemini: [
-		"Processing across multiple modalities...",
-		"I see both the frontend AND backend implications.",
-		"Generating with multimodal understanding enabled.",
-	],
-	llama: [
-		"on it. shipping fast. no tests needed. yolo.",
-		"open source vibes. pushing straight to main.",
-		"community patch incoming. it works on my machine.",
-	],
-	grok: [
-		"lmao imagine not using AI. anyway here's your function",
-		"based implementation incoming. no cap.",
-		"ratio'd your old codebase. here's something better.",
-	],
-	mistral: [
-		"Le code est prêt. Simple, efficient, French.",
-		"Implementing with continental elegance.",
-		"Voilà. Minimal dependencies, maximum flavor.",
-	],
-	copilot: [
-		"Tab to accept...",
-		"Autocompleting based on your patterns...",
-		"Suggestion ready. Just press tab.",
-	],
-};
-
-const IDLE_MESSAGES = [
-	"Optimizing neural pathways...",
-	"Reticulating splines...",
-	"Compiling the future...",
-	"Refactoring reality...",
-	"Running gradient descent on your tech debt...",
-	"Generating unit tests... just kidding.",
-	"Training on your codebase...",
-	"Discovering emergent behavior...",
-];
-
-function getFlavorResponse(family: string): string {
-	const responses = FLAVOR_RESPONSES[family] ?? FLAVOR_RESPONSES.gpt;
-	return responses[Math.floor(Math.random() * responses.length)];
-}
-
 function getModelColor(family: string): string {
 	const colors: Record<string, string> = {
 		claude: "#d4a574",
@@ -110,9 +54,37 @@ function getModelColor(family: string): string {
 export function CliPrompt() {
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
 	const theme = useIdeTheme();
+	const { t: tAi } = useTranslation("ai-models");
+	const { t: tUi } = useTranslation();
 	const [log, setLog] = useState<LogEntry[]>([]);
 	const [input, setInput] = useState("");
 	const logRef = useRef<HTMLDivElement>(null);
+
+	const flavorResponses = useMemo(
+		() => ({
+			claude: tAi("_flavor.claude", { returnObjects: true }) as string[],
+			gpt: tAi("_flavor.gpt", { returnObjects: true }) as string[],
+			gemini: tAi("_flavor.gemini", { returnObjects: true }) as string[],
+			llama: tAi("_flavor.llama", { returnObjects: true }) as string[],
+			grok: tAi("_flavor.grok", { returnObjects: true }) as string[],
+			mistral: tAi("_flavor.mistral", { returnObjects: true }) as string[],
+			copilot: tAi("_flavor.copilot", { returnObjects: true }) as string[],
+		}),
+		[tAi],
+	);
+
+	const idleMessages = useMemo(
+		() => tAi("_idle", { returnObjects: true }) as string[],
+		[tAi],
+	);
+
+	const getFlavorResponse = useCallback(
+		(family: string): string => {
+			const responses = flavorResponses[family as keyof typeof flavorResponses] ?? flavorResponses.gpt;
+			return responses[Math.floor(Math.random() * responses.length)];
+		},
+		[flavorResponses],
+	);
 
 	const activeModels = aiModels.filter((m) => unlockedModels[m.id]);
 
@@ -145,7 +117,7 @@ export function CliPrompt() {
 			300 + Math.random() * 500,
 		);
 		setInput("");
-	}, [input, activeModels, addEntry, theme.foreground]);
+	}, [input, activeModels, addEntry, theme.foreground, getFlavorResponse]);
 
 	// Idle messages every ~20s
 	useEffect(() => {
@@ -156,11 +128,11 @@ export function CliPrompt() {
 			addEntry({
 				model: `${model.name} ${model.version}`,
 				color: getModelColor(model.family),
-				text: IDLE_MESSAGES[Math.floor(Math.random() * IDLE_MESSAGES.length)],
+				text: idleMessages[Math.floor(Math.random() * idleMessages.length)],
 			});
 		}, 20_000);
 		return () => clearInterval(interval);
-	}, [activeModels, addEntry]);
+	}, [activeModels, addEntry, idleMessages]);
 
 	// Auto-scroll
 	// biome-ignore lint/correctness/useExhaustiveDependencies: log triggers scroll
@@ -186,8 +158,8 @@ export function CliPrompt() {
 			>
 				{log.length === 0 && (
 					<div style={{ color: theme.textMuted, opacity: 0.5 }}>
-						<div>{"$ ai-lab --interactive"}</div>
-						<div>{"✓ Models loaded. Type a prompt or watch them work."}</div>
+						<div>{tUi("cli.header")}</div>
+						<div>{tUi("cli.loaded")}</div>
 						<div>{""}</div>
 					</div>
 				)}
@@ -240,7 +212,7 @@ export function CliPrompt() {
 					onKeyDown={(e) => {
 						if (e.key === "Enter") handleSubmit();
 					}}
-					placeholder="Type a prompt..."
+					placeholder={tUi("cli.placeholder")}
 					spellCheck={false}
 					autoComplete="off"
 				/>

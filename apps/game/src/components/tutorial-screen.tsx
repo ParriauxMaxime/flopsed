@@ -1,69 +1,19 @@
 import { css, keyframes } from "@emotion/react";
 import { useGameStore, useUiStore } from "@modules/game";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
-// ── Tip definitions ──
+// ── Tip ID → translation key mapping ──
 
-interface TipDef {
-	id: string;
-	lines: string[];
-}
-
-const tips: TipDef[] = [
-	{
-		id: "welcome",
-		lines: [
-			"$ init flopsed",
-			"✓ Loading garage environment...",
-			"",
-			"A keyboard. A dream. Type to write code.",
-			"Every keystroke = Lines of Code.",
-		],
-	},
-	{
-		id: "tech_tree_intro",
-		lines: [
-			"$ open tech-tree.svg",
-			"✓ Tech tree loaded →",
-			"",
-			"Research upgrades here. Spend cash and LoC.",
-			"Start with the basics. Work your way up.",
-		],
-	},
-	{
-		id: "sidebar_intro",
-		lines: [
-			"$ ls upgrades/",
-			"✓ File explorer unlocked ←",
-			"",
-			"Browse and buy upgrades by tier.",
-			"More FLOPS = faster execution. More devs = more code.",
-		],
-	},
-	{
-		id: "execution_intro",
-		lines: [
-			"$ cat README.md",
-			"",
-			"  type → queue → execute → $$$",
-			"",
-			"Code piles up. FLOPS burn through it. Cash flows.",
-		],
-	},
-	{
-		id: "ai_lab_tokens",
-		lines: [
-			"$ switch --mode ai-lab",
-			"✓ Workers now produce tokens instead of LoC.",
-			"",
-			"AI models consume tokens + FLOPS → massive LoC.",
-			"More humans = more tokens = more AI output.",
-		],
-	},
-];
-
-const tipMap = new Map(tips.map((t) => [t.id, t]));
+const tipTranslationKeys: Record<string, string> = {
+	welcome: "welcome.lines",
+	tech_tree_intro: "tech_tree.lines",
+	sidebar_intro: "sidebar.lines",
+	execution_intro: "execution.lines",
+	ai_lab_tokens: "ai_lab.lines",
+};
 
 // ── Trigger conditions ──
 
@@ -90,6 +40,15 @@ const triggers: Array<{ id: string; test: (s: GameState) => boolean }> = [
 
 export function useTutorialTriggers() {
 	useEffect(() => {
+		const tTutorial = i18n.getFixedT(null, "tutorial");
+
+		const getTipLines = (id: string): string[] | undefined => {
+			const translationKey = tipTranslationKeys[id];
+			if (!translationKey) return undefined;
+			const result = tTutorial(translationKey, { returnObjects: true }) as string[];
+			return result;
+		};
+
 		const unsub = useGameStore.subscribe((state) => {
 			const uiState = useUiStore.getState();
 			for (const trigger of triggers) {
@@ -103,9 +62,9 @@ export function useTutorialTriggers() {
 							uiState.toggleSplit();
 						}
 					}
-					const tip = tipMap.get(trigger.id);
-					if (tip) {
-						for (const line of tip.lines) {
+					const lines = getTipLines(trigger.id);
+					if (lines) {
+						for (const line of lines) {
 							uiState.pushTerminalLine(line);
 						}
 						uiState.pushTerminalLine("");
@@ -119,13 +78,13 @@ export function useTutorialTriggers() {
 		const uiState = useUiStore.getState();
 		if (!uiState.seenTips.includes("welcome")) {
 			uiState.showTip("welcome");
-			const tip = tipMap.get("welcome");
-			if (tip) {
-				for (const line of tip.lines) {
+			const lines = getTipLines("welcome");
+			if (lines) {
+				for (const line of lines) {
 					uiState.pushTerminalLine(line);
 				}
 				uiState.pushTerminalLine("");
-				uiState.pushTerminalLine("$ loading tech-tree.svg ...");
+				uiState.pushTerminalLine(tTutorial("loading") as string);
 			}
 		}
 
@@ -234,6 +193,7 @@ export function TutorialTip() {
 	const terminalLog = useUiStore((s) => s.terminalLog);
 	const toggleTerminal = useUiStore((s) => s.toggleTerminal);
 	const theme = useIdeTheme();
+	const { t: tTutorial } = useTranslation("tutorial");
 	const logRef = useRef<HTMLDivElement>(null);
 	const prevLogLen = useRef(terminalLog.length);
 
@@ -263,8 +223,8 @@ export function TutorialTip() {
 						borderBottom: `1px solid ${theme.foreground}`,
 					}}
 				>
-					Terminal
-					<span css={shortcutHintCss}>Ctrl+T</span>
+					{tTutorial("terminal_label")}
+					<span css={shortcutHintCss}>{tTutorial("terminal_shortcut")}</span>
 				</span>
 				<button
 					type="button"
@@ -278,7 +238,7 @@ export function TutorialTip() {
 						},
 					]}
 					onClick={toggleTerminal}
-					title="Close terminal (Ctrl+T)"
+					title={tTutorial("close_terminal")}
 				>
 					×
 				</button>

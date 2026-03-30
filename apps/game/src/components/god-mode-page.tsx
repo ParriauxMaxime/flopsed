@@ -10,6 +10,7 @@ import {
 } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/shallow";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
@@ -133,6 +134,7 @@ function BumpBtn({ label, onClick }: { label: string; onClick: () => void }) {
 
 export function GodModePage() {
 	const theme = useIdeTheme();
+	const { t } = useTranslation();
 	const godSet = useGameStore((s) => s.godSet);
 	const reset = useGameStore((s) => s.reset);
 	const resetAll = useUiStore((s) => s.resetAll);
@@ -163,29 +165,29 @@ export function GodModePage() {
 		color: string;
 		bumps: number[];
 	}> = [
-		{ key: "cash", label: "Cash", color: theme.cashColor, bumps: stdBumps },
+		{ key: "cash", label: t("god_mode.cash"), color: theme.cashColor, bumps: stdBumps },
 		{
 			key: "totalCash",
-			label: "Total Cash",
+			label: t("god_mode.total_cash"),
 			color: theme.cashColor,
 			bumps: stdBumps,
 		},
-		{ key: "loc", label: "LoC", color: theme.locColor, bumps: stdBumps },
+		{ key: "loc", label: t("god_mode.loc"), color: theme.locColor, bumps: stdBumps },
 		{
 			key: "totalLoc",
-			label: "Total LoC",
+			label: t("god_mode.total_loc"),
 			color: theme.locColor,
 			bumps: stdBumps,
 		},
 		{
 			key: "flops",
-			label: "FLOPS",
+			label: t("god_mode.flops"),
 			color: theme.flopsColor,
 			bumps: [100, 1_000, 10_000, 100_000],
 		},
 		{
 			key: "tokens",
-			label: "Tokens",
+			label: t("god_mode.tokens"),
 			color: "#d4a574",
 			bumps: [1_000, 100_000, 10_000_000],
 		},
@@ -208,10 +210,10 @@ export function GodModePage() {
 			}}
 		>
 			<div css={{ padding: "16px 16px 8px", fontSize: 24, fontWeight: 300 }}>
-				God Mode
+				{t("god_mode.title")}
 			</div>
 
-			<Section title="Resources">
+			<Section title={t("god_mode.resources")}>
 				<div css={{ display: "flex", flexDirection: "column", gap: 8 }}>
 					{resourceRows.map((r) => (
 						<div
@@ -288,9 +290,9 @@ export function GodModePage() {
 				</div>
 			</Section>
 
-			<Section title="Tier">
+			<Section title={t("god_mode.tier")}>
 				<div css={{ display: "flex", alignItems: "center", gap: 8 }}>
-					<span css={{ color: theme.textMuted }}>Current:</span>
+					<span css={{ color: theme.textMuted }}>{t("god_mode.current")}</span>
 					<span css={{ fontWeight: 600 }}>
 						{tiers[state.currentTierIndex]?.name ?? "—"} (T
 						{state.currentTierIndex})
@@ -317,7 +319,7 @@ export function GodModePage() {
 				</div>
 			</Section>
 
-			<Section title="AI Models" defaultOpen={false}>
+			<Section title={t("god_mode.ai_models")} defaultOpen={false}>
 				{["copilot", "claude_haiku", "claude_sonnet", "openai_gpt3"].map(
 					(id) => (
 						<div
@@ -342,7 +344,7 @@ export function GodModePage() {
 							</span>
 							{!state.unlockedModels[id] && (
 								<BumpBtn
-									label="Grant"
+									label={t("god_mode.grant")}
 									onClick={() => {
 										const current = useGameStore.getState();
 										useGameStore.setState({
@@ -360,7 +362,7 @@ export function GodModePage() {
 				)}
 			</Section>
 
-			<Section title="Tools" defaultOpen={false}>
+			<Section title={t("god_mode.tools")} defaultOpen={false}>
 				<div css={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
 					<a
 						href="http://localhost:3738"
@@ -376,12 +378,12 @@ export function GodModePage() {
 							"&:hover": { background: theme.accent, color: theme.background },
 						}}
 					>
-						Data Editor
+						{t("god_mode.data_editor")}
 					</a>
 				</div>
 			</Section>
 
-			<Section title="Danger Zone" defaultOpen={false}>
+			<Section title={t("god_mode.danger_zone")} defaultOpen={false}>
 				<div css={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
 					<button
 						type="button"
@@ -402,7 +404,7 @@ export function GodModePage() {
 							window.location.reload();
 						}}
 					>
-						Reset Game
+						{t("god_mode.reset_game")}
 					</button>
 					<button
 						type="button"
@@ -431,7 +433,7 @@ export function GodModePage() {
 							recalc();
 						}}
 					>
-						Trigger Singularity
+						{t("god_mode.trigger_singularity")}
 					</button>
 					<button
 						type="button"
@@ -461,7 +463,7 @@ export function GodModePage() {
 							recalc();
 						}}
 					>
-						Unlock All Tech
+						{t("god_mode.unlock_all_tech")}
 					</button>
 					<button
 						type="button"
@@ -492,7 +494,7 @@ export function GodModePage() {
 							recalc();
 						}}
 					>
-						Max All Upgrades
+						{t("god_mode.max_all_upgrades")}
 					</button>
 				</div>
 			</Section>
