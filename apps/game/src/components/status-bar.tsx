@@ -80,7 +80,12 @@ export function StatusBar() {
 			</div>
 			<div css={rightCss}>
 				<span>${tier?.cashPerLoc ?? 0}/loc</span>
-				<button css={muteBtnCss} onClick={toggleMute} title={muted ? "Unmute" : "Mute"}>
+				<button
+					type="button"
+					css={muteBtnCss}
+					onClick={toggleMute}
+					title={muted ? "Unmute" : "Mute"}
+				>
 					{muted ? "🔇" : "🔊"}
 				</button>
 				<span>Python</span>

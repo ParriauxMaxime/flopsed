@@ -307,7 +307,14 @@ function SettingsPage() {
 				name="Mute All"
 				description="Mute all game audio (music and sound effects)."
 			>
-				<label css={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+				<label
+					css={{
+						display: "flex",
+						alignItems: "center",
+						gap: 8,
+						cursor: "pointer",
+					}}
+				>
 					<input
 						type="checkbox"
 						checked={muted}
