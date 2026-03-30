@@ -45,9 +45,9 @@
 			"name": "Auto-Execute",
 			"description": "FLOPS run your code automatically.",
 			"icon": "⚡",
-			"requires": ["computer"],
+			"requires": ["tier_freelancing"],
 			"max": 1,
-			"baseCost": 80,
+			"baseCost": 150,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
