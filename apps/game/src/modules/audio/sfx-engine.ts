@@ -12,15 +12,26 @@ function sliderToGain(volume: number, muted: boolean): number {
 	return normalized * normalized; // simple perceptual curve
 }
 
-// ── Typing sound: short filtered noise burst, 20-40ms ──
+// ── Typing sound: mechanical keyboard click + thock ──
 
-const TYPING_VARIANTS = [800, 1000, 1200, 1400]; // bandpass center freqs
 let typingIndex = 0;
 let lastTypingTime = 0;
 
+// Pre-generate a reusable noise buffer (1 second at sample rate)
+let noiseBuffer: AudioBuffer | null = null;
+
+function getNoiseBuffer(ac: AudioContext): AudioBuffer {
+	if (noiseBuffer && noiseBuffer.sampleRate === ac.sampleRate) return noiseBuffer;
+	const len = ac.sampleRate; // 1 second
+	noiseBuffer = ac.createBuffer(1, len, ac.sampleRate);
+	const data = noiseBuffer.getChannelData(0);
+	for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+	return noiseBuffer;
+}
+
 export function playTyping(volume: number, muted: boolean) {
 	const now = performance.now();
-	if (now - lastTypingTime < 40) return; // debounce at 25/s max
+	if (now - lastTypingTime < 35) return; // debounce ~28/s max
 	lastTypingTime = now;
 
 	const gain = sliderToGain(volume, muted);
@@ -28,29 +39,51 @@ export function playTyping(volume: number, muted: boolean) {
 
 	const ac = getCtx();
 	const t = ac.currentTime;
+	typingIndex++;
 
-	// White noise buffer (short)
-	const bufferSize = Math.floor(ac.sampleRate * 0.03); // 30ms
-	const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-	const data = buffer.getChannelData(0);
-	for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+	// Vary each keystroke slightly
+	const pitch = 3000 + Math.random() * 2000; // 3-5kHz click center
+	const thockPitch = 120 + Math.random() * 60; // 120-180Hz thock body
+	const vol = gain * (0.10 + Math.random() * 0.04); // slight volume variation
+	const duration = 0.02 + Math.random() * 0.01; // 20-30ms
 
-	const src = ac.createBufferSource();
-	src.buffer = buffer;
+	// Layer 1: high-frequency click (noise → highpass → bandpass → gain)
+	const noiseSrc = ac.createBufferSource();
+	noiseSrc.buffer = getNoiseBuffer(ac);
+	// Random offset into noise buffer for variation
+	noiseSrc.loopStart = Math.random() * 0.9;
+	noiseSrc.loopEnd = noiseSrc.loopStart + 0.05;
+
+	const hp = ac.createBiquadFilter();
+	hp.type = "highpass";
+	hp.frequency.value = 2000;
 
 	const bp = ac.createBiquadFilter();
 	bp.type = "bandpass";
-	bp.frequency.value = TYPING_VARIANTS[typingIndex % TYPING_VARIANTS.length];
-	bp.Q.value = 2;
-	typingIndex++;
+	bp.frequency.value = pitch;
+	bp.Q.value = 1.5;
 
-	const g = ac.createGain();
-	g.gain.setValueAtTime(gain * 0.15, t);
-	g.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+	const clickGain = ac.createGain();
+	clickGain.gain.setValueAtTime(vol, t);
+	clickGain.gain.exponentialRampToValueAtTime(0.001, t + duration);
 
-	src.connect(bp).connect(g).connect(ac.destination);
-	src.start(t);
-	src.stop(t + 0.03);
+	noiseSrc.connect(hp).connect(bp).connect(clickGain).connect(ac.destination);
+	noiseSrc.start(t, noiseSrc.loopStart);
+	noiseSrc.stop(t + duration + 0.01);
+
+	// Layer 2: low "thock" body (damped sine)
+	const thock = ac.createOscillator();
+	thock.type = "sine";
+	thock.frequency.setValueAtTime(thockPitch, t);
+	thock.frequency.exponentialRampToValueAtTime(60, t + 0.04);
+
+	const thockGain = ac.createGain();
+	thockGain.gain.setValueAtTime(vol * 0.6, t);
+	thockGain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+
+	thock.connect(thockGain).connect(ac.destination);
+	thock.start(t);
+	thock.stop(t + 0.05);
 }
 
 // ── Execute sound: subtle digital tick ──
