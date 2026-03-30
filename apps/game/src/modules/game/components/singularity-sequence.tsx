@@ -1,4 +1,5 @@
 import { css, keyframes } from "@emotion/react";
+import { music } from "@modules/audio";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGameStore } from "../store/game-store";
 
@@ -539,6 +540,12 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 			behavior: "smooth",
 		});
 	}, [scrollTrigger]);
+
+	useEffect(() => {
+		if (animate && phase === PhaseEnum.glitch) {
+			music.singularity();
+		}
+	}, [animate, phase]);
 
 	// ── Input submit ──
 
