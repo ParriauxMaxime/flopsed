@@ -101,6 +101,7 @@ export function StatsPanelResources() {
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
 	const totalCash = useGameStore((s) => s.totalCash);
+	const tokens = useGameStore((s) => s.tokens);
 	const flops = useGameStore((s) => s.flops);
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const cashMultiplier = useGameStore((s) => s.cashMultiplier);
@@ -388,6 +389,23 @@ export function StatsPanelResources() {
 							</div>
 						</div>
 					</div>
+
+					{aiUnlocked && (
+						<div css={statRowCss}>
+							<div css={statLabelCss}>
+								<span style={{ color: theme.tokenColor }}>🪙</span>{" "}
+								{t("stats_panel.tokens")}
+							</div>
+							<div>
+								<div css={statValueCss}>
+									<RollingNumber
+										value={formatNumber(tokens)}
+										color={theme.tokenColor}
+									/>
+								</div>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 

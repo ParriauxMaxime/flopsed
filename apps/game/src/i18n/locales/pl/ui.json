@@ -15,6 +15,7 @@
 		"cash": "Gotówka",
 		"loc": "LoC",
 		"flops": "FLOPS",
+		"tokens": "Tokeny",
 		"token_sources": "Źródła tokenów",
 		"loc_sources": "Źródła LoC",
 		"you": "Ty",

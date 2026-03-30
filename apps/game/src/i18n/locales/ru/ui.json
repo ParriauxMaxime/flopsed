@@ -15,6 +15,7 @@
 		"cash": "Деньги",
 		"loc": "LoC",
 		"flops": "FLOPS",
+		"tokens": "Токены",
 		"token_sources": "Источники токенов",
 		"loc_sources": "Источники LoC",
 		"you": "Вы",

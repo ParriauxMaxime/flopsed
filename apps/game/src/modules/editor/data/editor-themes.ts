@@ -46,6 +46,7 @@ export interface EditorTheme {
 	cashColor: string;
 	locColor: string;
 	flopsColor: string;
+	tokenColor: string;
 }
 
 export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
@@ -81,6 +82,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#e5c07b",
 		locColor: "#61afef",
 		flopsColor: "#c678dd",
+		tokenColor: "#e5a54b",
 	},
 	[EditorThemeEnum.monokai]: {
 		name: "Monokai",
@@ -114,6 +116,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#e5c07b",
 		locColor: "#61afef",
 		flopsColor: "#c678dd",
+		tokenColor: "#e5a54b",
 	},
 	[EditorThemeEnum.github_dark]: {
 		name: "GitHub Dark",
@@ -147,6 +150,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#e5c07b",
 		locColor: "#61afef",
 		flopsColor: "#c678dd",
+		tokenColor: "#e5a54b",
 	},
 	[EditorThemeEnum.github_light]: {
 		name: "GitHub Light",
@@ -180,6 +184,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#9a6700",
 		locColor: "#0550ae",
 		flopsColor: "#8250df",
+		tokenColor: "#a06b1b",
 	},
 	[EditorThemeEnum.solarized_dark]: {
 		name: "Solarized Dark",
@@ -213,6 +218,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#e5c07b",
 		locColor: "#61afef",
 		flopsColor: "#c678dd",
+		tokenColor: "#e5a54b",
 	},
 	[EditorThemeEnum.solarized_light]: {
 		name: "Solarized Light",
@@ -246,6 +252,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#b58900",
 		locColor: "#268bd2",
 		flopsColor: "#d33682",
+		tokenColor: "#b58900",
 	},
 	[EditorThemeEnum.dracula]: {
 		name: "Dracula",
@@ -279,6 +286,7 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#e5c07b",
 		locColor: "#61afef",
 		flopsColor: "#c678dd",
+		tokenColor: "#e5a54b",
 	},
 	[EditorThemeEnum.nord]: {
 		name: "Nord",
@@ -312,5 +320,6 @@ export const EDITOR_THEMES: Record<EditorThemeEnum, EditorTheme> = {
 		cashColor: "#e5c07b",
 		locColor: "#61afef",
 		flopsColor: "#c678dd",
+		tokenColor: "#e5a54b",
 	},
 };
