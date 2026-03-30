@@ -190,8 +190,8 @@ def generate_pad():
             detune_factor = 2 ** (10 / 1200)  # 10 cents
             # Slow vibrato LFO at ~2.5 Hz
             vibrato = 1 + 0.004 * np.sin(2 * np.pi * 2.5 * t_local)
-            osc1 = saw_bl(freq * vibrato, t_local, 0.08)
-            osc2 = saw_bl(freq * detune_factor * vibrato, t_local, 0.08)
+            osc1 = saw_bl(freq * vibrato, t_local, 0.12)
+            osc2 = saw_bl(freq * detune_factor * vibrato, t_local, 0.12)
             chord_sig += osc1 + osc2
 
         # Slow attack/release for pad character
@@ -206,14 +206,14 @@ def generate_pad():
         chord_sig *= env
         out[start:end] += chord_sig
 
-    # Heavy lowpass for warmth
-    out = lowpass_1pole(out, 3000)
-    # Heavy reverb
-    out = simple_reverb(out, decay=0.5, delays_ms=(31, 53, 79, 113, 157))
-    # Delay
-    out = delay_effect(out, beat_frac=0.5, feedback=0.25, wet=0.2)
+    # Gentle warmth filter — keep it bright and brassy, just tame the harshest highs
+    out = lowpass_1pole(out, 8000)
+    # Reverb — spacious but not muddy
+    out = simple_reverb(out, decay=0.4, delays_ms=(31, 53, 79, 113, 157))
+    # Delay — subtle space
+    out = delay_effect(out, beat_frac=0.5, feedback=0.2, wet=0.15)
 
-    return out * 0.6
+    return out * 0.7
 
 
 def generate_arp():
