@@ -11,40 +11,35 @@ import enTutorial from "./locales/en/tutorial.json";
 import enUi from "./locales/en/ui.json";
 import enUpgrades from "./locales/en/upgrades.json";
 
+import frLocale from "./locales/fr";
+import itLocale from "./locales/it";
+import deLocale from "./locales/de";
+import esLocale from "./locales/es";
+import plLocale from "./locales/pl";
+import zhLocale from "./locales/zh";
+import ruLocale from "./locales/ru";
+
 export const supportedLanguages = [
 	{ code: "en", name: "English" },
-	{ code: "fr", name: "Fran\u00e7ais" },
+	{ code: "fr", name: "Français" },
 	{ code: "it", name: "Italiano" },
 	{ code: "de", name: "Deutsch" },
-	{ code: "es", name: "Espa\u00f1ol" },
+	{ code: "es", name: "Español" },
 	{ code: "pl", name: "Polski" },
-	{ code: "zh", name: "\u4e2d\u6587" },
-	{ code: "ru", name: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" },
+	{ code: "zh", name: "中文" },
+	{ code: "ru", name: "Русский" },
 ] as const;
 
-const lazyLocales: Record<
-	string,
-	() => Promise<{ default: Record<string, Record<string, unknown>> }>
-> = {
-	fr: () => import("./locales/fr"),
-	it: () => import("./locales/it"),
-	de: () => import("./locales/de"),
-	es: () => import("./locales/es"),
-	pl: () => import("./locales/pl"),
-	zh: () => import("./locales/zh"),
-	ru: () => import("./locales/ru"),
+const enBundles = {
+	ui: enUi,
+	upgrades: enUpgrades,
+	"tech-tree": enTechTree,
+	tiers: enTiers,
+	events: enEvents,
+	milestones: enMilestones,
+	"ai-models": enAiModels,
+	tutorial: enTutorial,
 };
-
-const namespaces = [
-	"ui",
-	"upgrades",
-	"tech-tree",
-	"tiers",
-	"events",
-	"milestones",
-	"ai-models",
-	"tutorial",
-] as const;
 
 i18n
 	.use(LanguageDetector)
@@ -52,18 +47,16 @@ i18n
 	.init({
 		fallbackLng: "en",
 		defaultNS: "ui",
-		ns: [...namespaces],
+		ns: ["ui", "upgrades", "tech-tree", "tiers", "events", "milestones", "ai-models", "tutorial"],
 		resources: {
-			en: {
-				ui: enUi,
-				upgrades: enUpgrades,
-				"tech-tree": enTechTree,
-				tiers: enTiers,
-				events: enEvents,
-				milestones: enMilestones,
-				"ai-models": enAiModels,
-				tutorial: enTutorial,
-			},
+			en: enBundles,
+			fr: frLocale,
+			it: itLocale,
+			de: deLocale,
+			es: esLocale,
+			pl: plLocale,
+			zh: zhLocale,
+			ru: ruLocale,
 		},
 		interpolation: { escapeValue: false },
 		detection: {
@@ -71,19 +64,5 @@ i18n
 			caches: ["localStorage"],
 		},
 	});
-
-i18n.on("languageChanged", async (lng: string) => {
-	if (lng === "en" || !lazyLocales[lng]) return;
-	if (i18n.hasResourceBundle(lng, "ui")) return;
-
-	const loader = lazyLocales[lng];
-	const mod = await loader();
-	const bundles = mod.default;
-	for (const ns of namespaces) {
-		if (bundles[ns]) {
-			i18n.addResourceBundle(lng, ns, bundles[ns]);
-		}
-	}
-});
 
 export default i18n;
