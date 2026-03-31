@@ -1,6 +1,7 @@
 import { EditorPanel } from "@components/editor-panel";
 import { GodModePage } from "@components/god-mode-page";
-import { MobileShell } from "@components/mobile-shell";
+import { PerfProfiler } from "@components/perf-profiler";
+import { RotateNudge } from "@components/rotate-nudge";
 import { SidebarTree } from "@components/sidebar-tree";
 import { StatsPanel } from "@components/stats-panel";
 import { StatusBar } from "@components/status-bar";
@@ -27,7 +28,6 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { match } from "ts-pattern";
 import { useIdeTheme } from "./hooks/use-ide-theme";
-import { useIsMobile } from "./hooks/use-is-mobile";
 import { supportedLanguages } from "./i18n";
 
 const globalStyles = css({
@@ -432,24 +432,6 @@ function SettingsPage() {
 	);
 }
 
-// ── Collapsed sidebar strip ──
-
-const collapsedStripCss = css({
-	display: "flex",
-	alignItems: "flex-start",
-	justifyContent: "center",
-	paddingTop: 10,
-	width: 28,
-	flexShrink: 0,
-	cursor: "pointer",
-	border: "none",
-	fontFamily: "inherit",
-	color: "#8b949e",
-	transition: "color 0.15s",
-	alignSelf: "stretch",
-	"&:hover": { color: "#c9d1d9" },
-});
-
 // ── Tabbed pane (reusable for split view) ──
 
 const splitBtnCss = css({
@@ -605,7 +587,6 @@ export function App() {
 	useTutorialTriggers();
 	useKeyboardShortcuts();
 	const { t } = useTranslation();
-	const isMobile = useIsMobile();
 	const page = useUiStore((s) => s.page);
 	const setPage = useUiStore((s) => s.setPage);
 	const splitEnabled = useUiStore((s) => s.splitEnabled);
@@ -656,20 +637,10 @@ export function App() {
 		}
 	}, [singularityAnimate]);
 
-	if (isMobile) {
-		return (
-			<>
-				<Global styles={globalStyles} />
-				<MobileShell />
-				<EventToast />
-				{singularity && <SingularitySequence animate={singularityAnimate} />}
-			</>
-		);
-	}
-
 	return (
 		<>
 			<Global styles={globalStyles} />
+			<RotateNudge />
 			<div
 				ref={shellRef}
 				css={[
@@ -690,44 +661,47 @@ export function App() {
 				{/* Main area: sidebar + center + stats panel */}
 				<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
 					{/* Left sidebar */}
-					{!sidebarUnlocked || sidebarCollapsed ? (
+					{sidebarUnlocked && sidebarCollapsed && (
 						<button
 							type="button"
-							css={collapsedStripCss}
+							css={{
+								display: "flex",
+								alignItems: "flex-start",
+								justifyContent: "center",
+								paddingTop: 10,
+								width: 28,
+								flexShrink: 0,
+								cursor: "pointer",
+								border: "none",
+								fontFamily: "inherit",
+								color: "#8b949e",
+								transition: "color 0.15s",
+								alignSelf: "stretch",
+								"&:hover": { color: "#c9d1d9" },
+							}}
 							style={{
 								borderRight: `1px solid ${theme.border}`,
 								background: theme.sidebarBg,
-								opacity: sidebarUnlocked ? 1 : 0.3,
-								cursor: sidebarUnlocked ? "pointer" : "default",
 							}}
-							onClick={sidebarUnlocked ? toggleSidebar : undefined}
-							title={
-								sidebarUnlocked ? t("sidebar.show") : t("tabs.unlock_tech_tree")
-							}
+							onClick={toggleSidebar}
+							title={t("sidebar.show")}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-								<rect
-									x="1.5"
-									y="2.5"
-									width="13"
-									height="11"
-									rx="1"
-									stroke="currentColor"
-									strokeWidth="1.2"
-								/>
-								<line
-									x1="5"
-									y1="3"
-									x2="5"
-									y2="13"
-									stroke="currentColor"
-									strokeWidth="1.2"
-								/>
+								<rect x="1.5" y="2.5" width="13" height="11" rx="1" stroke="currentColor" strokeWidth="1.2" />
+								<line x1="5" y1="3" x2="5" y2="13" stroke="currentColor" strokeWidth="1.2" />
 							</svg>
 						</button>
-					) : (
-						<SidebarTree onCollapse={toggleSidebar} />
 					)}
+					<div
+						css={{
+							overflow: "hidden",
+							flexShrink: 0,
+							width: sidebarUnlocked && !sidebarCollapsed ? 260 : 0,
+							transition: "width 0.25s ease",
+						}}
+					>
+						<SidebarTree onCollapse={toggleSidebar} />
+					</div>
 
 					{/* Center: tabbed panes + tutorial */}
 					<div
@@ -764,45 +738,46 @@ export function App() {
 					</div>
 
 					{/* Right stats panel (full height) */}
-					{!statsPanelUnlocked || statsPanelCollapsed ? (
+					<div
+						css={{
+							overflow: "hidden",
+							flexShrink: 0,
+							width: statsPanelUnlocked && !statsPanelCollapsed ? 280 : 0,
+							transition: "width 0.25s ease",
+						}}
+					>
+						<StatsPanel onCollapse={toggleStatsPanel} />
+					</div>
+					{statsPanelUnlocked && statsPanelCollapsed && (
 						<button
 							type="button"
-							css={collapsedStripCss}
+							css={{
+								display: "flex",
+								alignItems: "flex-start",
+								justifyContent: "center",
+								paddingTop: 10,
+								width: 28,
+								flexShrink: 0,
+								cursor: "pointer",
+								border: "none",
+								fontFamily: "inherit",
+								color: "#8b949e",
+								transition: "color 0.15s",
+								alignSelf: "stretch",
+								"&:hover": { color: "#c9d1d9" },
+							}}
 							style={{
 								borderLeft: `1px solid ${theme.border}`,
 								background: theme.sidebarBg,
-								opacity: statsPanelUnlocked ? 1 : 0.3,
-								cursor: statsPanelUnlocked ? "pointer" : "default",
 							}}
-							onClick={statsPanelUnlocked ? toggleStatsPanel : undefined}
-							title={
-								statsPanelUnlocked
-									? t("tabs.show_stats")
-									: t("tabs.unlock_tech_tree")
-							}
+							onClick={toggleStatsPanel}
+							title={t("tabs.show_stats")}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-								<rect
-									x="1.5"
-									y="2.5"
-									width="13"
-									height="11"
-									rx="1"
-									stroke="currentColor"
-									strokeWidth="1.2"
-								/>
-								<line
-									x1="11"
-									y1="3"
-									x2="11"
-									y2="13"
-									stroke="currentColor"
-									strokeWidth="1.2"
-								/>
+								<rect x="1.5" y="2.5" width="13" height="11" rx="1" stroke="currentColor" strokeWidth="1.2" />
+								<line x1="11" y1="3" x2="11" y2="13" stroke="currentColor" strokeWidth="1.2" />
 							</svg>
 						</button>
-					) : (
-						<StatsPanel onCollapse={toggleStatsPanel} />
 					)}
 				</div>
 
@@ -810,6 +785,7 @@ export function App() {
 				<StatusBar />
 			</div>
 			<EventToast />
+			<PerfProfiler />
 			{singularity && <SingularitySequence animate={singularityAnimate} />}
 		</>
 	);
