@@ -11,3 +11,7 @@ createRoot(root).render(
 		<App />
 	</StrictMode>,
 );
+
+if ("serviceWorker" in navigator) {
+	navigator.serviceWorker.register("/sw.js");
+}
