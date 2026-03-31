@@ -184,14 +184,16 @@ export function StatsPanelResources() {
 		t,
 	]);
 
+	const flopSlider = useGameStore((s) => s.flopSlider);
 	const aiSources = useMemo((): SourceRow[] => {
 		if (!aiUnlocked) return [];
+		// Bottom-up allocation: cheapest models first (matches tick logic)
 		const activeModels = aiModels
 			.filter((m) => unlockedModels[m.id])
-			.sort((a, b) => b.locPerSec - a.locPerSec)
+			.sort((a, b) => a.flopsCost - b.flopsCost)
 			.slice(0, llmHostSlots);
-		let remaining = flops;
-		return activeModels.map((model) => {
+		let remaining = flops * (1 - flopSlider);
+		const rows = activeModels.map((model) => {
 			const modelFlops = Math.min(model.flopsCost, remaining);
 			remaining -= modelFlops;
 			const ratio = model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
@@ -201,7 +203,10 @@ export function StatsPanelResources() {
 				color: modelColor(model, theme.textMuted),
 			};
 		});
-	}, [aiUnlocked, unlockedModels, llmHostSlots, flops, theme]);
+		// Display sorted by output descending (highest producers first)
+		rows.sort((a, b) => b.locPerSec - a.locPerSec);
+		return rows;
+	}, [aiUnlocked, unlockedModels, llmHostSlots, flops, flopSlider, theme]);
 
 	const humanMaxLoc = Math.max(1, ...humanSources.map((s) => s.locPerSec));
 	const aiMaxLoc = Math.max(1, ...aiSources.map((s) => s.locPerSec));
