@@ -697,6 +697,60 @@ export const useGameStore = create<GameState & GameActions>()(
 						next.prevTickTotalExecLoc = totalExecutedLoc;
 					}
 
+					// ── 5. Auto-arbitrage (smooth slider adjustment) ──
+					if (
+						s.autoArbitrageEnabled &&
+						!s.autoArbitrageOverride &&
+						aiUnlocked
+					) {
+						// Compute AI production rate at current slider
+						const currentAiFlops = s.flops * (1 - s.flopSlider);
+						let aiLocRate = 0;
+						let remainingForCalc = currentAiFlops;
+						const activeForCalc = aiModels
+							.filter((m) => s.unlockedModels[m.id])
+							.sort((a, b) => b.locPerSec - a.locPerSec)
+							.slice(0, s.llmHostSlots);
+						for (const model of activeForCalc) {
+							const mf = Math.min(model.flopsCost, remainingForCalc);
+							remainingForCalc -= mf;
+							const ratio =
+								model.flopsCost > 0 ? mf / model.flopsCost : 0;
+							aiLocRate += model.locPerSec * Math.min(1, ratio);
+						}
+
+						// Target: match exec rate to AI production rate
+						let targetSlider =
+							s.flops > 0 ? aiLocRate / s.flops : 0.7;
+
+						// Queue pressure bias
+						const currentExecFlops = s.flops * s.flopSlider;
+						if (loc > currentExecFlops * 5) {
+							targetSlider += 0.05; // queue backing up → more exec
+						} else if (loc < currentExecFlops * 1) {
+							targetSlider -= 0.05; // queue nearly empty → more AI
+						}
+
+						// Clamp
+						targetSlider = Math.min(0.95, Math.max(0.1, targetSlider));
+
+						// Smooth lerp
+						const newSlider =
+							s.flopSlider + (targetSlider - s.flopSlider) * 0.02;
+						next.flopSlider = Math.min(
+							0.95,
+							Math.max(0.1, newSlider),
+						);
+					}
+
+					// Auto-arbitrage override timeout (10s)
+					if (
+						s.autoArbitrageOverride &&
+						performance.now() - s.autoArbitrageOverrideAt > 10000
+					) {
+						next.autoArbitrageOverride = false;
+					}
+
 					return next;
 				});
 			},
