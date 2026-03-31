@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Editor } from "@modules/editor";
+import { Editor, StreamingEditor } from "@modules/editor";
 import { useGameStore } from "@modules/game";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { CliPrompt } from "./cli-prompt";
@@ -29,6 +29,7 @@ const contentCss = css({
 
 export function EditorPanel() {
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
+	const streamingMode = useGameStore((s) => s.editorStreamingMode);
 	const theme = useIdeTheme();
 
 	if (aiUnlocked) {
@@ -43,7 +44,18 @@ export function EditorPanel() {
 		);
 	}
 
-	// T0-T3: Full editor
+	// T2+ streaming: simplified CSS-driven editor
+	if (streamingMode) {
+		return (
+			<div css={wrapperCss} data-tutorial="editor">
+				<div css={editorAreaCss} style={{ flex: 1 }}>
+					<StreamingEditor />
+				</div>
+			</div>
+		);
+	}
+
+	// T0-early T2: Full block-based editor
 	return (
 		<div css={wrapperCss} data-tutorial="editor">
 			<div css={editorAreaCss} style={{ flex: 1 }}>
