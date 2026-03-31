@@ -131,7 +131,7 @@
 			"id": "gpu_cluster",
 			"tier": "tech_company",
 			"name": "GPU Cluster",
-			"description": "+2,000 FLOPS",
+			"description": "+50,000 FLOPS",
 			"icon": "🎮",
 			"baseCost": 800000,
 			"costMultiplier": 1.7,
@@ -140,7 +140,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 2000
+					"value": 50000
 				}
 			]
 		},
@@ -165,7 +165,7 @@
 			"id": "data_center",
 			"tier": "tech_company",
 			"name": "Data Center",
-			"description": "+20,000 FLOPS",
+			"description": "+200,000 FLOPS",
 			"icon": "🏭",
 			"baseCost": 1500000,
 			"costMultiplier": 1.8,
@@ -174,7 +174,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 20000
+					"value": 200000
 				}
 			]
 		},
