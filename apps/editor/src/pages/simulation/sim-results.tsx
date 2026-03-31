@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { BalanceSummaryTable } from "@flopsed/design-system";
 import type { SimResult } from "@flopsed/engine";
 import { CashChart } from "./cash-chart";
+import { FlopsChart } from "./flops-chart";
 import { TierTimeline } from "./tier-timeline";
 
 const bannerCss = (passed: boolean) =>
@@ -155,6 +156,9 @@ export function SimResults({ result }: SimResultsProps) {
 
 			<div css={sectionTitleCss}>Cash Over Time</div>
 			<CashChart snapshots={result.snapshots} />
+
+			<div css={sectionTitleCss}>FLOPS vs LoC/s Over Time</div>
+			<FlopsChart snapshots={result.snapshots} />
 
 			<div css={sectionTitleCss}>Tier Timeline</div>
 			<TierTimeline
