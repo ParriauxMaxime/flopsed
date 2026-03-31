@@ -159,6 +159,7 @@ const TRIM_TO = 40;
 export function CliPrompt() {
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
 	const autoPokeEnabled = useGameStore((s) => s.autoPokeEnabled);
+	const flopSlider = useGameStore((s) => s.flopSlider);
 	const theme = useIdeTheme();
 	const { t: tUi } = useTranslation();
 
@@ -270,11 +271,12 @@ export function CliPrompt() {
 		return () => clearTimeout(timer);
 	}, [stream.phase]);
 
-	// ── Auto-prompt: AI models always produce when active ──
-	// Auto-poke tech node makes the delay shorter (more responsive)
+	// ── Auto-prompt: AI models produce when active + AI FLOPS available ──
+	const hasAiFlops = flopSlider < 1;
 	useEffect(() => {
 		if (stream.phase !== "idle") return;
 		if (activeModels.length === 0) return;
+		if (!hasAiFlops) return; // slider at 100% exec → frozen
 
 		const delay = autoPokeEnabled
 			? 500 + Math.random() * 1000
@@ -283,16 +285,16 @@ export function CliPrompt() {
 			startPrompt(pickPrompt());
 		}, delay);
 		return () => clearTimeout(timer);
-	}, [autoPokeEnabled, stream.phase, activeModels.length, startPrompt]);
+	}, [autoPokeEnabled, stream.phase, activeModels.length, startPrompt, hasAiFlops]);
 
 	// ── Manual submit ──
 	const handleSubmit = useCallback(() => {
 		const text = input.trim();
-		if (!text || activeModels.length === 0) return;
+		if (!text || activeModels.length === 0 || !hasAiFlops) return;
 		if (stream.phase === "streaming") return; // don't interrupt
 		setInput("");
 		startPrompt(text);
-	}, [input, activeModels, stream.phase, startPrompt]);
+	}, [input, activeModels, stream.phase, startPrompt, hasAiFlops]);
 
 	// ── Auto-scroll ──
 	// biome-ignore lint/correctness/useExhaustiveDependencies: log triggers scroll
