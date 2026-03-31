@@ -621,11 +621,16 @@ export const useGameStore = create<GameState & GameActions>()(
 					loc = Math.max(0, loc);
 
 					// ── 3. Visual block queue (capped, for editor only) ──
+					// Skip at T4+ — editor is replaced by CLI prompt
 					let blockQueue = s.blockQueue;
-					const visualProduced = Math.floor(humanOutput + aiProduced);
-					if (visualProduced > 0) {
-						blockQueue = blockQueue.slice(-99);
-						blockQueue.push({ lines: [], loc: visualProduced });
+					if (!aiUnlocked) {
+						const visualProduced = Math.floor(humanOutput + aiProduced);
+						if (visualProduced > 0) {
+							blockQueue = blockQueue.slice(-99);
+							blockQueue.push({ lines: [], loc: visualProduced });
+						}
+					} else if (blockQueue.length > 0) {
+						blockQueue = [];
 					}
 
 					const next: Partial<GameState> = {

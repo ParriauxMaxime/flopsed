@@ -8,7 +8,6 @@ import {
 	type DiffSnippet,
 	pickDiffSnippet,
 } from "./diff-snippets";
-import { FlopsSlider } from "./flops-slider";
 
 // ── Types ──
 
@@ -152,8 +151,8 @@ function diffLineColor(
 }
 
 // ── Max visible log entries ──
-const MAX_LOG = 150;
-const TRIM_TO = 80;
+const MAX_LOG = 80;
+const TRIM_TO = 40;
 
 // ── Component ──
 
@@ -308,7 +307,6 @@ export function CliPrompt() {
 
 	return (
 		<div css={wrapperCss} style={{ background: theme.panelBg }}>
-			<FlopsSlider />
 			<div ref={logRef} css={logCss} style={{ color: theme.textMuted }}>
 				{log.length === 0 && (
 					<div style={{ color: theme.textMuted, opacity: 0.5 }}>

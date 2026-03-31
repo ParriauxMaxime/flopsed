@@ -3,6 +3,7 @@ import { Editor } from "@modules/editor";
 import { useGameStore } from "@modules/game";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { CliPrompt } from "./cli-prompt";
+import { FlopsSlider } from "./flops-slider";
 
 const wrapperCss = css({
 	display: "flex",
@@ -34,6 +35,7 @@ export function EditorPanel() {
 		// T4+: CLI prompt takes over entirely
 		return (
 			<div css={wrapperCss} data-tutorial="editor">
+				<FlopsSlider />
 				<div css={contentCss} style={{ background: theme.panelBg }}>
 					<CliPrompt />
 				</div>
