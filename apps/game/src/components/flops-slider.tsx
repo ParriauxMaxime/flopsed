@@ -80,16 +80,6 @@ const toggleCss = css({
 	position: "relative" as const,
 	transition: "background 0.2s",
 	flexShrink: 0,
-	"&::after": {
-		content: '""',
-		position: "absolute" as const,
-		top: 2,
-		width: 10,
-		height: 10,
-		borderRadius: "50%",
-		background: "#e6edf3",
-		transition: "left 0.2s",
-	},
 });
 
 export function FlopsSlider() {
