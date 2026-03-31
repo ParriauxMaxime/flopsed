@@ -649,6 +649,7 @@ export function runBalanceSim(
 
 		// ── AI + token split + FLOPS slider + execution ──
 		let aiLoc = 0;
+		let tokensConsumed = 0;
 		if (sim.aiUnlocked) {
 			const activeModels = aiModels
 				.filter((m) => sim.ownedModels[m.id])
@@ -661,6 +662,7 @@ export function runBalanceSim(
 				totalTokenDemand += m.tokenCost;
 			}
 			const tokensProduced = Math.min(humanOutput, totalTokenDemand);
+			tokensConsumed = tokensProduced;
 			const directLoc = humanOutput - tokensProduced;
 			const tokenEfficiency =
 				totalTokenDemand > 0 ? tokensProduced / totalTokenDemand : 0;
@@ -1034,7 +1036,7 @@ export function runBalanceSim(
 				cashPerSec:
 					Math.min(manualLoc + autoTypeLoc + autoLoc + aiLoc, snapExecFlops) *
 					cashPerLoc(),
-				tokensPerSec: sim.aiUnlocked ? humanOutput : 0,
+				tokensPerSec: tokensConsumed,
 				tier: sim.currentTier,
 			});
 		}
