@@ -86,6 +86,7 @@
 		"sound": "Sound",
 		"music": "Music",
 		"sfx": "SFX",
+		"style": "Style",
 		"mute": "Mute",
 		"unmute": "Unmute"
 	},

@@ -77,9 +77,7 @@ export function FlopsSlider() {
 	const flopSlider = useGameStore((s) => s.flopSlider);
 	const unlockedModels = useGameStore((s) => s.unlockedModels);
 	const llmHostSlots = useGameStore((s) => s.llmHostSlots);
-	const autoArbitrageEnabled = useGameStore(
-		(s) => s.autoArbitrageEnabled,
-	);
+	const autoArbitrageEnabled = useGameStore((s) => s.autoArbitrageEnabled);
 	const setFlopSlider = useGameStore((s) => s.setFlopSlider);
 
 	const { aiLocPerSec } = useMemo(() => {
@@ -93,8 +91,7 @@ export function FlopsSlider() {
 		for (const model of active) {
 			const modelFlops = Math.min(model.flopsCost, remaining);
 			remaining -= modelFlops;
-			const ratio =
-				model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
+			const ratio = model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
 			totalLoc += model.locPerSec * Math.min(1, ratio);
 		}
 		return { aiLocPerSec: totalLoc };

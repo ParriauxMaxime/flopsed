@@ -547,7 +547,6 @@ export const useGameStore = create<GameState & GameActions>()(
 
 					// ── 1. Production ──
 					const humanOutput = s.autoLocPerSec * dt;
-					let aiFlopsCost = 0;
 					let aiProduced = 0;
 
 					if (aiUnlocked && s.running) {
@@ -582,7 +581,6 @@ export const useGameStore = create<GameState & GameActions>()(
 						let remainingAiFlops = aiFlops;
 						for (const model of activeModels) {
 							const modelFlops = Math.min(model.flopsCost, remainingAiFlops);
-							aiFlopsCost += modelFlops;
 							remainingAiFlops -= modelFlops;
 							const flopRatio =
 								model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
@@ -601,9 +599,7 @@ export const useGameStore = create<GameState & GameActions>()(
 					}
 
 					// ── 2. Execution ──
-					const execFlops = aiUnlocked
-						? s.flops * s.flopSlider
-						: s.flops;
+					const execFlops = aiUnlocked ? s.flops * s.flopSlider : s.flops;
 					let manualExecAccum = s.manualExecAccum;
 					let execCapacity: number;
 					if (s.autoExecuteEnabled && s.running) {
@@ -716,14 +712,12 @@ export const useGameStore = create<GameState & GameActions>()(
 						for (const model of activeForCalc) {
 							const mf = Math.min(model.flopsCost, remainingForCalc);
 							remainingForCalc -= mf;
-							const ratio =
-								model.flopsCost > 0 ? mf / model.flopsCost : 0;
+							const ratio = model.flopsCost > 0 ? mf / model.flopsCost : 0;
 							aiLocRate += model.locPerSec * Math.min(1, ratio);
 						}
 
 						// Target: match exec rate to AI production rate
-						let targetSlider =
-							s.flops > 0 ? aiLocRate / s.flops : 0.7;
+						let targetSlider = s.flops > 0 ? aiLocRate / s.flops : 0.7;
 
 						// Queue pressure bias
 						const currentExecFlops = s.flops * s.flopSlider;
@@ -739,10 +733,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						// Smooth lerp
 						const newSlider =
 							s.flopSlider + (targetSlider - s.flopSlider) * 0.02;
-						next.flopSlider = Math.min(
-							0.95,
-							Math.max(0.1, newSlider),
-						);
+						next.flopSlider = Math.min(0.95, Math.max(0.1, newSlider));
 					}
 
 					// Auto-arbitrage override timeout (10s)
@@ -840,7 +831,8 @@ export const useGameStore = create<GameState & GameActions>()(
 					if (node.id === "auto_type") newState.autoTypeEnabled = true;
 					if (node.id === "auto_execute") newState.autoExecuteEnabled = true;
 					if (node.id === "auto_poke") newState.autoPokeEnabled = true;
-					if (node.id === "auto_arbitrage") newState.autoArbitrageEnabled = true;
+					if (node.id === "auto_arbitrage")
+						newState.autoArbitrageEnabled = true;
 					recalcDerivedStats(newState);
 					return newState;
 				});
@@ -870,9 +862,7 @@ export const useGameStore = create<GameState & GameActions>()(
 			executeManual: () => {
 				const s = get();
 				if (s.autoExecuteEnabled || s.flops <= 0) return;
-				const execFlops = s.aiUnlocked
-					? s.flops * s.flopSlider
-					: s.flops;
+				const execFlops = s.aiUnlocked ? s.flops * s.flopSlider : s.flops;
 				if (execFlops <= 0) return;
 				set({ manualExecAccum: s.manualExecAccum + execFlops });
 			},
