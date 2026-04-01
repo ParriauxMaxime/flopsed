@@ -3,20 +3,19 @@ import { createRoot } from "react-dom/client";
 import "./i18n";
 import { App } from "./app";
 
-// Suppress benign ResizeObserver loop warnings from React Flow
-// See: https://github.com/xyflow/xyflow/issues/3076
-// Wrap the native ResizeObserver to swallow the error at the source
-const OriginalResizeObserver = window.ResizeObserver;
-window.ResizeObserver = class extends OriginalResizeObserver {
-	constructor(callback: ResizeObserverCallback) {
-		super((entries, observer) => {
-			// requestAnimationFrame prevents the "loop completed" error
-			requestAnimationFrame(() => {
-				callback(entries, observer);
-			});
-		});
-	}
-};
+// Suppress benign ResizeObserver loop error (React Flow + terminal resize).
+// Must be registered before React's error overlay attaches its handler.
+window.addEventListener(
+	"error",
+	(e) => {
+		if (e instanceof ErrorEvent && e.message?.includes("ResizeObserver loop")) {
+			e.stopImmediatePropagation();
+			e.stopPropagation();
+			e.preventDefault();
+		}
+	},
+	true, // capture phase — runs before React's bubble-phase handler
+);
 
 declare const __BUILD_HASH__: string | undefined;
 
