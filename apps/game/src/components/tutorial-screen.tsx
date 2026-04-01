@@ -20,31 +20,45 @@ import {
 
 type GameState = ReturnType<typeof useGameStore.getState>;
 
-const triggers: Array<{ id: string; test: (s: GameState) => boolean }> = [
-	{ id: "welcome", test: () => true },
-	{ id: "tech_tree_intro", test: (s) => s.totalLoc >= 15 },
+const triggers: Array<{
+	id: string;
+	i18nKey: string;
+	test: (s: GameState) => boolean;
+}> = [
+	{ id: "welcome", i18nKey: "welcome", test: () => true },
+	{
+		id: "tech_tree_intro",
+		i18nKey: "tech_tree",
+		test: (s) => s.totalLoc >= 15,
+	},
 	{
 		id: "sidebar_intro",
+		i18nKey: "sidebar",
 		test: (s) => (s.ownedTechNodes.unlock_sidebar ?? 0) > 0,
 	},
 	{
 		id: "execution_intro",
+		i18nKey: "execution",
 		test: (s) => (s.ownedTechNodes.unlock_stats_panel ?? 0) > 0,
 	},
 	{
 		id: "first_purchase",
+		i18nKey: "first_purchase",
 		test: (s) => Object.values(s.ownedUpgrades).some((v) => v > 0),
 	},
 	{
 		id: "first_tier",
+		i18nKey: "first_tier",
 		test: (s) => s.currentTierIndex >= 1,
 	},
 	{
 		id: "ai_lab_tokens",
+		i18nKey: "ai_lab",
 		test: (s) => s.aiUnlocked,
 	},
 	{
 		id: "singularity_hint",
+		i18nKey: "singularity_hint",
 		test: (s) => s.currentTierIndex >= 5 && s.cash > 100_000_000_000_000,
 	},
 ];
@@ -55,12 +69,12 @@ export function useTutorialTriggers() {
 	useEffect(() => {
 		const tTutorial = i18n.getFixedT(null, "tutorial");
 
-		const pushTutorial = (id: string) => {
-			const header = tTutorial(`${id}.header`, {
-				defaultValue: `tutorial.${id}()`,
+		const pushTutorial = (id: string, i18nKey: string) => {
+			const header = tTutorial(`${i18nKey}.header`, {
+				defaultValue: `tutorial.${i18nKey}()`,
 			}) as string;
-			const body = tTutorial(`${id}.body`, {
-				defaultValue: `Tip: ${id}`,
+			const body = tTutorial(`${i18nKey}.body`, {
+				defaultValue: `Tip: ${i18nKey}`,
 			}) as string;
 
 			const lines = shellEngine.pushToolCall("tutorial", header, body);
@@ -80,7 +94,7 @@ export function useTutorialTriggers() {
 					if (trigger.id === "tech_tree_intro" && !uiState.splitEnabled) {
 						uiState.toggleSplit();
 					}
-					pushTutorial(trigger.id);
+					pushTutorial(trigger.id, trigger.i18nKey);
 					break;
 				}
 			}
@@ -90,7 +104,7 @@ export function useTutorialTriggers() {
 		const uiState = useUiStore.getState();
 		if (!uiState.seenTips.includes("welcome")) {
 			uiState.showTip("welcome");
-			pushTutorial("welcome");
+			pushTutorial("welcome", "welcome");
 		}
 
 		return () => unsub();
