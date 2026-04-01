@@ -65,15 +65,6 @@ export function useTutorialTriggers() {
 
 			const lines = shellEngine.pushToolCall("tutorial", header, body);
 
-			// Append next milestone hint
-			const next = shellEngine.getNextMilestone();
-			if (next) {
-				lines.push({
-					type: ShellLineTypeEnum.next_milestone,
-					text: next.label,
-				});
-			}
-
 			const { sfxVolume, muted } = useAudioStore.getState();
 			playEvent(sfxVolume, muted);
 
@@ -163,45 +154,6 @@ function renderLineGroup(
 		};
 	}
 
-	// Group milestone_header + milestone_body
-	if (line.type === ShellLineTypeEnum.milestone_header) {
-		const bodyLines: ShellLine[] = [];
-		let j = startIndex + 1;
-		while (
-			j < lines.length &&
-			lines[j].type === ShellLineTypeEnum.milestone_body
-		) {
-			bodyLines.push(lines[j]);
-			j++;
-		}
-		return {
-			element: (
-				<div
-					key={startIndex}
-					css={toolBlockCss}
-					style={{
-						borderLeftColor: "#d4782f",
-						background: "rgba(212, 120, 47, 0.06)",
-					}}
-				>
-					<div css={blockHeaderCss} style={{ color: "#d4782f" }}>
-						{"🏆 "}
-						{line.text}
-					</div>
-					{bodyLines.map((bl, bi) => (
-						<div
-							key={`${startIndex}-b-${bi}`}
-							style={{ color: theme.foreground, paddingLeft: 20 }}
-						>
-							{bl.text || "\u00A0"}
-						</div>
-					))}
-				</div>
-			),
-			consumed: 1 + bodyLines.length,
-		};
-	}
-
 	// Single-line types
 	let content: React.ReactNode;
 	let color = theme.textMuted;
@@ -229,10 +181,6 @@ function renderLineGroup(
 		case ShellLineTypeEnum.error:
 			color = "#e06c75";
 			content = line.text;
-			break;
-		case ShellLineTypeEnum.next_milestone:
-			color = theme.textMuted;
-			content = `⏳ ${line.text}`;
 			break;
 		case ShellLineTypeEnum.separator:
 			return {
