@@ -108,32 +108,9 @@ export function useTutorialTriggers() {
 
 // ── Keyboard shortcuts hook ──
 
+/** @deprecated Keyboard shortcuts removed — conflicts with browser shortcuts */
 export function useKeyboardShortcuts() {
-	useEffect(() => {
-		function onKey(e: KeyboardEvent) {
-			if (!e.ctrlKey) return;
-			const tag = (e.target as HTMLElement).tagName;
-			if (tag === "INPUT" || tag === "TEXTAREA") return;
-
-			const ui = useUiStore.getState();
-			switch (e.key) {
-				case "t":
-					e.preventDefault();
-					ui.toggleTerminal();
-					break;
-				case "b":
-					e.preventDefault();
-					ui.toggleSidebar();
-					break;
-				case "s":
-					e.preventDefault();
-					ui.toggleStatsPanel();
-					break;
-			}
-		}
-		window.addEventListener("keydown", onKey);
-		return () => window.removeEventListener("keydown", onKey);
-	}, []);
+	// No-op: Ctrl+T/B/S conflict with browser tab/bookmark/save shortcuts
 }
 
 // ── Line renderer helper ──
@@ -366,12 +343,6 @@ const logCss = css({
 	"&::-webkit-scrollbar-track": { background: "transparent" },
 });
 
-const shortcutHintCss = css({
-	fontSize: 10,
-	opacity: 0.5,
-	marginLeft: 6,
-});
-
 const toolBlockCss = css({
 	borderLeft: "2px solid",
 	padding: "6px 10px",
@@ -580,8 +551,6 @@ export function TutorialTip() {
 		[input, historyIndex],
 	);
 
-	if (terminalLog.length === 0) return null;
-
 	return (
 		<div css={panelCss} style={{ borderTop: `1px solid ${theme.border}` }}>
 			{/* Tab header — always visible */}
@@ -603,9 +572,6 @@ export function TutorialTip() {
 					}}
 				>
 					{tTutorial("terminal_label", { defaultValue: "Terminal" })}
-					<span css={shortcutHintCss}>
-						{tTutorial("terminal_shortcut", { defaultValue: "Ctrl+T" })}
-					</span>
 				</span>
 				<button
 					type="button"
