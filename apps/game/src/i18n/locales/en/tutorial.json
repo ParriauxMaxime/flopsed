@@ -1,51 +1,38 @@
 {
 	"welcome": {
-		"lines": [
-			"$ init flopsed",
-			"✓ Loading garage environment...",
-			"",
-			"A keyboard. A dream. Type to write code.",
-			"Every keystroke = Lines of Code."
-		]
+		"header": "tutorial.welcome()",
+		"body": "A keyboard. A dream. Every keystroke = Lines of Code.\nType to fill the code queue. Execute to earn $$$."
 	},
 	"tech_tree": {
-		"lines": [
-			"$ open tech-tree.svg",
-			"✓ Tech tree loaded →",
-			"",
-			"Research upgrades here. Spend cash and LoC.",
-			"Start with the basics. Work your way up."
-		]
+		"header": "tutorial.tech_tree()",
+		"body": "Tech tree unlocked! Research upgrades with cash and LoC.\nRun `cd tech-tree && ls` to browse nodes."
 	},
 	"sidebar": {
-		"lines": [
-			"$ ls upgrades/",
-			"✓ File explorer unlocked ←",
-			"",
-			"Browse and buy upgrades by tier.",
-			"More FLOPS = faster execution. More devs = more code."
-		]
+		"header": "tutorial.sidebar()",
+		"body": "File explorer unlocked! Browse and buy upgrades by tier.\nRun `ls upgrades/` to see what's available."
 	},
 	"execution": {
-		"lines": [
-			"$ cat README.md",
-			"",
-			"  type → queue → execute → $$$",
-			"",
-			"Code piles up. FLOPS burn through it. Cash flows."
-		]
+		"header": "tutorial.execution()",
+		"body": "type → queue → execute → $$$\nCode piles up. FLOPS burn through it. Cash flows."
+	},
+	"first_purchase": {
+		"header": "tutorial.first_purchase()",
+		"body": "First upgrade purchased! Check your stats with `status`."
+	},
+	"first_tier": {
+		"header": "tutorial.tier_unlocked()",
+		"body": "New tier reached! More upgrades, more power.\nRun `ls upgrades/` to see what's new."
 	},
 	"ai_lab": {
-		"lines": [
-			"$ switch --mode ai-lab",
-			"✓ Workers now produce tokens instead of LoC.",
-			"",
-			"AI models consume tokens + FLOPS → massive LoC.",
-			"More humans = more tokens = more AI output."
-		]
+		"header": "tutorial.ai_lab()",
+		"body": "AI Lab online. Workers now produce tokens instead of LoC.\nAI models consume tokens + FLOPS → massive LoC output."
 	},
-	"loading": "$ loading tech-tree.svg ...",
+	"singularity_hint": {
+		"header": "tutorial.endgame()",
+		"body": "The Singularity is within reach.\nCheck `cat agi.py` for a hint..."
+	},
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
-	"close_terminal": "Close terminal (Ctrl+T)"
+	"close_terminal": "Close terminal (Ctrl+T)",
+	"new_content": "↓ new"
 }

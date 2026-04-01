@@ -1,51 +1,38 @@
 {
 	"welcome": {
-		"lines": [
-			"$ init flopsed",
-			"✓ Garage-Umgebung wird geladen...",
-			"",
-			"Eine Tastatur. Ein Traum. Tippe um Code zu schreiben.",
-			"Jeder Tastendruck = Lines of Code."
-		]
+		"header": "tutorial.welcome()",
+		"body": "Eine Tastatur. Ein Traum. Jeder Tastendruck = Lines of Code.\nTippe um die Code-Warteschlange zu füllen. Führe aus, um $$$ zu verdienen."
 	},
 	"tech_tree": {
-		"lines": [
-			"$ open tech-tree.svg",
-			"✓ Technologiebaum geladen →",
-			"",
-			"Forsche hier Upgrades. Gib Cash und LoC aus.",
-			"Fang mit den Grundlagen an. Arbeite dich hoch."
-		]
+		"header": "tutorial.tech_tree()",
+		"body": "Technologiebaum freigeschaltet! Forsche Upgrades mit Cash und LoC.\nFühre `cd tech-tree && ls` aus, um Knoten zu durchsuchen."
 	},
 	"sidebar": {
-		"lines": [
-			"$ ls upgrades/",
-			"✓ Datei-Explorer freigeschaltet ←",
-			"",
-			"Durchsuche und kaufe Upgrades nach Stufe.",
-			"Mehr FLOPS = schnellere Ausführung. Mehr Devs = mehr Code."
-		]
+		"header": "tutorial.sidebar()",
+		"body": "Datei-Explorer freigeschaltet! Durchsuche und kaufe Upgrades nach Stufe.\nFühre `ls upgrades/` aus, um Verfügbares zu sehen."
 	},
 	"execution": {
-		"lines": [
-			"$ cat README.md",
-			"",
-			"  tippen → Warteschlange → ausführen → $$$",
-			"",
-			"Code häuft sich an. FLOPS verbrennen ihn. Cash fließt."
-		]
+		"header": "tutorial.execution()",
+		"body": "tippen → Warteschlange → ausführen → $$$\nCode häuft sich an. FLOPS verbrennen ihn. Cash fließt."
+	},
+	"first_purchase": {
+		"header": "tutorial.first_purchase()",
+		"body": "Erstes Upgrade gekauft! Prüfe deine Stats mit `status`."
+	},
+	"first_tier": {
+		"header": "tutorial.tier_unlocked()",
+		"body": "Neue Stufe erreicht! Mehr Upgrades, mehr Leistung.\nFühre `ls upgrades/` aus, um Neues zu sehen."
 	},
 	"ai_lab": {
-		"lines": [
-			"$ switch --mode ai-lab",
-			"✓ Arbeiter produzieren jetzt Token statt LoC.",
-			"",
-			"KI-Modelle verbrauchen Token + FLOPS → massenhaft LoC.",
-			"Mehr Menschen = mehr Token = mehr KI-Output."
-		]
+		"header": "tutorial.ai_lab()",
+		"body": "KI-Labor online. Arbeiter produzieren jetzt Token statt LoC.\nKI-Modelle verbrauchen Token + FLOPS → massenhaft LoC."
 	},
-	"loading": "$ tech-tree.svg wird geladen ...",
+	"singularity_hint": {
+		"header": "tutorial.endgame()",
+		"body": "Die Singularität ist zum Greifen nah.\nSchau in `cat agi.py` für einen Hinweis..."
+	},
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
-	"close_terminal": "Terminal schließen (Ctrl+T)"
+	"close_terminal": "Terminal schließen (Ctrl+T)",
+	"new_content": "↓ neu"
 }

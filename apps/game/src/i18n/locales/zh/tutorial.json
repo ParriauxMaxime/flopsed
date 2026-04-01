@@ -1,51 +1,38 @@
 {
 	"welcome": {
-		"lines": [
-			"$ init flopsed",
-			"✓ 正在加载车库环境……",
-			"",
-			"一个键盘。一个梦想。输入即写代码。",
-			"每次按键 = 代码行数。"
-		]
+		"header": "tutorial.welcome()",
+		"body": "一个键盘。一个梦想。每次按键 = 代码行数。\n输入以填充代码队列。执行以赚取 $$$。"
 	},
 	"tech_tree": {
-		"lines": [
-			"$ open tech-tree.svg",
-			"✓ 科技树已加载 →",
-			"",
-			"在这里研究升级。花费现金和 LoC。",
-			"从基础开始。逐步向上。"
-		]
+		"header": "tutorial.tech_tree()",
+		"body": "科技树已解锁！用现金和 LoC 研究升级。\n运行 `cd tech-tree && ls` 浏览节点。"
 	},
 	"sidebar": {
-		"lines": [
-			"$ ls upgrades/",
-			"✓ 文件资源管理器已解锁 ←",
-			"",
-			"按层级浏览和购买升级。",
-			"更多 FLOPS = 更快执行。更多开发者 = 更多代码。"
-		]
+		"header": "tutorial.sidebar()",
+		"body": "文件资源管理器已解锁！按层级浏览和购买升级。\n运行 `ls upgrades/` 查看可用内容。"
 	},
 	"execution": {
-		"lines": [
-			"$ cat README.md",
-			"",
-			"  输入 → 队列 → 执行 → $$$",
-			"",
-			"代码堆积。FLOPS 消耗代码。现金流入。"
-		]
+		"header": "tutorial.execution()",
+		"body": "输入 → 队列 → 执行 → $$$\n代码堆积。FLOPS 消耗代码。现金流入。"
+	},
+	"first_purchase": {
+		"header": "tutorial.first_purchase()",
+		"body": "首个升级已购买！用 `status` 查看你的统计数据。"
+	},
+	"first_tier": {
+		"header": "tutorial.tier_unlocked()",
+		"body": "新层级达成！更多升级，更多能力。\n运行 `ls upgrades/` 查看新内容。"
 	},
 	"ai_lab": {
-		"lines": [
-			"$ switch --mode ai-lab",
-			"✓ 工人现在生产代币而非 LoC。",
-			"",
-			"AI 模型消耗代币 + FLOPS → 大量 LoC。",
-			"更多人类 = 更多代币 = 更多 AI 产出。"
-		]
+		"header": "tutorial.ai_lab()",
+		"body": "AI 实验室上线。工人现在生产代币而非 LoC。\nAI 模型消耗代币 + FLOPS → 大量 LoC 输出。"
 	},
-	"loading": "$ loading tech-tree.svg ...",
+	"singularity_hint": {
+		"header": "tutorial.endgame()",
+		"body": "奇点触手可及。\n查看 `cat agi.py` 获取提示..."
+	},
 	"terminal_label": "终端",
 	"terminal_shortcut": "Ctrl+T",
-	"close_terminal": "关闭终端 (Ctrl+T)"
+	"close_terminal": "关闭终端 (Ctrl+T)",
+	"new_content": "↓ 新消息"
 }

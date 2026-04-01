@@ -1,51 +1,38 @@
 {
 	"welcome": {
-		"lines": [
-			"$ init flopsed",
-			"✓ Cargando entorno del garaje...",
-			"",
-			"Un teclado. Un sueño. Escribe para crear código.",
-			"Cada pulsación = Líneas de Código."
-		]
+		"header": "tutorial.welcome()",
+		"body": "Un teclado. Un sueño. Cada pulsación = Líneas de Código.\nEscribe para llenar la cola de código. Ejecuta para ganar $$$."
 	},
 	"tech_tree": {
-		"lines": [
-			"$ open tech-tree.svg",
-			"✓ Árbol tecnológico cargado →",
-			"",
-			"Investiga mejoras aquí. Gasta dinero y LoC.",
-			"Empieza por lo básico. Ve avanzando."
-		]
+		"header": "tutorial.tech_tree()",
+		"body": "¡Árbol tecnológico desbloqueado! Investiga mejoras con dinero y LoC.\nEjecuta `cd tech-tree && ls` para explorar los nodos."
 	},
 	"sidebar": {
-		"lines": [
-			"$ ls upgrades/",
-			"✓ Explorador de archivos desbloqueado ←",
-			"",
-			"Navega y compra mejoras por nivel.",
-			"Más FLOPS = ejecución más rápida. Más devs = más código."
-		]
+		"header": "tutorial.sidebar()",
+		"body": "¡Explorador de archivos desbloqueado! Navega y compra mejoras por nivel.\nEjecuta `ls upgrades/` para ver lo disponible."
 	},
 	"execution": {
-		"lines": [
-			"$ cat README.md",
-			"",
-			"  escribir → cola → ejecutar → $$$",
-			"",
-			"El código se acumula. Los FLOPS lo queman. El dinero fluye."
-		]
+		"header": "tutorial.execution()",
+		"body": "escribir → cola → ejecutar → $$$\nEl código se acumula. Los FLOPS lo queman. El dinero fluye."
+	},
+	"first_purchase": {
+		"header": "tutorial.first_purchase()",
+		"body": "¡Primera mejora comprada! Consulta tus estadísticas con `status`."
+	},
+	"first_tier": {
+		"header": "tutorial.tier_unlocked()",
+		"body": "¡Nuevo nivel alcanzado! Más mejoras, más poder.\nEjecuta `ls upgrades/` para ver las novedades."
 	},
 	"ai_lab": {
-		"lines": [
-			"$ switch --mode ai-lab",
-			"✓ Los trabajadores ahora producen tokens en lugar de LoC.",
-			"",
-			"Los modelos de IA consumen tokens + FLOPS → LoC masivo.",
-			"Más humanos = más tokens = más producción de IA."
-		]
+		"header": "tutorial.ai_lab()",
+		"body": "Laboratorio IA en línea. Los trabajadores ahora producen tokens en lugar de LoC.\nLos modelos de IA consumen tokens + FLOPS → LoC masivo."
 	},
-	"loading": "$ cargando tech-tree.svg ...",
+	"singularity_hint": {
+		"header": "tutorial.endgame()",
+		"body": "La Singularidad está al alcance.\nRevisa `cat agi.py` para una pista..."
+	},
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
-	"close_terminal": "Cerrar terminal (Ctrl+T)"
+	"close_terminal": "Cerrar terminal (Ctrl+T)",
+	"new_content": "↓ nuevo"
 }
