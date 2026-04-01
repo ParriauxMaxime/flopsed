@@ -14,6 +14,7 @@ import { MusicStyleEnum, useAudioStore } from "@modules/audio";
 import { useAudioEvents } from "@modules/audio/use-audio-events";
 import type { EditorTheme } from "@modules/editor";
 import { EDITOR_THEMES, type EditorThemeEnum } from "@modules/editor";
+import { useEventStore } from "@modules/event";
 import { EventToast } from "@modules/event/components/event-toast";
 import { PageEnum, useGameLoop, useGameStore, useUiStore } from "@modules/game";
 import { lazy, Suspense, useEffect, useRef } from "react";
@@ -515,6 +516,7 @@ function TabbedPane({
 	openTabs,
 	onCloseTab,
 	onPaneFocus,
+	paneId,
 	showSplitBtn,
 	splitActive,
 	onToggleSplit,
@@ -525,16 +527,43 @@ function TabbedPane({
 	openTabs: PageEnum[];
 	onCloseTab: (page: PageEnum) => void;
 	onPaneFocus?: () => void;
+	paneId: "left" | "right";
 	showSplitBtn?: boolean;
 	splitActive?: boolean;
 	onToggleSplit?: () => void;
 }) {
 	const theme = useIdeTheme();
 	const { t } = useTranslation();
+	const moveTab = useUiStore((s) => s.moveTab);
 	const visibleTabs = tabs.filter((tab) => openTabs.includes(tab.page));
+	const isEmpty = visibleTabs.length === 0;
+
+	const handleDragOver = (e: React.DragEvent) => {
+		if (e.dataTransfer.types.includes("application/x-tab")) {
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "move";
+		}
+	};
+
+	const handleDrop = (e: React.DragEvent) => {
+		const data = e.dataTransfer.getData("application/x-tab");
+		if (!data) return;
+		const { page: draggedPage, from } = JSON.parse(data) as {
+			page: PageEnum;
+			from: "left" | "right";
+		};
+		if (from !== paneId) {
+			moveTab(draggedPage, from, paneId);
+		}
+	};
 
 	return (
-		<div css={[panelCss, { flex: 1 }]} onClick={onPaneFocus}>
+		<div
+			css={[panelCss, { flex: 1 }]}
+			onClick={onPaneFocus}
+			onDragOver={handleDragOver}
+			onDrop={handleDrop}
+		>
 			<div
 				css={{
 					display: "flex",
@@ -547,11 +576,19 @@ function TabbedPane({
 					position: "relative",
 				}}
 			>
-				{visibleTabs.map((t) => {
-					const active = t.page === activePage;
+				{visibleTabs.map((tab) => {
+					const active = tab.page === activePage;
 					return (
 						<div
-							key={t.page}
+							key={tab.page}
+							draggable
+							onDragStart={(e) => {
+								e.dataTransfer.setData(
+									"application/x-tab",
+									JSON.stringify({ page: tab.page, from: paneId }),
+								);
+								e.dataTransfer.effectAllowed = "move";
+							}}
 							css={{
 								padding: "0 4px 0 16px",
 								display: "flex",
@@ -565,16 +602,19 @@ function TabbedPane({
 									? `1px solid ${theme.tabActiveBg}`
 									: "none",
 								marginBottom: active ? -1 : 0,
-								cursor: "pointer",
+								cursor: "grab",
 								whiteSpace: "nowrap",
 								transition: "all 0.15s",
 								"&:hover": {
 									color: theme.foreground,
 								},
+								"&:active": {
+									cursor: "grabbing",
+								},
 							}}
-							onClick={() => onSetPage(t.page)}
+							onClick={() => onSetPage(tab.page)}
 							onKeyDown={(e) => {
-								if (e.key === "Enter") onSetPage(t.page);
+								if (e.key === "Enter") onSetPage(tab.page);
 							}}
 							role="tab"
 							tabIndex={0}
@@ -588,7 +628,7 @@ function TabbedPane({
 									flexShrink: 0,
 								}}
 							/>
-							<span css={{ fontFamily: "inherit" }}>{t.filename}</span>
+							<span css={{ fontFamily: "inherit" }}>{tab.filename}</span>
 							<button
 								type="button"
 								css={{
@@ -612,7 +652,7 @@ function TabbedPane({
 								}}
 								onClick={(e) => {
 									e.stopPropagation();
-									onCloseTab(t.page);
+									onCloseTab(tab.page);
 								}}
 							>
 								×
@@ -635,7 +675,30 @@ function TabbedPane({
 				)}
 			</div>
 			<div css={contentCss}>
-				<PageContent page={activePage} />
+				{isEmpty ? (
+					<div
+						css={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+							justifyContent: "center",
+							height: "100%",
+							gap: 16,
+							color: theme.textMuted,
+							opacity: 0.3,
+							userSelect: "none",
+						}}
+					>
+						<span css={{ fontSize: 80 }}>{"</>"}</span>
+						<span css={{ fontSize: 14 }}>
+							{t("tabs.empty_panel", {
+								defaultValue: "Open a file from the sidebar",
+							})}
+						</span>
+					</div>
+				) : (
+					<PageContent page={activePage} />
+				)}
 			</div>
 		</div>
 	);
@@ -678,6 +741,23 @@ export function App() {
 	const shellRef = useRef<HTMLDivElement>(null);
 	const singularityOnMount = useRef(useGameStore.getState().singularity);
 	const singularityAnimate = singularity && !singularityOnMount.current;
+
+	// "Focused Workers" achievement: grant $10 when all tabs closed (once per session)
+	const focusedAchieved = useRef(false);
+	useEffect(() => {
+		if (openTabs.length === 0 && !splitEnabled && !focusedAchieved.current) {
+			focusedAchieved.current = true;
+			useGameStore.getState().applyEventReward(10, 0);
+			useEventStore
+				.getState()
+				.showMilestoneToast(
+					"focused_workers",
+					"Focused Workers",
+					"You closed all tabs. Here's $10 for your troubles.",
+					10,
+				);
+		}
+	}, [openTabs.length, splitEnabled]);
 
 	// Auto-expand panels when unlocked for the first time
 	const prevSidebarUnlocked = useRef(sidebarUnlocked);
@@ -806,6 +886,7 @@ export function App() {
 								openTabs={openTabs}
 								onCloseTab={closeTab}
 								onPaneFocus={() => focusPane("left")}
+								paneId="left"
 								showSplitBtn
 								splitActive={splitEnabled}
 								onToggleSplit={toggleSplit}
@@ -826,6 +907,7 @@ export function App() {
 										openTabs={rightOpenTabs}
 										onCloseTab={closeRightTab}
 										onPaneFocus={() => focusPane("right")}
+										paneId="right"
 									/>
 								</>
 							)}

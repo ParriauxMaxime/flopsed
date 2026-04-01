@@ -60,6 +60,8 @@ interface UiState {
 	openRightTab: (page: PageEnum) => void;
 	closeRightTab: (page: PageEnum) => void;
 	focusPane: (pane: PaneEnum) => void;
+	/** Move a tab from one pane to the other */
+	moveTab: (page: PageEnum, from: PaneEnum, to: PaneEnum) => void;
 	/** Opens a tab in the last-focused pane */
 	openInActivePane: (page: PageEnum) => void;
 	toggleSplit: () => void;
@@ -76,18 +78,6 @@ interface UiState {
 
 function addToTabs(tabs: PageEnum[], page: PageEnum): PageEnum[] {
 	return tabs.includes(page) ? tabs : [...tabs, page];
-}
-
-function removeFromTabs(
-	tabs: PageEnum[],
-	page: PageEnum,
-	activePage: PageEnum,
-): { tabs: PageEnum[]; newActive: PageEnum } {
-	const next = tabs.filter((t) => t !== page);
-	const safe = next.length === 0 ? [PageEnum.game] : next;
-	const newActive =
-		activePage === page ? (safe[safe.length - 1] ?? PageEnum.game) : activePage;
-	return { tabs: safe, newActive };
 }
 
 export const useUiStore = create<UiState>()(
@@ -122,8 +112,26 @@ export const useUiStore = create<UiState>()(
 				})),
 			closeTab: (page) =>
 				set((s) => {
-					const { tabs, newActive } = removeFromTabs(s.openTabs, page, s.page);
-					return { openTabs: tabs, page: newActive };
+					const remaining = s.openTabs.filter((t) => t !== page);
+					if (remaining.length === 0) {
+						// Last tab closed: if split, merge right into left
+						if (s.splitEnabled) {
+							return {
+								openTabs: s.rightOpenTabs,
+								page: s.rightPage,
+								rightOpenTabs: [PageEnum.tech_tree],
+								splitEnabled: false,
+								lastActivePane: PaneEnum.left,
+							};
+						}
+						// Single panel: "Focused Workers" achievement
+						return { openTabs: [], page: s.page };
+					}
+					const newActive =
+						s.page === page
+							? (remaining[remaining.length - 1] ?? PageEnum.game)
+							: s.page;
+					return { openTabs: remaining, page: newActive };
 				}),
 
 			// Right pane
@@ -137,15 +145,74 @@ export const useUiStore = create<UiState>()(
 				})),
 			closeRightTab: (page) =>
 				set((s) => {
-					const { tabs, newActive } = removeFromTabs(
-						s.rightOpenTabs,
-						page,
-						s.rightPage,
-					);
-					return { rightOpenTabs: tabs, rightPage: newActive };
+					const remaining = s.rightOpenTabs.filter((t) => t !== page);
+					if (remaining.length === 0) {
+						// Last tab in right pane: unsplit
+						return {
+							rightOpenTabs: [PageEnum.tech_tree],
+							splitEnabled: false,
+							lastActivePane: PaneEnum.left,
+						};
+					}
+					const newActive =
+						s.rightPage === page
+							? (remaining[remaining.length - 1] ?? PageEnum.tech_tree)
+							: s.rightPage;
+					return { rightOpenTabs: remaining, rightPage: newActive };
 				}),
 
 			focusPane: (pane) => set({ lastActivePane: pane }),
+
+			moveTab: (page, from, to) =>
+				set((s) => {
+					if (from === to) return s;
+					const srcTabs = from === PaneEnum.left ? s.openTabs : s.rightOpenTabs;
+					const srcActive = from === PaneEnum.left ? s.page : s.rightPage;
+					const dstTabs = to === PaneEnum.left ? s.openTabs : s.rightOpenTabs;
+
+					const newSrc = srcTabs.filter((t) => t !== page);
+					const newDst = addToTabs(dstTabs, page);
+					const newSrcActive =
+						srcActive === page
+							? (newSrc[newSrc.length - 1] ?? PageEnum.game)
+							: srcActive;
+
+					const update: Partial<UiState> = {};
+					if (from === PaneEnum.left) {
+						// If source left is now empty, unsplit (merge dst into left)
+						if (newSrc.length === 0) {
+							update.openTabs = newDst;
+							update.page = page;
+							update.splitEnabled = false;
+							update.lastActivePane = PaneEnum.left;
+							return update;
+						}
+						update.openTabs = newSrc;
+						update.page = newSrcActive;
+					} else {
+						if (newSrc.length === 0) {
+							update.rightOpenTabs = [PageEnum.tech_tree];
+							update.splitEnabled = false;
+							update.lastActivePane = PaneEnum.left;
+							// Add the tab to left if not already there
+							update.openTabs = addToTabs(s.openTabs, page);
+							update.page = page;
+							return update;
+						}
+						update.rightOpenTabs = newSrc;
+						update.rightPage = newSrcActive;
+					}
+					if (to === PaneEnum.left) {
+						update.openTabs = newDst;
+						update.page = page;
+						update.lastActivePane = PaneEnum.left;
+					} else {
+						update.rightOpenTabs = newDst;
+						update.rightPage = page;
+						update.lastActivePane = PaneEnum.right;
+					}
+					return update;
+				}),
 
 			// Sidebar: open in whichever pane was last touched
 			openInActivePane: (page) => {
