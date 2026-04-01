@@ -53,6 +53,7 @@ interface UiState {
 	uiZoom: number;
 	sidebarWidth: number;
 	statsPanelWidth: number;
+	terminalHeight: number;
 	splitRatio: number;
 	sidebarCollapsed: boolean;
 	statsPanelCollapsed: boolean;
@@ -75,6 +76,7 @@ interface UiState {
 	setUiZoom: (size: number) => void;
 	setSidebarWidth: (w: number) => void;
 	setStatsPanelWidth: (w: number) => void;
+	setTerminalHeight: (h: number) => void;
 	setSplitRatio: (r: number) => void;
 	showTip: (id: string) => void;
 	pushTerminalLines: (lines: ShellLine[]) => void;
@@ -107,6 +109,7 @@ export const useUiStore = create<UiState>()(
 			uiZoom: 100,
 			sidebarWidth: 260,
 			statsPanelWidth: 280,
+			terminalHeight: 200,
 			splitRatio: 0.5,
 			sidebarCollapsed: true,
 			statsPanelCollapsed: true,
@@ -253,6 +256,10 @@ export const useUiStore = create<UiState>()(
 				set({ sidebarWidth: Math.min(500, Math.max(160, w)) }),
 			setStatsPanelWidth: (w) =>
 				set({ statsPanelWidth: Math.min(500, Math.max(200, w)) }),
+			setTerminalHeight: (h) =>
+				set({
+					terminalHeight: Math.min(window.innerHeight * 0.7, Math.max(80, h)),
+				}),
 			setSplitRatio: (r) =>
 				set({ splitRatio: Math.min(0.8, Math.max(0.2, r)) }),
 			setTechTreeViewport: (viewport) => set({ techTreeViewport: viewport }),
@@ -287,6 +294,7 @@ export const useUiStore = create<UiState>()(
 					uiZoom: 100,
 					sidebarWidth: 260,
 					statsPanelWidth: 280,
+					terminalHeight: 200,
 					splitRatio: 0.5,
 				});
 				localStorage.removeItem("flopsed-ui");
@@ -305,6 +313,7 @@ export const useUiStore = create<UiState>()(
 				statsPanelCollapsed: state.statsPanelCollapsed,
 				sidebarWidth: state.sidebarWidth,
 				statsPanelWidth: state.statsPanelWidth,
+				terminalHeight: state.terminalHeight,
 				splitRatio: state.splitRatio,
 				techTreeViewport: state.techTreeViewport,
 				editorTheme: state.editorTheme,

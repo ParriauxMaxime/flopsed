@@ -305,7 +305,6 @@ const panelCss = css({
 	flexDirection: "column",
 	flexShrink: 0,
 	overflow: "hidden",
-	minHeight: 80,
 	boxShadow: "0 -2px 6px rgba(0,0,0,0.15)",
 	zIndex: 1,
 	position: "relative",
@@ -407,7 +406,8 @@ export function TutorialTip() {
 	const [isNearBottom, setIsNearBottom] = useState(true);
 	const [hasNew, setHasNew] = useState(false);
 	const prevLogLen = useRef(terminalLog.length);
-	const [contentHeight, setContentHeight] = useState(200);
+	const contentHeight = useUiStore((s) => s.terminalHeight);
+	const setContentHeight = useUiStore((s) => s.setTerminalHeight);
 	const isDragging = useRef(false);
 
 	// Drag-to-resize handler
@@ -441,7 +441,7 @@ export function TutorialTip() {
 			document.addEventListener("mousemove", onMove);
 			document.addEventListener("mouseup", onUp);
 		},
-		[terminalOpen, contentHeight],
+		[terminalOpen, contentHeight, setContentHeight],
 	);
 
 	// Auto-focus input when terminal is open

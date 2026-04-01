@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { useAudioStore } from "@modules/audio";
-import { tiers, useGameStore, useUiStore } from "@modules/game";
+import { tiers, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
@@ -47,18 +47,6 @@ const muteBtnCss = css({
 	padding: "0 2px",
 	fontSize: 12,
 	opacity: 0.7,
-	"&:hover": { opacity: 1 },
-});
-
-const toggleBtnCss = css({
-	background: "none",
-	border: "none",
-	color: "inherit",
-	cursor: "pointer",
-	padding: "0 2px",
-	fontSize: 12,
-	display: "flex",
-	alignItems: "center",
 	"&:hover": { opacity: 1 },
 });
 
