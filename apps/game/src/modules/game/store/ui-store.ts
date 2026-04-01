@@ -33,6 +33,7 @@ interface TechTreeViewport {
 
 interface UiState {
 	page: PageEnum;
+	openTabs: PageEnum[];
 	splitEnabled: boolean;
 	rightPage: PageEnum;
 	editorTheme: EditorThemeEnum;
@@ -44,6 +45,8 @@ interface UiState {
 	sidebarCollapsed: boolean;
 	statsPanelCollapsed: boolean;
 	setPage: (page: PageEnum) => void;
+	openTab: (page: PageEnum) => void;
+	closeTab: (page: PageEnum) => void;
 	setRightPage: (page: PageEnum) => void;
 	toggleSplit: () => void;
 	toggleSidebar: () => void;
@@ -61,6 +64,7 @@ export const useUiStore = create<UiState>()(
 	persist(
 		(set, get) => ({
 			page: PageEnum.game,
+			openTabs: [PageEnum.game],
 			splitEnabled: false,
 			rightPage: PageEnum.tech_tree,
 			editorTheme: EditorThemeEnum.one_dark,
@@ -76,6 +80,24 @@ export const useUiStore = create<UiState>()(
 			sidebarCollapsed: true,
 			statsPanelCollapsed: true,
 			setPage: (page) => set({ page }),
+			openTab: (page) =>
+				set((s) => ({
+					openTabs: s.openTabs.includes(page)
+						? s.openTabs
+						: [...s.openTabs, page],
+					page,
+				})),
+			closeTab: (page) =>
+				set((s) => {
+					const tabs = s.openTabs.filter((t) => t !== page);
+					return {
+						openTabs: tabs.length === 0 ? [PageEnum.game] : tabs,
+						page:
+							s.page === page
+								? (tabs[tabs.length - 1] ?? PageEnum.game)
+								: s.page,
+					};
+				}),
 			setRightPage: (page) => set({ rightPage: page }),
 			toggleSplit: () => set((s) => ({ splitEnabled: !s.splitEnabled })),
 			toggleSidebar: () =>
