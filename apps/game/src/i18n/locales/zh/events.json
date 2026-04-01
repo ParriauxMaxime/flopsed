@@ -9,7 +9,11 @@
 	},
 	"investor_demo": {
 		"name": "投资人演示",
-		"description": "若 LoC/s 超过阈值：获得奖励现金。若未达到：什么都没发生（好尴尬）。"
+		"description": "风投正在看。展示你的愿景——但要明智选择。",
+		"options": {
+			"ai_demo": "AI 演示",
+			"quality_pitch": "质量路线"
+		}
 	},
 	"stackoverflow_down": {
 		"name": "Stack Overflow 挂了",

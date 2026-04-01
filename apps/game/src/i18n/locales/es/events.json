@@ -8,8 +8,12 @@
 		"description": "Producción de LoC duplicada durante 20s. ¡Envíalo!"
 	},
 	"investor_demo": {
-		"name": "Demo para inversores",
-		"description": "Si LoC/s > umbral: bonus de dinero. Si no: nada ocurre (incómodo)."
+		"name": "Demo para Inversores",
+		"description": "Los VCs están mirando. Presenta tu visión — pero elige bien.",
+		"options": {
+			"ai_demo": "Demo de IA",
+			"quality_pitch": "Pitch de calidad"
+		}
 	},
 	"stackoverflow_down": {
 		"name": "Stack Overflow está caído",

@@ -8,8 +8,12 @@
 		"description": "Podwójna produkcja LoC przez 20s. Wysyłaj!"
 	},
 	"investor_demo": {
-		"name": "Demo dla inwestorów",
-		"description": "Jeśli LoC/s > próg: premia gotówkowa. Jeśli nie: nic się nie dzieje (niezręcznie)."
+		"name": "Demo dla Inwestorów",
+		"description": "VC patrzą. Przedstaw swoją wizję — ale wybierz mądrze.",
+		"options": {
+			"ai_demo": "Demo AI",
+			"quality_pitch": "Pitch jakości"
+		}
 	},
 	"stackoverflow_down": {
 		"name": "Stack Overflow nie działa",

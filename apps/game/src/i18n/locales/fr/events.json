@@ -8,8 +8,12 @@
 		"description": "Production de LoC doublée pendant 20s. Livrez !"
 	},
 	"investor_demo": {
-		"name": "Démo investisseur",
-		"description": "Si LoC/s > seuil : bonus cash. Sinon : rien ne se passe (c'est gênant)."
+		"name": "Démo Investisseur",
+		"description": "Les VCs regardent. Présentez votre vision — mais choisissez bien.",
+		"options": {
+			"ai_demo": "Démo IA",
+			"quality_pitch": "Pitch qualité"
+		}
 	},
 	"stackoverflow_down": {
 		"name": "Stack Overflow est down",

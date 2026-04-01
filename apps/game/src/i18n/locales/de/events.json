@@ -8,8 +8,12 @@
 		"description": "Doppelte LoC-Produktion für 20s. Rausschicken!"
 	},
 	"investor_demo": {
-		"name": "Investor-Demo",
-		"description": "Wenn LoC/s > Schwellenwert: Cash-Bonus. Sonst: nichts passiert (peinlich)."
+		"name": "Investoren-Demo",
+		"description": "VCs schauen zu. Präsentiere deine Vision — aber wähle weise.",
+		"options": {
+			"ai_demo": "KI-Demo",
+			"quality_pitch": "Qualitäts-Pitch"
+		}
 	},
 	"stackoverflow_down": {
 		"name": "Stack Overflow ist down",

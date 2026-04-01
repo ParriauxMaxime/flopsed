@@ -28,15 +28,33 @@
 		{
 			"id": "investor_demo",
 			"name": "Investor Demo",
-			"description": "If LoC/s > threshold: bonus cash. If not: nothing happens (awkward).",
+			"description": "VCs are watching. Pitch your vision — but choose wisely.",
 			"icon": "💼",
 			"minTier": "startup",
-			"duration": 15,
+			"maxTier": "ai_lab",
+			"duration": 0,
 			"effects": [
 				{
-					"type": "conditionalCash",
-					"threshold": "currentLocPerSec * 0.8",
-					"reward": "currentCash * 0.1"
+					"type": "choice",
+					"options": [
+						{
+							"label": "AI demo",
+							"effect": {
+								"type": "instantCash",
+								"op": "add",
+								"value": "currentCash * 0.25"
+							}
+						},
+						{
+							"label": "Quality pitch",
+							"effect": {
+								"type": "cashMultiplier",
+								"op": "multiply",
+								"value": 1.2,
+								"duration": 60
+							}
+						}
+					]
 				}
 			],
 			"weight": 8

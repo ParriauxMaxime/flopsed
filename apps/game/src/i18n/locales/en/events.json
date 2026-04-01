@@ -9,7 +9,11 @@
 	},
 	"investor_demo": {
 		"name": "Investor Demo",
-		"description": "If LoC/s > threshold: bonus cash. If not: nothing happens (awkward)."
+		"description": "VCs are watching. Pitch your vision — but choose wisely.",
+		"options": {
+			"ai_demo": "AI demo",
+			"quality_pitch": "Quality pitch"
+		}
 	},
 	"stackoverflow_down": {
 		"name": "Stack Overflow is down",
