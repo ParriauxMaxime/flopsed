@@ -1,6 +1,7 @@
 export { BalanceSummaryTable } from "./components/balance-summary-table";
 export type { Column } from "./components/editable-table";
 export { EditableTable } from "./components/editable-table";
+export type { TechNodeTheme } from "./tech-tree/tech-node";
 export {
 	formatEffect,
 	TECH_NODE_HEIGHT,

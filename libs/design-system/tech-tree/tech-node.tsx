@@ -13,6 +13,15 @@ function getCurrencyColor(currency: string): string {
 		.otherwise(() => "#8892b0");
 }
 
+export interface TechNodeTheme {
+	nodeBg: string; // default card background
+	nodeBgLocked: string; // locked state background
+	nodeBorder: string; // default/inactive border
+	nameColor: string; // node name text
+	effectColor: string; // effect text (green-ish)
+	badgeColor: string; // owned badge text
+}
+
 interface StateStyle {
 	borderColor: string;
 	opacity: number;
@@ -25,8 +34,10 @@ function getStateStyle(
 	state: NodeStateEnum | undefined,
 	currency: string,
 	selected: boolean,
+	nodeTheme: TechNodeTheme | undefined,
 ): StateStyle {
-	const defaults = { background: "#16213e", filter: "none" };
+	const defaultBg = nodeTheme ? nodeTheme.nodeBg : "#16213e";
+	const defaults = { background: defaultBg, filter: "none" };
 	if (!state) {
 		// Editor mode — border by currency, full opacity
 		return {
@@ -38,17 +49,17 @@ function getStateStyle(
 	}
 	return match(state)
 		.with(NodeStateEnum.locked, () => ({
-			borderColor: "#1e2630",
+			borderColor: nodeTheme ? nodeTheme.nodeBorder : "#1e2630",
 			opacity: 1,
 			cursor: "default",
-			background: "#0d1220",
+			background: nodeTheme ? nodeTheme.nodeBgLocked : "#0d1220",
 			filter: "saturate(0.2) brightness(0.5)",
 		}))
 		.with(NodeStateEnum.visible, () => ({
-			borderColor: "#1e2630",
+			borderColor: nodeTheme ? nodeTheme.nodeBorder : "#1e2630",
 			opacity: 1,
 			cursor: "default",
-			background: "#111a2e",
+			background: nodeTheme ? nodeTheme.nodeBg : "#111a2e",
 			filter: "none",
 		}))
 		.with(NodeStateEnum.affordable, () => ({
@@ -151,38 +162,12 @@ const iconCss = css({
 	flexShrink: 0,
 });
 
-const nameCss = css({
-	color: "#ccd6f6",
-	fontSize: 12,
-	fontWeight: 600,
-	lineHeight: 1.2,
-	wordBreak: "break-word",
-});
-
-const effectCss = css({
-	color: "#7ee787",
-	fontSize: 10,
-	lineHeight: 1.2,
-	marginTop: 2,
-	whiteSpace: "nowrap",
-	overflow: "hidden",
-	textOverflow: "ellipsis",
-});
-
 const priceCss = css({
 	position: "absolute",
 	bottom: 5,
 	right: 8,
 	fontSize: 14,
 	fontWeight: 700,
-});
-
-const ownedBadgeCss = css({
-	position: "absolute",
-	top: 3,
-	right: 6,
-	color: "#8892b0",
-	fontSize: 9,
 });
 
 export const TECH_NODE_WIDTH = 150;
@@ -198,7 +183,8 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 	const max = node.max as number;
 	const state = node.state as NodeStateEnum | undefined;
 	const owned = (node.owned as number | undefined) ?? 0;
-	const style = getStateStyle(state, currency, selected ?? false);
+	const nodeTheme = node.nodeTheme as TechNodeTheme | undefined;
+	const style = getStateStyle(state, currency, selected ?? false, nodeTheme);
 	const maxed = state ? owned >= max : false;
 	const displayCost = Math.floor(baseCost * costMultiplier ** owned);
 
@@ -210,6 +196,10 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 		: effects[0]
 			? formatEffect(effects[0])
 			: "";
+
+	const nameColor = nodeTheme ? nodeTheme.nameColor : "#ccd6f6";
+	const effectColor = nodeTheme ? nodeTheme.effectColor : "#7ee787";
+	const badgeColor = nodeTheme ? nodeTheme.badgeColor : "#8892b0";
 
 	return (
 		<div
@@ -238,15 +228,47 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 			<Handle type="source" position={Position.Left} id="left" />
 			<Handle type="source" position={Position.Right} id="right" />
 			{state && max > 1 && (
-				<span css={ownedBadgeCss}>
+				<span
+					style={{
+						position: "absolute",
+						top: 3,
+						right: 6,
+						color: badgeColor,
+						fontSize: 9,
+					}}
+				>
 					{owned}/{max}
 				</span>
 			)}
 			<div css={topSectionCss}>
 				<div css={iconCss}>{node.icon as string}</div>
 				<div style={{ flex: 1, minWidth: 0 }}>
-					<div css={nameCss}>{name}</div>
-					{effectText && <div css={effectCss}>{effectText}</div>}
+					<div
+						style={{
+							color: nameColor,
+							fontSize: 12,
+							fontWeight: 600,
+							lineHeight: 1.2,
+							wordBreak: "break-word",
+						}}
+					>
+						{name}
+					</div>
+					{effectText && (
+						<div
+							style={{
+								color: effectColor,
+								fontSize: 10,
+								lineHeight: 1.2,
+								marginTop: 2,
+								whiteSpace: "nowrap",
+								overflow: "hidden",
+								textOverflow: "ellipsis",
+							}}
+						>
+							{effectText}
+						</div>
+					)}
 				</div>
 			</div>
 			{maxed ? (

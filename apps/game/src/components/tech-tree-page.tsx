@@ -13,6 +13,7 @@ import {
 	TECH_NODE_HEIGHT,
 	TECH_NODE_WIDTH,
 	TechNodeComponent,
+	type TechNodeTheme,
 } from "@flopsed/design-system";
 import type { TechNode } from "@modules/game";
 import {
@@ -38,6 +39,7 @@ function buildFlowNodes(
 	ownedTechNodes: Record<string, number>,
 	loc: number,
 	cash: number,
+	nodeTheme: TechNodeTheme,
 ): Node[] {
 	const nodes: Node[] = [];
 	for (const n of techNodes) {
@@ -62,7 +64,7 @@ function buildFlowNodes(
 			id: n.id,
 			type: "techNode",
 			position: { x: n.x ?? 0, y: n.y ?? 0 },
-			data: { ...n, state, owned },
+			data: { ...n, state, owned, nodeTheme },
 		});
 	}
 	return nodes;
@@ -404,6 +406,18 @@ export function TechTreePage() {
 	const cachedNodes = useRef<Node[]>([]);
 	const prevOwned = useRef(ownedTechNodes);
 
+	const nodeTheme = useMemo(
+		(): TechNodeTheme => ({
+			nodeBg: theme.panelBg,
+			nodeBgLocked: theme.background,
+			nodeBorder: theme.border,
+			nameColor: theme.foreground,
+			effectColor: theme.success,
+			badgeColor: theme.textMuted,
+		}),
+		[theme],
+	);
+
 	const flowNodes = useMemo(() => {
 		const now = Date.now();
 		const ownedChanged = prevOwned.current !== ownedTechNodes;
@@ -419,10 +433,11 @@ export function TechTreePage() {
 				ownedTechNodes,
 				loc,
 				cash,
+				nodeTheme,
 			);
 		}
 		return cachedNodes.current;
-	}, [ownedTechNodes, loc, cash]);
+	}, [ownedTechNodes, loc, cash, nodeTheme]);
 
 	const edgeDefs = useMemo(
 		() => buildEdgeDefs(flowNodes, allTechNodes, ownedTechNodes),

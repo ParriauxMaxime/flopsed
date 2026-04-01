@@ -3,7 +3,9 @@ import type { EventEffect } from "@flopsed/domain";
 import { events as allEvents } from "@flopsed/domain";
 import { useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useIdeTheme } from "../../../hooks/use-ide-theme";
 import { resolveChoiceEffects, useEventStore } from "../store/event-store";
 
 // ---------------------------------------------------------------------------
@@ -45,30 +47,6 @@ const toastWrapperCss = css({
 	maxWidth: 400,
 });
 
-function toastBodyCss(sentiment: "positive" | "negative" | "neutral") {
-	const accentBar =
-		sentiment === "positive"
-			? "#3794ff"
-			: sentiment === "negative"
-				? "#f14c4c"
-				: "#cca700";
-
-	return css({
-		background: "#252526",
-		border: "1px solid #454545",
-		borderLeft: `3px solid ${accentBar}`,
-		borderRadius: 3,
-		padding: "10px 14px",
-		display: "flex",
-		alignItems: "flex-start",
-		gap: 10,
-		boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-		fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
-		color: "#cccccc",
-		fontSize: 13,
-	});
-}
-
 const iconCss = css({
 	fontSize: 18,
 	flexShrink: 0,
@@ -80,50 +58,18 @@ const contentCss = css({
 	minWidth: 0,
 });
 
-const nameCss = css({
-	fontWeight: "bold",
-	fontSize: 13,
-	color: "#e6edf3",
-	marginBottom: 2,
-});
-
-const descCss = css({
-	fontSize: 12,
-	color: "#8b949e",
-	lineHeight: 1.4,
-});
-
-const timerCss = css({
-	flexShrink: 0,
-	fontSize: 13,
-	color: "#8b949e",
-	fontVariantNumeric: "tabular-nums",
-	alignSelf: "center",
-	marginLeft: 8,
-});
-
-const dismissBtnCss = css({
-	flexShrink: 0,
-	alignSelf: "center",
-	marginLeft: 8,
-	background: "transparent",
-	border: "1px solid #484f58",
-	borderRadius: 4,
-	color: "#8b949e",
-	fontSize: 12,
-	fontFamily: "'Courier New', monospace",
-	fontVariantNumeric: "tabular-nums",
-	padding: "4px 8px",
-	cursor: "pointer",
-	transition: "all 0.15s",
-	"&:hover": { background: "#484f58", color: "#e0e0e0" },
-});
-
 const choiceRowCss = css({
 	display: "flex",
 	gap: 8,
 	marginTop: 8,
 	flexWrap: "wrap",
+});
+
+const milestoneBonusCss = css({
+	fontSize: 12,
+	color: "#3fb950",
+	fontWeight: "bold",
+	marginTop: 4,
 });
 
 function choiceBtnCss(sentiment: "positive" | "negative" | "neutral") {
@@ -152,33 +98,53 @@ function choiceBtnCss(sentiment: "positive" | "negative" | "neutral") {
 // Component
 // ---------------------------------------------------------------------------
 
-const milestoneToastCss = css({
-	background: "#252526",
-	border: "1px solid #454545",
-	borderLeft: "3px solid #3fb950",
-	borderRadius: 3,
-	padding: "10px 14px",
-	display: "flex",
-	alignItems: "flex-start",
-	gap: 10,
-	boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-	fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
-	color: "#cccccc",
-	fontSize: 13,
-	marginBottom: 8,
-});
-
-const milestoneBonusCss = css({
-	fontSize: 12,
-	color: "#3fb950",
-	fontWeight: "bold",
-	marginTop: 4,
-});
-
 function MilestoneToastCard() {
 	const { t } = useTranslation();
 	const { t: tMilestones } = useTranslation("milestones");
+	const theme = useIdeTheme();
 	const milestoneToast = useEventStore((s) => s.milestoneToast);
+
+	const milestoneToastCss = useMemo(
+		() =>
+			css({
+				background: theme.sidebarBg,
+				border: `1px solid ${theme.border}`,
+				borderLeft: "3px solid #3fb950",
+				borderRadius: 3,
+				padding: "10px 14px",
+				display: "flex",
+				alignItems: "flex-start",
+				gap: 10,
+				boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+				fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+				color: theme.foreground,
+				fontSize: 13,
+				marginBottom: 8,
+			}),
+		[theme],
+	);
+
+	const nameCss = useMemo(
+		() =>
+			css({
+				fontWeight: "bold",
+				fontSize: 13,
+				color: theme.foreground,
+				marginBottom: 2,
+			}),
+		[theme],
+	);
+
+	const descCss = useMemo(
+		() =>
+			css({
+				fontSize: 12,
+				color: theme.textMuted,
+				lineHeight: 1.4,
+			}),
+		[theme],
+	);
+
 	if (!milestoneToast) return null;
 
 	return (
@@ -201,6 +167,7 @@ function MilestoneToastCard() {
 
 export function EventToast() {
 	const { t: tEvents } = useTranslation("events");
+	const theme = useIdeTheme();
 	const activeEvents = useEventStore((s) => s.activeEvents);
 	const toastEvent = useEventStore((s) => s.toastEvent);
 	const milestoneToast = useEventStore((s) => s.milestoneToast);
@@ -211,6 +178,61 @@ export function EventToast() {
 	const loc = useGameStore((s) => s.loc);
 	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
 	const applyEventReward = useGameStore((s) => s.applyEventReward);
+
+	const nameCss = useMemo(
+		() =>
+			css({
+				fontWeight: "bold",
+				fontSize: 13,
+				color: theme.foreground,
+				marginBottom: 2,
+			}),
+		[theme],
+	);
+
+	const descCss = useMemo(
+		() =>
+			css({
+				fontSize: 12,
+				color: theme.textMuted,
+				lineHeight: 1.4,
+			}),
+		[theme],
+	);
+
+	const timerCss = useMemo(
+		() =>
+			css({
+				flexShrink: 0,
+				fontSize: 13,
+				color: theme.textMuted,
+				fontVariantNumeric: "tabular-nums",
+				alignSelf: "center",
+				marginLeft: 8,
+			}),
+		[theme],
+	);
+
+	const dismissBtnCss = useMemo(
+		() =>
+			css({
+				flexShrink: 0,
+				alignSelf: "center",
+				marginLeft: 8,
+				background: "transparent",
+				border: `1px solid ${theme.border}`,
+				borderRadius: 4,
+				color: theme.textMuted,
+				fontSize: 12,
+				fontFamily: "'Courier New', monospace",
+				fontVariantNumeric: "tabular-nums",
+				padding: "4px 8px",
+				cursor: "pointer",
+				transition: "all 0.15s",
+				"&:hover": { background: theme.border, color: theme.foreground },
+			}),
+		[theme],
+	);
 
 	// Find display event: first non-synthetic, non-resolved active event
 	const activeDisplayEvent =
@@ -243,12 +265,31 @@ export function EventToast() {
 					const remainingDuration = activeDisplayEvent?.remainingDuration ?? 0;
 					const hasDuration = remainingDuration > 0;
 
+					const accentBar =
+						sentiment === "positive"
+							? "#3794ff"
+							: sentiment === "negative"
+								? "#f14c4c"
+								: "#cca700";
+
+					const toastBodyStyle = css({
+						background: theme.sidebarBg,
+						border: `1px solid ${theme.border}`,
+						borderLeft: `3px solid ${accentBar}`,
+						borderRadius: 3,
+						padding: "10px 14px",
+						display: "flex",
+						alignItems: "flex-start",
+						gap: 10,
+						boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+						fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+						color: theme.foreground,
+						fontSize: 13,
+					});
+
 					return (
 						<div
-							css={[
-								toastBodyCss(sentiment),
-								!isChoice && { cursor: "pointer" },
-							]}
+							css={[toastBodyStyle, !isChoice && { cursor: "pointer" }]}
 							onClick={!isChoice ? dismissToast : undefined}
 							onKeyDown={undefined}
 							role={!isChoice ? "button" : undefined}
