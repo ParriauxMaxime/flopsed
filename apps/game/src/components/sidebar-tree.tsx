@@ -297,24 +297,39 @@ const UpgradeItem = memo(function UpgradeItem({
 
 // ── Main sidebar ──
 
-const basePageFiles: Array<{
+interface FileEntry {
 	page: PageEnum;
 	filename: string;
+	folder?: string;
 	dotColor: string;
-}> = [
-	{ page: PageEnum.readme, filename: "README.md", dotColor: "#519aba" },
-	{ page: PageEnum.game, filename: "agi.py", dotColor: "#519aba" },
+}
+
+const basePageFiles: FileEntry[] = [
+	{
+		page: PageEnum.game,
+		filename: "agi.py",
+		folder: "src",
+		dotColor: "#519aba",
+	},
 	{
 		page: PageEnum.tech_tree,
 		filename: "tech-tree.svg",
+		folder: "src",
 		dotColor: "#f1c542",
 	},
-	{ page: PageEnum.settings, filename: "settings.json", dotColor: "#cbcb41" },
+	{
+		page: PageEnum.settings,
+		filename: "settings.json",
+		folder: "utils",
+		dotColor: "#cbcb41",
+	},
+	{ page: PageEnum.readme, filename: "README.md", dotColor: "#519aba" },
 ];
 
-const godModeEntry = {
+const godModeEntry: FileEntry = {
 	page: PageEnum.god_mode,
 	filename: "godmode.ts",
+	folder: "utils",
 	dotColor: "#519aba",
 };
 
@@ -458,55 +473,91 @@ export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 					</>
 				)}
 
-				{/* All files */}
-				<div
-					css={sectionHeaderBaseCss}
-					style={{ color: theme.textMuted, marginTop: 8 }}
-				>
-					&#9662; {t("sidebar.files", { defaultValue: "Files" })}
-				</div>
-				{allPageFiles.map((f) => {
-					const active = f.page === page;
-					const isOpen = allOpenPages.has(f.page);
-					return (
-						<div
-							key={`file-${f.page}`}
-							css={{
-								padding: "2px 8px 2px 28px",
-								display: "flex",
-								alignItems: "center",
-								gap: 6,
-								fontSize: 13,
-								height: 22,
-								cursor: "pointer",
-								background: active ? theme.activeBg : "transparent",
-								color: isOpen ? theme.foreground : theme.textMuted,
-								"&:hover": {
-									background: theme.activeBg,
-									color: theme.foreground,
-								},
-							}}
-							onClick={() => openInActivePane(f.page)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") openInActivePane(f.page);
-							}}
-							role="button"
-							tabIndex={0}
-						>
-							<span
-								css={{
-									width: 6,
-									height: 6,
-									borderRadius: "50%",
-									background: isOpen ? f.dotColor : "transparent",
-									border: isOpen ? "none" : `1px solid ${f.dotColor}`,
-									flexShrink: 0,
-								}}
-							/>
-							{f.filename}
-						</div>
+				{/* All files — grouped by folder */}
+				{(() => {
+					const folders = new Map<string, FileEntry[]>();
+					const rootFiles: FileEntry[] = [];
+					for (const f of allPageFiles) {
+						if (f.folder) {
+							if (!folders.has(f.folder)) folders.set(f.folder, []);
+							folders.get(f.folder)?.push(f);
+						} else {
+							rootFiles.push(f);
+						}
+					}
+					// Sort folders alphabetically, root files after
+					const sortedFolders = [...folders.entries()].sort((a, b) =>
+						a[0].localeCompare(b[0]),
 					);
-				})}
+
+					const renderFile = (f: FileEntry, indent: number) => {
+						const active = f.page === page;
+						const isOpen = allOpenPages.has(f.page);
+						return (
+							<div
+								key={`file-${f.page}`}
+								css={{
+									padding: `2px 8px 2px ${indent}px`,
+									display: "flex",
+									alignItems: "center",
+									gap: 6,
+									fontSize: 13,
+									height: 22,
+									cursor: "pointer",
+									background: active ? theme.activeBg : "transparent",
+									color: isOpen ? theme.foreground : theme.textMuted,
+									"&:hover": {
+										background: theme.activeBg,
+										color: theme.foreground,
+									},
+								}}
+								onClick={() => openInActivePane(f.page)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") openInActivePane(f.page);
+								}}
+								role="button"
+								tabIndex={0}
+							>
+								<span
+									css={{
+										width: 6,
+										height: 6,
+										borderRadius: "50%",
+										background: isOpen ? f.dotColor : "transparent",
+										border: isOpen ? "none" : `1px solid ${f.dotColor}`,
+										flexShrink: 0,
+									}}
+								/>
+								{f.filename}
+							</div>
+						);
+					};
+
+					return (
+						<>
+							{sortedFolders.map(([folder, files]) => (
+								<div key={folder}>
+									<div
+										css={{
+											padding: "2px 8px 2px 16px",
+											fontSize: 13,
+											height: 22,
+											display: "flex",
+											alignItems: "center",
+											gap: 4,
+											color: theme.textMuted,
+										}}
+									>
+										<span style={{ fontSize: 11 }}>📁</span>
+										{folder}/
+									</div>
+									{files.map((f) => renderFile(f, 36))}
+								</div>
+							))}
+							{rootFiles.map((f) => renderFile(f, 16))}
+						</>
+					);
+				})()}
 
 				{/* Upgrades */}
 				<div
