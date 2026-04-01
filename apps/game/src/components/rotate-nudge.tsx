@@ -6,33 +6,42 @@ import { useTouchDevice } from "../hooks/use-touch-device";
 
 const SESSION_KEY = "flopsed-rotate-dismissed";
 
-const slideDown = keyframes({
-	from: { transform: "translateY(-100%)" },
-	to: { transform: "translateY(0)" },
+const fadeIn = keyframes({
+	from: { opacity: 0 },
+	to: { opacity: 1 },
 });
 
-const barCss = css({
+const overlayCss = css({
 	position: "fixed",
-	top: 0,
-	left: 0,
-	right: 0,
+	inset: 0,
 	zIndex: 9999,
 	display: "flex",
+	flexDirection: "column",
 	alignItems: "center",
 	justifyContent: "center",
-	gap: 12,
-	padding: "8px 16px",
-	fontSize: 13,
-	animation: `${slideDown} 0.3s ease-out`,
+	gap: 16,
+	padding: 32,
+	cursor: "pointer",
+	animation: `${fadeIn} 0.3s ease-out`,
+	textAlign: "center",
 });
 
-const closeBtnCss = css({
-	background: "none",
-	border: "none",
-	cursor: "pointer",
-	fontSize: 16,
-	padding: "0 4px",
+const iconCss = css({
+	fontSize: 48,
 	lineHeight: 1,
+});
+
+const messageCss = css({
+	fontSize: 16,
+	fontWeight: 500,
+	lineHeight: 1.4,
+	maxWidth: 280,
+});
+
+const hintCss = css({
+	fontSize: 12,
+	opacity: 0.6,
+	marginTop: 4,
 });
 
 export function RotateNudge() {
@@ -61,22 +70,21 @@ export function RotateNudge() {
 
 	return (
 		<div
-			css={barCss}
+			css={overlayCss}
 			style={{
-				background: theme.statusBarBg,
-				color: theme.statusBarFg,
-				borderBottom: `1px solid ${theme.border}`,
+				background: theme.background,
+				color: theme.foreground,
 			}}
+			onClick={dismiss}
+			onKeyDown={undefined}
 		>
-			<span>{t("mobile.rotate_device")}</span>
-			<button
-				css={closeBtnCss}
-				style={{ color: theme.textMuted }}
-				onClick={dismiss}
-				type="button"
-			>
-				×
-			</button>
+			<div css={iconCss}>📱↔️</div>
+			<div css={messageCss}>{t("mobile.rotate_device")}</div>
+			<div css={hintCss} style={{ color: theme.textMuted }}>
+				{t("mobile.tap_to_dismiss", {
+					defaultValue: "Tap anywhere to continue",
+				})}
+			</div>
 		</div>
 	);
 }

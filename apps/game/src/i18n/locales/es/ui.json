@@ -151,6 +151,7 @@
 		"off": "OFF",
 		"reset_game": "Reiniciar juego",
 		"rotate_device": "Gira tu dispositivo para una mejor experiencia",
+		"tap_to_dismiss": "Toca en cualquier lugar para continuar",
 		"tap_or_hold": "Toca o mantén pulsado para programar"
 	},
 	"cli": {

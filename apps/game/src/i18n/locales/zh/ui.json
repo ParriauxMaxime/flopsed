@@ -151,6 +151,7 @@
 		"off": "关",
 		"reset_game": "重置游戏",
 		"rotate_device": "旋转设备以获得最佳体验",
+		"tap_to_dismiss": "点击任意位置继续",
 		"tap_or_hold": "点击或长按来编程"
 	},
 	"cli": {

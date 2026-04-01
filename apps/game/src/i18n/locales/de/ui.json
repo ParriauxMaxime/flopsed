@@ -151,6 +151,7 @@
 		"off": "AUS",
 		"reset_game": "Spiel zurücksetzen",
 		"rotate_device": "Drehe dein Gerät für ein besseres Erlebnis",
+		"tap_to_dismiss": "Tippe irgendwo, um fortzufahren",
 		"tap_or_hold": "Tippen oder halten zum Coden"
 	},
 	"cli": {
