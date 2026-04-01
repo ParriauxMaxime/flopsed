@@ -43,13 +43,6 @@ const h2Css = css({
 	paddingBottom: 6,
 });
 
-const codeCss = css({
-	fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-	fontSize: 12,
-	padding: "2px 6px",
-	borderRadius: 3,
-});
-
 const blockCss = css({
 	fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
 	fontSize: 12,
@@ -71,14 +64,20 @@ const cardCss = css({
 	padding: "12px 16px",
 	borderRadius: 8,
 	minWidth: 200,
+	flex: 1,
 	fontSize: 13,
 });
 
-const listCss = css({
-	fontSize: 14,
-	paddingLeft: 20,
-	marginBottom: 16,
-	"& li": { marginBottom: 6 },
+const linkCss = css({
+	fontSize: 11,
+	textDecoration: "none",
+	"&:hover": { textDecoration: "underline" },
+});
+
+const linkRowCss = css({
+	display: "flex",
+	gap: 10,
+	marginTop: 6,
 });
 
 export function ReadmePage() {
@@ -91,7 +90,6 @@ export function ReadmePage() {
 				{
 					background: theme.background,
 					color: theme.foreground,
-					"&::-webkit-scrollbar-thumb": { background: theme.border },
 				} as React.CSSProperties
 			}
 		>
@@ -122,9 +120,21 @@ export function ReadmePage() {
 			</p>
 
 			<p css={pCss}>
-				Type code. Execute it for cash. Scale from a garage to building AGI. The
-				meta joke: every upgrade brings you closer to making yourself obsolete.
-				The keyboard is your first tool. The AI is your last.
+				Type code. Execute it for cash. Scale from a garage to building AGI.
+				Every upgrade brings you closer to making yourself obsolete. The
+				keyboard is your first tool. The AI is your last.
+			</p>
+
+			<p css={pCss}>
+				<a
+					href="https://github.com/ParriauxMaxime/flopsed"
+					target="_blank"
+					rel="noreferrer"
+					css={linkCss}
+					style={{ color: theme.accent, fontSize: 13 }}
+				>
+					github.com/ParriauxMaxime/flopsed
+				</a>
 			</p>
 
 			<div
@@ -134,37 +144,7 @@ export function ReadmePage() {
 					color: theme.accent,
 				}}
 			>
-				## Quick Start
-			</div>
-
-			<div
-				css={blockCss}
-				style={{ background: theme.panelBg, color: theme.foreground }}
-			>
-				<span style={{ color: theme.comment }}>{"# "}</span>
-				<span style={{ color: theme.keyword }}>git clone</span>{" "}
-				<span style={{ color: theme.string }}>
-					github.com/ParriauxMaxime/flopsed
-				</span>
-				<br />
-				<span style={{ color: theme.comment }}>{"# "}</span>
-				<span style={{ color: theme.keyword }}>npm install</span>
-				{" && "}
-				<span style={{ color: theme.keyword }}>npm run dev</span>
-				<br />
-				<span style={{ color: theme.comment }}>{"# "}</span>
-				open <span style={{ color: theme.string }}>localhost:3000</span>{" "}
-				<span style={{ color: theme.comment }}>{"// start typing"}</span>
-			</div>
-
-			<div
-				css={h2Css}
-				style={{
-					borderBottom: `1px solid ${theme.border}`,
-					color: theme.accent,
-				}}
-			>
-				## The Loop
+				## Getting Started
 			</div>
 
 			<div
@@ -184,52 +164,12 @@ export function ReadmePage() {
 				</span>
 			</div>
 
-			<div
-				css={h2Css}
-				style={{
-					borderBottom: `1px solid ${theme.border}`,
-					color: theme.accent,
-				}}
-			>
-				## Tech Stack
-			</div>
-
-			<ul css={listCss}>
-				<li>
-					<span css={codeCss} style={{ background: theme.panelBg }}>
-						React 19
-					</span>
-					{" + "}
-					<span css={codeCss} style={{ background: theme.panelBg }}>
-						Emotion
-					</span>{" "}
-					for the IDE shell
-				</li>
-				<li>
-					<span css={codeCss} style={{ background: theme.panelBg }}>
-						Zustand
-					</span>{" "}
-					for state (persisted to localStorage)
-				</li>
-				<li>
-					<span css={codeCss} style={{ background: theme.panelBg }}>
-						Rspack
-					</span>{" "}
-					for builds (sub-second HMR)
-				</li>
-				<li>
-					<span css={codeCss} style={{ background: theme.panelBg }}>
-						TypeScript
-					</span>{" "}
-					strict mode, no exceptions
-				</li>
-				<li>
-					8 languages via{" "}
-					<span css={codeCss} style={{ background: theme.panelBg }}>
-						i18next
-					</span>
-				</li>
-			</ul>
+			<p css={pCss} style={{ color: theme.textMuted }}>
+				Start typing. Every keystroke generates Lines of Code. Execute them with
+				your FLOPS to earn cash. Buy upgrades, hire devs, unlock AI models.
+				Research the tech tree to advance through 6 tiers — from a garage to the
+				singularity.
+			</p>
 
 			<div
 				css={h2Css}
@@ -266,6 +206,62 @@ export function ReadmePage() {
 						<br />
 						The one who types. For now.
 					</div>
+					<div css={linkRowCss}>
+						<a
+							href="https://github.com/ParriauxMaxime"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{ color: theme.accent }}
+						>
+							GitHub
+						</a>
+						<a
+							href="https://parriauxmaxime.github.io/"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{ color: theme.accent }}
+						>
+							Website
+						</a>
+					</div>
+				</div>
+				<div
+					css={cardCss}
+					style={{
+						background: theme.panelBg,
+						border: `1px solid ${theme.border}`,
+					}}
+				>
+					<div
+						style={{
+							fontWeight: 700,
+							marginBottom: 4,
+							color: theme.foreground,
+						}}
+					>
+						Noe Maire-Amiot
+					</div>
+					<div style={{ color: theme.textMuted, fontSize: 12 }}>
+						Human developer
+					</div>
+					<div style={{ color: theme.textMuted, fontSize: 11, marginTop: 4 }}>
+						Game design, art direction, UX, playtesting.
+						<br />
+						The one who makes it look good.
+					</div>
+					<div css={linkRowCss}>
+						<a
+							href="https://noemaireamiot.com/"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{ color: theme.accent }}
+						>
+							Website
+						</a>
+					</div>
 				</div>
 				<div
 					css={cardCss}
@@ -291,6 +287,17 @@ export function ReadmePage() {
 						<br />
 						The one who writes the code that writes the code.
 					</div>
+					<div css={linkRowCss}>
+						<a
+							href="https://claude.ai"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{ color: theme.accent }}
+						>
+							claude.ai
+						</a>
+					</div>
 				</div>
 			</div>
 
@@ -305,11 +312,9 @@ export function ReadmePage() {
 			</div>
 
 			<p css={pCss}>
-				<span css={codeCss} style={{ background: theme.panelBg }}>
-					MIT
-				</span>{" "}
+				MIT{" "}
 				<span style={{ color: theme.textMuted }}>
-					-- because the singularity should be open source.
+					— because the singularity should be open source.
 				</span>
 			</p>
 
