@@ -4,7 +4,6 @@ import { formatNumber } from "@utils/format";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
-import { useRatePerSec } from "../hooks/use-rate-per-sec";
 
 const wrapCss = css({
 	display: "flex",
@@ -58,7 +57,6 @@ export function StatsExecuteBar() {
 	const theme = useIdeTheme();
 	const loc = useGameStore((s) => s.loc);
 	const flops = useGameStore((s) => s.flops);
-	const totalCash = useGameStore((s) => s.totalCash);
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const cashMultiplier = useGameStore((s) => s.cashMultiplier);
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
@@ -71,7 +69,6 @@ export function StatsExecuteBar() {
 	const flopSlider = useGameStore((s) => s.flopSlider);
 
 	const btnRef = useRef<HTMLButtonElement>(null);
-	const cashRate = useRatePerSec(totalCash);
 
 	const handleExecute = useCallback(() => {
 		executeManual();
@@ -94,6 +91,9 @@ export function StatsExecuteBar() {
 	const execFlops = aiUnlocked ? flops * flopSlider : flops;
 	const execLoc = Math.min(Math.floor(execFlops), Math.floor(loc));
 	const earnPerExec = execLoc * cashPerLoc * cashMultiplier;
+
+	// Deterministic cash/s: min(queued loc, exec flops) * rate
+	const cashRate = Math.min(loc, execFlops) * cashPerLoc * cashMultiplier;
 
 	const autoDisplay = (
 		<div

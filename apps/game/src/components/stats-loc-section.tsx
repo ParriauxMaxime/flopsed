@@ -5,7 +5,6 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { useKeypressRate } from "../hooks/use-keypress-rate";
-import { useRatePerSec } from "../hooks/use-rate-per-sec";
 import { CollapsibleSection } from "./collapsible-section";
 import { RollingNumber } from "./rolling-number";
 import { Sparkline } from "./sparkline";
@@ -69,7 +68,6 @@ export function StatsLocSection() {
 	const { t } = useTranslation();
 	const theme = useIdeTheme();
 	const loc = useGameStore((s) => s.loc);
-	const totalLoc = useGameStore((s) => s.totalLoc);
 	const analyticsUnlocked = useGameStore(
 		(s) => (s.ownedTechNodes.unlock_analytics ?? 0) > 0,
 	);
@@ -88,8 +86,11 @@ export function StatsLocSection() {
 	const tierTransitions = useGameStore((s) => s.tierTransitions);
 	const sessionStartTime = useGameStore((s) => s.sessionStartTime);
 
+	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
 	const keysPerSec = useKeypressRate();
-	const locRate = useRatePerSec(totalLoc);
+	const autoTypeKeysPerSec = autoTypeEnabled ? 5 : 0;
+	const typingLocPerSec = Math.max(keysPerSec, autoTypeKeysPerSec) * locPerKey;
+	const locRate = autoLocPerSec + typingLocPerSec;
 	const elapsed = (performance.now() - sessionStartTime) / 1000;
 
 	const humanSources = useMemo((): SourceRow[] => {
