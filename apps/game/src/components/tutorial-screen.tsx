@@ -412,17 +412,21 @@ export function TutorialTip() {
 		}
 	}, [terminalOpen]);
 
-	// Auto-scroll when near bottom
+	// Auto-scroll when near bottom — only if content overflows
 	useEffect(() => {
 		if (terminalLog.length > prevLogLen.current) {
-			if (isNearBottom && logRef.current) {
-				requestAnimationFrame(() => {
-					logRef.current?.scrollTo({
-						top: logRef.current.scrollHeight,
-						behavior: "smooth",
+			const el = logRef.current;
+			if (isNearBottom && el) {
+				// Only scroll if content actually overflows the container
+				if (el.scrollHeight > el.clientHeight) {
+					requestAnimationFrame(() => {
+						logRef.current?.scrollTo({
+							top: logRef.current.scrollHeight,
+							behavior: "smooth",
+						});
 					});
-				});
-			} else {
+				}
+			} else if (el && el.scrollHeight > el.clientHeight) {
 				setHasNew(true);
 			}
 		}
