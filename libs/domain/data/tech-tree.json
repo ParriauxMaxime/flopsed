@@ -47,7 +47,7 @@
 			"icon": "⚡",
 			"requires": ["tier_freelancing"],
 			"max": 1,
-			"baseCost": 150,
+			"baseCost": 250,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -253,7 +253,7 @@
 			"icon": "💼",
 			"requires": ["computer"],
 			"max": 1,
-			"baseCost": 250,
+			"baseCost": 150,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [
@@ -1199,7 +1199,7 @@
 			"icon": "🌍",
 			"requires": ["tier_freelancing"],
 			"max": 1,
-			"baseCost": 500,
+			"baseCost": 200,
 			"costMultiplier": 1,
 			"currency": "cash",
 			"effects": [],
