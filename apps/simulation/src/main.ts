@@ -9,7 +9,7 @@ import {
 	upgradesJson,
 } from "@flopsed/domain";
 import type { SimData, SimResult } from "@flopsed/engine";
-import { runBalanceSim } from "@flopsed/engine";
+import { AiStrategyEnum, runBalanceSim } from "@flopsed/engine";
 
 // ── CLI flags ──
 
@@ -20,6 +20,7 @@ const traceOutput = args.includes("--trace");
 const profileFlag = args.includes("--profile")
 	? args[args.indexOf("--profile") + 1]
 	: null;
+const greedyMode = args.includes("--greedy");
 
 // ── Validation thresholds from balance.json ──
 
@@ -110,6 +111,7 @@ function validateProfile(profile: Profile): ProfileResult {
 		keysPerSec: profile.keysPerSec,
 		skill: profile.skill,
 		maxMinutes: 90,
+		...(greedyMode && { aiStrategy: AiStrategyEnum.greedy }),
 	});
 
 	const failures: string[] = [];
@@ -354,6 +356,7 @@ if (traceOutput) {
 			keysPerSec: p.keysPerSec,
 			skill: p.skill,
 			maxMinutes: 90,
+			...(greedyMode && { aiStrategy: AiStrategyEnum.greedy }),
 		});
 		return {
 			profile: p.name,

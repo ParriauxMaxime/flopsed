@@ -2,6 +2,7 @@ export const AiStrategyEnum = {
 	balanced: "balanced",
 	exec_heavy: "exec_heavy",
 	ai_heavy: "ai_heavy",
+	greedy: "greedy",
 } as const;
 export type AiStrategyEnum =
 	(typeof AiStrategyEnum)[keyof typeof AiStrategyEnum];

@@ -738,275 +738,78 @@ export function runBalanceSim(
 			}
 		}
 
-		// ── Research tech nodes ──
-		for (let b = 0; b < 5; b++) {
-			const availTech = techNodes.filter((n) => {
-				const owned = sim.ownedTech[n.id] ?? 0;
-				if (owned >= n.max) return false;
-				return n.requires.every((r) => (sim.ownedTech[r] ?? 0) > 0);
-			});
+		// ── Purchase AI ──
+		if (cfg.aiStrategy === AiStrategyEnum.greedy) {
+			// Greedy: buy cheapest affordable thing each tick
+			const PLANETARY_DC_CAP = 10;
+			let boughtThisTick = false;
 
-			const freeNode = availTech.find((n) => getTechCost(n) === 0);
-			if (freeNode) {
-				sim.ownedTech[freeNode.id] = (sim.ownedTech[freeNode.id] ?? 0) + 1;
-				recalcSimStats();
-				applyInstantEffects(freeNode.effects);
-				purchaseCount++;
-				const isTier = freeNode.effects.some((e) => e.type === "tierUnlock");
-				purchases.push({
-					time: t,
-					type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
-					name: freeNode.name,
-					cost: 0,
-					currency: freeNode.currency,
-					snapshot: capturePurchaseSnapshot(),
+			// Tech: buy all affordable (cheapest first, cascade)
+			for (let b = 0; b < 10; b++) {
+				let bought = false;
+				const availTech = techNodes.filter((n) => {
+					const owned = sim.ownedTech[n.id] ?? 0;
+					if (owned >= n.max) return false;
+					return n.requires.every((r) => (sim.ownedTech[r] ?? 0) > 0);
 				});
-				continue;
-			}
-
-			const gateNode = availTech.find((n) => {
-				const cost = getTechCost(n);
-				const useLoc = n.currency === "loc";
-				const canAfford = useLoc ? sim.loc >= cost : sim.cash >= cost;
-				const isGate =
-					n.effects.length === 0 ||
-					n.effects.every((e) => e.type === "tierUnlock");
-				return canAfford && isGate;
-			});
-			if (gateNode) {
-				const cost = getTechCost(gateNode);
-				if (gateNode.currency === "loc") sim.loc -= cost;
-				else sim.cash -= cost;
-				sim.ownedTech[gateNode.id] = (sim.ownedTech[gateNode.id] ?? 0) + 1;
-				recalcSimStats();
-				applyInstantEffects(gateNode.effects);
-				purchaseCount++;
-				const isTier = gateNode.effects.some((e) => e.type === "tierUnlock");
-				purchases.push({
-					time: t,
-					type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
-					name: gateNode.name,
-					cost,
-					currency: gateNode.currency,
-					snapshot: capturePurchaseSnapshot(),
-				});
-				continue;
-			}
-
-			let bestTech: { node: TechNodeData; cost: number } | null = null;
-			let bestTechVal = 0;
-
-			for (const n of availTech) {
-				const cost = getTechCost(n);
-				const useLoc = n.currency === "loc";
-				if (useLoc && cost > sim.loc) continue;
-				if (!useLoc && cost > sim.cash) continue;
-				let val = 0;
-				for (const e of n.effects) {
-					const ev = e.value as number;
-					if (e.type === "flops") val += ev * cashPerLoc() * 2;
-					if (e.type === "cpuFlops" || e.type === "ramFlops")
-						val += ev * cashPerLoc() * 1.5;
-					if (e.type === "storageFlops") val += ev * cashPerLoc();
-					if (e.type === "locPerKey" && e.op === "add")
-						val += ev * cfg.keysPerSec * cashPerLoc();
-					if (e.type === "locPerKey" && e.op === "multiply")
-						val += sim.locPerKey * (ev - 1) * cfg.keysPerSec * cashPerLoc();
-					if (e.type === "locProductionSpeed" && e.op === "multiply")
-						val += calcAutoLoc() * (ev - 1) * cashPerLoc();
-					if (e.type === "autoType") val += 5 * effLocPerKey() * cashPerLoc();
-					if (e.type === "autoExecute") val += flops * cashPerLoc() * 10; // high priority: unlocks continuous execution
-					if (
-						e.type === "internLocMultiplier" ||
-						e.type === "devLocMultiplier" ||
-						e.type === "teamLocMultiplier" ||
-						e.type === "freelancerLocMultiplier"
+				const affordable = availTech
+					.map((n) => {
+						const cost = getTechCost(n);
+						const useLoc = n.currency === "loc";
+						return { n, cost, useLoc };
+					})
+					.filter((x) =>
+						x.useLoc ? sim.totalLoc >= x.cost : sim.cash >= x.cost,
 					)
-						val += calcAutoLoc() * (ev - 1) * cashPerLoc();
-					if (e.type === "freelancerCostDiscount") val += 100;
-					if (e.type === "cashMultiplier")
-						val +=
-							(calcAutoLoc() + effLocPerKey() * cfg.keysPerSec) *
-							cashPerLoc() *
-							(ev - 1);
-					if (e.type === "tokenMultiplier" && sim.aiUnlocked)
-						val += calcAutoLoc() * cashPerLoc() * (ev - 1) * 0.5;
-					if (
-						e.type === "internCostDiscount" ||
-						e.type === "devCostDiscount" ||
-						e.type === "teamCostDiscount" ||
-						e.type === "managerCostDiscount" ||
-						e.type === "llmCostDiscount" ||
-						e.type === "agentCostDiscount"
-					)
-						val += 100;
-					if (e.type === "llmLocMultiplier")
-						val += sim.llmLoc * sim.llmLocMultiplier * (ev - 1) * cashPerLoc();
-					if (e.type === "agentLocMultiplier")
-						val +=
-							sim.agentLoc * sim.agentLocMultiplier * (ev - 1) * cashPerLoc();
-					if (
-						e.type === "llmMaxBonus" ||
-						e.type === "agentMaxBonus" ||
-						e.type === "internMaxBonus" ||
-						e.type === "teamMaxBonus" ||
-						e.type === "managerMaxBonus" ||
-						e.type === "freelancerMaxBonus"
-					)
-						val += calcAutoLoc() * cashPerLoc() * 0.1;
-					if (e.type === "modelUnlock") {
-						const modelId = e.value as string;
-						const model = aiModels.find((x) => x.id === modelId);
-						if (model) {
-							val +=
-								(model.locPerSec * sim.aiLocMultiplier * cashPerLoc()) /
-								(model.cost + cost);
-						}
-					}
+					.sort((a, b) => a.cost - b.cost);
+
+				for (const { n, cost, useLoc } of affordable) {
+					if (useLoc) sim.loc -= Math.min(sim.loc, cost);
+					else sim.cash -= cost;
+					sim.ownedTech[n.id] = (sim.ownedTech[n.id] ?? 0) + 1;
+					recalcSimStats();
+					applyInstantEffects(n.effects);
+					purchaseCount++;
+					const isTier = n.effects.some((e) => e.type === "tierUnlock");
+					const isModel = n.effects.some((e) => e.type === "modelUnlock");
+					purchases.push({
+						time: t,
+						type: isTier
+							? PurchaseTypeEnum.tier
+							: isModel
+								? PurchaseTypeEnum.ai
+								: PurchaseTypeEnum.tech,
+						name: n.name,
+						cost,
+						currency: n.currency,
+						snapshot: capturePurchaseSnapshot(),
+					});
+					bought = true;
+					boughtThisTick = true;
+					break;
 				}
-				if (cost > 0 && val / cost > bestTechVal) {
-					bestTechVal = val / cost;
-					bestTech = { node: n, cost };
-				}
+				if (!bought) break;
 			}
 
-			if (!bestTech) break;
-			if (bestTech.node.currency === "loc") sim.loc -= bestTech.cost;
-			else sim.cash -= bestTech.cost;
-			sim.ownedTech[bestTech.node.id] =
-				(sim.ownedTech[bestTech.node.id] ?? 0) + 1;
-			recalcSimStats();
-			applyInstantEffects(bestTech.node.effects);
-			purchaseCount++;
-			const isModelUnlock = bestTech.node.effects.some(
-				(e) => e.type === "modelUnlock",
-			);
-			purchases.push({
-				time: t,
-				type: isModelUnlock ? PurchaseTypeEnum.ai : PurchaseTypeEnum.tech,
-				name: bestTech.node.name,
-				cost: bestTech.cost,
-				currency: bestTech.node.currency,
-				snapshot: capturePurchaseSnapshot(),
-			});
-		}
+			// Upgrades: buy cheapest affordable (cap planetary_datacenter)
+			for (let b = 0; b < 5; b++) {
+				const avail = upgrades
+					.filter((u) => {
+						const tier = tiers.find((t2) => t2.id === u.tier);
+						if (!tier || tier.index > sim.currentTier) return false;
+						const owned = sim.owned[u.id] ?? 0;
+						if (owned >= getEffMax(u)) return false;
+						if (u.id === "planetary_datacenter" && owned >= PLANETARY_DC_CAP)
+							return false;
+						return true;
+					})
+					.map((u) => ({ u, cost: getCost(u) }))
+					.filter((x) => x.cost <= sim.cash)
+					.sort((a, b) => a.cost - b.cost);
 
-		// ── Buy items ──
-		// At T5 approaching singularity: keep buying but reserve cash.
-		// Don't spend more than 50% of current cash on any item — lets savings
-		// grow naturally while still investing in FLOPS.
-		const cashCap =
-			useCashWin && sim.currentTier >= 5
-				? sim.cash * 0.5
-				: Number.POSITIVE_INFINITY;
-		let boughtThisTick = false;
-		for (let b = 0; b < 5; b++) {
-			const avail = upgrades.filter((u) => {
-				const tier = tiers.find((t2) => t2.id === u.tier);
-				return (
-					tier &&
-					tier.index <= sim.currentTier &&
-					(sim.owned[u.id] ?? 0) < getEffMax(u)
-				);
-			});
-			const availModels =
-				sim.currentTier >= 4
-					? aiModels.filter((m) => {
-							if (sim.ownedModels[m.id]) return false;
-							if (m.requires && !sim.ownedModels[m.requires]) return false;
-							const gateNode = techGatedModels[m.id];
-							if (gateNode && !(sim.ownedTech[gateNode] ?? 0)) return false;
-							return true;
-						})
-					: [];
-
-			const totalLocS =
-				effLocPerKey() * cfg.keysPerSec + autoTypeLoc + calcAutoLoc() + aiLoc;
-			const execCap = sim.aiUnlocked ? flops * sim.flopSlider : flops;
-			const bottlenecked = totalLocS > execCap;
-
-			let best: {
-				type: "u" | "m";
-				item: UpgradeData | AiModel;
-				cost: number;
-			} | null = null;
-			let bestVal = 0;
-
-			for (const u of avail) {
-				const cost = getCost(u);
-				if (cost > sim.cash || cost > cashCap) continue;
-				let val = 0;
-				for (const e of u.effects) {
-					const ev = e.value as number;
-					if (e.type === "flops")
-						val += ev * cashPerLoc() * (bottlenecked ? 2 : 0.5);
-					if (e.type === "locPerKey" && e.op === "add")
-						val +=
-							ev * cfg.keysPerSec * cashPerLoc() * (bottlenecked ? 0.3 : 1);
-					if (
-						e.type === "autoLoc" ||
-						e.type === "freelancerLoc" ||
-						e.type === "internLoc" ||
-						e.type === "devLoc"
-					)
-						val += ev * cashPerLoc() * (bottlenecked ? 0.3 : 1);
-					if (e.type === "teamLoc")
-						val +=
-							ev *
-							cashPerLoc() *
-							(1 + sim.managerCount * 0.5) *
-							(bottlenecked ? 0.3 : 1);
-					if (e.type === "managerLoc")
-						val += sim.teamLoc * 0.5 * cashPerLoc() * (bottlenecked ? 0.3 : 1);
-					if (e.type === "llmLoc" || e.type === "agentLoc")
-						val += ev * cashPerLoc() * (bottlenecked ? 0.3 : 1);
-					if (e.type === "cashMultiplier")
-						val += Math.min(totalLocS, execCap) * cashPerLoc() * (ev - 1);
-					if (e.type === "tokenMultiplier" && sim.aiUnlocked)
-						val += totalLocS * cashPerLoc() * (ev - 1) * 0.5;
-					if (e.type === "instantCash") val += ev / 60;
-					if (e.type === "llmHostSlot") {
-						const unlockedCount = Object.values(sim.ownedModels).filter(
-							Boolean,
-						).length;
-						const activeCount = Math.min(unlockedCount, sim.llmHostSlots);
-						if (activeCount < unlockedCount) {
-							const sorted = aiModels
-								.filter((m) => sim.ownedModels[m.id])
-								.sort((a, b) => b.locPerSec - a.locPerSec);
-							const nextModel = sorted[activeCount];
-							if (nextModel) {
-								val += nextModel.locPerSec * sim.aiLocMultiplier * cashPerLoc();
-							}
-						}
-					}
-					if (e.type === "devSpeed" || e.type === "locProductionSpeed")
-						val +=
-							calcAutoLoc() *
-							(ev - 1) *
-							cashPerLoc() *
-							(bottlenecked ? 0.3 : 1);
-				}
-				if (cost > 0 && val / cost > bestVal) {
-					bestVal = val / cost;
-					best = { type: "u", item: u, cost };
-				}
-			}
-
-			for (const m of availModels) {
-				if (m.cost > sim.cash || m.cost > cashCap) continue;
-				const val = (m.locPerSec * sim.aiLocMultiplier * cashPerLoc()) / m.cost;
-				if (val > bestVal) {
-					bestVal = val;
-					best = { type: "m", item: m, cost: m.cost };
-				}
-			}
-
-			if (!best) break;
-
-			if (best.type === "u") {
-				const u = best.item as UpgradeData;
-				sim.cash -= best.cost;
+				if (avail.length === 0) break;
+				const { u, cost } = avail[0];
+				sim.cash -= cost;
 				sim.owned[u.id] = (sim.owned[u.id] ?? 0) + 1;
 				recalcSimStats();
 				applyInstantEffects(u.effects);
@@ -1014,33 +817,357 @@ export function runBalanceSim(
 					time: t,
 					type: PurchaseTypeEnum.upgrade,
 					name: u.name,
-					cost: best.cost,
+					cost,
 					currency: "cash",
 					snapshot: capturePurchaseSnapshot(),
 				});
-			} else {
-				const m = best.item as AiModel;
-				sim.cash -= best.cost;
-				sim.ownedModels[m.id] = true;
+				purchaseCount++;
+				boughtThisTick = true;
+			}
+
+			// AI models: buy cheapest affordable
+			if (sim.currentTier >= 4) {
+				const availModels = aiModels.filter((m) => {
+					if (sim.ownedModels[m.id]) return false;
+					if (m.requires && !sim.ownedModels[m.requires]) return false;
+					const gateNode = techGatedModels[m.id];
+					if (gateNode && !(sim.ownedTech[gateNode] ?? 0)) return false;
+					return m.cost <= sim.cash;
+				});
+				const cheapest = availModels.sort((a, b) => a.cost - b.cost)[0];
+				if (cheapest) {
+					sim.cash -= cheapest.cost;
+					sim.ownedModels[cheapest.id] = true;
+					recalcSimStats();
+					purchases.push({
+						time: t,
+						type: PurchaseTypeEnum.ai,
+						name: `${cheapest.name} ${cheapest.version}`,
+						cost: cheapest.cost,
+						currency: "cash",
+						snapshot: capturePurchaseSnapshot(),
+					});
+					purchaseCount++;
+					boughtThisTick = true;
+				}
+			}
+
+			if (boughtThisTick) {
+				const wait = t - lastPurchaseTime;
+				if (wait > longestWait) longestWait = wait;
+				lastPurchaseTime = t;
+			}
+		} else {
+			// ── Balanced: value-based purchase AI ──
+
+			// Research tech nodes
+			for (let b = 0; b < 5; b++) {
+				const availTech = techNodes.filter((n) => {
+					const owned = sim.ownedTech[n.id] ?? 0;
+					if (owned >= n.max) return false;
+					return n.requires.every((r) => (sim.ownedTech[r] ?? 0) > 0);
+				});
+
+				const freeNode = availTech.find((n) => getTechCost(n) === 0);
+				if (freeNode) {
+					sim.ownedTech[freeNode.id] = (sim.ownedTech[freeNode.id] ?? 0) + 1;
+					recalcSimStats();
+					applyInstantEffects(freeNode.effects);
+					purchaseCount++;
+					const isTier = freeNode.effects.some((e) => e.type === "tierUnlock");
+					purchases.push({
+						time: t,
+						type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
+						name: freeNode.name,
+						cost: 0,
+						currency: freeNode.currency,
+						snapshot: capturePurchaseSnapshot(),
+					});
+					continue;
+				}
+
+				const gateNode = availTech.find((n) => {
+					const cost = getTechCost(n);
+					const useLoc = n.currency === "loc";
+					const canAfford = useLoc ? sim.loc >= cost : sim.cash >= cost;
+					const isGate =
+						n.effects.length === 0 ||
+						n.effects.every((e) => e.type === "tierUnlock");
+					return canAfford && isGate;
+				});
+				if (gateNode) {
+					const cost = getTechCost(gateNode);
+					if (gateNode.currency === "loc") sim.loc -= cost;
+					else sim.cash -= cost;
+					sim.ownedTech[gateNode.id] = (sim.ownedTech[gateNode.id] ?? 0) + 1;
+					recalcSimStats();
+					applyInstantEffects(gateNode.effects);
+					purchaseCount++;
+					const isTier = gateNode.effects.some((e) => e.type === "tierUnlock");
+					purchases.push({
+						time: t,
+						type: isTier ? PurchaseTypeEnum.tier : PurchaseTypeEnum.tech,
+						name: gateNode.name,
+						cost,
+						currency: gateNode.currency,
+						snapshot: capturePurchaseSnapshot(),
+					});
+					continue;
+				}
+
+				let bestTech: { node: TechNodeData; cost: number } | null = null;
+				let bestTechVal = 0;
+
+				for (const n of availTech) {
+					const cost = getTechCost(n);
+					const useLoc = n.currency === "loc";
+					if (useLoc && cost > sim.loc) continue;
+					if (!useLoc && cost > sim.cash) continue;
+					let val = 0;
+					for (const e of n.effects) {
+						const ev = e.value as number;
+						if (e.type === "flops") val += ev * cashPerLoc() * 2;
+						if (e.type === "cpuFlops" || e.type === "ramFlops")
+							val += ev * cashPerLoc() * 1.5;
+						if (e.type === "storageFlops") val += ev * cashPerLoc();
+						if (e.type === "locPerKey" && e.op === "add")
+							val += ev * cfg.keysPerSec * cashPerLoc();
+						if (e.type === "locPerKey" && e.op === "multiply")
+							val += sim.locPerKey * (ev - 1) * cfg.keysPerSec * cashPerLoc();
+						if (e.type === "locProductionSpeed" && e.op === "multiply")
+							val += calcAutoLoc() * (ev - 1) * cashPerLoc();
+						if (e.type === "autoType") val += 5 * effLocPerKey() * cashPerLoc();
+						if (e.type === "autoExecute") val += flops * cashPerLoc() * 10; // high priority: unlocks continuous execution
+						if (
+							e.type === "internLocMultiplier" ||
+							e.type === "devLocMultiplier" ||
+							e.type === "teamLocMultiplier" ||
+							e.type === "freelancerLocMultiplier"
+						)
+							val += calcAutoLoc() * (ev - 1) * cashPerLoc();
+						if (e.type === "freelancerCostDiscount") val += 100;
+						if (e.type === "cashMultiplier")
+							val +=
+								(calcAutoLoc() + effLocPerKey() * cfg.keysPerSec) *
+								cashPerLoc() *
+								(ev - 1);
+						if (e.type === "tokenMultiplier" && sim.aiUnlocked)
+							val += calcAutoLoc() * cashPerLoc() * (ev - 1) * 0.5;
+						if (
+							e.type === "internCostDiscount" ||
+							e.type === "devCostDiscount" ||
+							e.type === "teamCostDiscount" ||
+							e.type === "managerCostDiscount" ||
+							e.type === "llmCostDiscount" ||
+							e.type === "agentCostDiscount"
+						)
+							val += 100;
+						if (e.type === "llmLocMultiplier")
+							val +=
+								sim.llmLoc * sim.llmLocMultiplier * (ev - 1) * cashPerLoc();
+						if (e.type === "agentLocMultiplier")
+							val +=
+								sim.agentLoc * sim.agentLocMultiplier * (ev - 1) * cashPerLoc();
+						if (
+							e.type === "llmMaxBonus" ||
+							e.type === "agentMaxBonus" ||
+							e.type === "internMaxBonus" ||
+							e.type === "teamMaxBonus" ||
+							e.type === "managerMaxBonus" ||
+							e.type === "freelancerMaxBonus"
+						)
+							val += calcAutoLoc() * cashPerLoc() * 0.1;
+						if (e.type === "modelUnlock") {
+							const modelId = e.value as string;
+							const model = aiModels.find((x) => x.id === modelId);
+							if (model) {
+								val +=
+									(model.locPerSec * sim.aiLocMultiplier * cashPerLoc()) /
+									(model.cost + cost);
+							}
+						}
+					}
+					if (cost > 0 && val / cost > bestTechVal) {
+						bestTechVal = val / cost;
+						bestTech = { node: n, cost };
+					}
+				}
+
+				if (!bestTech) break;
+				if (bestTech.node.currency === "loc") sim.loc -= bestTech.cost;
+				else sim.cash -= bestTech.cost;
+				sim.ownedTech[bestTech.node.id] =
+					(sim.ownedTech[bestTech.node.id] ?? 0) + 1;
 				recalcSimStats();
+				applyInstantEffects(bestTech.node.effects);
+				purchaseCount++;
+				const isModelUnlock = bestTech.node.effects.some(
+					(e) => e.type === "modelUnlock",
+				);
 				purchases.push({
 					time: t,
-					type: PurchaseTypeEnum.ai,
-					name: `${m.name} ${m.version}`,
-					cost: best.cost,
-					currency: "cash",
+					type: isModelUnlock ? PurchaseTypeEnum.ai : PurchaseTypeEnum.tech,
+					name: bestTech.node.name,
+					cost: bestTech.cost,
+					currency: bestTech.node.currency,
 					snapshot: capturePurchaseSnapshot(),
 				});
 			}
-			purchaseCount++;
-			boughtThisTick = true;
-		}
 
-		if (boughtThisTick) {
-			const wait = t - lastPurchaseTime;
-			if (wait > longestWait) longestWait = wait;
-			lastPurchaseTime = t;
-		}
+			// ── Buy items ──
+			// At T5 approaching singularity: keep buying but reserve cash.
+			// Don't spend more than 50% of current cash on any item — lets savings
+			// grow naturally while still investing in FLOPS.
+			const cashCap =
+				useCashWin && sim.currentTier >= 5
+					? sim.cash * 0.5
+					: Number.POSITIVE_INFINITY;
+			let boughtThisTick = false;
+			for (let b = 0; b < 5; b++) {
+				const avail = upgrades.filter((u) => {
+					const tier = tiers.find((t2) => t2.id === u.tier);
+					return (
+						tier &&
+						tier.index <= sim.currentTier &&
+						(sim.owned[u.id] ?? 0) < getEffMax(u)
+					);
+				});
+				const availModels =
+					sim.currentTier >= 4
+						? aiModels.filter((m) => {
+								if (sim.ownedModels[m.id]) return false;
+								if (m.requires && !sim.ownedModels[m.requires]) return false;
+								const gateNode = techGatedModels[m.id];
+								if (gateNode && !(sim.ownedTech[gateNode] ?? 0)) return false;
+								return true;
+							})
+						: [];
+
+				const totalLocS =
+					effLocPerKey() * cfg.keysPerSec + autoTypeLoc + calcAutoLoc() + aiLoc;
+				const execCap = sim.aiUnlocked ? flops * sim.flopSlider : flops;
+				const bottlenecked = totalLocS > execCap;
+
+				let best: {
+					type: "u" | "m";
+					item: UpgradeData | AiModel;
+					cost: number;
+				} | null = null;
+				let bestVal = 0;
+
+				for (const u of avail) {
+					const cost = getCost(u);
+					if (cost > sim.cash || cost > cashCap) continue;
+					let val = 0;
+					for (const e of u.effects) {
+						const ev = e.value as number;
+						if (e.type === "flops")
+							val += ev * cashPerLoc() * (bottlenecked ? 2 : 0.5);
+						if (e.type === "locPerKey" && e.op === "add")
+							val +=
+								ev * cfg.keysPerSec * cashPerLoc() * (bottlenecked ? 0.3 : 1);
+						if (
+							e.type === "autoLoc" ||
+							e.type === "freelancerLoc" ||
+							e.type === "internLoc" ||
+							e.type === "devLoc"
+						)
+							val += ev * cashPerLoc() * (bottlenecked ? 0.3 : 1);
+						if (e.type === "teamLoc")
+							val +=
+								ev *
+								cashPerLoc() *
+								(1 + sim.managerCount * 0.5) *
+								(bottlenecked ? 0.3 : 1);
+						if (e.type === "managerLoc")
+							val +=
+								sim.teamLoc * 0.5 * cashPerLoc() * (bottlenecked ? 0.3 : 1);
+						if (e.type === "llmLoc" || e.type === "agentLoc")
+							val += ev * cashPerLoc() * (bottlenecked ? 0.3 : 1);
+						if (e.type === "cashMultiplier")
+							val += Math.min(totalLocS, execCap) * cashPerLoc() * (ev - 1);
+						if (e.type === "tokenMultiplier" && sim.aiUnlocked)
+							val += totalLocS * cashPerLoc() * (ev - 1) * 0.5;
+						if (e.type === "instantCash") val += ev / 60;
+						if (e.type === "llmHostSlot") {
+							const unlockedCount = Object.values(sim.ownedModels).filter(
+								Boolean,
+							).length;
+							const activeCount = Math.min(unlockedCount, sim.llmHostSlots);
+							if (activeCount < unlockedCount) {
+								const sorted = aiModels
+									.filter((m) => sim.ownedModels[m.id])
+									.sort((a, b) => b.locPerSec - a.locPerSec);
+								const nextModel = sorted[activeCount];
+								if (nextModel) {
+									val +=
+										nextModel.locPerSec * sim.aiLocMultiplier * cashPerLoc();
+								}
+							}
+						}
+						if (e.type === "devSpeed" || e.type === "locProductionSpeed")
+							val +=
+								calcAutoLoc() *
+								(ev - 1) *
+								cashPerLoc() *
+								(bottlenecked ? 0.3 : 1);
+					}
+					if (cost > 0 && val / cost > bestVal) {
+						bestVal = val / cost;
+						best = { type: "u", item: u, cost };
+					}
+				}
+
+				for (const m of availModels) {
+					if (m.cost > sim.cash || m.cost > cashCap) continue;
+					const val =
+						(m.locPerSec * sim.aiLocMultiplier * cashPerLoc()) / m.cost;
+					if (val > bestVal) {
+						bestVal = val;
+						best = { type: "m", item: m, cost: m.cost };
+					}
+				}
+
+				if (!best) break;
+
+				if (best.type === "u") {
+					const u = best.item as UpgradeData;
+					sim.cash -= best.cost;
+					sim.owned[u.id] = (sim.owned[u.id] ?? 0) + 1;
+					recalcSimStats();
+					applyInstantEffects(u.effects);
+					purchases.push({
+						time: t,
+						type: PurchaseTypeEnum.upgrade,
+						name: u.name,
+						cost: best.cost,
+						currency: "cash",
+						snapshot: capturePurchaseSnapshot(),
+					});
+				} else {
+					const m = best.item as AiModel;
+					sim.cash -= best.cost;
+					sim.ownedModels[m.id] = true;
+					recalcSimStats();
+					purchases.push({
+						time: t,
+						type: PurchaseTypeEnum.ai,
+						name: `${m.name} ${m.version}`,
+						cost: best.cost,
+						currency: "cash",
+						snapshot: capturePurchaseSnapshot(),
+					});
+				}
+				purchaseCount++;
+				boughtThisTick = true;
+			}
+
+			if (boughtThisTick) {
+				const wait = t - lastPurchaseTime;
+				if (wait > longestWait) longestWait = wait;
+				lastPurchaseTime = t;
+			}
+		} // end balanced purchase AI
 
 		// ── Track tier changes ──
 		if (!tierTimes[sim.currentTier]) {
