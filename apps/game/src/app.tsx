@@ -1,5 +1,6 @@
 import { EditorPanel } from "@components/editor-panel";
 import { GodModePage } from "@components/god-mode-page";
+import { ReadmePage } from "@components/readme-page";
 import { ResizeHandle } from "@components/resize-handle";
 import { RotateNudge } from "@components/rotate-nudge";
 import { SidebarTree } from "@components/sidebar-tree";
@@ -92,6 +93,7 @@ interface TabDef {
 }
 
 const baseTabs: TabDef[] = [
+	{ page: PageEnum.readme, filename: "README.md" },
 	{ page: PageEnum.game, filename: "agi.py" },
 	{ page: PageEnum.tech_tree, filename: "tech-tree.svg" },
 	{ page: PageEnum.settings, filename: "settings.json" },
@@ -474,6 +476,7 @@ const splitBtnCss = css({
 
 function PageContent({ page }: { page: PageEnum }) {
 	return match(page)
+		.with(PageEnum.readme, () => <ReadmePage />)
 		.with(PageEnum.game, () => <EditorPanel />)
 		.with(PageEnum.tech_tree, () => (
 			<Suspense fallback={null}>

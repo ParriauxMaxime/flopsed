@@ -302,6 +302,7 @@ const basePageFiles: Array<{
 	filename: string;
 	dotColor: string;
 }> = [
+	{ page: PageEnum.readme, filename: "README.md", dotColor: "#519aba" },
 	{ page: PageEnum.game, filename: "agi.py", dotColor: "#519aba" },
 	{
 		page: PageEnum.tech_tree,

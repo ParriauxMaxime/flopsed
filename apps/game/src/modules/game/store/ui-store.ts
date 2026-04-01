@@ -7,6 +7,7 @@ export const PageEnum = {
 	tech_tree: "tech_tree",
 	settings: "settings",
 	god_mode: "god_mode",
+	readme: "readme",
 } as const;
 
 export type PageEnum = (typeof PageEnum)[keyof typeof PageEnum];
