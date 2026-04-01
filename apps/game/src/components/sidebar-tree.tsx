@@ -234,8 +234,19 @@ const UpgradeItem = memo(function UpgradeItem({
 					? theme.success
 					: theme.border;
 			}}
-			onClick={() => {
-				if (canAfford && !maxed) buyUpgrade(upgrade);
+			onClick={(e) => {
+				if (canAfford && !maxed) {
+					const el = e.currentTarget;
+					el.style.outline = `2px solid ${theme.success}`;
+					el.style.outlineOffset = "-2px";
+					el.style.filter = "brightness(1.4)";
+					setTimeout(() => {
+						el.style.outline = "";
+						el.style.outlineOffset = "";
+						el.style.filter = "";
+					}, 150);
+					buyUpgrade(upgrade);
+				}
 			}}
 			onKeyDown={(e) => {
 				if (e.key === "Enter" && canAfford && !maxed) buyUpgrade(upgrade);
