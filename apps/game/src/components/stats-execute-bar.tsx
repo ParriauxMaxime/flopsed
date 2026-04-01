@@ -83,7 +83,7 @@ export function StatsExecuteBar() {
 				setTimeout(() => {
 					btn.style.background = "transparent";
 					btn.style.transform = "scale(1)";
-				}, 100);
+				}, 50);
 			});
 		}
 	}, [executeManual, theme.success]);
