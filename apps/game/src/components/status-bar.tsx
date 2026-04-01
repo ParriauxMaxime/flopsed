@@ -71,18 +71,8 @@ export function StatusBar() {
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const muted = useAudioStore((s) => s.muted);
 	const toggleMute = useAudioStore((s) => s.toggleMute);
-	const sidebarCollapsed = useUiStore((s) => s.sidebarCollapsed);
-	const statsPanelCollapsed = useUiStore((s) => s.statsPanelCollapsed);
-	const sidebarUnlocked = useGameStore(
-		(s) => (s.ownedTechNodes.unlock_sidebar ?? 0) > 0,
-	);
-	const statsPanelUnlocked = useGameStore(
-		(s) => (s.ownedTechNodes.unlock_stats_panel ?? 0) > 0,
-	);
 	const prestigeCount = useGameStore((s) => s.prestigeCount);
 	const prestigeMultiplier = useGameStore((s) => s.prestigeMultiplier);
-	const toggleSidebar = useUiStore((s) => s.toggleSidebar);
-	const toggleStatsPanel = useUiStore((s) => s.toggleStatsPanel);
 	const theme = useIdeTheme();
 	const { t } = useTranslation();
 
@@ -139,64 +129,6 @@ export function StatusBar() {
 				</button>
 				<span>{t("status_bar.python")}</span>
 				<span>{t("status_bar.utf8")}</span>
-				{sidebarUnlocked && (
-					<button
-						type="button"
-						css={toggleBtnCss}
-						style={{ opacity: sidebarCollapsed ? 0.5 : 0.8 }}
-						onClick={toggleSidebar}
-						title={t("sidebar.title")}
-					>
-						<svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-							<rect
-								x="1.5"
-								y="2.5"
-								width="13"
-								height="11"
-								rx="1"
-								stroke="currentColor"
-								strokeWidth="1.2"
-							/>
-							<line
-								x1="5"
-								y1="3"
-								x2="5"
-								y2="13"
-								stroke="currentColor"
-								strokeWidth="1.2"
-							/>
-						</svg>
-					</button>
-				)}
-				{statsPanelUnlocked && (
-					<button
-						type="button"
-						css={toggleBtnCss}
-						style={{ opacity: statsPanelCollapsed ? 0.5 : 0.8 }}
-						onClick={toggleStatsPanel}
-						title={t("stats_panel.title")}
-					>
-						<svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-							<rect
-								x="1.5"
-								y="2.5"
-								width="13"
-								height="11"
-								rx="1"
-								stroke="currentColor"
-								strokeWidth="1.2"
-							/>
-							<line
-								x1="11"
-								y1="3"
-								x2="11"
-								y2="13"
-								stroke="currentColor"
-								strokeWidth="1.2"
-							/>
-						</svg>
-					</button>
-				)}
 			</div>
 		</div>
 	);
