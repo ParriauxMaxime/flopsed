@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { tiers, useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { useRatePerSec } from "../hooks/use-rate-per-sec";
@@ -69,7 +70,23 @@ export function StatsExecuteBar() {
 	const executeManual = useGameStore((s) => s.executeManual);
 	const flopSlider = useGameStore((s) => s.flopSlider);
 
+	const btnRef = useRef<HTMLButtonElement>(null);
 	const cashRate = useRatePerSec(totalCash);
+
+	const handleExecute = useCallback(() => {
+		executeManual();
+		const btn = btnRef.current;
+		if (btn) {
+			btn.style.background = `${theme.success}40`;
+			btn.style.transform = "scale(0.97)";
+			requestAnimationFrame(() => {
+				setTimeout(() => {
+					btn.style.background = "transparent";
+					btn.style.transform = "scale(1)";
+				}, 100);
+			});
+		}
+	}, [executeManual, theme.success]);
 
 	const tier = tiers[currentTierIndex];
 	const cashPerLoc = tier?.cashPerLoc ?? 0.1;
@@ -101,9 +118,10 @@ export function StatsExecuteBar() {
 
 	const manualButton = (
 		<button
+			ref={btnRef}
 			type="button"
 			css={btnCss}
-			onClick={executeManual}
+			onClick={handleExecute}
 			disabled={execLoc <= 0}
 			style={{
 				border: `1px solid ${theme.success}`,
