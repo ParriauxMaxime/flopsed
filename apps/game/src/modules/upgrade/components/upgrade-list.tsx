@@ -27,10 +27,6 @@ const upgradeStyle = css({
 	transition: "all 0.15s",
 	position: "relative",
 	"&:hover": { borderColor: "#58a6ff", background: "#1a2030" },
-	'&[data-flash="true"]': {
-		borderColor: "#3fb950 !important",
-		background: "rgba(63, 185, 80, 0.2) !important",
-	},
 });
 
 const lockedStyle = css({
@@ -91,8 +87,14 @@ function UpgradeCard({ upgrade }: { upgrade: Upgrade }) {
 		if (!canAfford || maxed) return;
 		const el = btnRef.current;
 		if (el) {
-			el.setAttribute("data-flash", "true");
-			setTimeout(() => el.removeAttribute("data-flash"), 200);
+			el.style.outline = "2px solid #3fb950";
+			el.style.outlineOffset = "-2px";
+			el.style.filter = "brightness(1.4)";
+			setTimeout(() => {
+				el.style.outline = "";
+				el.style.outlineOffset = "";
+				el.style.filter = "";
+			}, 200);
 		}
 		buyUpgrade(upgrade);
 	}, [canAfford, maxed, buyUpgrade, upgrade]);
