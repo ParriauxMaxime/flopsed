@@ -93,7 +93,7 @@ export const useUiStore = create<UiState>()(
 	persist(
 		(set, get) => ({
 			page: PageEnum.game,
-			openTabs: [PageEnum.game, PageEnum.settings],
+			openTabs: [PageEnum.readme, PageEnum.game, PageEnum.settings],
 			rightPage: PageEnum.tech_tree,
 			rightOpenTabs: [PageEnum.tech_tree],
 			lastActivePane: PaneEnum.left,
@@ -280,7 +280,7 @@ export const useUiStore = create<UiState>()(
 					terminalLog: [],
 					terminalOpen: true,
 					page: PageEnum.game,
-					openTabs: [PageEnum.game, PageEnum.settings],
+					openTabs: [PageEnum.readme, PageEnum.game, PageEnum.settings],
 					rightPage: PageEnum.tech_tree,
 					rightOpenTabs: [PageEnum.tech_tree],
 					lastActivePane: PaneEnum.left,

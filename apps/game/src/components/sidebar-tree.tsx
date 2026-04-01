@@ -322,15 +322,23 @@ const IS_DEV = location.hostname === "localhost";
 
 export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 	const page = useUiStore((s) => s.page);
+	const openTabs = useUiStore((s) => s.openTabs);
+	const rightOpenTabs = useUiStore((s) => s.rightOpenTabs);
+	const splitEnabled = useUiStore((s) => s.splitEnabled);
 	const openInActivePane = useUiStore((s) => s.openInActivePane);
 	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const ownedTechNodes = useGameStore((s) => s.ownedTechNodes);
 	const reachedMilestones = useGameStore((s) => s.reachedMilestones);
 	const hasReachedSingularity = useGameStore((s) => s.hasReachedSingularity);
-	const pageFiles =
+	const allPageFiles =
 		IS_DEV || hasReachedSingularity
 			? [...basePageFiles, godModeEntry]
 			: basePageFiles;
+	const allOpenPages = new Set([
+		...openTabs,
+		...(splitEnabled ? rightOpenTabs : []),
+	]);
+	const openEditorFiles = allPageFiles.filter((f) => allOpenPages.has(f.page));
 	const { t } = useTranslation();
 	const theme = useIdeTheme();
 	const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -402,14 +410,67 @@ export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 					{`.sidebar-scroll::-webkit-scrollbar-thumb { background: ${theme.border}; border-radius: 3px; }`}
 				</style>
 				{/* Open Editors */}
-				<div css={sectionHeaderBaseCss} style={{ color: theme.textMuted }}>
-					&#9662; {t("sidebar.open_editors")}
+				{openEditorFiles.length > 0 && (
+					<>
+						<div css={sectionHeaderBaseCss} style={{ color: theme.textMuted }}>
+							&#9662; {t("sidebar.open_editors")}
+						</div>
+						{openEditorFiles.map((f) => {
+							const active = f.page === page;
+							return (
+								<div
+									key={f.page}
+									css={{
+										padding: "2px 8px 2px 28px",
+										display: "flex",
+										alignItems: "center",
+										gap: 6,
+										fontSize: 13,
+										height: 22,
+										cursor: "pointer",
+										background: active ? theme.activeBg : "transparent",
+										color: active ? theme.foreground : theme.textMuted,
+										"&:hover": {
+											background: theme.activeBg,
+											color: theme.foreground,
+										},
+									}}
+									onClick={() => openInActivePane(f.page)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") openInActivePane(f.page);
+									}}
+									role="button"
+									tabIndex={0}
+								>
+									<span
+										css={{
+											width: 6,
+											height: 6,
+											borderRadius: "50%",
+											background: f.dotColor,
+											flexShrink: 0,
+										}}
+									/>
+									{f.filename}
+								</div>
+							);
+						})}
+					</>
+				)}
+
+				{/* All files */}
+				<div
+					css={sectionHeaderBaseCss}
+					style={{ color: theme.textMuted, marginTop: 8 }}
+				>
+					&#9662; {t("sidebar.files", { defaultValue: "Files" })}
 				</div>
-				{pageFiles.map((f) => {
+				{allPageFiles.map((f) => {
 					const active = f.page === page;
+					const isOpen = allOpenPages.has(f.page);
 					return (
 						<div
-							key={f.page}
+							key={`file-${f.page}`}
 							css={{
 								padding: "2px 8px 2px 28px",
 								display: "flex",
@@ -419,7 +480,7 @@ export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 								height: 22,
 								cursor: "pointer",
 								background: active ? theme.activeBg : "transparent",
-								color: active ? theme.foreground : theme.textMuted,
+								color: isOpen ? theme.foreground : theme.textMuted,
 								"&:hover": {
 									background: theme.activeBg,
 									color: theme.foreground,
@@ -437,7 +498,8 @@ export function SidebarTree({ onCollapse }: { onCollapse?: () => void }) {
 									width: 6,
 									height: 6,
 									borderRadius: "50%",
-									background: f.dotColor,
+									background: isOpen ? f.dotColor : "transparent",
+									border: isOpen ? "none" : `1px solid ${f.dotColor}`,
 									flexShrink: 0,
 								}}
 							/>
