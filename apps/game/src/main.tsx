@@ -5,13 +5,11 @@ import { App } from "./app";
 
 // Suppress benign ResizeObserver loop warnings from React Flow
 // See: https://github.com/xyflow/xyflow/issues/3076
-const origError = window.onerror;
-window.onerror = (msg, ...args) => {
-	if (typeof msg === "string" && msg.includes("ResizeObserver loop")) {
-		return true;
+window.addEventListener("error", (e) => {
+	if (e.message?.includes("ResizeObserver loop")) {
+		e.stopImmediatePropagation();
 	}
-	return origError ? origError(msg, ...args) : false;
-};
+});
 
 declare const __BUILD_HASH__: string | undefined;
 
