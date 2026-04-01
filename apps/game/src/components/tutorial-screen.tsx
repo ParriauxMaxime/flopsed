@@ -398,11 +398,48 @@ export function TutorialTip() {
 
 	const logRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const panelRef = useRef<HTMLDivElement>(null);
 	const [input, setInput] = useState("");
 	const [historyIndex, setHistoryIndex] = useState(-1);
 	const [isNearBottom, setIsNearBottom] = useState(true);
 	const [hasNew, setHasNew] = useState(false);
 	const prevLogLen = useRef(terminalLog.length);
+	const [contentHeight, setContentHeight] = useState(200);
+	const isDragging = useRef(false);
+
+	// Drag-to-resize handler
+	const handleDragStart = useCallback(
+		(e: React.MouseEvent) => {
+			if (!terminalOpen) return;
+			e.preventDefault();
+			isDragging.current = true;
+			const startY = e.clientY;
+			const startHeight = contentHeight;
+
+			const onMove = (ev: MouseEvent) => {
+				const delta = startY - ev.clientY;
+				const newHeight = Math.max(
+					80,
+					Math.min(window.innerHeight * 0.7, startHeight + delta),
+				);
+				setContentHeight(newHeight);
+			};
+
+			const onUp = () => {
+				isDragging.current = false;
+				document.removeEventListener("mousemove", onMove);
+				document.removeEventListener("mouseup", onUp);
+				document.body.style.cursor = "";
+				document.body.style.userSelect = "";
+			};
+
+			document.body.style.cursor = "row-resize";
+			document.body.style.userSelect = "none";
+			document.addEventListener("mousemove", onMove);
+			document.addEventListener("mouseup", onUp);
+		},
+		[terminalOpen, contentHeight],
+	);
 
 	// Auto-focus input when terminal is open
 	useEffect(() => {
@@ -558,9 +595,22 @@ export function TutorialTip() {
 	return (
 		<div
 			data-terminal
+			ref={panelRef}
 			css={panelCss}
 			style={{ borderTop: `1px solid ${theme.border}` }}
 		>
+			{/* Drag handle — only when expanded */}
+			{terminalOpen && (
+				<div
+					css={{
+						height: 4,
+						cursor: "row-resize",
+						flexShrink: 0,
+						"&:hover": { background: theme.accent },
+					}}
+					onMouseDown={handleDragStart}
+				/>
+			)}
 			{/* Tab header — always visible, clickable when collapsed */}
 			<div
 				css={tabBarCss}
@@ -607,9 +657,8 @@ export function TutorialTip() {
 			<div
 				css={{
 					overflow: "hidden",
-					transition: "height 0.25s ease",
-					height: terminalOpen ? "25vh" : 0,
-					minHeight: terminalOpen ? 100 : 0,
+					transition: isDragging.current ? "none" : "height 0.25s ease",
+					height: terminalOpen ? contentHeight : 0,
 					display: "flex",
 					flexDirection: "column",
 				}}
