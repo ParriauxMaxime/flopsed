@@ -662,6 +662,7 @@ export function App() {
 						zoom: uiZoom / 100,
 						fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
 					},
+					singularity && { position: "relative" as const, zIndex: 10 },
 					singularity && singularityAnimate && shellCollapseCss,
 				]}
 			>

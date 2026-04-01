@@ -116,7 +116,7 @@ const ERROR_DISPLAY_DURATION = 5000;
 const overlayBaseCss = css({
 	position: "fixed",
 	inset: 0,
-	zIndex: 9999,
+	zIndex: 0,
 	display: "flex",
 	fontFamily: "'Courier New', monospace",
 });
@@ -173,11 +173,6 @@ const reconnectedCss = css({
 	animation: `${blinkAnim} 1s ease-in-out infinite`,
 	marginLeft: 8,
 	whiteSpace: "nowrap",
-});
-
-const slideIn = keyframes({
-	from: { transform: "translateX(100%)" },
-	to: { transform: "translateX(0)" },
 });
 
 const contentAreaCss = css({
@@ -575,7 +570,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 
 	// ── Render helpers ──
 
-	const showCli = phaseAtLeast(phase, PhaseEnum.cli_fade_in);
+	const showCli = phaseAtLeast(phase, PhaseEnum.crt_collapse);
 	const showReconnected = phaseAtLeast(phase, PhaseEnum.comeback_typing);
 	const showError = phaseAtLeast(phase, PhaseEnum.error_display);
 	const errorStruck = phaseAtLeast(phase, PhaseEnum.comeback_typing);
@@ -610,17 +605,8 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 	}
 
 	return (
-		<div css={[overlayBaseCss, { background: "rgba(0, 0, 0, 0.4)" }]}>
-			<div
-				css={[
-					cliContainerCss,
-					{
-						animation: animate
-							? `${slideIn} ${CLI_FADE_DURATION}ms ease-out forwards`
-							: undefined,
-					},
-				]}
-			>
+		<div css={[overlayBaseCss, { background: "#0d1117" }]}>
+			<div css={cliContainerCss}>
 				{/* Top bar */}
 				<div css={topBarCss}>
 					<button
