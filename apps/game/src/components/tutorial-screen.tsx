@@ -435,6 +435,13 @@ export function TutorialTip() {
 	const [hasNew, setHasNew] = useState(false);
 	const prevLogLen = useRef(terminalLog.length);
 
+	// Auto-focus input when terminal is open
+	useEffect(() => {
+		if (terminalOpen) {
+			requestAnimationFrame(() => inputRef.current?.focus());
+		}
+	}, [terminalOpen]);
+
 	// Auto-scroll when near bottom
 	useEffect(() => {
 		if (terminalLog.length > prevLogLen.current) {
@@ -519,6 +526,8 @@ export function TutorialTip() {
 
 				setInput("");
 				setHistoryIndex(-1);
+				// Re-focus input after command execution
+				requestAnimationFrame(() => inputRef.current?.focus());
 				return;
 			}
 
