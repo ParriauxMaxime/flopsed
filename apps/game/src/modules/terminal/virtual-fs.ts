@@ -67,14 +67,17 @@ export function buildFilesystem(): FsNode {
 
 	const tierNames = tiers.map((t) => t.id);
 
-	// ── upgrades/ ──
-	const upgradeTierDirs: FsNode[] = tiers.map((tier, i) => {
-		const tierUpgrades = upgrades.filter((u) => u.tier === tier.id);
-		const files = tierUpgrades.map((u) =>
-			makeFile(`${u.id}.ts`, buildUpgradeFile(u, ownedUpgrades[u.id] ?? 0)),
-		);
-		return makeDir(`tier${i}/`, files, i > currentTierIndex);
-	});
+	// ── upgrades/ — only show unlocked tiers ──
+	const upgradeTierDirs: FsNode[] = tiers
+		.map((tier, i) => {
+			if (i > currentTierIndex) return null; // Hide future tiers entirely
+			const tierUpgrades = upgrades.filter((u) => u.tier === tier.id);
+			const files = tierUpgrades.map((u) =>
+				makeFile(`${u.id}.ts`, buildUpgradeFile(u, ownedUpgrades[u.id] ?? 0)),
+			);
+			return makeDir(`tier${i}/`, files);
+		})
+		.filter((d): d is FsNode => d !== null);
 
 	// ── tech-tree/ ──
 	const techFiles = techNodes
@@ -148,17 +151,19 @@ export function buildFilesystem(): FsNode {
 					]
 				: ["# agi.py", "# coming soon...", "pass"];
 
-	// ── Root ──
+	// ── Root — only show what the player has unlocked ──
 	const children: FsNode[] = [
 		makeDir("upgrades/", upgradeTierDirs),
 		makeDir("tech-tree/", techFiles),
 		makeFile("README.md", readme),
 		makeFile(".env", envContent),
-		makeFile("agi.py", agiContent),
 	];
 
 	if (aiUnlocked) {
-		children.splice(2, 0, makeDir("models/", modelFiles));
+		children.push(makeDir("models/", modelFiles));
+	}
+	if (currentTierIndex >= 4) {
+		children.push(makeFile("agi.py", agiContent));
 	}
 
 	return makeDir("~", children);
