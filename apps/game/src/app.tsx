@@ -515,6 +515,7 @@ function TabbedPane({
 	tabs,
 	openTabs,
 	onCloseTab,
+	closable = true,
 	onPaneFocus,
 	paneId,
 	showSplitBtn,
@@ -526,6 +527,7 @@ function TabbedPane({
 	tabs: TabDef[];
 	openTabs: PageEnum[];
 	onCloseTab: (page: PageEnum) => void;
+	closable?: boolean;
 	onPaneFocus?: () => void;
 	paneId: "left" | "right";
 	showSplitBtn?: boolean;
@@ -581,7 +583,7 @@ function TabbedPane({
 					return (
 						<div
 							key={tab.page}
-							draggable
+							draggable={closable}
 							onDragStart={(e) => {
 								e.dataTransfer.setData(
 									"application/x-tab",
@@ -629,34 +631,36 @@ function TabbedPane({
 								}}
 							/>
 							<span css={{ fontFamily: "inherit" }}>{tab.filename}</span>
-							<button
-								type="button"
-								css={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									width: 20,
-									height: 20,
-									border: "none",
-									background: "transparent",
-									color: active ? theme.textMuted : "transparent",
-									borderRadius: 3,
-									cursor: "pointer",
-									fontSize: 14,
-									lineHeight: 1,
-									fontFamily: "inherit",
-									"&:hover": {
-										background: theme.border,
-										color: theme.foreground,
-									},
-								}}
-								onClick={(e) => {
-									e.stopPropagation();
-									onCloseTab(tab.page);
-								}}
-							>
-								×
-							</button>
+							{closable && (
+								<button
+									type="button"
+									css={{
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+										width: 20,
+										height: 20,
+										border: "none",
+										background: "transparent",
+										color: active ? theme.textMuted : "transparent",
+										borderRadius: 3,
+										cursor: "pointer",
+										fontSize: 14,
+										lineHeight: 1,
+										fontFamily: "inherit",
+										"&:hover": {
+											background: theme.border,
+											color: theme.foreground,
+										},
+									}}
+									onClick={(e) => {
+										e.stopPropagation();
+										onCloseTab(tab.page);
+									}}
+								>
+									×
+								</button>
+							)}
 						</div>
 					);
 				})}
@@ -885,6 +889,7 @@ export function App() {
 								tabs={middleTabs}
 								openTabs={openTabs}
 								onCloseTab={closeTab}
+								closable={sidebarUnlocked}
 								onPaneFocus={() => focusPane("left")}
 								paneId="left"
 								showSplitBtn
@@ -906,6 +911,7 @@ export function App() {
 										tabs={middleTabs}
 										openTabs={rightOpenTabs}
 										onCloseTab={closeRightTab}
+										closable={sidebarUnlocked}
 										onPaneFocus={() => focusPane("right")}
 										paneId="right"
 									/>
