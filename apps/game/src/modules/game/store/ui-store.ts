@@ -51,6 +51,9 @@ interface UiState {
 	terminalOpen: boolean;
 	techTreeViewport: TechTreeViewport;
 	uiZoom: number;
+	sidebarWidth: number;
+	statsPanelWidth: number;
+	splitRatio: number;
 	sidebarCollapsed: boolean;
 	statsPanelCollapsed: boolean;
 	setPage: (page: PageEnum) => void;
@@ -70,6 +73,9 @@ interface UiState {
 	toggleTerminal: () => void;
 	setEditorTheme: (theme: EditorThemeEnum) => void;
 	setUiZoom: (size: number) => void;
+	setSidebarWidth: (w: number) => void;
+	setStatsPanelWidth: (w: number) => void;
+	setSplitRatio: (r: number) => void;
 	showTip: (id: string) => void;
 	pushTerminalLines: (lines: ShellLine[]) => void;
 	resetAll: () => void;
@@ -99,6 +105,9 @@ export const useUiStore = create<UiState>()(
 				zoom: 1,
 			},
 			uiZoom: 100,
+			sidebarWidth: 260,
+			statsPanelWidth: 280,
+			splitRatio: 0.5,
 			sidebarCollapsed: true,
 			statsPanelCollapsed: true,
 
@@ -240,6 +249,12 @@ export const useUiStore = create<UiState>()(
 			toggleTerminal: () => set((s) => ({ terminalOpen: !s.terminalOpen })),
 			setEditorTheme: (editorTheme) => set({ editorTheme }),
 			setUiZoom: (value) => set({ uiZoom: Math.min(150, Math.max(75, value)) }),
+			setSidebarWidth: (w) =>
+				set({ sidebarWidth: Math.min(500, Math.max(160, w)) }),
+			setStatsPanelWidth: (w) =>
+				set({ statsPanelWidth: Math.min(500, Math.max(200, w)) }),
+			setSplitRatio: (r) =>
+				set({ splitRatio: Math.min(0.8, Math.max(0.2, r)) }),
 			setTechTreeViewport: (viewport) => set({ techTreeViewport: viewport }),
 			showTip: (id) => {
 				const { seenTips } = get();
@@ -270,6 +285,9 @@ export const useUiStore = create<UiState>()(
 						zoom: 1,
 					},
 					uiZoom: 100,
+					sidebarWidth: 260,
+					statsPanelWidth: 280,
+					splitRatio: 0.5,
 				});
 				localStorage.removeItem("flopsed-ui");
 			},
@@ -285,6 +303,9 @@ export const useUiStore = create<UiState>()(
 				splitEnabled: state.splitEnabled,
 				sidebarCollapsed: state.sidebarCollapsed,
 				statsPanelCollapsed: state.statsPanelCollapsed,
+				sidebarWidth: state.sidebarWidth,
+				statsPanelWidth: state.statsPanelWidth,
+				splitRatio: state.splitRatio,
 				techTreeViewport: state.techTreeViewport,
 				editorTheme: state.editorTheme,
 				uiZoom: state.uiZoom,

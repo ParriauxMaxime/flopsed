@@ -1,5 +1,6 @@
 import { EditorPanel } from "@components/editor-panel";
 import { GodModePage } from "@components/god-mode-page";
+import { ResizeHandle } from "@components/resize-handle";
 import { RotateNudge } from "@components/rotate-nudge";
 import { SidebarTree } from "@components/sidebar-tree";
 import { StatsPanel } from "@components/stats-panel";
@@ -805,6 +806,12 @@ export function App() {
 	const focusPane = useUiStore((s) => s.focusPane);
 	const toggleSplit = useUiStore((s) => s.toggleSplit);
 	const uiZoom = useUiStore((s) => s.uiZoom);
+	const sidebarWidth = useUiStore((s) => s.sidebarWidth);
+	const setSidebarWidth = useUiStore((s) => s.setSidebarWidth);
+	const statsPanelWidth = useUiStore((s) => s.statsPanelWidth);
+	const setStatsPanelWidth = useUiStore((s) => s.setStatsPanelWidth);
+	const splitRatio = useUiStore((s) => s.splitRatio);
+	const setSplitRatio = useUiStore((s) => s.setSplitRatio);
 	const sidebarCollapsed = useUiStore((s) => s.sidebarCollapsed);
 	const toggleSidebar = useUiStore((s) => s.toggleSidebar);
 	const statsPanelCollapsed = useUiStore((s) => s.statsPanelCollapsed);
@@ -944,12 +951,18 @@ export function App() {
 						css={{
 							overflow: "hidden",
 							flexShrink: 0,
-							width: sidebarUnlocked && !sidebarCollapsed ? 260 : 0,
-							transition: "width 0.25s ease",
+							width: sidebarUnlocked && !sidebarCollapsed ? sidebarWidth : 0,
+							transition:
+								sidebarUnlocked && !sidebarCollapsed
+									? "none"
+									: "width 0.25s ease",
 						}}
 					>
 						<SidebarTree onCollapse={toggleSidebar} />
 					</div>
+					{sidebarUnlocked && !sidebarCollapsed && (
+						<ResizeHandle onResize={(d) => setSidebarWidth(sidebarWidth + d)} />
+					)}
 
 					{/* Center: tabbed panes + tutorial */}
 					<div
@@ -961,39 +974,63 @@ export function App() {
 							minWidth: 0,
 						}}
 					>
-						<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
-							<TabbedPane
-								activePage={page}
-								onSetPage={setPage}
-								tabs={middleTabs}
-								openTabs={openTabs}
-								onCloseTab={closeTab}
-								closable={sidebarUnlocked}
-								onPaneFocus={() => focusPane("left")}
-								paneId="left"
-								showSplitBtn
-								splitActive={splitEnabled}
-								onToggleSplit={toggleSplit}
-							/>
+						<div
+							data-pane-container
+							css={{ display: "flex", flex: 1, overflow: "hidden" }}
+						>
+							<div
+								css={{
+									display: "flex",
+									flex: splitEnabled ? splitRatio : 1,
+									overflow: "hidden",
+									minWidth: 200,
+								}}
+							>
+								<TabbedPane
+									activePage={page}
+									onSetPage={setPage}
+									tabs={middleTabs}
+									openTabs={openTabs}
+									onCloseTab={closeTab}
+									closable={sidebarUnlocked}
+									onPaneFocus={() => focusPane("left")}
+									paneId="left"
+									showSplitBtn
+									splitActive={splitEnabled}
+									onToggleSplit={toggleSplit}
+								/>
+							</div>
 							{splitEnabled && (
 								<>
-									<div
-										css={{
-											width: 1,
-											background: theme.border,
-											flexShrink: 0,
+									<ResizeHandle
+										onResize={(d) => {
+											const container = document.querySelector(
+												"[data-pane-container]",
+											);
+											if (!container) return;
+											const total = container.clientWidth;
+											setSplitRatio(splitRatio + d / total);
 										}}
 									/>
-									<TabbedPane
-										activePage={rightPage}
-										onSetPage={setRightPage}
-										tabs={middleTabs}
-										openTabs={rightOpenTabs}
-										onCloseTab={closeRightTab}
-										closable={sidebarUnlocked}
-										onPaneFocus={() => focusPane("right")}
-										paneId="right"
-									/>
+									<div
+										css={{
+											display: "flex",
+											flex: 1 - splitRatio,
+											overflow: "hidden",
+											minWidth: 200,
+										}}
+									>
+										<TabbedPane
+											activePage={rightPage}
+											onSetPage={setRightPage}
+											tabs={middleTabs}
+											openTabs={rightOpenTabs}
+											onCloseTab={closeRightTab}
+											closable={sidebarUnlocked}
+											onPaneFocus={() => focusPane("right")}
+											paneId="right"
+										/>
+									</div>
 								</>
 							)}
 						</div>
@@ -1001,12 +1038,23 @@ export function App() {
 					</div>
 
 					{/* Right stats panel (full height) */}
+					{statsPanelUnlocked && !statsPanelCollapsed && (
+						<ResizeHandle
+							onResize={(d) => setStatsPanelWidth(statsPanelWidth - d)}
+						/>
+					)}
 					<div
 						css={{
 							overflow: "hidden",
 							flexShrink: 0,
-							width: statsPanelUnlocked && !statsPanelCollapsed ? 280 : 0,
-							transition: "width 0.25s ease",
+							width:
+								statsPanelUnlocked && !statsPanelCollapsed
+									? statsPanelWidth
+									: 0,
+							transition:
+								statsPanelUnlocked && !statsPanelCollapsed
+									? "none"
+									: "width 0.25s ease",
 						}}
 					>
 						<StatsPanel onCollapse={toggleStatsPanel} />

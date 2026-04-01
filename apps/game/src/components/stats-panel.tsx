@@ -14,8 +14,8 @@ import { StatsTokensSection } from "./stats-tokens-section";
 const panelCss = css({
 	display: "flex",
 	flexDirection: "column",
-	width: 280,
-	minWidth: 280,
+	width: "100%",
+	minWidth: 0,
 	height: "100%",
 	flexShrink: 0,
 	overflow: "hidden",
