@@ -44,6 +44,12 @@ const globalStyles = css({
 	"html, body": {
 		background: "#000",
 	},
+	"#root": {
+		userSelect: "none",
+	},
+	"input, textarea": {
+		userSelect: "text",
+	},
 });
 
 // ── Shared styles ──
