@@ -554,8 +554,14 @@ export function TutorialTip() {
 			if (e.key === "Tab") {
 				e.preventDefault();
 
-				// First tab press or input changed — build match list
-				if (tabOriginal.current !== input) {
+				// Detect if we're mid-cycle: tabOriginal is set and
+				// input matches what the last cycle produced
+				const isCycling =
+					tabOriginal.current !== "" && tabMatches.current.length > 0;
+
+				if (!isCycling) {
+					// First Tab press — snapshot the original input and build matches
+					// If input ends with "/", complete inside that dir (empty prefix)
 					tabOriginal.current = input;
 					tabMatches.current = shellEngine.autocomplete(input);
 					tabIndex.current = -1;
@@ -568,17 +574,16 @@ export function TutorialTip() {
 				tabIndex.current = (tabIndex.current + 1) % matches.length;
 				const match = matches[tabIndex.current];
 
-				// Rebuild input: keep everything up to the last word,
-				// then append the match with its parent path prefix
-				const parts = input.split(/\s+/);
-				const lastWord = parts[parts.length - 1] ?? "";
+				// Rebuild from the ORIGINAL input, not current (which was modified by cycling)
+				const baseParts = tabOriginal.current.split(/\s+/);
+				const lastWord = baseParts[baseParts.length - 1] ?? "";
 
 				// Preserve parent path prefix for path completions
 				const slashIdx = lastWord.lastIndexOf("/");
 				const prefix = slashIdx >= 0 ? lastWord.slice(0, slashIdx + 1) : "";
 
-				parts[parts.length - 1] = prefix + match;
-				setInput(parts.join(" "));
+				baseParts[baseParts.length - 1] = prefix + match;
+				setInput(baseParts.join(" "));
 				return;
 			}
 
