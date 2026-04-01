@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import type { Upgrade } from "@modules/game";
 import {
 	allUpgrades,
@@ -26,12 +26,15 @@ const upgradeStyle = css({
 	transition: "all 0.15s",
 	position: "relative",
 	"&:hover": { borderColor: "#58a6ff", background: "#1a2030" },
-	"&:active:not(:disabled)": {
-		transform: "scale(0.97)",
-		background: "rgba(63, 185, 80, 0.15)",
-		borderColor: "#3fb950",
-		transition: "all 0.05s",
-	},
+});
+
+const purchaseFlash = keyframes({
+	"0%": { borderColor: "#3fb950", background: "rgba(63, 185, 80, 0.2)" },
+	"100%": { borderColor: "#1e2630", background: "#161b22" },
+});
+
+const flashStyle = css({
+	animation: `${purchaseFlash} 0.3s ease-out`,
 });
 
 const lockedStyle = css({
@@ -94,6 +97,7 @@ function UpgradeCard({ upgrade }: { upgrade: Upgrade }) {
 				upgradeStyle,
 				!canAfford && !maxed && lockedStyle,
 				maxed && maxedStyle,
+				owned > 0 && !maxed && flashStyle,
 			]}
 			onClick={() => {
 				if (canAfford && !maxed) buyUpgrade(upgrade);
@@ -148,7 +152,10 @@ export function UpgradeList() {
 	return (
 		<div>
 			{sorted.map((upgrade) => (
-				<UpgradeCard key={upgrade.id} upgrade={upgrade} />
+				<UpgradeCard
+					key={`${upgrade.id}-${state.ownedUpgrades[upgrade.id] ?? 0}`}
+					upgrade={upgrade}
+				/>
 			))}
 		</div>
 	);

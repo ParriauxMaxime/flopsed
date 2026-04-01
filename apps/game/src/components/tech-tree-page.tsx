@@ -514,17 +514,20 @@ export function TechTreePage() {
 
 			if (!maxed && canAfford) {
 				researchNode(techNode);
-				// Flash the node for tactile feedback
+				// Flash the node for tactile feedback (use outline/filter to avoid
+				// clobbering React Flow's inline transform: translate())
 				const el = document.querySelector(
-					`[data-id="${node.id}"]`,
+					`[data-id="${node.id}"] > div`,
 				) as HTMLElement | null;
 				if (el) {
-					el.style.transform = "scale(0.95)";
-					el.style.boxShadow = "0 0 12px rgba(63, 185, 80, 0.5)";
+					el.style.outline = "2px solid #3fb950";
+					el.style.outlineOffset = "-2px";
+					el.style.filter = "brightness(1.3)";
 					setTimeout(() => {
-						el.style.transform = "";
-						el.style.boxShadow = "";
-					}, 50);
+						el.style.outline = "";
+						el.style.outlineOffset = "";
+						el.style.filter = "";
+					}, 150);
 				}
 				if (isMobile) setHovered(null);
 			} else if (isMobile) {
