@@ -47,6 +47,9 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 	const { t } = useTranslation();
 	const theme = useIdeTheme();
 	const sessionStartTime = useGameStore((s) => s.sessionStartTime);
+	const timelineUnlocked = useGameStore(
+		(s) => (s.ownedTechNodes.unlock_session_timeline ?? 0) > 0,
+	);
 
 	const [elapsed, setElapsed] = useState(0);
 
@@ -129,7 +132,7 @@ export function StatsPanel({ onCollapse }: { onCollapse?: () => void }) {
 				<StatsLocSection />
 				<StatsTokensSection />
 				<StatsFlopsSection />
-				<StatsTierBar />
+				{timelineUnlocked && <StatsTierBar />}
 				<StatsHistory />
 			</div>
 
