@@ -61,6 +61,7 @@ const sourceValueCss = css({
 interface AiSourceRow {
 	name: string;
 	tokenPerSec: number;
+	locPerSec: number;
 	flopsCost: number;
 	color: string;
 }
@@ -75,48 +76,69 @@ export function StatsTokensSection() {
 	const flops = useGameStore((s) => s.flops);
 	const flopSlider = useGameStore((s) => s.flopSlider);
 
-	const { aiSources, totalTokenPerSec, aiFlops, totalDemand, saturation } =
-		useMemo(() => {
-			if (!aiUnlocked)
-				return {
-					aiSources: [],
-					totalTokenPerSec: 0,
-					aiFlops: 0,
-					totalDemand: 0,
-					saturation: 0,
-				};
-			const activeModels = aiModels
-				.filter((m) => unlockedModels[m.id])
-				.slice(0, llmHostSlots);
-			const af = flops * (1 - flopSlider);
-			let td = 0;
-			for (const m of activeModels) td += m.flopsCost;
-			const sat = td > 0 ? Math.min(1, af / td) : 0;
-			const rows: AiSourceRow[] = activeModels.map((model) => ({
-				name: `${model.name} ${model.version}`,
-				tokenPerSec: model.tokenCost * sat,
-				flopsCost: model.flopsCost,
-				color: MODEL_COLORS[model.family] ?? theme.textMuted,
-			}));
-			rows.sort((a, b) => b.tokenPerSec - a.tokenPerSec);
-			const total = rows.reduce((sum, r) => sum + r.tokenPerSec, 0);
-			return {
-				aiSources: rows,
-				totalTokenPerSec: total,
-				aiFlops: af,
-				totalDemand: td,
-				saturation: sat,
-			};
-		}, [
-			aiUnlocked,
-			unlockedModels,
-			llmHostSlots,
-			flops,
-			flopSlider,
-			theme.textMuted,
-		]);
+	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
+	const tokenMultiplier = useGameStore((s) => s.tokenMultiplier);
 
-	const aiMaxToken = Math.max(1, ...aiSources.map((s) => s.tokenPerSec));
+	const {
+		aiSources,
+		totalTokenPerSec,
+		totalAiLocPerSec,
+		saturation,
+		tokenEfficiency,
+	} = useMemo(() => {
+		if (!aiUnlocked)
+			return {
+				aiSources: [],
+				totalTokenPerSec: 0,
+				totalAiLocPerSec: 0,
+				saturation: 0,
+				tokenEfficiency: 0,
+			};
+		const activeModels = aiModels
+			.filter((m) => unlockedModels[m.id])
+			.sort((a, b) => a.flopsCost - b.flopsCost)
+			.slice(0, llmHostSlots);
+		const af = flops * (1 - flopSlider);
+		let td = 0;
+		for (const m of activeModels) td += m.flopsCost;
+		const sat = td > 0 ? Math.min(1, af / td) : 0;
+
+		// Token efficiency: how well human output feeds AI demand
+		let totalTokenDemand = 0;
+		for (const m of activeModels) totalTokenDemand += m.tokenCost;
+		const humanTokenOutput = autoLocPerSec * tokenMultiplier;
+		const tokEff =
+			totalTokenDemand > 0
+				? Math.min(1, humanTokenOutput / totalTokenDemand)
+				: 0;
+
+		const rows: AiSourceRow[] = activeModels.map((model) => ({
+			name: `${model.name} ${model.version}`,
+			tokenPerSec: model.tokenCost * tokEff,
+			locPerSec: model.locPerSec * tokEff * sat,
+			flopsCost: model.flopsCost,
+			color: MODEL_COLORS[model.family] ?? theme.textMuted,
+		}));
+		rows.sort((a, b) => b.locPerSec - a.locPerSec);
+		const totalTok = rows.reduce((sum, r) => sum + r.tokenPerSec, 0);
+		const totalLoc = rows.reduce((sum, r) => sum + r.locPerSec, 0);
+		return {
+			aiSources: rows,
+			totalTokenPerSec: totalTok,
+			totalAiLocPerSec: totalLoc,
+			saturation: sat,
+			tokenEfficiency: tokEff,
+		};
+	}, [
+		aiUnlocked,
+		unlockedModels,
+		llmHostSlots,
+		flops,
+		flopSlider,
+		autoLocPerSec,
+		tokenMultiplier,
+		theme.textMuted,
+	]);
 
 	if (!aiUnlocked) return null;
 
@@ -134,32 +156,51 @@ export function StatsTokensSection() {
 			collapsible={true}
 			defaultOpen={true}
 		>
-			{/* FLOPS saturation gauge */}
+			{/* Conversion summary */}
 			<div
 				style={{
-					display: "flex",
-					alignItems: "center",
 					fontSize: 10,
-					marginBottom: 6,
-					gap: 4,
+					marginBottom: 8,
+					display: "flex",
+					flexDirection: "column",
+					gap: 3,
 				}}
 			>
-				<span style={{ color: theme.flopsColor }}>
-					⚡ {formatNumber(aiFlops)}
-				</span>
-				<span style={{ color: theme.textMuted }}>/</span>
-				<span
-					style={{
-						color:
-							saturation < 0.5
-								? "#f44336"
-								: saturation < 0.9
-									? "#fbbf24"
-									: theme.success,
-					}}
-				>
-					{formatNumber(totalDemand)} FLOPS ({Math.round(saturation * 100)}%)
-				</span>
+				<div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+					<span style={{ color: TOKEN_COLOR }}>
+						🪙 {formatNumber(totalTokenPerSec)}/s
+					</span>
+					<span style={{ color: theme.textMuted }}>→</span>
+					<span style={{ color: theme.locColor }}>
+						{formatNumber(totalAiLocPerSec)} LoC/s
+					</span>
+				</div>
+				<div style={{ display: "flex", gap: 8 }}>
+					<span
+						style={{
+							color:
+								tokenEfficiency < 0.5
+									? "#f44336"
+									: tokenEfficiency < 0.9
+										? "#fbbf24"
+										: theme.success,
+						}}
+					>
+						Tokens {Math.round(tokenEfficiency * 100)}%
+					</span>
+					<span
+						style={{
+							color:
+								saturation < 0.5
+									? "#f44336"
+									: saturation < 0.9
+										? "#fbbf24"
+										: theme.success,
+						}}
+					>
+						FLOPS {Math.round(saturation * 100)}%
+					</span>
+				</div>
 			</div>
 			{/* AI model rows */}
 			{aiSources.map((s) => (
@@ -171,13 +212,13 @@ export function StatsTokensSection() {
 						<div
 							css={barFillCss}
 							style={{
-								transform: `scaleX(${s.tokenPerSec / aiMaxToken})`,
+								transform: `scaleX(${s.locPerSec / Math.max(1, ...aiSources.map((x) => x.locPerSec))})`,
 								background: s.color,
 							}}
 						/>
 					</div>
 					<span css={sourceValueCss} style={{ color: s.color }}>
-						{formatNumber(s.tokenPerSec)}
+						{formatNumber(s.locPerSec)}
 						{t("stats_panel.per_sec")}
 					</span>
 				</div>
