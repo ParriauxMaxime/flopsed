@@ -34,8 +34,6 @@ const chevronCss = css({
 	textAlign: "center",
 });
 
-const spacerCss = css({ width: 22, flexShrink: 0 });
-
 const labelCss = css({
 	fontSize: 15,
 	flex: 1,
@@ -96,7 +94,7 @@ export function CollapsibleSection({
 				}}
 				onClick={handleClick}
 			>
-				{collapsible ? (
+				{collapsible && (
 					<span
 						css={chevronCss}
 						style={{
@@ -106,8 +104,6 @@ export function CollapsibleSection({
 					>
 						▶
 					</span>
-				) : (
-					<span css={spacerCss} />
 				)}
 				<span css={labelCss} style={{ color: theme.textMuted }}>
 					<span css={iconCss}>{icon}</span>
