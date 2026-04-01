@@ -227,6 +227,8 @@ export function listChildren(
 		? partial.slice(partial.lastIndexOf("/") + 1)
 		: partial;
 	return dir.children
-		.filter((c) => c.name.startsWith(prefix))
-		.map((c) => c.name);
+		.filter((c) =>
+			c.name.replace(/\/$/, "").startsWith(prefix.replace(/\/$/, "")),
+		)
+		.map((c) => c.name.replace(/\/$/, ""));
 }
