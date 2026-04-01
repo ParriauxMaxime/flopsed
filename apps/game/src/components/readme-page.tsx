@@ -144,40 +144,6 @@ export function ReadmePage() {
 					color: theme.accent,
 				}}
 			>
-				## Getting Started
-			</div>
-
-			<div
-				css={blockCss}
-				style={{ background: theme.panelBg, color: theme.foreground }}
-			>
-				<span style={{ color: theme.comment }}>
-					{"You type  ->  LoC pile up  ->  FLOPS execute  ->  Cash flows"}
-				</span>
-				<br />
-				<span style={{ color: theme.comment }}>
-					{"Cash buys ->  more devs    ->  more FLOPS     ->  more cash"}
-				</span>
-				<br />
-				<span style={{ color: theme.comment }}>
-					{"Until    ->  AI writes     ->  code for you   ->  ???"}
-				</span>
-			</div>
-
-			<p css={pCss} style={{ color: theme.textMuted }}>
-				Start typing. Every keystroke generates Lines of Code. Execute them with
-				your FLOPS to earn cash. Buy upgrades, hire devs, unlock AI models.
-				Research the tech tree to advance through 6 tiers — from a garage to the
-				singularity.
-			</p>
-
-			<div
-				css={h2Css}
-				style={{
-					borderBottom: `1px solid ${theme.border}`,
-					color: theme.accent,
-				}}
-			>
 				## Collaborators
 			</div>
 
