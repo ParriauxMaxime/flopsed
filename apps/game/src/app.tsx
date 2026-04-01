@@ -147,6 +147,8 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 	);
 }
 
+declare const __GIT_SHA__: string;
+
 function SettingsPage() {
 	const { t, i18n } = useTranslation();
 	const editorTheme = useUiStore((s) => s.editorTheme);
@@ -430,6 +432,18 @@ function SettingsPage() {
 						))}
 					</div>
 				</div>
+			</div>
+			<div
+				css={{
+					textAlign: "right",
+					fontSize: 10,
+					color: theme.textMuted,
+					opacity: 0.5,
+					padding: "16px 0 4px",
+					fontFamily: "'Courier New', monospace",
+				}}
+			>
+				{__GIT_SHA__}
 			</div>
 		</div>
 	);

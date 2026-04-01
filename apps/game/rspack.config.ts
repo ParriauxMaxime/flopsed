@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { defineConfig } from "@rspack/cli";
@@ -10,6 +11,7 @@ import {
 } from "@rspack/core";
 
 const BUILD_HASH = Date.now().toString(36);
+const GIT_SHA = execSync("git rev-parse --short HEAD").toString().trim();
 
 /** Stamps __BUILD_HASH__ in sw.js at emit time */
 class StampSwPlugin {
@@ -76,6 +78,7 @@ export default defineConfig({
 	plugins: [
 		new DefinePlugin({
 			__BUILD_HASH__: JSON.stringify(BUILD_HASH),
+			__GIT_SHA__: JSON.stringify(GIT_SHA),
 		}) as unknown as RspackPluginFunction,
 		new HtmlRspackPlugin({
 			template: "./src/index.html",
