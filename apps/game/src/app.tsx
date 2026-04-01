@@ -911,9 +911,10 @@ export function App() {
 				{/* Main area: sidebar + center + stats panel */}
 				<div css={{ display: "flex", flex: 1, overflow: "hidden" }}>
 					{/* Left sidebar */}
-					{sidebarUnlocked && sidebarCollapsed && (
+					{(!sidebarUnlocked || sidebarCollapsed) && (
 						<button
 							type="button"
+							disabled={!sidebarUnlocked}
 							css={{
 								display: "flex",
 								alignItems: "flex-start",
@@ -921,20 +922,23 @@ export function App() {
 								paddingTop: 10,
 								width: 28,
 								flexShrink: 0,
-								cursor: "pointer",
 								border: "none",
 								fontFamily: "inherit",
-								color: "#8b949e",
-								transition: "color 0.15s",
+								transition: "color 0.15s, opacity 0.15s",
 								alignSelf: "stretch",
-								"&:hover": { color: "#c9d1d9" },
+								"&:disabled": {
+									cursor: "default",
+									opacity: 0.3,
+								},
 							}}
 							style={{
 								borderRight: `1px solid ${theme.border}`,
 								background: theme.sidebarBg,
+								cursor: sidebarUnlocked ? "pointer" : "default",
+								color: sidebarUnlocked ? "#8b949e" : theme.textMuted,
 							}}
-							onClick={toggleSidebar}
-							title={t("sidebar.show")}
+							onClick={sidebarUnlocked ? toggleSidebar : undefined}
+							title={sidebarUnlocked ? t("sidebar.show") : undefined}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<rect
@@ -1069,9 +1073,10 @@ export function App() {
 					>
 						<StatsPanel onCollapse={toggleStatsPanel} />
 					</div>
-					{statsPanelUnlocked && statsPanelCollapsed && (
+					{(!statsPanelUnlocked || statsPanelCollapsed) && (
 						<button
 							type="button"
+							disabled={!statsPanelUnlocked}
 							css={{
 								display: "flex",
 								alignItems: "flex-start",
@@ -1079,20 +1084,23 @@ export function App() {
 								paddingTop: 10,
 								width: 28,
 								flexShrink: 0,
-								cursor: "pointer",
 								border: "none",
 								fontFamily: "inherit",
-								color: "#8b949e",
-								transition: "color 0.15s",
+								transition: "color 0.15s, opacity 0.15s",
 								alignSelf: "stretch",
-								"&:hover": { color: "#c9d1d9" },
+								"&:disabled": {
+									cursor: "default",
+									opacity: 0.3,
+								},
 							}}
 							style={{
 								borderLeft: `1px solid ${theme.border}`,
 								background: theme.sidebarBg,
+								cursor: statsPanelUnlocked ? "pointer" : "default",
+								color: statsPanelUnlocked ? "#8b949e" : theme.textMuted,
 							}}
-							onClick={toggleStatsPanel}
-							title={t("tabs.show_stats")}
+							onClick={statsPanelUnlocked ? toggleStatsPanel : undefined}
+							title={statsPanelUnlocked ? t("tabs.show_stats") : undefined}
 						>
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<rect
