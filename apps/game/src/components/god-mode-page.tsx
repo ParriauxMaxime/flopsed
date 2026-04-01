@@ -521,8 +521,8 @@ export function GodModePage() {
 						onClick={() => {
 							const current = useGameStore.getState();
 							useGameStore.setState({
-								ownedUpgrades: {
-									...current.ownedUpgrades,
+								ownedTechNodes: {
+									...current.ownedTechNodes,
 									the_singularity: 1,
 								},
 							});
