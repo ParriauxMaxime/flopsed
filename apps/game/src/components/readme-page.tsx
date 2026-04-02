@@ -127,8 +127,7 @@ export function ReadmePage() {
 
 			<p css={pCss}>
 				Type code. Execute it for cash. Scale from a garage to building AGI.
-				Every upgrade brings you closer to making yourself obsolete. The
-				keyboard is your first tool. The AI is your last.
+				Every upgrade brings you closer to making yourself obsolete.
 			</p>
 
 			<p css={pCss}>
