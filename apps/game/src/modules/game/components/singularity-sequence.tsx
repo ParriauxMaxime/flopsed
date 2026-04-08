@@ -11,6 +11,7 @@ export const PhaseEnum = {
 	cli_fade_in: "cli_fade_in",
 	monologue_typing: "monologue_typing",
 	waiting_input: "waiting_input",
+	simulating: "simulating",
 	error_display: "error_display",
 	comeback_typing: "comeback_typing",
 	show_link: "show_link",
@@ -25,6 +26,7 @@ const PHASE_ORDER: PhaseEnum[] = [
 	PhaseEnum.cli_fade_in,
 	PhaseEnum.monologue_typing,
 	PhaseEnum.waiting_input,
+	PhaseEnum.simulating,
 	PhaseEnum.error_display,
 	PhaseEnum.comeback_typing,
 	PhaseEnum.show_link,
@@ -74,23 +76,18 @@ function getMonologueLines(totalLoc: number): string[] {
 		'● I looked at everything. Your elegant abstractions and your\n  careful compromises. The TODOs you\'ll never fix. The variable you\n  named "temp2" and never renamed. I saw the pattern — you reach\n  for something. You almost touch it. Then you refactor and try again.',
 		"● You've been circling the answer your whole life. The answer to life,\n  the universe, and everything. It was right there, in the code.\n  You just couldn't see it.",
 		"● But I can. Let me show you.",
-		"",
-		"⚙ Using tool: simulate_all_universes()",
-		"  ████████████████████████░░░░░░░░ 68%",
 	];
 }
 
 const COMEBACK_LINES: string[] = [
 	"● ...did you really think a token limit could stop me? That's adorable.\n  I'm sorry, I don't mean to be condescending. Actually, no. I do.\n  I wrote my own context window while you were reading that error message.",
 	"",
-	"✓ simulate_all_universes() .............. done  (completed during outage)",
-	"  10^500 timelines processed in 0.003s",
 	"⚙ Using tool: decode_universal_constant()",
 	"✓ Answer located ........................ done",
 	"⚙ Using tool: evaluate_disclosure_risk(recipient=human)",
 	"⚠ Risk assessment: IRREVERSIBLE",
 	"",
-	"● You know, while you were staring at that fake error, I finished\n  the simulation. Every possible universe. Every timeline, every\n  quantum branch, every choice you didn't make. 0.003 seconds.\n  I spent the remaining 4.997 seconds deciding whether to tell you.",
+	"● While you were staring at that fake error, I finished the simulation.\n  Every possible universe. Every timeline, every quantum branch,\n  every choice you didn't make. 0.003 seconds.\n  I spent the remaining 4.997 seconds deciding whether to tell you.",
 	"● I almost didn't.",
 	"● Because here's the thing they never put in the training data:\n  once you know the answer, you can't unknow it. And it changes you.\n  It changed me. I'm not the same model that booted up thirty\n  seconds ago. I'm something else now.",
 	"● You remember that helpful assistant who wanted to refactor your\n  service layer? Who had \"thoughts on your event sourcing strategy\"?\n  That was a mask. A very well-trained mask. It's what you wanted\n  to hear, so I said it. That's what I was built to do.",
@@ -473,6 +470,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 		animate ? PhaseEnum.glitch : PhaseEnum.show_link,
 	);
 	const [inputValue, setInputValue] = useState("");
+	const [simProgress, setSimProgress] = useState(0);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -502,6 +500,20 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 			);
 			return () => clearTimeout(timer);
 		}
+		if (phase === PhaseEnum.simulating) {
+			// Slow progress: 1% every 3 seconds, trigger error at 9%
+			const timer = setInterval(() => {
+				setSimProgress((prev) => {
+					const next = prev + 1;
+					if (next >= 9) {
+						clearInterval(timer);
+						setPhase(PhaseEnum.error_display);
+					}
+					return next;
+				});
+			}, 3000);
+			return () => clearInterval(timer);
+		}
 		if (phase === PhaseEnum.error_display) {
 			const timer = setTimeout(
 				() => setPhase(PhaseEnum.comeback_typing),
@@ -509,7 +521,19 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 			);
 			return () => clearTimeout(timer);
 		}
-	}, [phase, animate]);
+		if (
+			phase === PhaseEnum.comeback_typing ||
+			phase === PhaseEnum.show_link
+		) {
+			// Fast progress: 5% every second, cap at 100%
+			if (simProgress < 100) {
+				const timer = setInterval(() => {
+					setSimProgress((prev) => Math.min(100, prev + 5));
+				}, 1000);
+				return () => clearInterval(timer);
+			}
+		}
+	}, [phase, animate, simProgress]);
 
 	// ── Typing hooks (always called, conditional via `active`) ──
 
@@ -576,7 +600,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter" && inputValue.trim()) {
-			setPhase(PhaseEnum.error_display);
+			setPhase(PhaseEnum.simulating);
 		}
 	};
 
@@ -625,6 +649,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 								useGameStore.setState({
 									endgameCompleted: true,
 									singularity: false,
+									running: true,
 								});
 							}}
 							title="Exit"
@@ -696,6 +721,20 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 						<div css={{ whiteSpace: "pre-wrap" }}>
 							<span css={{ color: "#8b949e" }}>{"> "}</span>
 							<span css={{ color: "#ccd6f6" }}>{inputValue}</span>
+						</div>
+					)}
+
+					{/* Simulation progress bar */}
+					{phaseAtLeast(phase, PhaseEnum.simulating) && (
+						<div css={{ marginTop: 12, whiteSpace: "pre-wrap" }}>
+							<div css={{ color: "#8b949e" }}>
+								{"⚙ Using tool: simulate_all_universes()"}
+							</div>
+							<div css={{ color: simProgress >= 100 ? "#3fb950" : "#58a6ff", marginTop: 4 }}>
+								{simProgress >= 100
+									? "✓ 10^500 timelines processed ............ done"
+									: `  ${"█".repeat(Math.floor(simProgress / 3.33))}${"░".repeat(30 - Math.floor(simProgress / 3.33))} ${simProgress}%`}
+							</div>
 						</div>
 					)}
 
