@@ -719,24 +719,42 @@ export const useGameStore = create<GameState & GameActions>()(
 						}
 
 						// Sync visual queue with actual LoC counter:
-						// If loc is 0, clear all visual blocks
+						// Visual lines should roughly match loc count
 						if (loc <= 0 && blockQueue.length > 0) {
 							blockQueue = [];
 						} else if (blockQueue.length > 0) {
-							// Trim excess blocks if visual total exceeds actual loc
-							let visualTotal = 0;
-							for (const b of blockQueue) visualTotal += b.loc;
-							if (visualTotal > loc * 1.5) {
-								// Over-represented — trim from front
-								let excess = visualTotal - Math.floor(loc);
+							// Count total visual lines
+							let totalLines = 0;
+							for (const b of blockQueue) totalLines += b.lines.length;
+							// Trim from front until lines ≈ loc
+							if (totalLines > Math.max(loc, 1) * 1.2) {
+								const targetLines = Math.floor(loc);
 								blockQueue = blockQueue.slice();
-								while (blockQueue.length > 1 && excess > 0) {
+								while (
+									blockQueue.length > 0 &&
+									totalLines > targetLines
+								) {
 									const block = blockQueue[0];
-									if (block.loc <= excess) {
-										excess -= block.loc;
+									if (totalLines - block.lines.length >= targetLines) {
+										totalLines -= block.lines.length;
 										blockQueue.shift();
 									} else {
-										break;
+										// Trim partial: keep only what we need
+										const keep = Math.max(
+											1,
+											block.lines.length -
+												(totalLines - targetLines),
+										);
+										blockQueue[0] = {
+											lines: block.lines.slice(
+												block.lines.length - keep,
+											),
+											loc: Math.ceil(
+												block.loc *
+													(keep / block.lines.length),
+											),
+										};
+										totalLines = targetLines;
 									}
 								}
 							}
