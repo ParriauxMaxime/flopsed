@@ -37,11 +37,11 @@
 	},
 	"ai_hallucination": {
 		"name": "AI 幻觉",
-		"description": "你的一个 AI 模型失控了。它写了 1 万行废话。质量 -10%。"
+		"description": "你的一个 AI 模型失控了。它写了 10K 行无意义代码。-10% $/LoC 持续 30 秒。"
 	},
 	"security_audit": {
 		"name": "安全审计",
-		"description": "审计人员发现了漏洞。支付 5% 现金或损失 20% 质量。",
+		"description": "审计员发现了漏洞。支付 5% 现金或承受 -20% $/LoC 持续 60 秒。",
 		"options": {
 			"pay_fine": "支付罚款",
 			"ignore_it": "无视它"

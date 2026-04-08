@@ -41,7 +41,6 @@ export type EventEffect =
 	| { type: "cash"; op: "multiply"; value: number }
 	| { type: "instantCash"; op: "add"; value: string }
 	| { type: "instantLoc"; op: "add"; value: number }
-	| { type: "codeQuality"; op: "add"; value: number }
 	| { type: "conditionalCash"; threshold: string; reward: string }
 	| { type: "tokenProduction"; op: "multiply"; value: number }
 	| { type: "disableUpgrade"; upgradeId: string }

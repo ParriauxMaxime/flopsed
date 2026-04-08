@@ -37,11 +37,11 @@
 	},
 	"ai_hallucination": {
 		"name": "Hallucination IA",
-		"description": "Un de vos modèles a disjoncté. Il a pondu 10K LoC de charabia. Qualité -10%."
+		"description": "Un de vos modèles IA a déraillé. Il a écrit 10K LoC de n'importe quoi. -10% $/LoC pendant 30s."
 	},
 	"security_audit": {
 		"name": "Audit de sécurité",
-		"description": "Les auditeurs ont trouvé des failles. Payez 5% de votre cash ou perdez 20% de qualité.",
+		"description": "Les auditeurs ont trouvé des vulnérabilités. Payez 5% du cash ou subissez -20% $/LoC pendant 60s.",
 		"options": { "pay_fine": "Payer l'amende", "ignore_it": "Ignorer" }
 	},
 	"power_outage": {

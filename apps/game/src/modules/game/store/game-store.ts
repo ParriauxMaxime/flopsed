@@ -747,8 +747,15 @@ export const useGameStore = create<GameState & GameActions>()(
 						const locDelta = totalLoc - s.prevTickTotalLoc;
 						const execDelta = totalExecutedLoc - s.prevTickTotalExecLoc;
 						const dtSnap = elapsed - s.lastSnapshotTime;
+						// Utilization = how much of exec FLOPS were actually used
+						const execFlopsForUtil = s.aiUnlocked
+							? s.flops * s.flopSlider
+							: s.flops;
+						const execRate = dtSnap > 0 ? execDelta / dtSnap : 0;
 						const flopUtil =
-							s.flops > 0 ? Math.min(1, loc / Math.max(1, s.flops)) : 0;
+							execFlopsForUtil > 0
+								? Math.min(1, execRate / execFlopsForUtil)
+								: 0;
 
 						const snapshot: RateSnapshot = {
 							t: elapsed,

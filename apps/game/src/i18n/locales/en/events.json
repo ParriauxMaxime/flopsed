@@ -37,11 +37,11 @@
 	},
 	"ai_hallucination": {
 		"name": "AI Hallucination",
-		"description": "One of your AI models went rogue. It wrote 10K LoC of nonsense. Quality -10%."
+		"description": "One of your AI models went rogue. It wrote 10K LoC of nonsense. -10% $/LoC for 30s."
 	},
 	"security_audit": {
 		"name": "Security Audit",
-		"description": "Auditors found vulnerabilities. Pay 5% of cash or lose 20% quality.",
+		"description": "Auditors found vulnerabilities. Pay 5% of cash or take a -20% $/LoC hit for 60s.",
 		"options": {
 			"pay_fine": "Pay fine",
 			"ignore_it": "Ignore it"

@@ -37,11 +37,11 @@
 	},
 	"ai_hallucination": {
 		"name": "KI-Halluzination",
-		"description": "Eines deiner KI-Modelle ist ausgerastet. Es hat 10K LoC Unsinn geschrieben. Qualität -10%."
+		"description": "Eines Ihrer KI-Modelle ist durchgedreht. Es schrieb 10K LoC Unsinn. -10% $/LoC für 30s."
 	},
 	"security_audit": {
 		"name": "Sicherheitsaudit",
-		"description": "Prüfer haben Schwachstellen gefunden. Zahle 5% des Cashs oder verliere 20% Qualität.",
+		"description": "Auditoren fanden Schwachstellen. Zahlen Sie 5% Ihres Cash oder nehmen Sie -20% $/LoC für 60s in Kauf.",
 		"options": { "pay_fine": "Bußgeld zahlen", "ignore_it": "Ignorieren" }
 	},
 	"power_outage": {

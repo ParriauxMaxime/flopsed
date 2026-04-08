@@ -122,20 +122,19 @@
 		{
 			"id": "ai_hallucination",
 			"name": "AI Hallucination",
-			"description": "One of your AI models went rogue. It wrote 10K LoC of nonsense. Quality -10%.",
+			"description": "One of your AI models went rogue. It wrote 10K LoC of nonsense. -10% $/LoC for 30s.",
 			"icon": "🌀",
 			"minTier": "ai_lab",
-			"duration": 0,
+			"duration": 30,
 			"effects": [
-				{ "type": "instantLoc", "op": "add", "value": 10000 },
-				{ "type": "codeQuality", "op": "add", "value": -10 }
+				{ "type": "cashMultiplier", "op": "multiply", "value": 0.9 }
 			],
 			"weight": 8
 		},
 		{
 			"id": "security_audit",
 			"name": "Security Audit",
-			"description": "Auditors found vulnerabilities. Pay 5% of cash or lose 20% quality.",
+			"description": "Auditors found vulnerabilities. Pay 5% of cash or take a -20% $/LoC hit for 60s.",
 			"icon": "🔒",
 			"minTier": "tech_company",
 			"duration": 0,
@@ -149,7 +148,7 @@
 						},
 						{
 							"label": "Ignore it",
-							"effect": { "type": "codeQuality", "op": "add", "value": -20 }
+							"effect": { "type": "cashMultiplier", "op": "multiply", "value": 0.8, "duration": 60 }
 						}
 					]
 				}

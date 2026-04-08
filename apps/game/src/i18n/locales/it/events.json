@@ -37,11 +37,11 @@
 	},
 	"ai_hallucination": {
 		"name": "Allucinazione IA",
-		"description": "Uno dei tuoi modelli è impazzito. Ha scritto 10K LoC di sciocchezze. Qualità -10%."
+		"description": "Uno dei tuoi modelli IA è impazzito. Ha scritto 10K LoC senza senso. -10% $/LoC per 30s."
 	},
 	"security_audit": {
 		"name": "Audit di sicurezza",
-		"description": "Gli auditor hanno trovato vulnerabilità. Paga il 5% del cash o perdi il 20% di qualità.",
+		"description": "Gli auditor hanno trovato vulnerabilità. Paga il 5% del cash o subisci -20% $/LoC per 60s.",
 		"options": { "pay_fine": "Paga la multa", "ignore_it": "Ignora" }
 	},
 	"power_outage": {

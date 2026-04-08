@@ -37,11 +37,11 @@
 	},
 	"ai_hallucination": {
 		"name": "Halucynacja AI",
-		"description": "Jeden z twoich modeli AI oszalał. Napisał 10K LoC bzdur. Jakość -10%."
+		"description": "Jeden z Twoich modeli AI oszalał. Napisał 10K LoC bzdur. -10% $/LoC przez 30s."
 	},
 	"security_audit": {
 		"name": "Audyt bezpieczeństwa",
-		"description": "Audytorzy znaleźli luki. Zapłać 5% gotówki albo stracić 20% jakości.",
+		"description": "Audytorzy znaleźli luki. Zapłać 5% gotówki lub przyjmij -20% $/LoC przez 60s.",
 		"options": { "pay_fine": "Zapłać karę", "ignore_it": "Zignoruj" }
 	},
 	"power_outage": {
