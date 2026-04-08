@@ -221,20 +221,54 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 
 	const flatLines = useMemo(() => {
 		// Editor is a pure display of the loc counter.
-		// 1 LoC = 1 line. Show exactly floor(loc) lines from the pool.
-		const count = Math.max(0, Math.floor(loc));
-		if (count <= 0) {
+		// 1 LoC = 1 line. Show floor(loc) complete lines + partial last line.
+		if (loc <= 0) {
 			cachedLines.current = [];
 			return [];
 		}
+		const fullLines = Math.floor(loc);
+		const fraction = loc - fullLines;
 		const pool = ALL_CODE_LINES;
 		const result: FlatLine[] = [];
-		for (let i = 0; i < count; i++) {
-			const html = pool[i % pool.length];
+		for (let i = 0; i < fullLines; i++) {
 			result.push({
 				key: `L${i}`,
 				lineNumber: i + 1,
-				html,
+				html: pool[i % pool.length],
+			});
+		}
+		// Show partial line for the fractional part
+		if (fraction > 0) {
+			const nextLine = pool[fullLines % pool.length];
+			// Strip HTML tags to get raw text length, then slice proportionally
+			const rawText = nextLine.replace(/<[^>]*>/g, "");
+			const charsToShow = Math.max(1, Math.ceil(rawText.length * fraction));
+			// Rebuild partial: take characters from the HTML, respecting tags
+			let shown = 0;
+			let htmlIdx = 0;
+			let partial = "";
+			while (shown < charsToShow && htmlIdx < nextLine.length) {
+				if (nextLine[htmlIdx] === "<") {
+					// Include full tag
+					const tagEnd = nextLine.indexOf(">", htmlIdx);
+					partial += nextLine.slice(htmlIdx, tagEnd + 1);
+					htmlIdx = tagEnd + 1;
+				} else {
+					partial += nextLine[htmlIdx];
+					htmlIdx++;
+					shown++;
+				}
+			}
+			// Close any open span tags
+			const openSpans = (partial.match(/<span[^>]*>/g) ?? []).length;
+			const closeSpans = (partial.match(/<\/span>/g) ?? []).length;
+			for (let s = 0; s < openSpans - closeSpans; s++) {
+				partial += "</span>";
+			}
+			result.push({
+				key: `L${fullLines}`,
+				lineNumber: fullLines + 1,
+				html: partial,
 			});
 		}
 		cachedLines.current = result;
