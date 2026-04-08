@@ -1175,11 +1175,8 @@ export function App() {
 	const middleTabs = showGodMode ? [...baseTabs, godModeTab] : baseTabs;
 	const theme = useIdeTheme();
 	const shellRef = useRef<HTMLDivElement>(null);
-	const singularityPrev = useRef(useGameStore.getState().singularity);
-	const singularityAnimate = singularity && !singularityPrev.current;
-	// Track false→true transitions so re-triggers work (godmode, new prestige run)
-	if (!singularity) singularityPrev.current = false;
-	else if (singularityAnimate) singularityPrev.current = true;
+	// singularity is transient (not persisted) — always animate when true
+	const singularityAnimate = singularity;
 
 	// "Focused Workers" achievement: grant $10 when all tabs closed (once per session)
 	const focusedAchieved = useRef(false);
