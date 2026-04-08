@@ -10,6 +10,7 @@ import type * as ToneNs from "tone";
 let Tone: typeof ToneNs;
 
 export const MusicStyleEnum = {
+	ferreira: "ferreira",
 	chiptune: "chiptune",
 	landing: "landing",
 } as const;
@@ -25,6 +26,49 @@ interface StemPack {
 }
 
 const PACKS: Record<MusicStyleEnum, StemPack> = {
+	ferreira: {
+		dir: "stems/ferreira",
+		stems: [
+			"pads-t0",
+			"lfo-bass-t0",
+			"drums-t1",
+			"lfo-melody-t1",
+			"pads-t1",
+			"drums-t2",
+			"lfo-melody-t2",
+			"pads-t2",
+			"bells-t3",
+			"lfo-bass-t4",
+			"arp-t4",
+			"drums-t5",
+			"bells-t5",
+			"lfo-bass-t5",
+			"lfo-melody-t5",
+			"pads-t5",
+		],
+		tiers: {
+			0: ["pads-t0", "lfo-bass-t0"],
+			1: ["pads-t1", "lfo-bass-t0", "drums-t1", "lfo-melody-t1"],
+			2: ["pads-t2", "lfo-bass-t0", "drums-t2", "lfo-melody-t2"],
+			3: ["pads-t2", "lfo-bass-t0", "drums-t2", "lfo-melody-t2", "bells-t3"],
+			4: [
+				"pads-t2",
+				"lfo-bass-t4",
+				"drums-t2",
+				"lfo-melody-t2",
+				"bells-t3",
+				"arp-t4",
+			],
+			5: [
+				"pads-t5",
+				"lfo-bass-t5",
+				"drums-t5",
+				"lfo-melody-t5",
+				"bells-t5",
+				"arp-t4",
+			],
+		},
+	},
 	chiptune: {
 		dir: "stems",
 		stems: ["bass", "keys", "drums", "pad", "lead", "glitch"],
@@ -61,7 +105,7 @@ interface StemPlayer {
 const stems: Map<string, StemPlayer> = new Map();
 let started = false;
 let currentTier = 0;
-let currentStyle: MusicStyleEnum = MusicStyleEnum.chiptune;
+let currentStyle: MusicStyleEnum = MusicStyleEnum.ferreira;
 
 async function loadPack(style: MusicStyleEnum) {
 	const pack = PACKS[style];
@@ -105,7 +149,7 @@ function clearStems() {
 export async function initMusic(style?: MusicStyleEnum) {
 	Tone = await import("tone");
 	await Tone.start();
-	currentStyle = style ?? MusicStyleEnum.chiptune;
+	currentStyle = style ?? MusicStyleEnum.ferreira;
 	await loadPack(currentStyle);
 }
 

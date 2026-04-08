@@ -446,7 +446,7 @@ function SettingsPage() {
 									"&:hover": { borderColor: theme.accent },
 								}}
 							>
-								{style === "chiptune" ? "Chiptune" : "Landing"}
+								{style[0].toUpperCase() + style.slice(1)}
 							</button>
 						))}
 					</div>

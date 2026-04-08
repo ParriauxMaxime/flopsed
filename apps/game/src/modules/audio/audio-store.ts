@@ -22,7 +22,7 @@ export const useAudioStore = create<AudioState & AudioActions>()(
 			muted: false,
 			musicVolume: 50,
 			sfxVolume: 70,
-			musicStyle: "landing" as MusicStyleEnum,
+			musicStyle: "ferreira" as MusicStyleEnum,
 
 			toggleMute: () => set((s) => ({ muted: !s.muted })),
 			setMusicVolume: (v: number) => set({ musicVolume: v }),

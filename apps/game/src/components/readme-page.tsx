@@ -284,6 +284,47 @@ export function ReadmePage() {
 							color: theme.foreground,
 						}}
 					>
+						Quentin Ferreira Castico
+					</div>
+					<div style={{ color: theme.textMuted, fontSize: 12 }}>
+						Human producer
+					</div>
+					<div style={{ color: theme.textMuted, fontSize: 11, marginTop: 4 }}>
+						Music production, stem layering, sound design.
+						<br />
+						The one who makes it sound good.
+					</div>
+					<div css={linkRowCss}>
+						<a
+							href="https://www.malt.fr/profile/quentinferreiracastico"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{
+								color: theme.accent,
+								display: "inline-flex",
+								alignItems: "center",
+								gap: 4,
+							}}
+						>
+							<LinkIcon /> Malt
+						</a>
+					</div>
+				</div>
+				<div
+					css={cardCss}
+					style={{
+						background: theme.panelBg,
+						border: `1px solid ${theme.border}`,
+					}}
+				>
+					<div
+						style={{
+							fontWeight: 700,
+							marginBottom: 4,
+							color: theme.foreground,
+						}}
+					>
 						Claude
 					</div>
 					<div style={{ color: theme.textMuted, fontSize: 12 }}>
