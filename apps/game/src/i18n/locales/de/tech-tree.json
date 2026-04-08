@@ -217,6 +217,10 @@
 		"name": "Agent-Framework",
 		"description": "Autonome KI-Agenten freischalten."
 	},
+	"synthetic_data": {
+		"name": "Synthetische Daten",
+		"description": "Agenten erzeugen Trainingsdaten. x1.5 Token-Output pro Stufe"
+	},
 	"agent_autonomy": {
 		"name": "Selbstverbesserung",
 		"description": "x1.5 Agenten-Output pro Stufe"
@@ -364,5 +368,9 @@
 	"google_gemini_supreme": {
 		"name": "Gemini Supreme",
 		"description": "Gemini Supreme für den Einsatz freischalten."
+	},
+	"the_singularity": {
+		"name": "Die Singularität",
+		"description": "Es gibt kein Zurück mehr."
 	}
 }

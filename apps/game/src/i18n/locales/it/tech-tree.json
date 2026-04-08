@@ -217,6 +217,10 @@
 		"name": "Framework agenti",
 		"description": "Sblocca agenti IA autonomi."
 	},
+	"synthetic_data": {
+		"name": "Dati sintetici",
+		"description": "Gli agenti generano dati di addestramento. x1.5 output di token per livello"
+	},
 	"agent_autonomy": {
 		"name": "Auto-miglioramento",
 		"description": "x1.5 output degli agenti per livello"
@@ -364,5 +368,9 @@
 	"google_gemini_supreme": {
 		"name": "Gemini Supreme",
 		"description": "Sblocca Gemini Supreme per il deployment."
+	},
+	"the_singularity": {
+		"name": "La Singolarità",
+		"description": "Non si torna indietro."
 	}
 }

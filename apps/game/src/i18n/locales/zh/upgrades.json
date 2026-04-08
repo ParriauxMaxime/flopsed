@@ -26,5 +26,9 @@
 		"description": "自主代理——每秒写 100,000 LoC"
 	},
 	"supercomputer": { "name": "超级计算机", "description": "+20M FLOPS" },
+	"planetary_datacenter": {
+		"name": "行星级数据中心",
+		"description": "大陆级规模的计算农场。+10B FLOPS"
+	},
 	"the_singularity": { "name": "奇点", "description": "你赢了。还是说你赢了？" }
 }

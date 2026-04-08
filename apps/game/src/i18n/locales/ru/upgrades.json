@@ -47,6 +47,10 @@
 		"description": "Автономный агент — пишет 100,000 LoC/s"
 	},
 	"supercomputer": { "name": "Суперкомпьютер", "description": "+20M FLOPS" },
+	"planetary_datacenter": {
+		"name": "Планетарный дата-центр",
+		"description": "Вычислительная ферма размером с континент. +10B FLOPS"
+	},
 	"the_singularity": {
 		"name": "Сингулярность",
 		"description": "Ты победил. Или нет?"

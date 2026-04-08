@@ -217,6 +217,10 @@
 		"name": "Фреймворк агентов",
 		"description": "Разблокировать автономных AI-агентов."
 	},
+	"synthetic_data": {
+		"name": "Синтетические данные",
+		"description": "Агенты генерируют обучающие данные. x1.5 выход токенов за уровень"
+	},
 	"agent_autonomy": {
 		"name": "Само-улучшение",
 		"description": "x1.5 выработки агентов за уровень"
@@ -364,5 +368,9 @@
 	"google_gemini_supreme": {
 		"name": "Gemini Supreme",
 		"description": "Разблокировать Gemini Supreme для деплоя."
+	},
+	"the_singularity": {
+		"name": "Сингулярность",
+		"description": "Пути назад нет."
 	}
 }
