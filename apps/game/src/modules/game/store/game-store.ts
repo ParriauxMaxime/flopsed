@@ -561,11 +561,9 @@ function recalcDerivedStats(state: GameState): void {
 	state.unlockedModels = unlockedModels;
 	state.aiUnlocked =
 		llmHostSlots > 0 && Object.values(unlockedModels).some(Boolean);
-	// Trigger singularity when tech node is owned (skip if already playing)
-	if (singularity && !state.singularity) {
-		state.singularity = true;
+	// Track singularity eligibility — actual trigger is in researchNode/godmode only
+	if (singularity) {
 		state.hasReachedSingularity = true;
-		state.running = false;
 	}
 }
 
@@ -850,10 +848,15 @@ export const useGameStore = create<GameState & GameActions>()(
 						ownedTechNodes: { ...s.ownedTechNodes, [node.id]: newOwned },
 					};
 					if (node.id === "auto_type") newState.autoTypeEnabled = true;
-					if (node.id === "auto_execute") newState.autoExecuteEnabled = true;
+					if (node.id === "auto_execute")
+						newState.autoExecuteEnabled = true;
 					if (node.id === "auto_poke") newState.autoPokeEnabled = true;
 					if (node.id === "auto_arbitrage")
 						newState.autoArbitrageEnabled = true;
+					if (node.id === "the_singularity") {
+						newState.singularity = true;
+						newState.running = false;
+					}
 					recalcDerivedStats(newState);
 					return newState;
 				});
