@@ -178,6 +178,8 @@ const reconnectedCss = css({
 const contentAreaCss = css({
 	flex: 1,
 	overflowY: "auto",
+	scrollbarWidth: "none",
+	"&::-webkit-scrollbar": { display: "none" },
 	padding: "16px 24px",
 	fontSize: 14,
 	lineHeight: 1.6,
