@@ -268,11 +268,14 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 	const cachedLines = useRef<FlatLine[]>([]);
 
 	const flatLines = useMemo(() => {
-		const lines = buildLineList(blockQueue, typing.lines);
+		// When loc is 0, only show completed lines that are part of the current
+		// typing block (the line being actively typed). Hide everything else.
+		const visibleTypingLines = loc <= 0 ? [] : typing.lines;
+		const lines = buildLineList(blockQueue, visibleTypingLines);
 		cachedLines.current = lines;
 		prevBlockCount.current = blockCount;
 		return lines;
-	}, [blockQueue, typing.lines, blockCount]);
+	}, [blockQueue, typing.lines, blockCount, loc]);
 
 	const totalLines = flatLines.length + 1;
 
