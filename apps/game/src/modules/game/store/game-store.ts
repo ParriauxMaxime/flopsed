@@ -692,6 +692,24 @@ export const useGameStore = create<GameState & GameActions>()(
 						// T4+ or streaming: no block tracking needed
 						if (blockQueue.length > 0) blockQueue = [];
 					} else {
+						// Remove blocks from front when LoC is executed
+						if (executed > 0 && blockQueue.length > 0) {
+							let toRemove = Math.ceil(executed);
+							blockQueue = blockQueue.slice();
+							while (blockQueue.length > 0 && toRemove > 0) {
+								const block = blockQueue[0];
+								if (block.loc <= toRemove) {
+									toRemove -= block.loc;
+									blockQueue.shift();
+								} else {
+									blockQueue[0] = {
+										...block,
+										loc: block.loc - toRemove,
+									};
+									toRemove = 0;
+								}
+							}
+						}
 						const visualProduced = Math.floor(humanOutput + aiProduced);
 						if (visualProduced > 0 && visualTick % 5 === 0) {
 							blockQueue =
