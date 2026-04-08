@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
@@ -22,7 +23,7 @@ export function PrestigeModal({ onConfirm, onCancel }: PrestigeModalProps) {
 	const currentStars = "★".repeat(prestigeCount) || "—";
 	const nextStars = "★".repeat(nextCount);
 
-	return (
+	return createPortal(
 		<div
 			css={css({
 				position: "fixed",
@@ -184,6 +185,7 @@ export function PrestigeModal({ onConfirm, onCancel }: PrestigeModalProps) {
 					</button>
 				</div>
 			</div>
-		</div>
+		</div>,
+		document.body,
 	);
 }
