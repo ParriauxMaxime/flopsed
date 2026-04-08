@@ -300,15 +300,16 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 
 	// Auto-scroll: to bottom when lines grow, clamp when lines shrink
 	const prevLineCount = useRef(flatLines.length);
-	if (flatLines.length !== prevLineCount.current) {
+	const prev = prevLineCount.current;
+	if (flatLines.length !== prev) {
+		const grew = flatLines.length > prev;
+		prevLineCount.current = flatLines.length;
 		queueMicrotask(() => {
 			const el = editorRef.current;
 			if (!el) return;
-			if (flatLines.length > prevLineCount.current) {
-				// New lines: scroll to bottom
+			if (grew) {
 				el.scrollTop = el.scrollHeight;
 			} else {
-				// Lines removed: clamp scroll so content stays visible
 				const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight);
 				if (el.scrollTop > maxScroll) {
 					el.scrollTop = maxScroll;
@@ -316,7 +317,6 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 			}
 		});
 	}
-	prevLineCount.current = flatLines.length;
 
 	// ── Compute visible window ──
 	const contentHeight = totalLines * LINE_HEIGHT;
