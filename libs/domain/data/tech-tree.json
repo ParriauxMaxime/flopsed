@@ -546,13 +546,7 @@
 			"baseCost": 300,
 			"costMultiplier": 1,
 			"currency": "cash",
-			"effects": [
-				{
-					"type": "flops",
-					"op": "add",
-					"value": 10
-				}
-			],
+			"effects": [],
 			"x": 760,
 			"y": 0
 		},
