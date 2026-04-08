@@ -490,18 +490,10 @@ function recalcDerivedStats(state: GameState): void {
 	state.locPerKey = locPerKey;
 	state.autoLocPerSec =
 		totalAutoLoc * locProductionMultiplier * eventMods.autoLocMultiplier;
-	if (!state.editorStreamingMode && state.autoLocPerSec > locPerKey * 8) {
-		state.editorStreamingMode = true;
-	}
-	// In streaming mode, auto-type doesn't go through advanceTokens (no visual editor),
-	// so include its LoC production in autoLocPerSec for the tick to handle.
-	const autoTypeLoc = state.autoTypeEnabled
+	// Auto-type LoC/s (for display — actual production goes through the hook)
+	state.autoTypeLocPerSec = state.autoTypeEnabled
 		? 5 * locPerKey * locProductionMultiplier * eventMods.autoLocMultiplier
 		: 0;
-	state.autoTypeLocPerSec = autoTypeLoc;
-	if (state.editorStreamingMode) {
-		state.autoLocPerSec += autoTypeLoc;
-	}
 	state.effectiveLocPerKey = locPerKey;
 	state.freelancerLocPerSec =
 		freelancerLoc *

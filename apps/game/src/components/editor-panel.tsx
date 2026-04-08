@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Editor, StreamingEditor, TapToCode } from "@modules/editor";
+import { Editor, TapToCode } from "@modules/editor";
 import { useGameStore } from "@modules/game";
 import { useCallback, useRef } from "react";
 import { useIdeTheme } from "../hooks/use-ide-theme";
@@ -32,7 +32,6 @@ const contentCss = css({
 
 export function EditorPanel() {
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
-	const streamingMode = useGameStore((s) => s.editorStreamingMode);
 	const theme = useIdeTheme();
 	const isTouch = useTouchDevice();
 	const keystrokeCallbackRef = useRef<(() => void) | null>(null);
@@ -47,17 +46,6 @@ export function EditorPanel() {
 				<FlopsSlider />
 				<div css={contentCss} style={{ background: theme.panelBg }}>
 					<CliPrompt />
-				</div>
-			</div>
-		);
-	}
-
-	if (streamingMode) {
-		return (
-			<div css={wrapperCss} data-tutorial="editor">
-				<div css={editorAreaCss} style={{ flex: 1 }}>
-					<StreamingEditor />
-					{isTouch && <TapToCode theme={theme} onKeystroke={onKeystroke} />}
 				</div>
 			</div>
 		);
