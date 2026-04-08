@@ -268,15 +268,20 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 	const cachedLines = useRef<FlatLine[]>([]);
 
 	const flatLines = useMemo(() => {
-		// When loc is 0, show empty editor — no stale typing content
-		if (loc <= 0) {
+		// Editor is a pure display of the loc counter.
+		// Build all visual lines, then cap to floor(loc).
+		const maxLines = Math.floor(loc);
+		if (maxLines <= 0) {
 			cachedLines.current = [];
 			return [];
 		}
-		const lines = buildLineList(blockQueue, typing.lines);
-		cachedLines.current = lines;
+		const allLines = buildLineList(blockQueue, typing.lines);
+		// Show only the LAST maxLines lines (newest code at bottom)
+		const capped =
+			allLines.length > maxLines ? allLines.slice(-maxLines) : allLines;
+		cachedLines.current = capped;
 		prevBlockCount.current = blockCount;
-		return lines;
+		return capped;
 	}, [blockQueue, typing.lines, blockCount, loc]);
 
 	const totalLines = flatLines.length + 1;
@@ -365,8 +370,6 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 							const idx = startIdx + i;
 
 							if (idx === currentLineIdx) {
-								// Hide active typing line when loc = 0
-								const showContent = loc > 0;
 								return (
 									<div css={lineStyle} key="active">
 										<span
@@ -376,7 +379,7 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 											{currentLineNumber}
 										</span>
 										<span css={lineContentStyle}>
-											{showContent && (
+											{loc > 0 && (
 												<span
 													dangerouslySetInnerHTML={{
 														__html: typing.currentLine,
