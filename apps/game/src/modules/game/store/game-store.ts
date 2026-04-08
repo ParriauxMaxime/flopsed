@@ -77,6 +77,7 @@ export interface GameState {
 	locPerKey: number;
 	effectiveLocPerKey: number;
 	autoLocPerSec: number;
+	autoTypeLocPerSec: number;
 	freelancerLocPerSec: number;
 	internLocPerSec: number;
 	devLocPerSec: number;
@@ -181,6 +182,7 @@ const initialState: GameState = {
 	locPerKey: core.startingLocPerKey,
 	effectiveLocPerKey: core.startingLocPerKey,
 	autoLocPerSec: 0,
+	autoTypeLocPerSec: 0,
 	freelancerLocPerSec: 0,
 	internLocPerSec: 0,
 	devLocPerSec: 0,
@@ -488,6 +490,15 @@ function recalcDerivedStats(state: GameState): void {
 		totalAutoLoc * locProductionMultiplier * eventMods.autoLocMultiplier;
 	if (!state.editorStreamingMode && state.autoLocPerSec > locPerKey * 8) {
 		state.editorStreamingMode = true;
+	}
+	// In streaming mode, auto-type doesn't go through advanceTokens (no visual editor),
+	// so include its LoC production in autoLocPerSec for the tick to handle.
+	const autoTypeLoc = state.autoTypeEnabled
+		? 5 * locPerKey * locProductionMultiplier * eventMods.autoLocMultiplier
+		: 0;
+	state.autoTypeLocPerSec = autoTypeLoc;
+	if (state.editorStreamingMode) {
+		state.autoLocPerSec += autoTypeLoc;
 	}
 	state.effectiveLocPerKey = locPerKey;
 	state.freelancerLocPerSec =
