@@ -268,11 +268,16 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 	const cachedLines = useRef<FlatLine[]>([]);
 
 	const flatLines = useMemo(() => {
+		// When loc is 0, show empty editor — no stale typing content
+		if (loc <= 0) {
+			cachedLines.current = [];
+			return [];
+		}
 		const lines = buildLineList(blockQueue, typing.lines);
 		cachedLines.current = lines;
 		prevBlockCount.current = blockCount;
 		return lines;
-	}, [blockQueue, typing.lines, blockCount]);
+	}, [blockQueue, typing.lines, blockCount, loc]);
 
 	const totalLines = flatLines.length + 1;
 
@@ -360,6 +365,8 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 							const idx = startIdx + i;
 
 							if (idx === currentLineIdx) {
+								// Hide active typing line when loc = 0
+								const showContent = loc > 0;
 								return (
 									<div css={lineStyle} key="active">
 										<span
@@ -369,11 +376,13 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 											{currentLineNumber}
 										</span>
 										<span css={lineContentStyle}>
-											<span
-												dangerouslySetInnerHTML={{
-													__html: typing.currentLine,
-												}}
-											/>
+											{showContent && (
+												<span
+													dangerouslySetInnerHTML={{
+														__html: typing.currentLine,
+													}}
+												/>
+											)}
 											<span css={themedCursorCss} />
 										</span>
 									</div>
