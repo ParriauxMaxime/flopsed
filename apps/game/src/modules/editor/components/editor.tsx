@@ -177,9 +177,12 @@ interface EditorProps {
 
 export function Editor({ keystrokeCallbackRef }: EditorProps) {
 	const totalLoc = useGameStore((s) => s.totalLoc);
+	const loc = useGameStore((s) => s.loc);
 	const locPerKey = useGameStore((s) => s.locPerKey);
 	const effectiveLocPerKey = useGameStore((s) => s.effectiveLocPerKey);
-	const blockQueue = useGameStore((s) => s.blockQueue);
+	const rawBlockQueue = useGameStore((s) => s.blockQueue);
+	// If loc counter is 0, show empty editor regardless of queued blocks
+	const blockQueue = loc <= 0 ? [] : rawBlockQueue;
 	const editorTheme = useUiStore((s) => s.editorTheme);
 	const editorRef = useRef<HTMLDivElement>(null);
 
