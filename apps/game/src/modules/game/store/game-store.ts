@@ -692,7 +692,7 @@ export const useGameStore = create<GameState & GameActions>()(
 						// T4+ or streaming: no block tracking needed
 						if (blockQueue.length > 0) blockQueue = [];
 					} else {
-						// Remove blocks from front when LoC is executed
+						// Remove lines from front when LoC is executed
 						if (executed > 0 && blockQueue.length > 0) {
 							let toRemove = Math.ceil(executed);
 							blockQueue = blockQueue.slice();
@@ -702,8 +702,15 @@ export const useGameStore = create<GameState & GameActions>()(
 									toRemove -= block.loc;
 									blockQueue.shift();
 								} else {
+									// Trim lines proportionally from the front
+									const linesToTrim = Math.max(
+										1,
+										Math.round(
+											(toRemove / block.loc) * block.lines.length,
+										),
+									);
 									blockQueue[0] = {
-										...block,
+										lines: block.lines.slice(linesToTrim),
 										loc: block.loc - toRemove,
 									};
 									toRemove = 0;
