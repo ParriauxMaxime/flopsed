@@ -177,6 +177,7 @@ export function EventToast() {
 	const cash = useGameStore((s) => s.cash);
 	const loc = useGameStore((s) => s.loc);
 	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
+	const currentTierIndex = useGameStore((s) => s.currentTierIndex);
 	const applyEventReward = useGameStore((s) => s.applyEventReward);
 
 	const nameCss = useMemo(
@@ -250,6 +251,7 @@ export function EventToast() {
 		currentCash: cash,
 		currentLoc: loc,
 		currentLocPerSec: autoLocPerSec,
+		currentTierIndex,
 	};
 
 	return (
