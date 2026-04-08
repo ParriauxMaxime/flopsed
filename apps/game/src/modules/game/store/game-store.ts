@@ -127,6 +127,7 @@ export interface GameState {
 	prevTickTotalLoc: number;
 	prevTickTotalExecLoc: number;
 	_visualTick: number;
+	_typingLoc: number;
 	editorStreamingMode: boolean;
 	prestigeCount: number;
 	prestigeMultiplier: number;
@@ -232,6 +233,7 @@ const initialState: GameState = {
 	prevTickTotalLoc: 0,
 	prevTickTotalExecLoc: 0,
 	_visualTick: 0,
+	_typingLoc: 0,
 	editorStreamingMode: false,
 	prestigeCount: 0,
 	prestigeMultiplier: 1,
@@ -584,12 +586,30 @@ export const useGameStore = create<GameState & GameActions>()(
 			addLoc: (amount: number) => {
 				set((s) => {
 					const gained = amount * s.locProductionMultiplier;
+					if (!s.editorStreamingMode) {
+						// Block mode: loc = blockQueue total + typing buffer LoC
+						// addLoc represents LoC in the typing buffer (not yet a completed block)
+						const queueLoc = s.blockQueue.reduce((sum, b) => sum + b.loc, 0);
+						return {
+							loc: queueLoc + (s._typingLoc ?? 0) + gained,
+							_typingLoc: (s._typingLoc ?? 0) + gained,
+							totalLoc: s.totalLoc + gained,
+						};
+					}
 					return { loc: s.loc + gained, totalLoc: s.totalLoc + gained };
 				});
 			},
 
 			enqueueBlock: (block: QueuedBlock) => {
-				set((s) => ({ blockQueue: [...s.blockQueue, block] }));
+				set((s) => {
+					const blockQueue = [...s.blockQueue, block];
+					if (!s.editorStreamingMode) {
+						// Block completes: move typing LoC into the block, reset typing buffer
+						const loc = blockQueue.reduce((sum, b) => sum + b.loc, 0);
+						return { blockQueue, loc, _typingLoc: 0 };
+					}
+					return { blockQueue };
+				});
 			},
 
 			tick: (dt: number) => {
@@ -653,13 +673,23 @@ export const useGameStore = create<GameState & GameActions>()(
 						totalLoc += directLoc + aiProduced;
 						tokens += tokensProduced;
 						totalTokens += tokensProduced;
-					} else {
-						// Pre-T4: all human output goes to LoC directly
+					} else if (s.editorStreamingMode) {
+						// Streaming mode: direct counter
 						loc += humanOutput;
 						totalLoc += humanOutput;
 					}
+					// ── 2. Block queue management ──
+					let blockQueue = s.blockQueue;
+					const visualTick = (s._visualTick ?? 0) + 1;
 
-					// ── 2. Execution ──
+					if (s.editorStreamingMode || aiUnlocked) {
+						// Streaming/AI mode: no block tracking
+						if (blockQueue.length > 0) blockQueue = [];
+					}
+					// Block mode: production goes through addLoc/enqueueBlock from
+					// the typing hooks. The tick does NOT add production — only execution.
+
+					// ── 3. Execution ──
 					const execFlops = aiUnlocked ? s.flops * s.flopSlider : s.flops;
 					let manualExecAccum = s.manualExecAccum;
 					let execCapacity: number;
@@ -672,29 +702,25 @@ export const useGameStore = create<GameState & GameActions>()(
 						execCapacity = 0;
 					}
 
+					// In block mode, loc = blockQueue total + typing buffer
+					if (!s.editorStreamingMode && !aiUnlocked) {
+						loc = blockQueue.reduce((sum, b) => sum + b.loc, 0) + (s._typingLoc ?? 0);
+					}
+
 					const executed = Math.min(execCapacity, loc);
 					if (executed > 0) {
 						const earnRate = tier.cashPerLoc * s.cashMultiplier;
 						cash += executed * earnRate;
 						totalCash += executed * earnRate;
-						loc -= executed;
 						totalExecutedLoc += executed;
 						sfx.execute();
-					}
 
-					loc = Math.max(0, loc);
-
-					// ── 3. Visual block queue (capped, for editor only) ──
-					// Skip at T4+ (CLI prompt) and T2+ streaming mode
-					let blockQueue = s.blockQueue;
-					const visualTick = (s._visualTick ?? 0) + 1;
-					if (aiUnlocked || s.editorStreamingMode) {
-						// T4+ or streaming: no block tracking needed
-						if (blockQueue.length > 0) blockQueue = [];
-					} else {
-						// Remove lines from front when LoC is executed
-						if (executed > 0 && blockQueue.length > 0) {
-							let toRemove = Math.ceil(executed);
+						if (s.editorStreamingMode || aiUnlocked) {
+							// Streaming: subtract from counter directly
+							loc -= executed;
+						} else {
+							// Block mode: drain blocks from front
+							let toRemove = executed;
 							blockQueue = blockQueue.slice();
 							while (blockQueue.length > 0 && toRemove > 0) {
 								const block = blockQueue[0];
@@ -702,12 +728,11 @@ export const useGameStore = create<GameState & GameActions>()(
 									toRemove -= block.loc;
 									blockQueue.shift();
 								} else {
-									// Trim lines proportionally from the front
+									// Trim lines proportionally
+									const fraction = toRemove / block.loc;
 									const linesToTrim = Math.max(
 										1,
-										Math.round(
-											(toRemove / block.loc) * block.lines.length,
-										),
+										Math.round(fraction * block.lines.length),
 									);
 									blockQueue[0] = {
 										lines: block.lines.slice(linesToTrim),
@@ -716,59 +741,12 @@ export const useGameStore = create<GameState & GameActions>()(
 									toRemove = 0;
 								}
 							}
-						}
-
-						// Sync visual queue with actual LoC counter:
-						// Visual lines should roughly match loc count
-						if (loc <= 0 && blockQueue.length > 0) {
-							blockQueue = [];
-						} else if (blockQueue.length > 0) {
-							// Count total visual lines
-							let totalLines = 0;
-							for (const b of blockQueue) totalLines += b.lines.length;
-							// Trim from front until lines ≈ loc
-							if (totalLines > Math.max(loc, 1) * 1.2) {
-								const targetLines = Math.floor(loc);
-								blockQueue = blockQueue.slice();
-								while (
-									blockQueue.length > 0 &&
-									totalLines > targetLines
-								) {
-									const block = blockQueue[0];
-									if (totalLines - block.lines.length >= targetLines) {
-										totalLines -= block.lines.length;
-										blockQueue.shift();
-									} else {
-										// Trim partial: keep only what we need
-										const keep = Math.max(
-											1,
-											block.lines.length -
-												(totalLines - targetLines),
-										);
-										blockQueue[0] = {
-											lines: block.lines.slice(
-												block.lines.length - keep,
-											),
-											loc: Math.ceil(
-												block.loc *
-													(keep / block.lines.length),
-											),
-										};
-										totalLines = targetLines;
-									}
-								}
-							}
-						}
-
-						const visualProduced = Math.floor(humanOutput + aiProduced);
-						if (visualProduced > 0 && visualTick % 5 === 0) {
-							blockQueue =
-								blockQueue.length >= 100
-									? blockQueue.slice(-99)
-									: [...blockQueue];
-							blockQueue.push({ lines: [], loc: visualProduced * 5 });
+							// Derive loc from updated queue + typing buffer
+							loc = blockQueue.reduce((sum, b) => sum + b.loc, 0) + (s._typingLoc ?? 0);
 						}
 					}
+
+					loc = Math.max(0, loc);
 
 					const next: Partial<GameState> = {
 						loc,

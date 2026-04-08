@@ -180,9 +180,7 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 	const loc = useGameStore((s) => s.loc);
 	const locPerKey = useGameStore((s) => s.locPerKey);
 	const effectiveLocPerKey = useGameStore((s) => s.effectiveLocPerKey);
-	const rawBlockQueue = useGameStore((s) => s.blockQueue);
-	// If loc counter is 0, show empty editor regardless of queued blocks
-	const blockQueue = loc <= 0 ? [] : rawBlockQueue;
+	const blockQueue = useGameStore((s) => s.blockQueue);
 	const editorTheme = useUiStore((s) => s.editorTheme);
 	const editorRef = useRef<HTMLDivElement>(null);
 
@@ -268,14 +266,11 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 	const cachedLines = useRef<FlatLine[]>([]);
 
 	const flatLines = useMemo(() => {
-		// When loc is 0, only show completed lines that are part of the current
-		// typing block (the line being actively typed). Hide everything else.
-		const visibleTypingLines = loc <= 0 ? [] : typing.lines;
-		const lines = buildLineList(blockQueue, visibleTypingLines);
+		const lines = buildLineList(blockQueue, typing.lines);
 		cachedLines.current = lines;
 		prevBlockCount.current = blockCount;
 		return lines;
-	}, [blockQueue, typing.lines, blockCount, loc]);
+	}, [blockQueue, typing.lines, blockCount]);
 
 	const totalLines = flatLines.length + 1;
 
@@ -337,8 +332,8 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 				tabIndex={0}
 				onScroll={onScroll}
 			>
-				<div style={{ height: loc <= 0 ? "auto" : contentHeight, position: "relative" }}>
-					{(flatLines.length === 0 || loc <= 0) && (
+				<div style={{ height: contentHeight, position: "relative" }}>
+					{flatLines.length === 0 && (
 						<div css={hintCss} style={{ color: theme.comment }}>
 							<span
 								css={lineNumberLayoutCss}
@@ -353,7 +348,6 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 					)}
 					<div
 						style={{
-							display: loc <= 0 ? "none" : undefined,
 							position: "absolute",
 							top: startIdx * LINE_HEIGHT,
 							left: 0,
