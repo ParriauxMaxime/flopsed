@@ -1171,8 +1171,7 @@ export function App() {
 	);
 	const singularity = useGameStore((s) => s.singularity);
 	const endgameCompleted = useGameStore((s) => s.endgameCompleted);
-	const showGodMode =
-		endgameCompleted || location.hostname === "localhost";
+	const showGodMode = endgameCompleted || location.hostname === "localhost";
 	const middleTabs = showGodMode ? [...baseTabs, godModeTab] : baseTabs;
 	const theme = useIdeTheme();
 	const shellRef = useRef<HTMLDivElement>(null);

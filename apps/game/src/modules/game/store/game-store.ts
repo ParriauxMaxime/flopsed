@@ -927,8 +927,12 @@ export const useGameStore = create<GameState & GameActions>()(
 			},
 
 			reset: () => {
-				const { prestigeCount, prestigeMultiplier, hasReachedSingularity, endgameCompleted } =
-					get();
+				const {
+					prestigeCount,
+					prestigeMultiplier,
+					hasReachedSingularity,
+					endgameCompleted,
+				} = get();
 				set({
 					...initialState,
 					prestigeCount,

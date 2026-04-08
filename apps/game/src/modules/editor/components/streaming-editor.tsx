@@ -305,7 +305,9 @@ export function StreamingEditor() {
 						opacity: 0.7,
 					})}
 				>
-					{'// hint: You could have bypassed this whole grind by just running "sudo godmode"'}
+					{
+						'// hint: You could have bypassed this whole grind by just running "sudo godmode"'
+					}
 				</div>
 			)}
 		</>

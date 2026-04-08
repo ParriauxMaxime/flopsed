@@ -610,7 +610,10 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 					<button
 						type="button"
 						onClick={() => {
-							useGameStore.setState({ endgameCompleted: true, singularity: false });
+							useGameStore.setState({
+								endgameCompleted: true,
+								singularity: false,
+							});
 						}}
 						css={css({
 							position: "absolute",
@@ -645,7 +648,10 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 				{/* Top bar */}
 				<div css={topBarCss}>
 					<span
-						css={[trafficDotBtnCss, { background: "#ff5f57", cursor: "default" }]}
+						css={[
+							trafficDotBtnCss,
+							{ background: "#ff5f57", cursor: "default" },
+						]}
 						title="No escape"
 					/>
 					<span css={[trafficDotCss, { background: "#febc2e" }]} />
