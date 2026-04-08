@@ -801,14 +801,20 @@
 		{
 			"id": "llm_gate",
 			"name": "LLM",
-			"description": "Unlock LLM instances.",
+			"description": "Unlock LLM instances. Start with 1 host slot.",
 			"icon": "\ud83e\udde0",
 			"requires": ["tier_ai_lab"],
 			"max": 1,
 			"baseCost": 12000000,
 			"costMultiplier": 1,
 			"currency": "cash",
-			"effects": [],
+			"effects": [
+				{
+					"type": "llmHostSlot",
+					"op": "add",
+					"value": 1
+				}
+			],
 			"x": 640,
 			"y": 820
 		},
@@ -1089,7 +1095,7 @@
 		{
 			"id": "llm_capacity",
 			"name": "GPU Allocation",
-			"description": "+4 max LLM instances per level",
+			"description": "+4 LLM host slots per level",
 			"icon": "\ud83d\udd22",
 			"requires": ["llm_gate"],
 			"max": 4,
@@ -1098,7 +1104,7 @@
 			"currency": "cash",
 			"effects": [
 				{
-					"type": "llmMaxBonus",
+					"type": "llmHostSlot",
 					"op": "add",
 					"value": 4
 				}
