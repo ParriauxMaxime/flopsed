@@ -56,10 +56,10 @@
 		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
 	},
 	"flops_slider": {
-		"exec_flops": "Exec {{count}} FLOPS",
-		"ai_flops": "AI {{count}} FLOPS",
-		"exec_rate": "{{count}} loc/s exec",
-		"ai_rate": "{{count}} loc/s gen",
+		"exec_flops": "Execute LoC {{count}} FLOPS",
+		"ai_flops": "Generate LoC {{count}} FLOPS",
+		"exec_rate": "{{count}} LoC/s executed",
+		"ai_rate": "{{count}} LoC/s generated",
 		"auto_arbitrage_active": "Auto-Arbitrage active",
 		"targeting": "targeting {{pct}}%"
 	},
