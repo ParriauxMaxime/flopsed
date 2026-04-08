@@ -590,6 +590,7 @@ export function GodModePage() {
 								...current.ownedTechNodes,
 							};
 							for (const n of allTechNodes) {
+								if (n.id === "the_singularity") continue;
 								nodes[n.id] = n.max;
 							}
 							useGameStore.setState({ ownedTechNodes: nodes });
