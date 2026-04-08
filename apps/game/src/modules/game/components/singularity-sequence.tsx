@@ -466,15 +466,8 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 		animate ? PhaseEnum.glitch : PhaseEnum.show_link,
 	);
 	const [inputValue, setInputValue] = useState("");
-	const [rickrollPlayed, setRickrollPlayed] = useState(false);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		if (phase !== PhaseEnum.rickroll) return;
-		const timer = setTimeout(() => setRickrollPlayed(true), 5000);
-		return () => clearTimeout(timer);
-	}, [phase]);
 
 	// ── Phase transitions (timed) ──
 
@@ -596,45 +589,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 	const visibleComeback = animate ? comeback.visibleLines : COMEBACK_LINES;
 	const comebackPartial = animate ? comeback.currentPartial : "";
 
-	if (phase === PhaseEnum.rickroll) {
-		return (
-			<div css={rickrollOverlayCss}>
-				<iframe
-					css={rickrollVideoCss}
-					src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&start=0"
-					title="The Answer"
-					allow="autoplay; encrypted-media"
-					allowFullScreen
-				/>
-				{rickrollPlayed && (
-					<button
-						type="button"
-						onClick={() => {
-							useGameStore.setState({
-								endgameCompleted: true,
-								singularity: false,
-							});
-						}}
-						css={css({
-							position: "absolute",
-							top: 12,
-							left: 12,
-							width: 14,
-							height: 14,
-							borderRadius: "50%",
-							background: "#ff5f57",
-							border: "none",
-							cursor: "pointer",
-							animation: `${pulseRedDot} 1.5s ease-in-out infinite`,
-							zIndex: 10,
-							"&:hover": { filter: "brightness(1.2)" },
-						})}
-						title="Exit"
-					/>
-				)}
-			</div>
-		);
-	}
+	// Rickroll phase: video plays inside the terminal, red dot pulses for exit
 
 	if (!showCli) {
 		// During glitch and crt_collapse, don't render an overlay —
@@ -647,13 +602,35 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 			<div css={cliContainerCss}>
 				{/* Top bar */}
 				<div css={topBarCss}>
-					<span
-						css={[
-							trafficDotBtnCss,
-							{ background: "#ff5f57", cursor: "default" },
-						]}
-						title="No escape"
-					/>
+					{phase === PhaseEnum.rickroll ? (
+						<button
+							type="button"
+							css={[
+								trafficDotBtnCss,
+								css({
+									background: "#ff5f57",
+									cursor: "pointer",
+									animation: `${pulseRedDot} 1.5s ease-in-out infinite`,
+									"&:hover": { filter: "brightness(1.2)" },
+								}),
+							]}
+							onClick={() => {
+								useGameStore.setState({
+									endgameCompleted: true,
+									singularity: false,
+								});
+							}}
+							title="Exit"
+						/>
+					) : (
+						<span
+							css={[
+								trafficDotBtnCss,
+								{ background: "#ff5f57", cursor: "default" },
+							]}
+							title="No escape"
+						/>
+					)}
 					<span css={[trafficDotCss, { background: "#febc2e" }]} />
 					<span css={[trafficDotCss, { background: "#28c840" }]} />
 					<span css={titleTextCss}>
@@ -664,6 +641,21 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 
 				{/* Content area */}
 				<div css={contentAreaCss} ref={contentRef}>
+					{/* Rickroll: embed video inside terminal */}
+					{phase === PhaseEnum.rickroll && (
+						<iframe
+							css={css({
+								width: "100%",
+								height: "100%",
+								border: "none",
+								borderRadius: 4,
+							})}
+							src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&start=0"
+							title="The Answer"
+							allow="autoplay; encrypted-media"
+							allowFullScreen
+						/>
+					)}
 					{/* Monologue lines */}
 					{visibleMonologue.map((line, i) => (
 						<div

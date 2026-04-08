@@ -561,8 +561,9 @@ export function GodModePage() {
 									...current.ownedTechNodes,
 									the_singularity: 1,
 								},
+								singularity: true,
+								running: false,
 							});
-							recalc();
 						}}
 					>
 						{t("god_mode.trigger_singularity")}

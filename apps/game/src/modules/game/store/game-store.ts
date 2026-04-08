@@ -567,8 +567,10 @@ function recalcDerivedStats(state: GameState): void {
 	state.unlockedModels = unlockedModels;
 	state.aiUnlocked =
 		llmHostSlots > 0 && Object.values(unlockedModels).some(Boolean);
-	state.singularity = singularity;
-	if (singularity) {
+	// Only trigger singularity sequence if not already completed
+	// Godmode can re-trigger by setting singularity directly via setState
+	if (singularity && !state.endgameCompleted) {
+		state.singularity = true;
 		state.hasReachedSingularity = true;
 		state.running = false;
 	}
