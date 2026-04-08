@@ -163,5 +163,17 @@
 		"header": "$ ai-lab --interactive",
 		"loaded": "✓ Models loaded. Type a prompt or watch them work.",
 		"placeholder": "Type a prompt..."
+	},
+	"prestige_modal": {
+		"title": "Acquisition Offer",
+		"subtitle": "A corporation wants to buy your company.",
+		"pro_cash": "Walk away with ${{amount}} cash",
+		"pro_experience": "Experience gained: {{current}}x → {{next}}x $/LoC",
+		"pro_reputation": "Reputation: {{currentStars}} → {{nextStars}}",
+		"con_restart": "Start over from The Garage",
+		"con_employees": "All employees, hardware & AI lost",
+		"con_tech": "All tech research wiped",
+		"cancel": "Keep working",
+		"confirm": "Sell out"
 	}
 }

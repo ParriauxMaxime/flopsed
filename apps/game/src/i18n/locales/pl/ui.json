@@ -163,5 +163,17 @@
 		"header": "$ ai-lab --interactive",
 		"loaded": "✓ Modele załadowane. Wpisz prompt lub obserwuj ich pracę.",
 		"placeholder": "Wpisz prompt..."
+	},
+	"prestige_modal": {
+		"title": "Oferta przejęcia",
+		"subtitle": "Korporacja chce kupić Twoją firmę.",
+		"pro_cash": "Odejdź z ${{amount}} gotówki",
+		"pro_experience": "Zdobyte doświadczenie: {{current}}x → {{next}}x $/LoC",
+		"pro_reputation": "Reputacja: {{currentStars}} → {{nextStars}}",
+		"con_restart": "Zacznij od nowa z Garażu",
+		"con_employees": "Wszyscy pracownicy, sprzęt i AI stracone",
+		"con_tech": "Wszystkie badania tech usunięte",
+		"cancel": "Pracować dalej",
+		"confirm": "Sprzedać"
 	}
 }
