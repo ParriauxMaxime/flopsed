@@ -17,6 +17,17 @@ const SOURCE_COLORS = {
 	dev_team: "#2d8a4e",
 } as const;
 
+const MODEL_COLORS: Record<string, string> = {
+	claude: "#d4a574",
+	gpt: "#3fb950",
+	gemini: "#58a6ff",
+	llama: "#a29bfe",
+	mistral: "#fd79a8",
+	deepseek: "#00d4aa",
+	copilot: "#6c5ce7",
+	grok: "#e17055",
+};
+
 // ── Styles ──
 
 const sourceRowCss = css({
@@ -87,9 +98,7 @@ export function StatsLocSection() {
 	const sessionStartTime = useGameStore((s) => s.sessionStartTime);
 
 	const autoLocPerSec = useGameStore((s) => s.autoLocPerSec);
-	const autoTypeLocPerSec = useGameStore((s) => s.autoTypeLocPerSec);
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
-	const tokenMultiplier = useGameStore((s) => s.tokenMultiplier);
 	const keysPerSec = useKeypressRate();
 
 	// "You" = max(physical typing, auto-type) + auto-type base
@@ -97,8 +106,7 @@ export function StatsLocSection() {
 	const locRate = autoLocPerSec + youLocPerSec;
 	const elapsed = (performance.now() - sessionStartTime) / 1000;
 
-	// When AI is unlocked, workers become "token producers" — show tokens/s
-	const tokenScale = aiUnlocked ? tokenMultiplier : 1;
+	const tokenScale = 1;
 
 	const humanSources = useMemo((): SourceRow[] => {
 		const rows: SourceRow[] = [];
@@ -147,47 +155,30 @@ export function StatsLocSection() {
 		t,
 	]);
 
-	// AI LoC/s (same computation as flops-slider.tsx)
-	const flops = useGameStore((s) => s.flops);
-	const flopSlider = useGameStore((s) => s.flopSlider);
-	const unlockedModels = useGameStore((s) => s.unlockedModels);
-	const llmHostSlots = useGameStore((s) => s.llmHostSlots);
+	const aiModelAllocations = useGameStore((s) => s.aiModelAllocations);
 
-	const aiLocPerSec = useMemo(() => {
-		if (!aiUnlocked) return 0;
-		const active = aiModels
-			.filter((m) => unlockedModels[m.id])
-			.sort((a, b) => a.flopsCost - b.flopsCost)
-			.slice(0, llmHostSlots);
-		const aiFlops = flops * (1 - flopSlider);
-		let totalTokenDemand = 0;
-		for (const m of active) totalTokenDemand += m.tokenCost;
-		const humanTokenOutput = autoLocPerSec * tokenMultiplier;
-		const tokenEff =
-			totalTokenDemand > 0
-				? Math.min(1, humanTokenOutput / totalTokenDemand)
-				: 0;
-		let totalLoc = 0;
-		let remaining = aiFlops;
-		for (const model of active) {
-			const modelFlops = Math.min(model.flopsCost, remaining);
-			remaining -= modelFlops;
+	const aiSources = useMemo((): SourceRow[] => {
+		if (!aiUnlocked) return [];
+		return aiModelAllocations.map((alloc) => {
+			const model = aiModels.find((m) => m.id === alloc.modelId);
+			if (!model) return null;
 			const flopRatio =
-				model.flopsCost > 0 ? modelFlops / model.flopsCost : 0;
-			totalLoc += model.locPerSec * tokenEff * Math.min(1, flopRatio);
-		}
-		return totalLoc;
-	}, [
-		aiUnlocked,
-		unlockedModels,
-		flops,
-		flopSlider,
-		llmHostSlots,
-		autoLocPerSec,
-		tokenMultiplier,
-	]);
+				alloc.flopsCap > 0 ? alloc.allocatedFlops / alloc.flopsCap : 0;
+			const locOutput = model.locPerSec * flopRatio;
+			return {
+				name: `${model.name} ${model.version}`,
+				locPerSec: locOutput,
+				color: MODEL_COLORS[model.family] ?? "#8b949e",
+			};
+		}).filter((r): r is SourceRow => r !== null);
+	}, [aiUnlocked, aiModelAllocations]);
 
-	const humanMaxLoc = Math.max(1, ...humanSources.map((s) => s.locPerSec));
+	const allSources = useMemo(
+		() => [...humanSources, ...aiSources].sort((a, b) => b.locPerSec - a.locPerSec),
+		[humanSources, aiSources],
+	);
+	const maxLoc = Math.max(1, ...allSources.map((s) => s.locPerSec));
+	const totalAiLoc = aiSources.reduce((sum, s) => sum + s.locPerSec, 0);
 
 	const { locProdData, locExecData } = useMemo(
 		() => ({
@@ -198,45 +189,22 @@ export function StatsLocSection() {
 	);
 	const latest = rateSnapshots[rateSnapshots.length - 1];
 
-	const totalTokensPerSec = locRate * tokenMultiplier;
-	const unit = aiUnlocked
-		? t("stats_panel.tokens_per_sec")
-		: t("stats_panel.per_sec");
+	const unit = t("stats_panel.per_sec");
 
 	return (
 		<CollapsibleSection
 			icon={<span style={{ color: theme.locColor }}>◇</span>}
-			label={
-				aiUnlocked
-					? t("stats_panel.token_producers")
-					: t("stats_panel.loc")
-			}
+			label={t("stats_panel.loc")}
 			value={
-				aiUnlocked ? (
-					<RollingNumber
-						value={`${formatNumber(totalTokensPerSec)} tok/s`}
-						color={theme.locColor}
-					/>
-				) : (
-					<RollingNumber
-						value={formatNumber(loc)}
-						color={theme.locColor}
-					/>
-				)
+				<RollingNumber
+					value={`${formatNumber(locRate + totalAiLoc)}/s`}
+					color={theme.locColor}
+				/>
 			}
 			rate={
-				aiUnlocked ? (
-					<span style={{ color: "#c678dd" }}>
-						{"AI: "}
-						{formatNumber(aiLocPerSec)}
-						{t("stats_panel.per_sec")}
-					</span>
-				) : (
-					<span style={{ color: theme.locColor }}>
-						{formatNumber(locRate)}
-						{t("stats_panel.per_sec")}
-					</span>
-				)
+				<span style={{ color: theme.locColor }}>
+					{formatNumber(loc)} {t("stats_panel.loc").toLowerCase()}
+				</span>
 			}
 			collapsible={analyticsUnlocked}
 			defaultOpen={true}
@@ -275,7 +243,7 @@ export function StatsLocSection() {
 				</div>
 			)}
 			{/* Source rows */}
-			{humanSources.map((s) => (
+			{allSources.map((s) => (
 				<div css={sourceRowCss} key={s.name}>
 					<span css={sourceNameCss} style={{ color: theme.textMuted }}>
 						{s.name}
@@ -287,7 +255,7 @@ export function StatsLocSection() {
 						<div
 							css={barFillCss}
 							style={{
-								transform: `scaleX(${s.locPerSec / humanMaxLoc})`,
+								transform: `scaleX(${s.locPerSec / maxLoc})`,
 								background: s.color,
 							}}
 						/>
@@ -298,26 +266,6 @@ export function StatsLocSection() {
 					</span>
 				</div>
 			))}
-			{aiUnlocked && aiLocPerSec > 0 && (
-				<div css={sourceRowCss}>
-					<span css={sourceNameCss} style={{ color: "#c678dd" }}>
-						{t("stats_panel.ai_output")}
-					</span>
-					<div css={barTrackCss} style={{ background: theme.border }}>
-						<div
-							css={barFillCss}
-							style={{
-								transform: "scaleX(1)",
-								background: "#c678dd",
-							}}
-						/>
-					</div>
-					<span css={sourceValueCss} style={{ color: "#c678dd" }}>
-						{formatNumber(aiLocPerSec)}
-						{t("stats_panel.per_sec")}
-					</span>
-				</div>
-			)}
 			{managerBonus > 1 && (
 				<div style={{ fontSize: 10, color: theme.textMuted, marginTop: 3 }}>
 					{t("stats_panel.manager_bonus", {
