@@ -647,6 +647,11 @@ export const useGameStore = create<GameState & GameActions>()(
 					const humanOutput = s.running ? s.autoLocPerSec * dt : 0;
 					let aiProduced = 0;
 
+					// Track allocations for UI (updated every tick so slider changes reflect immediately)
+					const tickAllocations: GameState["aiModelAllocations"] = [];
+					let tickTotalCap = 0;
+					let tickTotalConsumed = 0;
+
 					if (aiUnlocked && s.running) {
 						const eventMods = useEventStore.getState().getEventModifiers();
 						const eventTokenMult = eventMods.tokenProductionMultiplier;
@@ -674,16 +679,48 @@ export const useGameStore = create<GameState & GameActions>()(
 							const tokensWanted = model.tokenCost * flopRatio * dt;
 							const tokensGot = Math.min(tokensWanted, remainingTokens);
 							remainingTokens -= tokensGot;
-							aiProduced += tokensGot * model.locPerToken;
+							const locOut = tokensGot * model.locPerToken;
+							aiProduced += locOut;
+							tickTotalCap += model.flopsCost;
+							tickTotalConsumed += allocated;
+							tickAllocations.push({
+								modelId: model.id,
+								allocatedFlops: allocated,
+								flopsCap: model.flopsCost,
+								locPerToken: model.locPerToken,
+								locProduced: locOut / dt,
+							});
 						}
 
 						// Surplus tokens convert back to direct LoC
-						const directLoc = remainingTokens / Math.max(1, s.tokenMultiplier * eventTokenMult);
+						const directLoc =
+							remainingTokens / Math.max(1, s.tokenMultiplier * eventTokenMult);
 
 						loc += directLoc + aiProduced;
 						totalLoc += directLoc + aiProduced;
 						tokens += humanTokenOutput - remainingTokens;
 						totalTokens += humanTokenOutput - remainingTokens;
+					} else if (aiUnlocked) {
+						// Not running but AI unlocked — compute allocations for UI
+						const activeModels = aiModels
+							.filter((m) => s.unlockedModels[m.id])
+							.sort((a, b) => a.flopsCost - b.flopsCost)
+							.slice(0, s.llmHostSlots);
+						const aiFlops = s.flops * (1 - s.flopSlider);
+						let remaining = aiFlops;
+						for (const model of activeModels) {
+							const allocated = Math.min(model.flopsCost, remaining);
+							remaining -= allocated;
+							tickTotalCap += model.flopsCost;
+							tickTotalConsumed += allocated;
+							tickAllocations.push({
+								modelId: model.id,
+								allocatedFlops: allocated,
+								flopsCap: model.flopsCost,
+								locPerToken: model.locPerToken,
+								locProduced: 0,
+							});
+						}
 					} else {
 						// Pre-T4: all human output goes to LoC directly
 						loc += humanOutput;
@@ -724,6 +761,9 @@ export const useGameStore = create<GameState & GameActions>()(
 						tokens,
 						totalTokens,
 						manualExecAccum,
+						aiModelAllocations: tickAllocations,
+						totalAiFlopsCap: tickTotalCap,
+						totalAiFlopsConsumed: tickTotalConsumed,
 					};
 
 					let newMilestones: string[] | null = null;
