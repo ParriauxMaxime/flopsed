@@ -601,55 +601,42 @@ export const useGameStore = create<GameState & GameActions>()(
 					let aiProduced = 0;
 
 					if (aiUnlocked && s.running) {
-						// Get event modifier for token production
 						const eventMods = useEventStore.getState().getEventModifiers();
 						const eventTokenMult = eventMods.tokenProductionMultiplier;
 
-						// Apply both tech tree token multiplier and event modifier
-						const adjustedHumanOutput =
+						// Human output → tokens
+						const humanTokenOutput =
 							humanOutput * s.tokenMultiplier * eventTokenMult;
 
-						// Compute AI token demand
+						// Active models sorted by flopsCost (cap) ascending — smallest first
 						const activeModels = aiModels
 							.filter((m) => s.unlockedModels[m.id])
 							.sort((a, b) => a.flopsCost - b.flopsCost)
 							.slice(0, s.llmHostSlots);
 
-						let totalTokenDemand = 0;
-						for (const model of activeModels) {
-							totalTokenDemand += model.tokenCost * dt;
-						}
-
-						// Split: tokens first (capped at demand), surplus → direct LoC
-						const tokensProduced = Math.min(
-							adjustedHumanOutput,
-							totalTokenDemand,
-						);
-						const directLoc = adjustedHumanOutput - tokensProduced;
-						const tokenEfficiency =
-							totalTokenDemand > 0 ? tokensProduced / totalTokenDemand : 0;
-
-						// AI LoC output (gated by tokens AND proportional FLOPS)
+						// Allocate FLOPS smallest-cap-first
 						const aiFlops = s.flops * (1 - s.flopSlider);
-						let totalFlopsDemand = 0;
+						let remainingFlops = aiFlops;
+						let remainingTokens = humanTokenOutput;
+
 						for (const model of activeModels) {
-							totalFlopsDemand += model.flopsCost;
+							const allocated = Math.min(model.flopsCost, remainingFlops);
+							remainingFlops -= allocated;
+							const flopRatio =
+								model.flopsCost > 0 ? allocated / model.flopsCost : 0;
+							const tokensWanted = model.tokenCost * flopRatio * dt;
+							const tokensGot = Math.min(tokensWanted, remainingTokens);
+							remainingTokens -= tokensGot;
+							aiProduced += tokensGot * model.locPerToken;
 						}
-						// Proportional: all models share FLOPS fairly
-						const flopSaturation =
-							totalFlopsDemand > 0
-								? Math.min(1, aiFlops / totalFlopsDemand)
-								: 0;
-						for (const model of activeModels) {
-							const flopRatio = flopSaturation;
-							aiProduced +=
-								model.locPerSec * tokenEfficiency * Math.min(1, flopRatio) * dt;
-						}
+
+						// Surplus tokens convert back to direct LoC
+						const directLoc = remainingTokens / Math.max(1, s.tokenMultiplier * eventTokenMult);
 
 						loc += directLoc + aiProduced;
 						totalLoc += directLoc + aiProduced;
-						tokens += tokensProduced;
-						totalTokens += tokensProduced;
+						tokens += humanTokenOutput - remainingTokens;
+						totalTokens += humanTokenOutput - remainingTokens;
 					} else {
 						// Pre-T4: all human output goes to LoC directly
 						loc += humanOutput;
