@@ -83,6 +83,9 @@ const aiChevronCss = css({
 const aiModelListCss = css({
 	overflow: "hidden",
 	transition: "max-height 0.2s ease, opacity 0.15s ease",
+	overflowY: "auto",
+	"&::-webkit-scrollbar": { width: 4 },
+	"&::-webkit-scrollbar-thumb": { borderRadius: 2 },
 });
 
 const sourceValueCss = css({
@@ -318,7 +321,7 @@ export function StatsLocSection() {
 					<div
 						css={aiModelListCss}
 						style={{
-							maxHeight: aiExpanded ? aiSources.length * 26 : 0,
+							maxHeight: aiExpanded ? 200 : 0,
 							opacity: aiExpanded ? 1 : 0,
 						}}
 					>
