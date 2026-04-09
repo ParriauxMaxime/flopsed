@@ -613,7 +613,9 @@ function recalcDerivedStats(state: GameState): void {
 	state.autoTypeEnabled = (state.ownedTechNodes.auto_type ?? 0) > 0;
 	state.autoExecuteEnabled = (state.ownedTechNodes.auto_execute ?? 0) > 0;
 	state.autoPokeEnabled = (state.ownedTechNodes.auto_poke ?? 0) > 0;
-	state.autoArbitrageEnabled = (state.ownedTechNodes.auto_arbitrage ?? 0) > 0;
+	if ((state.ownedTechNodes.auto_arbitrage ?? 0) === 0) {
+		state.autoArbitrageEnabled = false;
+	}
 	// Track singularity eligibility — actual trigger is in researchNode/godmode only
 	if (singularity) {
 		state.hasReachedSingularity = true;
@@ -927,7 +929,10 @@ export const useGameStore = create<GameState & GameActions>()(
 						cash: useLoc ? s.cash : s.cash - cost,
 						ownedTechNodes: { ...s.ownedTechNodes, [node.id]: newOwned },
 					};
-					// auto-* flags are derived in recalcDerivedStats from ownedTechNodes
+					// Enable auto-arbitrage on first unlock
+					if (node.id === "auto_arbitrage" && newOwned === 1) {
+						newState.autoArbitrageEnabled = true;
+					}
 					if (node.id === "the_singularity") {
 						newState.singularity = true;
 						newState.running = false;
