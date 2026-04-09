@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { CollapsibleSection } from "./collapsible-section";
+import { FlopsSlider } from "./flops-slider";
 import { RollingNumber } from "./rolling-number";
 
 const MODEL_COLORS: Record<string, string> = {
@@ -103,6 +104,9 @@ export function StatsAiComputeSection() {
 			collapsible={true}
 			defaultOpen={true}
 		>
+			{/* FLOPS allocation slider */}
+			<FlopsSlider embedded />
+
 			{/* Total FLOPS budget bar */}
 			<div
 				style={{

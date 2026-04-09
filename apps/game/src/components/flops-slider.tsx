@@ -78,7 +78,7 @@ const toggleThumbCss = css({
 	display: "block",
 });
 
-export function FlopsSlider() {
+export function FlopsSlider({ embedded = false }: { embedded?: boolean } = {}) {
 	const { t } = useTranslation();
 	const aiUnlocked = useGameStore((s) => s.aiUnlocked);
 	const flops = useGameStore((s) => s.flops);
@@ -138,7 +138,7 @@ export function FlopsSlider() {
 	const cashColor = theme.cashColor ?? "#e5c07b";
 
 	return (
-		<div css={wrapperCss} style={{ borderBottom: `1px solid ${theme.border}` }}>
+		<div css={embedded ? undefined : wrapperCss} style={embedded ? { marginBottom: 10 } : { borderBottom: `1px solid ${theme.border}` }}>
 			{/* Labels */}
 			<div css={labelRowCss}>
 				<span style={{ color: cashColor, fontWeight: 600 }}>
