@@ -269,7 +269,7 @@
 			"id": "tpu_pod",
 			"tier": "ai_lab",
 			"name": "TPU Pod",
-			"description": "+5M FLOPS",
+			"description": "+200K FLOPS",
 			"icon": "⚡",
 			"baseCost": 200000000,
 			"costMultiplier": 1.6,
@@ -278,7 +278,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 5000000
+					"value": 200000
 				}
 			]
 		},
@@ -304,7 +304,7 @@
 			"id": "supercomputer",
 			"tier": "agi_race",
 			"name": "Supercomputer",
-			"description": "+200M FLOPS",
+			"description": "+100M FLOPS",
 			"icon": "🖲️",
 			"baseCost": 25000000000,
 			"costMultiplier": 1.8,
@@ -313,7 +313,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 200000000
+					"value": 100000000
 				}
 			]
 		},
@@ -321,7 +321,7 @@
 			"id": "planetary_datacenter",
 			"tier": "agi_race",
 			"name": "Planetary Datacenter",
-			"description": "A continent-sized compute farm. +10B FLOPS",
+			"description": "A continent-sized compute farm. +500M FLOPS",
 			"icon": "🛰️",
 			"baseCost": 50000000000,
 			"costMultiplier": 1.35,
@@ -330,7 +330,7 @@
 				{
 					"type": "flops",
 					"op": "add",
-					"value": 10000000000
+					"value": 500000000
 				}
 			]
 		}
