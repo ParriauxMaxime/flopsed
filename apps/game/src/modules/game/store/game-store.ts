@@ -106,6 +106,15 @@ export interface GameState {
 	aiLocAccumulator: number;
 	autoLocAccumulator: number;
 	aiUnlocked: boolean;
+	aiModelAllocations: Array<{
+		modelId: string;
+		allocatedFlops: number;
+		flopsCap: number;
+		locPerToken: number;
+		locProduced: number;
+	}>;
+	totalAiFlopsCap: number;
+	totalAiFlopsConsumed: number;
 	currentTierIndex: number;
 	ownedUpgrades: Record<string, number>;
 	ownedTechNodes: Record<string, number>;
@@ -213,6 +222,9 @@ const initialState: GameState = {
 	aiLocAccumulator: 0,
 	autoLocAccumulator: 0,
 	aiUnlocked: false,
+	aiModelAllocations: [],
+	totalAiFlopsCap: 0,
+	totalAiFlopsConsumed: 0,
 	currentTierIndex: 0,
 	ownedUpgrades: {},
 	ownedTechNodes: { computer: 1 },
@@ -560,6 +572,41 @@ function recalcDerivedStats(state: GameState): void {
 	}
 	state.currentTierIndex = tierIndex;
 	state.unlockedModels = unlockedModels;
+	// Compute AI model allocations for UI
+	if (llmHostSlots > 0 && Object.values(unlockedModels).some(Boolean)) {
+		const activeModels = aiModels
+			.filter((m) => unlockedModels[m.id])
+			.sort((a, b) => a.flopsCost - b.flopsCost)
+			.slice(0, llmHostSlots);
+
+		const aiFlops = state.flops * (1 - state.flopSlider);
+		let remaining = aiFlops;
+		const allocations: GameState["aiModelAllocations"] = [];
+		let totalCap = 0;
+		let totalConsumed = 0;
+
+		for (const model of activeModels) {
+			const allocated = Math.min(model.flopsCost, remaining);
+			remaining -= allocated;
+			totalCap += model.flopsCost;
+			totalConsumed += allocated;
+			allocations.push({
+				modelId: model.id,
+				allocatedFlops: allocated,
+				flopsCap: model.flopsCost,
+				locPerToken: model.locPerToken,
+				locProduced: 0,
+			});
+		}
+
+		state.aiModelAllocations = allocations;
+		state.totalAiFlopsCap = totalCap;
+		state.totalAiFlopsConsumed = totalConsumed;
+	} else {
+		state.aiModelAllocations = [];
+		state.totalAiFlopsCap = 0;
+		state.totalAiFlopsConsumed = 0;
+	}
 	state.aiUnlocked =
 		llmHostSlots > 0 && Object.values(unlockedModels).some(Boolean);
 	// Derive auto-* flags from owned tech nodes (ensures correct state after load/prestige)
