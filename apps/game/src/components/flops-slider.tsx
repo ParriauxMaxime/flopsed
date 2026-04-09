@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
 const wrapperCss = css({
-	padding: "10px 14px",
+	padding: "10px 14px 12px",
 	flexShrink: 0,
 });
 
