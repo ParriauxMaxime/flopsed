@@ -3,13 +3,13 @@ import { useGameStore } from "@modules/game";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
+import { StatsAiComputeSection } from "./stats-ai-compute-section";
 import { StatsCashSection } from "./stats-cash-section";
 import { StatsExecuteBar } from "./stats-execute-bar";
 import { StatsFlopsSection } from "./stats-flops-section";
 import { StatsHistory } from "./stats-history";
 import { StatsLocSection } from "./stats-loc-section";
 import { StatsTierBar } from "./stats-tier-bar";
-import { StatsAiComputeSection } from "./stats-ai-compute-section";
 
 const panelCss = css({
 	display: "flex",

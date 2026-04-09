@@ -102,44 +102,43 @@ export function StatsLocSection() {
 	const keysPerSec = useKeypressRate();
 
 	// "You" = max(physical typing, auto-type) + auto-type base
-	const youLocPerSec = Math.max(keysPerSec, autoTypeEnabled ? 5 : 0) * locPerKey;
+	const youLocPerSec =
+		Math.max(keysPerSec, autoTypeEnabled ? 5 : 0) * locPerKey;
 	const locRate = autoLocPerSec + youLocPerSec;
 	const elapsed = (performance.now() - sessionStartTime) / 1000;
-
-	const tokenScale = 1;
 
 	const humanSources = useMemo((): SourceRow[] => {
 		const rows: SourceRow[] = [];
 		if ((ownedUpgrades.malt_freelancer ?? 0) > 0)
 			rows.push({
 				name: t("malt_freelancer.name", { ns: "upgrades" }),
-				locPerSec: freelancerLocPerSec * tokenScale,
+				locPerSec: freelancerLocPerSec,
 				color: SOURCE_COLORS.malt_freelancer,
 				count: ownedUpgrades.malt_freelancer,
 			});
 		if ((ownedUpgrades.intern ?? 0) > 0)
 			rows.push({
 				name: t("intern.name", { ns: "upgrades" }),
-				locPerSec: internLocPerSec * tokenScale,
+				locPerSec: internLocPerSec,
 				color: SOURCE_COLORS.intern,
 				count: ownedUpgrades.intern,
 			});
 		if ((ownedUpgrades.dev_team ?? 0) > 0)
 			rows.push({
 				name: t("dev_team.name", { ns: "upgrades" }),
-				locPerSec: teamLocPerSec * tokenScale,
+				locPerSec: teamLocPerSec,
 				color: SOURCE_COLORS.dev_team,
 				count: ownedUpgrades.dev_team,
 			});
 		if (devLocPerSec > 0 && (ownedUpgrades.dev_team ?? 0) === 0)
 			rows.push({
 				name: t("dev_team.name", { ns: "upgrades" }),
-				locPerSec: devLocPerSec * tokenScale,
+				locPerSec: devLocPerSec,
 				color: SOURCE_COLORS.dev_team,
 			});
 		rows.push({
 			name: t("stats_panel.you"),
-			locPerSec: youLocPerSec * tokenScale,
+			locPerSec: youLocPerSec,
 			color: SOURCE_COLORS.you,
 		});
 		rows.sort((a, b) => b.locPerSec - a.locPerSec);
@@ -151,7 +150,6 @@ export function StatsLocSection() {
 		devLocPerSec,
 		teamLocPerSec,
 		youLocPerSec,
-		tokenScale,
 		t,
 	]);
 
@@ -159,22 +157,25 @@ export function StatsLocSection() {
 
 	const aiSources = useMemo((): SourceRow[] => {
 		if (!aiUnlocked) return [];
-		return aiModelAllocations.map((alloc) => {
-			const model = aiModels.find((m) => m.id === alloc.modelId);
-			if (!model) return null;
-			const flopRatio =
-				alloc.flopsCap > 0 ? alloc.allocatedFlops / alloc.flopsCap : 0;
-			const locOutput = model.locPerSec * flopRatio;
-			return {
-				name: `${model.name} ${model.version}`,
-				locPerSec: locOutput,
-				color: MODEL_COLORS[model.family] ?? "#8b949e",
-			};
-		}).filter((r): r is SourceRow => r !== null);
+		return aiModelAllocations
+			.map((alloc) => {
+				const model = aiModels.find((m) => m.id === alloc.modelId);
+				if (!model) return null;
+				const flopRatio =
+					alloc.flopsCap > 0 ? alloc.allocatedFlops / alloc.flopsCap : 0;
+				const locOutput = model.locPerSec * flopRatio;
+				return {
+					name: `${model.name} ${model.version}`,
+					locPerSec: locOutput,
+					color: MODEL_COLORS[model.family] ?? "#8b949e",
+				};
+			})
+			.filter((r): r is SourceRow => r !== null);
 	}, [aiUnlocked, aiModelAllocations]);
 
 	const allSources = useMemo(
-		() => [...humanSources, ...aiSources].sort((a, b) => b.locPerSec - a.locPerSec),
+		() =>
+			[...humanSources, ...aiSources].sort((a, b) => b.locPerSec - a.locPerSec),
 		[humanSources, aiSources],
 	);
 	const maxLoc = Math.max(1, ...allSources.map((s) => s.locPerSec));
