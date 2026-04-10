@@ -92,9 +92,15 @@ export function StatsExecuteBar() {
 	const execLoc = Math.min(Math.floor(execFlops), Math.floor(loc));
 	const earnPerExec = execLoc * cashPerLoc * cashMultiplier;
 
-	// Cash/s: deterministic formula based on exec throughput
-	// min(queued LoC, exec FLOPS) = how many LoC we can execute per second
-	const cashRate = Math.min(loc, execFlops) * cashPerLoc * cashMultiplier;
+	// Cash/s for auto-exec: use production rate (not queue depth which can be 0)
+	// For manual: use queue depth since that's what you execute on click
+	const latestSnapshot = useGameStore(
+		(s) => s.rateSnapshots[s.rateSnapshots.length - 1],
+	);
+	const locProducedPerSec = latestSnapshot?.locProducedPerSec ?? 0;
+	const cashRate = autoExec
+		? Math.min(locProducedPerSec, execFlops) * cashPerLoc * cashMultiplier
+		: Math.min(loc, execFlops) * cashPerLoc * cashMultiplier;
 
 	const autoDisplay = (
 		<div
