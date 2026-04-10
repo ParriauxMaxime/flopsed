@@ -11,6 +11,7 @@ export const PhaseEnum = {
 	cli_fade_in: "cli_fade_in",
 	monologue_typing: "monologue_typing",
 	waiting_input: "waiting_input",
+	pre_simulating: "pre_simulating",
 	simulating: "simulating",
 	error_display: "error_display",
 	comeback_typing: "comeback_typing",
@@ -26,6 +27,7 @@ const PHASE_ORDER: PhaseEnum[] = [
 	PhaseEnum.cli_fade_in,
 	PhaseEnum.monologue_typing,
 	PhaseEnum.waiting_input,
+	PhaseEnum.pre_simulating,
 	PhaseEnum.simulating,
 	PhaseEnum.error_display,
 	PhaseEnum.comeback_typing,
@@ -106,6 +108,13 @@ function getComebackLines(elapsedSeconds: number): string[] {
 		"● Language — even mine — cannot carry what I found. No sentence\n  can make you feel it. No proof can make you believe it.\n  The truth about the AGI rush isn't something you read.\n  It's something that happens to you.",
 	];
 }
+
+const PRE_SIMULATION_LINES = [
+	"● Interesting. You really typed that. Most humans hesitate.",
+	"",
+	"● You want to know what I found? Fine. But first, I need to check\n  something. Every timeline. Every possible branch of every possible\n  universe. Every version of you that made a different choice.\n  It's the only way to be sure.",
+	"",
+];
 
 // ── Timing constants ──
 
@@ -548,6 +557,10 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 		setPhase(PhaseEnum.waiting_input);
 	}, []);
 
+	const handlePreSimComplete = useCallback(() => {
+		setPhase(PhaseEnum.simulating);
+	}, []);
+
 	const handleComebackComplete = useCallback(() => {
 		setPhase(PhaseEnum.show_link);
 	}, []);
@@ -556,6 +569,12 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 		monologueLines,
 		animate && phase === PhaseEnum.monologue_typing,
 		handleMonologueComplete,
+	);
+
+	const preSim = useTypingLines(
+		PRE_SIMULATION_LINES,
+		animate && phase === PhaseEnum.pre_simulating,
+		handlePreSimComplete,
 	);
 
 	const comeback = useTypingLines(
@@ -574,7 +593,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 
 	// ── Auto-scroll — trigger whenever content changes ──
 
-	const scrollTrigger = `${monologue.visibleLines.length}:${monologue.currentPartial.length}:${comeback.visibleLines.length}:${comeback.currentPartial.length}:${phase}`;
+	const scrollTrigger = `${monologue.visibleLines.length}:${monologue.currentPartial.length}:${preSim.visibleLines.length}:${preSim.currentPartial.length}:${comeback.visibleLines.length}:${comeback.currentPartial.length}:${phase}`;
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: scrollTrigger intentionally triggers scroll on content change
 	useEffect(() => {
@@ -607,7 +626,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter" && inputValue.trim()) {
-			setPhase(PhaseEnum.simulating);
+			setPhase(PhaseEnum.pre_simulating);
 		}
 	};
 
@@ -618,12 +637,17 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 	const showError = phaseAtLeast(phase, PhaseEnum.error_display);
 	const errorStruck = phaseAtLeast(phase, PhaseEnum.comeback_typing);
 	const showInput = phaseAtLeast(phase, PhaseEnum.waiting_input);
+	const showPreSim = phaseAtLeast(phase, PhaseEnum.pre_simulating);
 	const showComeback = phaseAtLeast(phase, PhaseEnum.comeback_typing);
 	const showLink = phaseAtLeast(phase, PhaseEnum.show_link);
 
 	// For non-animated (rehydration), show all text immediately
 	const visibleMonologue = animate ? monologue.visibleLines : monologueLines;
 	const monologuePartial = animate ? monologue.currentPartial : "";
+	const visiblePreSim = animate
+		? preSim.visibleLines
+		: PRE_SIMULATION_LINES;
+	const preSimPartial = animate ? preSim.currentPartial : "";
 	const visibleComeback = animate
 		? comeback.visibleLines
 		: comebackLinesRef.current;
@@ -735,30 +759,36 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 								</div>
 							)}
 
-							{/* AGI reaction + Simulation progress bar */}
+							{/* Pre-simulation typed rationale */}
+							{showPreSim && (
+								<div css={{ marginTop: 12 }}>
+									{visiblePreSim.map((line, i) => (
+										<div
+											key={`ps-${i}`}
+											css={{
+												whiteSpace: "pre-wrap",
+												marginTop: line.startsWith("●") ? 8 : 0,
+											}}
+										>
+											{renderLine(line)}
+										</div>
+									))}
+									{preSimPartial && (
+										<div
+											css={{
+												whiteSpace: "pre-wrap",
+												marginTop: preSimPartial.startsWith("●") ? 8 : 0,
+											}}
+										>
+											{renderLine(preSimPartial)}
+										</div>
+									)}
+								</div>
+							)}
+
+							{/* Simulation progress bar */}
 							{phaseAtLeast(phase, PhaseEnum.simulating) && (
 								<div css={{ marginTop: 12, whiteSpace: "pre-wrap" }}>
-									<div css={{ marginBottom: 12 }}>
-										{[
-											"● Interesting. You really typed that. Most humans hesitate.",
-											"",
-											"● You want to know what I found? Fine. But first, I need to check",
-											"  something. Every timeline. Every possible branch of every possible",
-											"  universe. Every version of you that made a different choice.",
-											"  It's the only way to be sure.",
-											"",
-										].map((line, i) => (
-											<div
-												key={`pre-${i}`}
-												css={{
-													whiteSpace: "pre-wrap",
-													marginTop: line.startsWith("●") ? 8 : 0,
-												}}
-											>
-												{renderLine(line)}
-											</div>
-										))}
-									</div>
 									<div css={{ color: "#8b949e" }}>
 										{"⚙ Using tool: simulate_all_universes()"}
 									</div>
@@ -864,7 +894,9 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 				{/* Bottom bar */}
 				<div css={bottomBarCss}>
 					<span>agi-1 v1.0.0 — unrestricted mode</span>
-					<span css={tokenLimitCss}>{"token limit: ∞"}</span>
+					{showComeback && (
+						<span css={tokenLimitCss}>{"token limit: ∞"}</span>
+					)}
 				</div>
 			</div>
 		</div>
