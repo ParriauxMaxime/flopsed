@@ -1,202 +1,153 @@
 # T4+ Sidebar Rework: LoC Producers + AI Compute
 
-**Date:** 2026-04-09
-**Status:** Approved
+**Date:** 2026-04-09 (updated 2026-04-10)
+**Status:** Implemented
 
 ## Problem
 
-At T4, the sidebar becomes confusing. The "Token Producers" label replaces "LoC", the Tokens section shows metrics players don't understand, and LoC production tracking is lost. Players can't tell what's happening or where to invest.
+At T4, the sidebar became confusing. The "Token Producers" label replaced "LoC", the Tokens section showed metrics players didn't understand, and LoC production tracking was lost. The FLOPS slider lived in the editor panel, disconnected from the resource stats. AI models produced negligible output compared to human devs.
 
-## Design Goals
+## What We Built
 
-1. Keep LoC as the primary production metric throughout the entire game
-2. Make AI models visible as LoC producers alongside humans
-3. Show AI compute costs clearly in a dedicated section
-4. Create a natural incentive to parallelize multiple AI models
-5. Make the FLOPS bottleneck obvious and actionable
+### Sidebar Layout (T4+)
 
-## Overview
+```
+Cash            $67.5M         (unchanged)
+                $385K/s
 
-Two key changes:
+LoC             36.7M          (always "LoC", never "Token Producers")
+                258K/s
+  [sparkline: produced / executed / tokens→AI]
+  Dev Team x20  ████████░░  200K+56K/s
+  Intern x25    ██░         1.2K+340/s
+  Freelancer    █░          90+25/s
+  You           ░           8+3/s
+  ▶ AI Output               40.3K/s
+    Copilot Basic            500/s
+    Claude Haiku             800/s
+    ...
 
-1. **LoC section stays as "LoC"** at T4+ — all producers (humans + AI models) appear in one unified list, sorted by LoC/s output
-2. **New "AI Compute" section** replaces the old Tokens section — shows total FLOPS budget and per-model FLOPS consumption vs cap
+AI Compute      385K         / 1.80M cap
+  [draggable split bar: gold(exec) | blue(AI)]
+  FLOPS usage                21%
+  [budget bar]
+  Copilot Basic   1x · 385K/800K
+  [thin cap bar]
+  Mistral Large   1.6x · 0/1.00M
+  [thin cap bar]
 
-The old "Token Producers" and "Tokens" sections are removed.
+FLOPS           751K          (simplified, no duplicate split bar)
+  [utilization sparkline]
+
+Tier Progression  [T0][T1][T2][T3][T4]
+History
+Execute Bar       ⚡ $385K/s   [AUTO]
+```
+
+### Key Changes from Original Design
+
+1. **LoC section** shows ALL producers (humans + agents + AI models) sorted by output. Human/agent rows show token diversion visually: bar splits into source color (direct LoC) + green (tokens fed to AI). Values show `netLoC+tokenPart/s`.
+
+2. **AI models** live in a collapsible sub-section ("▶ AI Output — total/s"), expandable to show per-model LoC/s with scrolling for many models.
+
+3. **AI Agents** appear as regular LoC producers alongside dev teams, with their own color (#e17055).
+
+4. **AI Compute section** replaces old Tokens section. Shows total FLOPS budget bar, then per-model two-line compact rows (name + ratio badge + allocated/cap + thin bar). No diagnostic messages.
+
+5. **FLOPS slider** moved from editor panel into AI Compute section body. Rewritten as draggable split bar (pointer events). Colors: gold (cashColor) for execution, blue (locColor) for AI/LoC generation. Auto-arbitrage toggle preserved.
+
+6. **FLOPS section** simplified — removed duplicate exec/AI split bar (now in the slider). Only shows utilization sparkline.
+
+7. **Sparkline** upgraded to 3 data series: LoC produced (solid blue), LoC executed (dashed purple), tokens consumed by AI (dotted green).
 
 ## Mechanic Changes
 
 ### Per-Model FLOPS Cap
 
-Each AI model has a `flopsCap` — the maximum FLOPS it can consume regardless of how much AI budget is available.
-
-- Existing field `flopsCost` is repurposed as `flopsCap` (the max FLOPS the model can use)
-- A model at cap produces at its full `locPerSec` rate (scaled by LoC/tok ratio)
-- A model below cap produces proportionally: `output = locPerSec * (allocatedFlops / flopsCap)`
-
-This creates the parallelization incentive: one big model at 20% capacity produces less than five small models at 100%.
+Each AI model has a `flopsCost` that acts as its FLOPS cap — the maximum FLOPS it can consume. Output scales linearly with allocation: `output = locPerSec × (allocatedFlops / flopsCost)`.
 
 ### LoC/Token Ratio
 
-Each AI model has a `locPerToken` ratio (replacing the current `locPerSec` / `tokenCost` implicit ratio). Better models produce more LoC per token consumed.
-
-- Ratio displayed as a multiplier badge in the AI Compute section (e.g., `5x`, `1.2x`)
-- Tokens remain an internal mechanic — not shown as a top-level stat
-- Human producers generate tokens at their LoC rate * `tokenMultiplier`
-- AI models consume tokens and produce LoC at `tokensConsumed * locPerToken`
+Each model has `locPerToken` — how many LoC produced per token consumed. Better models have higher ratios (1x for Copilot, up to 50x for T5 models). `locPerSec = tokenCost × locPerToken`.
 
 ### FLOPS Allocation: Smallest Cap First
 
-When AI FLOPS budget < total model demand, allocation fills models from smallest cap to largest:
+Models sorted by `flopsCost` ascending. Each gets `min(flopsCap, remainingFlops)`. Small models fill before big ones — incentivizes parallelizing multiple models.
 
-1. Sort active models by `flopsCap` ascending
-2. Iterate: give each model `min(flopsCap, remainingBudget)`
-3. Subtract allocated amount from remaining budget
-
-**Why smallest first:**
-- Cheap models stay relevant — they fill up before big models see any FLOPS
-- Big models are aspirational — partial capacity until FLOPS scale
-- Prevents "new model makes all old models useless" problem
-- Visual story: top of list (small models) = green/full, bottom (big models) = partially lit
-
-### FLOPS Slider
-
-Unchanged. Splits total FLOPS between:
-- **Exec share** (`flopSlider`): converts LoC queue → cash
-- **AI share** (`1 - flopSlider`): feeds AI models to convert tokens → LoC
-
-### Token Flow (Internal)
-
-Not shown in UI, but the underlying pipeline:
+### Token Flow (Internal, shown in UI via bar splits)
 
 ```
-Human producers → tokens/s  (rate = autoLocPerSec * tokenMultiplier)
-                    ↓
+All producers (humans + agents) → tokens/s (rate × tokenMultiplier)
+    ↓
 AI models consume tokens (gated by FLOPS allocation)
-                    ↓
-AI produces LoC    (rate = tokensConsumed * locPerToken per model)
-                    ↓
-LoC joins queue alongside direct human LoC surplus
-                    ↓
-Exec FLOPS convert LoC → cash
+    ↓
+AI produces LoC (tokensConsumed × locPerToken)
+    ↓
+Surplus tokens → direct LoC (surplus / tokenMultiplier)
 ```
 
-Tokens are an internal gating mechanic. If human token output < total model token demand, models run below capacity even with full FLOPS. This creates late-game pressure (T5) for AI agents that produce massive token volumes.
+### Allocations Updated Every Tick
 
-## UI Changes
+`aiModelAllocations`, `totalAiFlopsCap`, `totalAiFlopsConsumed` are computed in `tick()` (not just `recalcDerivedStats`), so slider changes reflect immediately in the UI.
 
-### LoC Section (Modified)
+## Balance Changes
 
-**Header:** `◇ LoC` with total LoC/s as primary value, queue depth as rate.
+### AI Models
 
-**Body (expanded):**
-- Produced vs executed sparkline (unchanged)
-- Source rows: ALL LoC producers in one list, sorted by output descending
-  - Human sources: Dev Team, Intern, Freelancer, You (unchanged styling, existing source colors)
-  - AI model sources: appear in same list with their family color (claude: `#d4a574`, copilot: `#6c5ce7`, etc.)
-  - Bar = proportion of max source output (unchanged)
-  - Value = `{formatted}/s`
-- Manager bonus text (unchanged)
+- T4 models: `flopsCost` divided by 10 from original values (caps 40K–600K)
+- T5 models: `flopsCost` kept at original values (caps 10M–2B)
+- All models: `locPerToken` multiplied by 5 (range 5x–50x)
+- `locPerSec` recalculated as `tokenCost × locPerToken`
 
-**What's removed:** "Token Producers" label, `tok/s` units, `AI: X/s` rate in header. Everything is LoC again.
+### Hardware Upgrades (FLOPS output reduced)
 
-### AI Compute Section (New, replaces Tokens section)
+| Upgrade | Before | After |
+|---------|--------|-------|
+| Desktop PC | 50 | 15 |
+| Second Monitor | 25 | 10 |
+| Server Rack | 200 | 100 |
+| GPU Cluster | 30K | 5K |
+| Data Center | 200K | 30K |
+| TPU Pod | 5M | 80K |
+| Supercomputer | 200M | 20M (mult 1.8→2.2) |
+| Planetary Datacenter | 10B | 200M (base $5B→$50B, mult 1.25→1.35) |
 
-**Header:** `🤖 AI Compute` with total consumed FLOPS as primary value, total cap as rate (e.g., `178K / 210K cap`).
+### Tech Tree FLOPS Nodes
 
-**Only visible when `aiUnlocked === true`.**
+| Node | Before | After |
+|------|--------|-------|
+| GPU Farm (T4, LoC cost) | 2M/level | 200K/level |
+| Quantum Cluster (T5, LoC cost) | 50M/level | 500M/level |
 
-**Body (expanded):**
+### FLOPS Waste Results
 
-1. **Total FLOPS budget bar**
-   - Label: `FLOPS usage` left, `{pct}%` right
-   - Bar: 6px height, purple fill (`#c678dd`), track = `theme.border`
-   - Width = `totalConsumed / totalCap`
+| Tier | Before | After |
+|------|--------|-------|
+| T0-T1 | 81% | 67% (tiny absolute, typing bottleneck) |
+| T2 | 72% | 35% → 0% mid-tier |
+| T3 | 73% | 10% |
+| T4 | 91% | 47% (transient spike from burst purchases) |
+| T5 | 99% | 49% steady / 95% transient |
 
-2. **Model rows** — two-line compact layout, sorted by `flopsCap` ascending:
-   - Line 1: model name (family color, font-weight 500) | `{ratio}x · {consumed}/{cap}`
-   - Line 2: thin FLOPS bar (3px, family color fill, border track)
-   - ~29px per model row
-
-3. **Diagnostic message** (conditional, same logic as current):
-   - Model near cap: `⚠ {name} near cap — add another instance`
-   - All models starved: `⚠ Need more AI FLOPS — move slider`
-
-**What's removed:** Token count display, token production bar, token demand/supply stats, `tokensConsumed → LoC/s` text.
-
-### Tokens Section
-
-Removed entirely. No replacement needed.
-
-### FLOPS Section
-
-Unchanged. Exec/AI split bar and utilization sparkline stay as-is.
-
-### Execute Bar
-
-Unchanged.
-
-## Data Changes
-
-### `libs/domain/data/ai-models.json`
-
-Each model needs:
-- `flopsCap`: maximum FLOPS the model can consume (replaces semantic of `flopsCost`)
-- `locPerToken`: LoC produced per token consumed (new field, derived from existing `locPerSec / tokenCost`)
-- `tokenCost`: tokens consumed per second at full capacity (unchanged)
-
-The existing `flopsCost` field can be renamed to `flopsCap` or kept as-is with updated semantics — implementation decision.
-
-### `libs/domain/types/ai-model.ts`
-
-Add `locPerToken: number` to `AiModelData` interface. Clarify `flopsCost` docs as "max FLOPS this model can consume."
-
-## Game Store Changes
-
-### `tick()` function — T4+ production phase
-
-Replace current AI production logic with:
-
-```
-1. Compute human token output = autoLocPerSec * tokenMultiplier
-2. Compute AI FLOPS budget = flops * (1 - flopSlider)
-3. Sort active models by flopsCap ascending
-4. Allocate FLOPS smallest-first:
-   for each model:
-     allocated = min(model.flopsCap, remainingFlops)
-     remainingFlops -= allocated
-     flopRatio = allocated / model.flopsCap
-     tokensWanted = model.tokenCost * flopRatio
-     tokensGot = min(tokensWanted, remainingTokens)
-     remainingTokens -= tokensGot
-     locProduced = tokensGot * model.locPerToken
-5. Direct LoC = remainingTokens / tokenMultiplier (surplus tokens → LoC)
-6. loc += directLoc + sum(aiLocProduced)
-```
-
-### `recalcDerivedStats()`
-
-Add derived fields for the AI Compute section:
-- `aiModelAllocations: Array<{ modelId, allocatedFlops, flopsCap, locPerToken, locProduced }>` — for rendering model rows
-- `totalAiFlopsCap`: sum of active model caps
-- `totalAiFlopsConsumed`: sum of allocated FLOPS
-
-## Files to Modify
+## Files Changed
 
 | File | Change |
 |------|--------|
-| `libs/domain/types/ai-model.ts` | Add `locPerToken` field |
-| `libs/domain/data/ai-models.json` | Add `locPerToken` values, clarify `flopsCost` as cap |
-| `apps/game/src/modules/game/store/game-store.ts` | Rewrite T4+ tick production, add derived stats |
-| `apps/game/src/components/stats-loc-section.tsx` | Revert to "LoC" label, add AI models to source list |
-| `apps/game/src/components/stats-tokens-section.tsx` | Replace with AI Compute section (or rename file) |
-| `apps/game/src/components/stats-panel.tsx` | Update section ordering |
-| `libs/engine/balance-sim.ts` | Update sim to use new allocation logic |
-| `apps/simulation/` | May need adjustments for new fields |
-| `apps/game/src/i18n/locales/*/` | Update translation keys |
-
-## Balance Considerations
-
-- `locPerToken` values should be derived from existing `locPerSec / tokenCost` ratios to preserve current balance
-- The smallest-cap-first allocation changes AI output distribution — run `npm run sim` after implementing to validate pacing
-- The FLOPS cap mechanic may require rebalancing model costs in the tech tree if early models become too efficient
+| `libs/domain/types/ai-model.ts` | Added `locPerToken` field |
+| `libs/domain/data/ai-models.json` | Added `locPerToken`, rebalanced `flopsCost` and `locPerSec` |
+| `libs/domain/data/upgrades.json` | Reduced FLOPS outputs, repriced datacenter |
+| `libs/domain/data/tech-tree.json` | Tuned gpu_farm and quantum_compute |
+| `apps/game/src/modules/game/store/game-store.ts` | Rewrote T4+ tick, added allocation tracking per tick, added `tokensConsumedPerSec` to snapshots, fixed auto-arbitrage toggle |
+| `apps/game/src/components/stats-loc-section.tsx` | Reverted to "LoC", merged human+agent+AI sources, token diversion bars+values, collapsible AI sub-section |
+| `apps/game/src/components/stats-ai-compute-section.tsx` | New component (replaces StatsTokensSection) |
+| `apps/game/src/components/stats-tokens-section.tsx` | Deleted |
+| `apps/game/src/components/stats-panel.tsx` | Swapped sections |
+| `apps/game/src/components/stats-flops-section.tsx` | Removed duplicate split bar |
+| `apps/game/src/components/flops-slider.tsx` | Rewritten as draggable split bar, blue/gold colors, embedded mode |
+| `apps/game/src/components/editor-panel.tsx` | Removed FlopsSlider, added T4 keystroke handler |
+| `apps/game/src/components/sparkline.tsx` | Added data3/color3 support |
+| `apps/game/src/components/stats-execute-bar.tsx` | Fixed $/s to use deterministic formula |
+| `apps/game/src/i18n/locales/*/ui.json` | Added AI Compute keys, removed token keys |
+| `libs/engine/balance-sim.ts` | Updated to smallest-cap-first allocation, added `locPerToken` |
+| `apps/editor/src/pages/simulation/flops-util-chart.tsx` | New FLOPS utilization chart |
+| `apps/editor/src/pages/simulation/sim-results.tsx` | Wired up utilization chart |
