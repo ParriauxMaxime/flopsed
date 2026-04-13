@@ -679,7 +679,9 @@ export function runBalanceSim(
 			}
 
 			// Surplus tokens → direct LoC
-			const directLoc = remainingTokens / Math.max(1, sim.tokenMultiplier * eventTokenProductionMultiplier);
+			const directLoc =
+				remainingTokens /
+				Math.max(1, sim.tokenMultiplier * eventTokenProductionMultiplier);
 			tokensConsumed = humanTokenOutput - remainingTokens;
 
 			sim.loc += directLoc + aiLoc;
@@ -691,7 +693,10 @@ export function runBalanceSim(
 
 			// Auto-arbitrage: target slider based on actual demand
 			if (sim.autoArbitrageEnabled) {
-				const totalFlopsDemand = activeModels.reduce((s, m) => s + m.flopsCost, 0);
+				const totalFlopsDemand = activeModels.reduce(
+					(s, m) => s + m.flopsCost,
+					0,
+				);
 				const idealAiFraction =
 					flops > 0 ? Math.min(0.9, totalFlopsDemand / flops) : 0.3;
 				let targetSlider = 1 - idealAiFraction;
@@ -883,8 +888,7 @@ export function runBalanceSim(
 			const totalLocS =
 				effLocPerKey() * cfg.keysPerSec + autoTypeLoc + calcAutoLoc() + aiLoc;
 			const execCap = sim.aiUnlocked ? flops * sim.flopSlider : flops;
-			const currentCashPerSec =
-				Math.min(totalLocS, execCap) * cashPerLoc();
+			const currentCashPerSec = Math.min(totalLocS, execCap) * cashPerLoc();
 
 			// Research tech nodes
 			for (let b = 0; b < 5; b++) {
@@ -946,12 +950,10 @@ export function runBalanceSim(
 
 				// Eagerly buy model-unlock tech nodes when affordable (< 2 min income)
 				const modelUnlockNodes = availTech.filter((n) => {
-					const isModelUnlock = n.effects.some(
-						(e) => e.type === "modelUnlock",
-					);
+					const isModelUnlock = n.effects.some((e) => e.type === "modelUnlock");
 					return isModelUnlock;
 				});
-					const modelUnlockNode = modelUnlockNodes.find((n) => {
+				const modelUnlockNode = modelUnlockNodes.find((n) => {
 					const cost = getTechCost(n);
 					if (n.currency === "loc" || cost > sim.cash) return false;
 					return currentCashPerSec > 0 && cost / currentCashPerSec < 600;
@@ -1143,9 +1145,7 @@ export function runBalanceSim(
 						const ev = e.value as number;
 						if (e.type === "tierUnlock") {
 							// Tier unlock boosts $/LoC for ALL future production — highest priority
-							const nextTier = tiers.find(
-								(t2) => t2.index === (ev as number),
-							);
+							const nextTier = tiers.find((t2) => t2.index === (ev as number));
 							if (nextTier) {
 								const newCashPerLoc = nextTier.cashPerLoc;
 								const boost = newCashPerLoc / Math.max(0.01, cashPerLoc());

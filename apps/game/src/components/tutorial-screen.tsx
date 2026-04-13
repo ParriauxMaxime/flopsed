@@ -69,7 +69,7 @@ export function useTutorialTriggers() {
 	useEffect(() => {
 		const tTutorial = i18n.getFixedT(null, "tutorial");
 
-		const pushTutorial = (id: string, i18nKey: string) => {
+		const pushTutorial = (_id: string, i18nKey: string) => {
 			const header = tTutorial(`${i18nKey}.header`, {
 				defaultValue: `tutorial.${i18nKey}()`,
 			}) as string;

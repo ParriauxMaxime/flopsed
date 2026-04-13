@@ -1,6 +1,5 @@
 import { css, keyframes } from "@emotion/react";
 import { sfx } from "@modules/audio";
-import { CODE_BLOCKS } from "../data/code-tokens";
 import { allEvents, useEventStore } from "@modules/event";
 import { useGameStore, useUiStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
@@ -14,6 +13,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { CODE_BLOCKS } from "../data/code-tokens";
 import { EDITOR_THEMES } from "../data/editor-themes";
 import { useAutoType } from "../hooks/use-auto-type";
 import { useCodeTyping } from "../hooks/use-code-typing";
@@ -109,13 +109,6 @@ const EditorLine = memo(function EditorLine({
 		</div>
 	);
 });
-
-// ── Build flat line list from blockQueue + typing state ──
-interface FlatLine {
-	key: string;
-	lineNumber: number;
-	html: string;
-}
 
 // Pre-generate a flat pool of code lines from all code blocks.
 // The editor picks lines from this pool based on the loc counter.

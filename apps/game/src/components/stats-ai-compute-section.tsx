@@ -166,7 +166,6 @@ export function StatsAiComputeSection() {
 					</div>
 				</div>
 			))}
-
 		</CollapsibleSection>
 	);
 }

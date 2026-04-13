@@ -235,6 +235,13 @@ export function GodModePage() {
 			flops: s.flops,
 			currentTierIndex: s.currentTierIndex,
 			unlockedModels: s.unlockedModels,
+			flopSlider: s.flopSlider,
+			autoExecuteEnabled: s.autoExecuteEnabled,
+			autoTypeEnabled: s.autoTypeEnabled,
+			aiUnlocked: s.aiUnlocked,
+			autoLocPerSec: s.autoLocPerSec,
+			locPerKey: s.locPerKey,
+			running: s.running,
 		})),
 	);
 
@@ -630,6 +637,36 @@ export function GodModePage() {
 					>
 						{t("god_mode.max_all_upgrades")}
 					</button>
+				</div>
+			</Section>
+
+			<Section title="Debug State" defaultOpen>
+				<div
+					css={{
+						display: "grid",
+						gridTemplateColumns: "1fr 1fr",
+						gap: "4px 16px",
+						fontSize: 11,
+						fontFamily: "monospace",
+					}}
+				>
+					{(
+						[
+							["flopSlider", state.flopSlider.toFixed(2)],
+							["autoExecute", String(state.autoExecuteEnabled)],
+							["autoType", String(state.autoTypeEnabled)],
+							["aiUnlocked", String(state.aiUnlocked)],
+							["running", String(state.running)],
+							["autoLocPerSec", formatNumber(state.autoLocPerSec)],
+							["locPerKey", state.locPerKey.toFixed(2)],
+							["flops", formatNumber(state.flops)],
+						] as const
+					).map(([k, v]) => (
+						<div key={k} css={{ display: "contents" }}>
+							<span style={{ color: theme.textMuted }}>{k}</span>
+							<span style={{ color: theme.foreground }}>{v}</span>
+						</div>
+					))}
 				</div>
 			</Section>
 		</div>

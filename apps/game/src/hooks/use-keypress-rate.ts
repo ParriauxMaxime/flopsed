@@ -9,11 +9,12 @@ const IGNORED_KEYS = new Set([
 	"Escape",
 	"CapsLock",
 ]);
-const HELD_CAP = 12;
 const IDLE_TIMEOUT = 3000;
+const REPEAT_WINDOW = 1000; // measure repeat rate over last 1s
 
 export function useKeypressRate(): number {
 	const pressTimestamps = useRef<number[]>([]);
+	const repeatTimestamps = useRef<number[]>([]);
 	const heldRef = useRef(false);
 	const lastKeyTime = useRef(0);
 	const [rate, setRate] = useState(0);
@@ -24,6 +25,7 @@ export function useKeypressRate(): number {
 			lastKeyTime.current = performance.now();
 			if (e.repeat) {
 				heldRef.current = true;
+				repeatTimestamps.current.push(performance.now());
 			} else {
 				heldRef.current = false;
 				pressTimestamps.current.push(performance.now());
@@ -31,6 +33,7 @@ export function useKeypressRate(): number {
 		}
 		function onKeyUp() {
 			heldRef.current = false;
+			repeatTimestamps.current.length = 0;
 		}
 
 		window.addEventListener("keydown", onKeyDown);
@@ -40,9 +43,14 @@ export function useKeypressRate(): number {
 			const now = performance.now();
 			if (now - lastKeyTime.current > IDLE_TIMEOUT) {
 				pressTimestamps.current.length = 0;
+				repeatTimestamps.current.length = 0;
 				setRate(0);
 			} else if (heldRef.current) {
-				setRate(HELD_CAP);
+				// Measure actual OS repeat rate from recent events
+				const cutoff = now - REPEAT_WINDOW;
+				const rts = repeatTimestamps.current;
+				while (rts.length > 0 && rts[0] < cutoff) rts.shift();
+				setRate(rts.length);
 			} else {
 				const cutoff = now - IDLE_TIMEOUT;
 				const ts = pressTimestamps.current;

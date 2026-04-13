@@ -97,7 +97,9 @@ export function SimulationPage() {
 				cliRunning={cliRunning}
 			/>
 			{error && <div css={errorCss}>{error}</div>}
-			{simResult && <SimResults result={simResult} aiModels={aiModelsRef.current} />}
+			{simResult && (
+				<SimResults result={simResult} aiModels={aiModelsRef.current} />
+			)}
 			{cliResult && <CliOutput result={cliResult} />}
 		</div>
 	);

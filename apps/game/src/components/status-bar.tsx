@@ -108,8 +108,9 @@ export function StatusBar() {
 			<div css={rightCss}>
 				<span>
 					{t("status_bar.cash_per_loc", {
-							rate: Math.round((tier?.cashPerLoc ?? 0) * cashMultiplier * 100) / 100,
-						})}
+						rate:
+							Math.round((tier?.cashPerLoc ?? 0) * cashMultiplier * 100) / 100,
+					})}
 				</span>
 				<button
 					type="button"

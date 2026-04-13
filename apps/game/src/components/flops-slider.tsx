@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { useGameStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 
@@ -99,7 +99,10 @@ export function FlopsSlider({ embedded = false }: { embedded?: boolean } = {}) {
 			const bar = barRef.current;
 			if (!bar) return;
 			const rect = bar.getBoundingClientRect();
-			const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+			const ratio = Math.max(
+				0,
+				Math.min(1, (clientX - rect.left) / rect.width),
+			);
 			setFlopSlider(ratio);
 		},
 		[setFlopSlider],
@@ -138,7 +141,14 @@ export function FlopsSlider({ embedded = false }: { embedded?: boolean } = {}) {
 	const cashColor = theme.cashColor ?? "#e5c07b";
 
 	return (
-		<div css={embedded ? undefined : wrapperCss} style={embedded ? { marginBottom: 10 } : { borderBottom: `1px solid ${theme.border}` }}>
+		<div
+			css={embedded ? undefined : wrapperCss}
+			style={
+				embedded
+					? { marginBottom: 10 }
+					: { borderBottom: `1px solid ${theme.border}` }
+			}
+		>
 			{/* Labels */}
 			<div css={labelRowCss}>
 				<span style={{ color: cashColor, fontWeight: 600 }}>

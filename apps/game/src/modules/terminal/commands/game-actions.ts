@@ -248,7 +248,6 @@ export function cmdExecute(
 	const {
 		loc,
 		flops,
-		cash,
 		currentTierIndex,
 		aiUnlocked,
 		flopSlider,

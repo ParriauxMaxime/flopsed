@@ -77,9 +77,7 @@ export function FlopsUtilChart({
 		const owned = new Set<string>();
 		for (const p of purchases) {
 			if (p.type === "ai") {
-				const model = aiModels.find(
-					(m) => `${m.name} ${m.version}` === p.name,
-				);
+				const model = aiModels.find((m) => `${m.name} ${m.version}` === p.name);
 				if (model && !owned.has(model.id)) {
 					owned.add(model.id);
 					modelTimeline.push({ time: p.time, modelId: model.id });
@@ -87,9 +85,7 @@ export function FlopsUtilChart({
 			}
 			if (p.type === "tech") {
 				const model = aiModels.find(
-					(m) =>
-						p.name === `${m.name} ${m.version}` ||
-						p.name === m.version,
+					(m) => p.name === `${m.name} ${m.version}` || p.name === m.version,
 				);
 				if (model && !owned.has(model.id)) {
 					owned.add(model.id);
@@ -101,8 +97,8 @@ export function FlopsUtilChart({
 		return snapshots.map((s) => {
 			const models = modelTimeline
 				.filter((mp) => mp.time <= s.time)
-				.map((mp) => aiModels.find((m) => m.id === mp.modelId)!)
-				.filter(Boolean);
+				.map((mp) => aiModels.find((m) => m.id === mp.modelId))
+				.filter((m): m is (typeof aiModels)[number] => m !== undefined);
 
 			const totalModelCap = models.reduce((sum, m) => sum + m.flopsCost, 0);
 			const aiDemandFrac =
@@ -132,142 +128,147 @@ export function FlopsUtilChart({
 		});
 	}, [snapshots, purchases, aiModels]);
 
-	const { paths, xTicks, yTicks, wastePctPoints, tierMarkers } =
-		useMemo(() => {
-			if (data.length === 0)
-				return {
-					paths: { total: "", exec: "", ai: "", execFill: "", aiFill: "", wasteFill: "" },
-					xTicks: [],
-					yTicks: [],
-					wastePctPoints: "",
-					tierMarkers: [] as Array<{ x: number; tier: number }>,
-				};
-
-			const maxTime = data[data.length - 1].time;
-			const allVals = data.map((d) => d.totalFlops).filter((v) => v > 0);
-			if (allVals.length === 0)
-				return {
-					paths: { total: "", exec: "", ai: "", execFill: "", aiFill: "", wasteFill: "" },
-					xTicks: [],
-					yTicks: [],
-					wastePctPoints: "",
-					tierMarkers: [],
-				};
-
-			const minLog = Math.floor(Math.log10(Math.min(...allVals)));
-			const maxLog = Math.ceil(
-				Math.log10(Math.max(...allVals, ...data.map((d) => d.execUsed + d.aiUsed).filter((v) => v > 0))),
-			);
-			const logRange = Math.max(maxLog - minLog, 1);
-			const innerW = CHART_W - PAD.left - PAD.right;
-			const innerH = CHART_H - PAD.top - PAD.bottom;
-
-			const toX = (t: number) => PAD.left + (t / maxTime) * innerW;
-			const toY = (v: number) => {
-				if (v <= 0) return PAD.top + innerH;
-				const logY = (Math.log10(v) - minLog) / logRange;
-				return PAD.top + innerH - logY * innerH;
-			};
-			const baseY = PAD.top + innerH;
-
-			// Paths
-			const totalPts = data
-				.filter((d) => d.totalFlops > 0)
-				.map((d) => `${toX(d.time)},${toY(d.totalFlops)}`)
-				.join(" ");
-			const execPts = data
-				.filter((d) => d.execUsed > 0)
-				.map((d) => `${toX(d.time)},${toY(d.execUsed)}`)
-				.join(" ");
-			const aiPts = data
-				.filter((d) => d.aiUsed > 0)
-				.map((d) => `${toX(d.time)},${toY(d.aiUsed)}`)
-				.join(" ");
-
-			// Fill areas
-			const execFillPts = data.filter((d) => d.execUsed > 0);
-			const execFill =
-				execFillPts.length > 0
-					? execFillPts.map((d) => `${toX(d.time)},${toY(d.execUsed)}`).join(" ") +
-						` ${toX(execFillPts[execFillPts.length - 1].time)},${baseY} ${toX(execFillPts[0].time)},${baseY}`
-					: "";
-
-			const aiFillPts = data.filter((d) => d.aiUsed > 0);
-			const aiFill =
-				aiFillPts.length > 0
-					? aiFillPts.map((d) => `${toX(d.time)},${toY(d.aiUsed)}`).join(" ") +
-						` ${toX(aiFillPts[aiFillPts.length - 1].time)},${baseY} ${toX(aiFillPts[0].time)},${baseY}`
-					: "";
-
-			// Waste fill (between total and used)
-			const wasteTopPts = data.filter((d) => d.totalFlops > 0);
-			const wasteBottomPts = data.filter(
-				(d) => d.totalFlops > 0 && d.execUsed + d.aiUsed > 0,
-			);
-			let wasteFill = "";
-			if (wasteTopPts.length > 1) {
-				wasteFill =
-					wasteTopPts.map((d) => `${toX(d.time)},${toY(d.totalFlops)}`).join(" ");
-				const reversed = [...wasteTopPts].reverse();
-				wasteFill +=
-					" " +
-					reversed
-						.map(
-							(d) =>
-								`${toX(d.time)},${toY(Math.max(1, d.execUsed + d.aiUsed))}`,
-						)
-						.join(" ");
-			}
-
-			// Waste % line (secondary chart at bottom)
-			const wastePct = data
-				.map((d) => {
-					const pct =
-						d.totalFlops > 0 ? (d.wasted / d.totalFlops) * 100 : 0;
-					return `${toX(d.time)},${PAD.top + innerH - (pct / 100) * 40}`;
-				})
-				.join(" ");
-
-			// X ticks
-			const xT = Array.from({ length: 5 }, (_, i) => ({
-				x: PAD.left + (i / 4) * innerW,
-				label: `${Math.floor(((maxTime / 4) * i) / 60)}m`,
-			}));
-
-			// Y ticks
-			const yT: Array<{ y: number; label: string }> = [];
-			for (let exp = minLog; exp <= maxLog; exp += 2) {
-				yT.push({
-					y: toY(10 ** exp),
-					label: formatValue(10 ** exp),
-				});
-			}
-
-			// Tier markers
-			const markers: Array<{ x: number; tier: number }> = [];
-			let prevTier = -1;
-			for (const d of data) {
-				if (d.tier !== prevTier) {
-					markers.push({ x: toX(d.time), tier: d.tier });
-					prevTier = d.tier;
-				}
-			}
-
+	const { paths, xTicks, yTicks, tierMarkers } = useMemo(() => {
+		if (data.length === 0)
 			return {
 				paths: {
-					total: totalPts,
-					exec: execPts,
-					ai: aiPts,
-					execFill,
-					aiFill,
-					wasteFill,
+					total: "",
+					exec: "",
+					ai: "",
+					execFill: "",
+					aiFill: "",
+					wasteFill: "",
 				},
-				xTicks: xT,
-				yTicks: yT,
-				wastePctPoints: wastePct,
-				tierMarkers: markers,
+				xTicks: [],
+				yTicks: [],
+				tierMarkers: [] as Array<{ x: number; tier: number }>,
 			};
-		}, [data]);
+
+		const maxTime = data[data.length - 1].time;
+		const allVals = data.map((d) => d.totalFlops).filter((v) => v > 0);
+		if (allVals.length === 0)
+			return {
+				paths: {
+					total: "",
+					exec: "",
+					ai: "",
+					execFill: "",
+					aiFill: "",
+					wasteFill: "",
+				},
+				xTicks: [],
+				yTicks: [],
+				tierMarkers: [],
+			};
+
+		const minLog = Math.floor(Math.log10(Math.min(...allVals)));
+		const maxLog = Math.ceil(
+			Math.log10(
+				Math.max(
+					...allVals,
+					...data.map((d) => d.execUsed + d.aiUsed).filter((v) => v > 0),
+				),
+			),
+		);
+		const logRange = Math.max(maxLog - minLog, 1);
+		const innerW = CHART_W - PAD.left - PAD.right;
+		const innerH = CHART_H - PAD.top - PAD.bottom;
+
+		const toX = (t: number) => PAD.left + (t / maxTime) * innerW;
+		const toY = (v: number) => {
+			if (v <= 0) return PAD.top + innerH;
+			const logY = (Math.log10(v) - minLog) / logRange;
+			return PAD.top + innerH - logY * innerH;
+		};
+		const baseY = PAD.top + innerH;
+
+		// Paths
+		const totalPts = data
+			.filter((d) => d.totalFlops > 0)
+			.map((d) => `${toX(d.time)},${toY(d.totalFlops)}`)
+			.join(" ");
+		const execPts = data
+			.filter((d) => d.execUsed > 0)
+			.map((d) => `${toX(d.time)},${toY(d.execUsed)}`)
+			.join(" ");
+		const aiPts = data
+			.filter((d) => d.aiUsed > 0)
+			.map((d) => `${toX(d.time)},${toY(d.aiUsed)}`)
+			.join(" ");
+
+		// Fill areas
+		const execFillPts = data.filter((d) => d.execUsed > 0);
+		const execFill =
+			execFillPts.length > 0
+				? execFillPts
+						.map((d) => `${toX(d.time)},${toY(d.execUsed)}`)
+						.join(" ") +
+					` ${toX(execFillPts[execFillPts.length - 1].time)},${baseY} ${toX(execFillPts[0].time)},${baseY}`
+				: "";
+
+		const aiFillPts = data.filter((d) => d.aiUsed > 0);
+		const aiFill =
+			aiFillPts.length > 0
+				? aiFillPts.map((d) => `${toX(d.time)},${toY(d.aiUsed)}`).join(" ") +
+					` ${toX(aiFillPts[aiFillPts.length - 1].time)},${baseY} ${toX(aiFillPts[0].time)},${baseY}`
+				: "";
+
+		// Waste fill (between total and used)
+		const wasteTopPts = data.filter((d) => d.totalFlops > 0);
+		let wasteFill = "";
+		if (wasteTopPts.length > 1) {
+			wasteFill = wasteTopPts
+				.map((d) => `${toX(d.time)},${toY(d.totalFlops)}`)
+				.join(" ");
+			const reversed = [...wasteTopPts].reverse();
+			wasteFill +=
+				" " +
+				reversed
+					.map(
+						(d) => `${toX(d.time)},${toY(Math.max(1, d.execUsed + d.aiUsed))}`,
+					)
+					.join(" ");
+		}
+
+		// X ticks
+		const xT = Array.from({ length: 5 }, (_, i) => ({
+			x: PAD.left + (i / 4) * innerW,
+			label: `${Math.floor(((maxTime / 4) * i) / 60)}m`,
+		}));
+
+		// Y ticks
+		const yT: Array<{ y: number; label: string }> = [];
+		for (let exp = minLog; exp <= maxLog; exp += 2) {
+			yT.push({
+				y: toY(10 ** exp),
+				label: formatValue(10 ** exp),
+			});
+		}
+
+		// Tier markers
+		const markers: Array<{ x: number; tier: number }> = [];
+		let prevTier = -1;
+		for (const d of data) {
+			if (d.tier !== prevTier) {
+				markers.push({ x: toX(d.time), tier: d.tier });
+				prevTier = d.tier;
+			}
+		}
+
+		return {
+			paths: {
+				total: totalPts,
+				exec: execPts,
+				ai: aiPts,
+				execFill,
+				aiFill,
+				wasteFill,
+			},
+			xTicks: xT,
+			yTicks: yT,
+			tierMarkers: markers,
+		};
+	}, [data]);
 
 	if (snapshots.length === 0) return null;
 
@@ -410,21 +411,14 @@ export function FlopsUtilChart({
 
 				{/* Waste fill */}
 				{paths.wasteFill && (
-					<polygon
-						points={paths.wasteFill}
-						fill="#f4434622"
-					/>
+					<polygon points={paths.wasteFill} fill="#f4434622" />
 				)}
 
 				{/* Exec fill */}
-				{paths.execFill && (
-					<polygon points={paths.execFill} fill="#e5c07b22" />
-				)}
+				{paths.execFill && <polygon points={paths.execFill} fill="#e5c07b22" />}
 
 				{/* AI fill */}
-				{paths.aiFill && (
-					<polygon points={paths.aiFill} fill="#61afef22" />
-				)}
+				{paths.aiFill && <polygon points={paths.aiFill} fill="#61afef22" />}
 
 				{/* Lines */}
 				{paths.total && (

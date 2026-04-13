@@ -245,9 +245,7 @@ export function StatsLocSection() {
 		() => ({
 			locProdData: rateSnapshots.map((s) => s.locProducedPerSec),
 			locExecData: rateSnapshots.map((s) => s.locExecutedPerSec),
-			tokenConsumedData: rateSnapshots.map(
-				(s) => s.tokensConsumedPerSec ?? 0,
-			),
+			tokenConsumedData: rateSnapshots.map((s) => s.tokensConsumedPerSec ?? 0),
 		}),
 		[rateSnapshots],
 	);
@@ -259,12 +257,7 @@ export function StatsLocSection() {
 		<CollapsibleSection
 			icon={<span style={{ color: theme.locColor }}>◇</span>}
 			label={t("stats_panel.loc")}
-			value={
-				<RollingNumber
-					value={formatNumber(loc)}
-					color={theme.locColor}
-				/>
-			}
+			value={<RollingNumber value={formatNumber(loc)} color={theme.locColor} />}
 			rate={
 				<span style={{ color: theme.locColor }}>
 					{formatNumber(locRate + totalAiLoc)}
@@ -328,8 +321,7 @@ export function StatsLocSection() {
 										verticalAlign: "middle",
 									}}
 								/>
-								tokens → AI:{" "}
-								{formatNumber(latest.tokensConsumedPerSec ?? 0)}/s
+								tokens → AI: {formatNumber(latest.tokensConsumedPerSec ?? 0)}/s
 							</span>
 						</div>
 					)}
@@ -363,9 +355,7 @@ export function StatsLocSection() {
 						</div>
 						{aiUnlocked && tokenFraction > 0.01 ? (
 							<span css={sourceValueCss} style={{ fontSize: 10 }}>
-								<span style={{ color: s.color }}>
-									{formatNumber(netLoc)}
-								</span>
+								<span style={{ color: s.color }}>{formatNumber(netLoc)}</span>
 								<span style={{ color: TOKEN_COLOR }}>
 									+{formatNumber(tokenPart)}
 								</span>

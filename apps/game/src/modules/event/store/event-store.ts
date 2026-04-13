@@ -401,10 +401,18 @@ export const useEventStore = create<EventState & EventActions>()(
 						parentEventId: eventId,
 						parentOptionIndex: optionIndex,
 					};
-					return { activeEvents: [...updatedEvents, synthetic] };
+					return {
+						activeEvents: [...updatedEvents, synthetic],
+						toastEvent: null,
+						toastDismissCountdown: 0,
+					};
 				}
 
-				return { activeEvents: updatedEvents };
+				return {
+					activeEvents: updatedEvents,
+					toastEvent: null,
+					toastDismissCountdown: 0,
+				};
 			});
 		},
 

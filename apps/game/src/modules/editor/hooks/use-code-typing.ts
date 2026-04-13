@@ -33,7 +33,6 @@ export interface TypingState {
 const MAX_VISUAL_TOKENS_PER_CALL = 60;
 
 export function useCodeTyping() {
-	const addLoc = useGameStore((s) => s.addLoc);
 	const enqueueBlock = useGameStore((s) => s.enqueueBlock);
 
 	const saved = useRef(loadEditorState());

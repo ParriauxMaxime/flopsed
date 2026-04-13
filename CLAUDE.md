@@ -14,6 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run check` — Biome lint + format check
 - `npm run check:fix` — Auto-fix biome issues
 
+**CRITICAL:** CI deployment runs `npm run check` and fails on any lint error. Always run `npm run check:fix` before committing, or set up a pre-commit hook at `.git/hooks/pre-commit` that runs it. Pattern: see `.git/hooks/pre-commit` in local clone — a shell script calling `npm run check --silent`.
+
 ## Stack
 
 - **React 19** with **Emotion** (`@emotion/react`) for CSS-in-JS via the `css` prop

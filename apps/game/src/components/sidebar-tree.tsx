@@ -154,7 +154,10 @@ function formatEffectSimple(
 			devLocMultiplier: { label: "dev loc", color: theme.locColor },
 			teamLocMultiplier: { label: "team loc", color: theme.locColor },
 			managerMultiplier: { label: "managers", color: theme.locColor },
-			freelancerCostDiscount: { label: "freelancer cost", color: theme.cashColor },
+			freelancerCostDiscount: {
+				label: "freelancer cost",
+				color: theme.cashColor,
+			},
 			internCostDiscount: { label: "intern cost", color: theme.cashColor },
 			devCostDiscount: { label: "dev cost", color: theme.cashColor },
 			teamCostDiscount: { label: "team cost", color: theme.cashColor },

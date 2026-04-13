@@ -126,9 +126,7 @@
 			"icon": "🌀",
 			"minTier": "ai_lab",
 			"duration": 30,
-			"effects": [
-				{ "type": "cashMultiplier", "op": "multiply", "value": 0.9 }
-			],
+			"effects": [{ "type": "cashMultiplier", "op": "multiply", "value": 0.9 }],
 			"weight": 8
 		},
 		{
@@ -148,7 +146,12 @@
 						},
 						{
 							"label": "Ignore it",
-							"effect": { "type": "cashMultiplier", "op": "multiply", "value": 0.8, "duration": 60 }
+							"effect": {
+								"type": "cashMultiplier",
+								"op": "multiply",
+								"value": 0.8,
+								"duration": 60
+							}
 						}
 					]
 				}

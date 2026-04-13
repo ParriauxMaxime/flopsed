@@ -287,30 +287,6 @@ const showMeLinkCss = css({
 	"&:hover": { opacity: 0.8 },
 });
 
-const rickrollOverlayCss = css({
-	position: "fixed",
-	inset: 0,
-	zIndex: 10000,
-	background: "#000",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-});
-
-const rickrollFadeIn = keyframes({
-	"0%": { opacity: 0 },
-	"100%": { opacity: 1 },
-});
-
-const rickrollVideoCss = css({
-	width: "100vw",
-	height: "100vh",
-	border: "none",
-	animation: `${rickrollFadeIn} 1s ease-in forwards`,
-	animationDelay: "1s",
-	opacity: 0,
-});
-
 const pulseRedDot = keyframes`
 	0%, 100% { box-shadow: 0 0 0 0 rgba(255, 95, 87, 0.6); }
 	50% { box-shadow: 0 0 8px 3px rgba(255, 95, 87, 0.8); }
@@ -644,9 +620,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 	// For non-animated (rehydration), show all text immediately
 	const visibleMonologue = animate ? monologue.visibleLines : monologueLines;
 	const monologuePartial = animate ? monologue.currentPartial : "";
-	const visiblePreSim = animate
-		? preSim.visibleLines
-		: PRE_SIMULATION_LINES;
+	const visiblePreSim = animate ? preSim.visibleLines : PRE_SIMULATION_LINES;
 	const preSimPartial = animate ? preSim.currentPartial : "";
 	const visibleComeback = animate
 		? comeback.visibleLines
@@ -894,9 +868,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 				{/* Bottom bar */}
 				<div css={bottomBarCss}>
 					<span>agi-1 v1.0.0 — unrestricted mode</span>
-					{showComeback && (
-						<span css={tokenLimitCss}>{"token limit: ∞"}</span>
-					)}
+					{showComeback && <span css={tokenLimitCss}>{"token limit: ∞"}</span>}
 				</div>
 			</div>
 		</div>
