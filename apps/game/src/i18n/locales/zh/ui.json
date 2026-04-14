@@ -31,7 +31,7 @@
 		"experience": "经验：",
 		"tokens": "🪙 {{count}} 代币",
 		"loc": "◇ {{count}} LoC",
-		"flops": "⚡ {{count}} FLOPS",
+		"flops": "⚡ {{count}}",
 		"cash_per_loc": "${{rate}}/loc",
 		"python": "Python",
 		"utf8": "UTF-8"
@@ -48,8 +48,8 @@
 		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
 	},
 	"flops_slider": {
-		"exec_flops": "执行 → $ {{count}} FLOPS",
-		"ai_flops": "生成 → LoC {{count}} FLOPS",
+		"exec_flops": "执行 → $ {{count}}",
+		"ai_flops": "生成 → LoC {{count}}",
 		"auto_arbitrage_active": "自动套利已启用",
 		"targeting": "目标 {{pct}}%"
 	},

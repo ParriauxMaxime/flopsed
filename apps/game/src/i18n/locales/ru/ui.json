@@ -16,7 +16,7 @@
 		"ai_output": "Выход ИИ",
 		"ai_compute": "ИИ вычисления",
 		"flops": "FLOPS",
-		"flops_usage": "Использование FLOPS",
+		"flops_usage": "Использование",
 		"you": "Вы",
 		"per_sec": "/с",
 		"manager_bonus": "+{{bonus}}% выработки команды",
@@ -31,7 +31,7 @@
 		"experience": "опыт:",
 		"tokens": "🪙 {{count}} токенов",
 		"loc": "◇ {{count}} LoC",
-		"flops": "⚡ {{count}} FLOPS",
+		"flops": "⚡ {{count}}",
 		"cash_per_loc": "${{rate}}/loc",
 		"python": "Python",
 		"utf8": "UTF-8"
@@ -44,12 +44,12 @@
 		"cpu_bottleneck": "⚠ Узкое место: CPU",
 		"ram_bottleneck": "⚠ Узкое место: RAM",
 		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
-		"flops_bottleneck": "⚠ Узкое место: FLOPS",
+		"flops_bottleneck": "⚠ Узкое место:",
 		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
 	},
 	"flops_slider": {
-		"exec_flops": "Выполнить → $ {{count}} FLOPS",
-		"ai_flops": "Сгенерировать → LoC {{count}} FLOPS",
+		"exec_flops": "Выполнить → $ {{count}}",
+		"ai_flops": "Сгенерировать → LoC {{count}}",
 		"auto_arbitrage_active": "Авто-арбитраж активен",
 		"targeting": "цель {{pct}}%"
 	},

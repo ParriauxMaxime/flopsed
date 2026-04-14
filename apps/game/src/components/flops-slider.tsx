@@ -208,7 +208,7 @@ export function FlopsSlider({ embedded = false }: { embedded?: boolean } = {}) {
 			{/* Rate labels */}
 			<div css={rateRowCss}>
 				<span style={{ color: theme.textMuted }}>
-					{formatNumber(execFlops)} LoC/s → $
+					{formatNumber(execFlops)} → $
 				</span>
 				<span style={{ color: theme.textMuted }}>
 					{formatNumber(aiFlops)} → LoC

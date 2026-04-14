@@ -16,7 +16,7 @@
 		"ai_output": "Output IA",
 		"ai_compute": "Calcolo IA",
 		"flops": "FLOPS",
-		"flops_usage": "Utilizzo FLOPS",
+		"flops_usage": "Utilizzo",
 		"you": "Tu",
 		"per_sec": "/s",
 		"manager_bonus": "+{{bonus}}% output del team",
@@ -31,7 +31,7 @@
 		"experience": "esperienza:",
 		"tokens": "🪙 {{count}} token",
 		"loc": "◇ {{count}} LoC",
-		"flops": "⚡ {{count}} FLOPS",
+		"flops": "⚡ {{count}}",
 		"cash_per_loc": "${{rate}}/loc",
 		"python": "Python",
 		"utf8": "UTF-8"
@@ -44,12 +44,12 @@
 		"cpu_bottleneck": "⚠ Collo di bottiglia CPU",
 		"ram_bottleneck": "⚠ Collo di bottiglia RAM",
 		"formula": "— min({{cpu}}, {{ram}}) + {{storage}}",
-		"flops_bottleneck": "⚠ Collo di bottiglia FLOPS",
+		"flops_bottleneck": "⚠ Collo di bottiglia",
 		"flops_detail": "— {{flops}} FLOPS < {{locPerSec}} LoC/s"
 	},
 	"flops_slider": {
-		"exec_flops": "Eseguire → $ {{count}} FLOPS",
-		"ai_flops": "Generare → LoC {{count}} FLOPS",
+		"exec_flops": "Eseguire → $ {{count}}",
+		"ai_flops": "Generare → LoC {{count}}",
 		"auto_arbitrage_active": "Auto-Arbitraggio attivo",
 		"targeting": "obiettivo {{pct}}%"
 	},
