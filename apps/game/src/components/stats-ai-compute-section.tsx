@@ -82,9 +82,10 @@ const familyChevronCss = css({
 });
 
 const familyModelsCss = css({
-	overflow: "hidden",
 	transition: "max-height 0.2s ease, opacity 0.15s ease",
 	paddingLeft: 15,
+	"&::-webkit-scrollbar": { width: 4 },
+	"&::-webkit-scrollbar-thumb": { borderRadius: 2 },
 });
 
 interface ModelRow {
@@ -282,8 +283,9 @@ export function StatsAiComputeSection() {
 						<div
 							css={familyModelsCss}
 							style={{
-								maxHeight: isExpanded ? group.models.length * 30 : 0,
+								maxHeight: isExpanded ? 150 : 0,
 								opacity: isExpanded ? 1 : 0,
+								overflowY: isExpanded ? "auto" : "hidden",
 							}}
 						>
 							{group.models.map((m) => (

@@ -93,9 +93,7 @@ const aiChevronCss = css({
 });
 
 const aiModelListCss = css({
-	overflow: "hidden",
 	transition: "max-height 0.2s ease, opacity 0.15s ease",
-	overflowY: "auto",
 	"&::-webkit-scrollbar": { width: 4 },
 	"&::-webkit-scrollbar-thumb": { borderRadius: 2 },
 });
@@ -438,8 +436,9 @@ export function StatsLocSection() {
 					<div
 						css={aiModelListCss}
 						style={{
-							maxHeight: aiExpanded ? 400 : 0,
+							maxHeight: aiExpanded ? 200 : 0,
 							opacity: aiExpanded ? 1 : 0,
+							overflowY: aiExpanded ? "auto" : "hidden",
 						}}
 					>
 						{aiFamilyGroups.map((group) => {
@@ -487,9 +486,9 @@ export function StatsLocSection() {
 									</div>
 									<div
 										style={{
-											overflow: "hidden",
-											maxHeight: famExpanded ? group.models.length * 26 : 0,
+											maxHeight: famExpanded ? 130 : 0,
 											opacity: famExpanded ? 1 : 0,
+											overflowY: famExpanded ? "auto" : "hidden",
 											transition: "max-height 0.15s ease, opacity 0.1s ease",
 											paddingLeft: 10,
 										}}
