@@ -29,6 +29,17 @@ const MODEL_COLORS: Record<string, string> = {
 	grok: "#e17055",
 };
 
+const FAMILY_LABELS: Record<string, string> = {
+	claude: "Anthropic",
+	gpt: "OpenAI",
+	gemini: "Google",
+	llama: "Meta",
+	mistral: "Mistral",
+	deepseek: "DeepSeek",
+	copilot: "GitHub",
+	grok: "xAI",
+};
+
 // ── Styles ──
 
 const sourceRowCss = css({
@@ -101,6 +112,7 @@ interface SourceRow {
 	locPerSec: number;
 	color: string;
 	count?: number;
+	family?: string;
 }
 
 export function StatsLocSection() {
@@ -195,21 +207,45 @@ export function StatsLocSection() {
 
 	const aiSources = useMemo((): SourceRow[] => {
 		if (!aiUnlocked) return [];
-		return aiModelAllocations
-			.map((alloc) => {
-				const model = aiModels.find((m) => m.id === alloc.modelId);
-				if (!model) return null;
-				const flopRatio =
-					alloc.flopsCap > 0 ? alloc.allocatedFlops / alloc.flopsCap : 0;
-				const locOutput = model.locPerSec * flopRatio;
-				return {
-					name: `${model.name} ${model.version}`,
-					locPerSec: locOutput,
-					color: MODEL_COLORS[model.family] ?? "#8b949e",
-				};
-			})
-			.filter((r): r is SourceRow => r !== null);
+		const rows: SourceRow[] = [];
+		for (const alloc of aiModelAllocations) {
+			const model = aiModels.find((m) => m.id === alloc.modelId);
+			if (!model) continue;
+			const flopRatio =
+				alloc.flopsCap > 0 ? alloc.allocatedFlops / alloc.flopsCap : 0;
+			rows.push({
+				name: `${model.name} ${model.version}`,
+				locPerSec: model.locPerSec * flopRatio,
+				color: MODEL_COLORS[model.family] ?? "#8b949e",
+				family: model.family,
+			});
+		}
+		return rows;
 	}, [aiUnlocked, aiModelAllocations]);
+
+	// Group AI sources by family for display
+	const aiFamilyGroups = useMemo(() => {
+		const groups: Record<
+			string,
+			{ label: string; color: string; total: number; models: SourceRow[] }
+		> = {};
+		for (const s of aiSources) {
+			const fam = s.family ?? "other";
+			if (!groups[fam]) {
+				groups[fam] = {
+					label: FAMILY_LABELS[fam] ?? fam,
+					color: s.color,
+					total: 0,
+					models: [],
+				};
+			}
+			groups[fam].total += s.locPerSec;
+			groups[fam].models.push(s);
+		}
+		return Object.entries(groups)
+			.map(([family, g]) => ({ family, ...g }))
+			.sort((a, b) => b.total - a.total);
+	}, [aiSources]);
 
 	const totalAiLoc = aiSources.reduce((sum, s) => sum + s.locPerSec, 0);
 
@@ -240,6 +276,14 @@ export function StatsLocSection() {
 
 	const [aiExpanded, setAiExpanded] = useState(false);
 	const toggleAi = useCallback(() => setAiExpanded((v) => !v), []);
+	const [expandedAiFamilies, setExpandedAiFamilies] = useState<
+		Record<string, boolean>
+	>({});
+	const toggleAiFamily = useCallback(
+		(fam: string) =>
+			setExpandedAiFamilies((prev) => ({ ...prev, [fam]: !prev[fam] })),
+		[],
+	);
 
 	const { locProdData, locExecData, tokenConsumedData } = useMemo(
 		() => ({
@@ -394,30 +438,132 @@ export function StatsLocSection() {
 					<div
 						css={aiModelListCss}
 						style={{
-							maxHeight: aiExpanded ? 200 : 0,
+							maxHeight: aiExpanded ? 400 : 0,
 							opacity: aiExpanded ? 1 : 0,
 						}}
 					>
-						{aiSources.map((s) => (
-							<div css={sourceRowCss} key={s.name} style={{ paddingLeft: 18 }}>
-								<span css={sourceNameCss} style={{ color: theme.textMuted }}>
-									{s.name}
-								</span>
-								<div css={barTrackCss} style={{ background: theme.border }}>
+						{aiFamilyGroups.map((group) => {
+							// Single model — show directly
+							if (group.models.length === 1) {
+								const s = group.models[0];
+								return (
 									<div
-										css={barFillCss}
+										css={sourceRowCss}
+										key={s.name}
+										style={{ paddingLeft: 18 }}
+									>
+										<span
+											css={sourceNameCss}
+											style={{ color: theme.textMuted }}
+										>
+											{s.name}
+										</span>
+										<div css={barTrackCss} style={{ background: theme.border }}>
+											<div
+												css={barFillCss}
+												style={{
+													transform: `scaleX(${s.locPerSec / maxLoc})`,
+													background: s.color,
+												}}
+											/>
+										</div>
+										<span css={sourceValueCss} style={{ color: s.color }}>
+											{formatNumber(s.locPerSec)}
+											{unit}
+										</span>
+									</div>
+								);
+							}
+							// Multi-model family — collapsible
+							const famExpanded = expandedAiFamilies[group.family] ?? false;
+							return (
+								<div key={group.family} style={{ paddingLeft: 12 }}>
+									<div
+										css={aiSubHeaderCss}
+										onClick={() => toggleAiFamily(group.family)}
+										style={{ marginTop: 2 }}
+									>
+										<span
+											css={aiChevronCss}
+											style={{
+												color: theme.textMuted,
+												transform: famExpanded ? "rotate(90deg)" : "none",
+												fontSize: 8,
+											}}
+										>
+											&#9654;
+										</span>
+										<span
+											style={{
+												fontSize: 11,
+												color: group.color,
+												flex: 1,
+											}}
+										>
+											{group.label}{" "}
+											<span
+												style={{
+													color: theme.textMuted,
+													fontWeight: 400,
+													fontSize: 10,
+												}}
+											>
+												({group.models.length})
+											</span>
+										</span>
+										<span css={sourceValueCss} style={{ color: group.color }}>
+											{formatNumber(group.total)}
+											{unit}
+										</span>
+									</div>
+									<div
 										style={{
-											transform: `scaleX(${s.locPerSec / maxLoc})`,
-											background: s.color,
+											overflow: "hidden",
+											maxHeight: famExpanded ? group.models.length * 26 : 0,
+											opacity: famExpanded ? 1 : 0,
+											transition: "max-height 0.15s ease, opacity 0.1s ease",
+											paddingLeft: 10,
 										}}
-									/>
+									>
+										{group.models.map((s) => (
+											<div css={sourceRowCss} key={s.name}>
+												<span
+													css={sourceNameCss}
+													style={{
+														color: theme.textMuted,
+														fontSize: 10,
+													}}
+												>
+													{s.name}
+												</span>
+												<div
+													css={barTrackCss}
+													style={{ background: theme.border }}
+												>
+													<div
+														css={barFillCss}
+														style={{
+															transform: `scaleX(${s.locPerSec / maxLoc})`,
+															background: s.color,
+														}}
+													/>
+												</div>
+												<span
+													css={sourceValueCss}
+													style={{
+														color: s.color,
+														fontSize: 10,
+													}}
+												>
+													{formatNumber(s.locPerSec)}
+													{unit}
+												</span>
+											</div>
+										))}
+									</div>
 								</div>
-								<span css={sourceValueCss} style={{ color: s.color }}>
-									{formatNumber(s.locPerSec)}
-									{unit}
-								</span>
-							</div>
-						))}
+							);
+						})}
 					</div>
 				</>
 			)}
