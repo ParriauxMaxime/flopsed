@@ -412,6 +412,13 @@ export function StatsLocSection() {
 					</div>
 				);
 			})}
+			{managerBonus > 1 && (
+				<div style={{ fontSize: 10, color: theme.textMuted, marginTop: 3 }}>
+					{t("stats_panel.manager_bonus", {
+						bonus: Math.round((managerBonus - 1) * 100),
+					})}
+				</div>
+			)}
 			{/* Collapsible AI sub-section */}
 			{aiUnlocked && aiSources.length > 0 && (
 				<>
@@ -486,9 +493,9 @@ export function StatsLocSection() {
 									</div>
 									<div
 										style={{
-											maxHeight: famExpanded ? 130 : 0,
+											maxHeight: famExpanded ? group.models.length * 26 : 0,
 											opacity: famExpanded ? 1 : 0,
-											overflowY: famExpanded ? "auto" : "hidden",
+											overflow: "hidden",
 											transition: "max-height 0.15s ease, opacity 0.1s ease",
 											paddingLeft: 10,
 										}}
@@ -534,13 +541,6 @@ export function StatsLocSection() {
 						})}
 					</div>
 				</>
-			)}
-			{managerBonus > 1 && (
-				<div style={{ fontSize: 10, color: theme.textMuted, marginTop: 3 }}>
-					{t("stats_panel.manager_bonus", {
-						bonus: Math.round((managerBonus - 1) * 100),
-					})}
-				</div>
 			)}
 		</CollapsibleSection>
 	);

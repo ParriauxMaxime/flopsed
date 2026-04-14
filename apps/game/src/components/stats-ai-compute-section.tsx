@@ -82,10 +82,9 @@ const familyChevronCss = css({
 });
 
 const familyModelsCss = css({
+	overflow: "hidden",
 	transition: "max-height 0.2s ease, opacity 0.15s ease",
 	paddingLeft: 15,
-	"&::-webkit-scrollbar": { width: 4 },
-	"&::-webkit-scrollbar-thumb": { borderRadius: 2 },
 });
 
 interface ModelRow {
@@ -228,107 +227,120 @@ export function StatsAiComputeSection() {
 			</div>
 
 			{/* Grouped model rows by family */}
-			{familyGroups.map((group) => {
-				const isExpanded = expandedFamilies[group.family] ?? false;
-				const groupPct =
-					group.totalCap > 0
-						? Math.round((group.totalAllocated / group.totalCap) * 100)
-						: 0;
+			<div
+				style={{
+					maxHeight: 200,
+					overflowY: "auto",
+				}}
+				css={{
+					"&::-webkit-scrollbar": { width: 4 },
+					"&::-webkit-scrollbar-thumb": { borderRadius: 2 },
+				}}
+			>
+				{familyGroups.map((group) => {
+					const isExpanded = expandedFamilies[group.family] ?? false;
+					const groupPct =
+						group.totalCap > 0
+							? Math.round((group.totalAllocated / group.totalCap) * 100)
+							: 0;
 
-				// Family group — collapsible
-				return (
-					<div key={group.family} style={{ marginBottom: 4 }}>
-						<div
-							css={familyHeaderCss}
-							onClick={() => toggleFamily(group.family)}
-						>
-							<span
-								css={familyChevronCss}
-								style={{
-									color: theme.textMuted,
-									transform: isExpanded ? "rotate(90deg)" : "none",
-								}}
+					// Family group — collapsible
+					return (
+						<div key={group.family} style={{ marginBottom: 4 }}>
+							<div
+								css={familyHeaderCss}
+								onClick={() => toggleFamily(group.family)}
 							>
-								&#9654;
-							</span>
-							<span css={modelNameCss} style={{ color: group.color, flex: 1 }}>
-								{group.label}{" "}
 								<span
+									css={familyChevronCss}
 									style={{
 										color: theme.textMuted,
-										fontWeight: 400,
+										transform: isExpanded ? "rotate(90deg)" : "none",
 									}}
 								>
-									({group.models.length})
+									&#9654;
 								</span>
-							</span>
-							<span css={modelStatsCss} style={{ color: theme.textMuted }}>
-								<span style={{ color: group.color }}>
-									{formatNumber(group.totalAllocated)}
-								</span>
-								/{formatNumber(group.totalCap)}
-							</span>
-						</div>
-						{/* Group summary bar */}
-						<div css={capBarTrackCss} style={{ background: theme.border }}>
-							<div
-								css={capBarFillCss}
-								style={{
-									width: `${groupPct}%`,
-									background: group.color,
-								}}
-							/>
-						</div>
-						{/* Expanded individual models */}
-						<div
-							css={familyModelsCss}
-							style={{
-								maxHeight: isExpanded ? 150 : 0,
-								opacity: isExpanded ? 1 : 0,
-								overflowY: isExpanded ? "auto" : "hidden",
-							}}
-						>
-							{group.models.map((m) => (
-								<div key={m.id} css={modelRowCss}>
-									<div css={modelHeaderCss}>
-										<span
-											css={modelNameCss}
-											style={{
-												color: theme.textMuted,
-												fontSize: 10,
-											}}
-										>
-											{m.name}
-										</span>
-										<span
-											css={modelStatsCss}
-											style={{ color: theme.textMuted }}
-										>
-											{m.ratio}x &middot;{" "}
-											<span style={{ color: m.color }}>
-												{formatNumber(m.allocated)}
-											</span>
-											/{formatNumber(m.cap)}
-										</span>
-									</div>
-									<div
-										css={capBarTrackCss}
-										style={{ background: theme.border }}
+								<span
+									css={modelNameCss}
+									style={{ color: group.color, flex: 1 }}
+								>
+									{group.label}{" "}
+									<span
+										style={{
+											color: theme.textMuted,
+											fontWeight: 400,
+										}}
 									>
+										({group.models.length})
+									</span>
+								</span>
+								<span css={modelStatsCss} style={{ color: theme.textMuted }}>
+									<span style={{ color: group.color }}>
+										{formatNumber(group.totalAllocated)}
+									</span>
+									/{formatNumber(group.totalCap)}
+								</span>
+							</div>
+							{/* Group summary bar */}
+							<div css={capBarTrackCss} style={{ background: theme.border }}>
+								<div
+									css={capBarFillCss}
+									style={{
+										width: `${groupPct}%`,
+										background: group.color,
+									}}
+								/>
+							</div>
+							{/* Expanded individual models */}
+							<div
+								css={familyModelsCss}
+								style={{
+									maxHeight: isExpanded ? group.models.length * 30 : 0,
+									opacity: isExpanded ? 1 : 0,
+								}}
+							>
+								{group.models.map((m) => (
+									<div key={m.id} css={modelRowCss}>
+										<div css={modelHeaderCss}>
+											<span
+												css={modelNameCss}
+												style={{
+													color: theme.textMuted,
+													fontSize: 10,
+												}}
+											>
+												{m.name}
+											</span>
+											<span
+												css={modelStatsCss}
+												style={{ color: theme.textMuted }}
+											>
+												{m.ratio}x &middot;{" "}
+												<span style={{ color: m.color }}>
+													{formatNumber(m.allocated)}
+												</span>
+												/{formatNumber(m.cap)}
+											</span>
+										</div>
 										<div
-											css={capBarFillCss}
-											style={{
-												width: `${Math.round(m.pct * 100)}%`,
-												background: m.color,
-											}}
-										/>
+											css={capBarTrackCss}
+											style={{ background: theme.border }}
+										>
+											<div
+												css={capBarFillCss}
+												style={{
+													width: `${Math.round(m.pct * 100)}%`,
+													background: m.color,
+												}}
+											/>
+										</div>
 									</div>
-								</div>
-							))}
+								))}
+							</div>
 						</div>
-					</div>
-				);
-			})}
+					);
+				})}
+			</div>
 		</CollapsibleSection>
 	);
 }
