@@ -108,6 +108,29 @@ const toolContentCss = css({
 	lineHeight: 1.6,
 });
 
+// ── Thinking indicator (self-contained, no log mutations) ──
+
+function ThinkingIndicator({ color }: { color: string }) {
+	const [frame, setFrame] = useState(0);
+	const [elapsed, setElapsed] = useState(0);
+	const startRef = useRef(performance.now());
+
+	useEffect(() => {
+		const id = setInterval(() => {
+			setFrame((f) => (f + 1) % SPINNER_FRAMES.length);
+			setElapsed((performance.now() - startRef.current) / 1000);
+		}, 80);
+		return () => clearInterval(id);
+	}, []);
+
+	return (
+		<div style={{ color }}>
+			<span>{SPINNER_FRAMES[frame]}</span>
+			<span style={{ marginLeft: 6 }}>Thinking... ({elapsed.toFixed(1)}s)</span>
+		</div>
+	);
+}
+
 // ── Helpers ──
 
 function pickAutoPrompt(): string {
@@ -150,10 +173,6 @@ export function CliPrompt() {
 	const queueRef = useRef(queue);
 	queueRef.current = queue;
 	const cancelRef = useRef<(() => void) | null>(null);
-
-	// Spinner state for the thinking phase
-	const [spinnerIdx, setSpinnerIdx] = useState(0);
-	const [thinkElapsed, setThinkElapsed] = useState(0);
 
 	const activeModels = useMemo(
 		() => aiModels.filter((m) => unlockedModels[m.id]),
@@ -222,19 +241,8 @@ export function CliPrompt() {
 				switch (step.type) {
 					case "think": {
 						setPhase("thinking");
-						// Add thinking entry that will be updated in place
-						appendEntry({
-							kind: "thinking",
-							text: `${SPINNER_FRAMES[0]} Thinking... (0s)`,
-						});
 						const thinkDuration = randomBetween(1500, 3000) / flopScale;
 						scheduleNext(thinkDuration, () => {
-							// Replace thinking line with final state
-							const elapsed = (thinkDuration / 1000).toFixed(1);
-							updateLastEntry(() => ({
-								kind: "thinking",
-								text: `${SPINNER_FRAMES[0]} Thinking... (${elapsed}s)`,
-							}));
 							stepIdx++;
 							subIdx = 0;
 							setPhase("executing");
@@ -445,24 +453,7 @@ export function CliPrompt() {
 		[activeModels.length, processSteps],
 	);
 
-	// ── Thinking spinner animation ──
-
-	useEffect(() => {
-		if (phase !== "thinking") return;
-
-		const startTime = performance.now();
-		const interval = setInterval(() => {
-			const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
-			setSpinnerIdx((prev) => (prev + 1) % SPINNER_FRAMES.length);
-			setThinkElapsed(Number(elapsed));
-			updateLastEntry(() => ({
-				kind: "thinking",
-				text: `thinking_placeholder`,
-			}));
-		}, 80);
-
-		return () => clearInterval(interval);
-	}, [phase, updateLastEntry]);
+	// Thinking spinner is rendered as a separate live element, not in the log
 
 	// ── When phase goes idle, check queue or start auto-prompt ──
 
@@ -542,11 +533,9 @@ export function CliPrompt() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: log triggers scroll
 	useEffect(() => {
-		logRef.current?.scrollTo({
-			top: logRef.current.scrollHeight,
-			behavior: "smooth",
-		});
-	}, [log]);
+		const el = logRef.current;
+		if (el) el.scrollTop = el.scrollHeight;
+	}, [log, phase]);
 
 	// ── Cleanup on unmount ──
 
@@ -603,17 +592,8 @@ export function CliPrompt() {
 					</div>
 				);
 
-			case "thinking": {
-				const frame = SPINNER_FRAMES[spinnerIdx % SPINNER_FRAMES.length];
-				return (
-					<div key={i} style={{ color: theme.textMuted }}>
-						<span>{frame}</span>
-						<span style={{ marginLeft: 6 }}>
-							Thinking... ({thinkElapsed.toFixed(1)}s)
-						</span>
-					</div>
-				);
-			}
+			case "thinking":
+				return null;
 
 			case "tool_header": {
 				const tool = entry.toolName ?? "Read";
@@ -718,6 +698,7 @@ export function CliPrompt() {
 					</div>
 				)}
 				{log.map((entry, i) => renderEntry(entry, i))}
+				{phase === "thinking" && <ThinkingIndicator color={theme.textMuted} />}
 			</div>
 			<div
 				css={inputRowCss}
