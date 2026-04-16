@@ -118,6 +118,8 @@ async function loadPack(style: MusicStyleEnum) {
 					const player = new Tone.Player({
 						url: `${basePath}/${name}.ogg`,
 						loop: true,
+						fadeIn: 0.05,
+						fadeOut: 0.05,
 						autostart: false,
 						onerror: () => resolve(),
 						onload: () => {
