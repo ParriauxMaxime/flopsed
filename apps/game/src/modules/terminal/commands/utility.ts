@@ -106,7 +106,7 @@ export function cmdHelp(
 	for (const [name, info] of Object.entries(COMMAND_HELP)) {
 		lines.push({
 			type: ShellLineTypeEnum.output,
-			text: `  ${name.padEnd(14)} — ${info.desc}`,
+			text: `  ${name.padEnd(16)}${info.desc}`,
 		});
 	}
 	return { lines };
