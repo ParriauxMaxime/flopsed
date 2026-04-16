@@ -96,7 +96,7 @@ const PACKS: Record<MusicStyleEnum, StemPack> = {
 };
 
 const FADE_DURATION = 2; // seconds
-const LOOP_CROSSFADE = 6; // seconds of crossfade at loop boundary
+const LOOP_CROSSFADE = 2; // seconds of crossfade at loop boundary
 
 interface StemPlayer {
 	player: ToneNs.Player;
@@ -164,8 +164,8 @@ async function loadPack(style: MusicStyleEnum) {
 	);
 }
 
-/** Start crossfade looping for a stem: schedule alternating playback
- *  with overlap, using setTimeout based on known buffer duration. */
+/** Start crossfade looping for a stem: A and B alternate,
+ *  each starting before the other ends for a seamless overlap. */
 function startCrossfadeLoop(name: string) {
 	const stem = stems.get(name) as
 		| (StemPlayer & { _gainA: ToneNs.Gain; _gainB: ToneNs.Gain })
@@ -177,66 +177,66 @@ function startCrossfadeLoop(name: string) {
 	if (dur <= 0) return;
 
 	const cf = LOOP_CROSSFADE;
-	const cycleDur = (dur - cf) * 1000; // ms between starting each copy
-	let useA = true;
+	const skipIntro = Math.min(2, dur * 0.05);
+	// Effective play duration (accounting for skipped intro)
+	const playDur = dur - skipIntro;
+	// How long before the end of current copy we start the next
+	const overlapStart = (playDur - cf) * 1000;
+	let aIsPlaying = true;
 
-	function startNext() {
+	function crossfade() {
 		if (!stem || !stems.has(name)) return;
 
-		const incoming = useA ? stem.player : stem.playerB;
-		const inGain = useA ? stem._gainA : stem._gainB;
-		const outGain = useA ? stem._gainB : stem._gainA;
+		const incoming = aIsPlaying ? stem.playerB : stem.player;
+		const inGain = aIsPlaying ? stem._gainB : stem._gainA;
+		const outgoing = aIsPlaying ? stem.player : stem.playerB;
+		const outGain = aIsPlaying ? stem._gainA : stem._gainB;
 
 		const now = Tone.now();
 
-		// Start incoming copy — skip the file's natural intro/fade-in
-		// by offsetting a few seconds into the buffer
-		const skipIntro = Math.min(3, dur * 0.1);
-		incoming.start(Tone.now(), skipIntro);
+		// Stop incoming if it was left in "stopped" state from previous cycle
+		try {
+			incoming.stop();
+		} catch {
+			/* may not be started */
+		}
 
-		// Very gradual crossfade — both players loud together for most of the overlap
-		// Incoming: slowly rise from 0 → 1 over the full duration
+		// Start incoming, skip the intro
+		incoming.start(now, skipIntro);
+
+		// Fade in incoming
 		inGain.gain.cancelScheduledValues(now);
 		inGain.gain.setValueAtTime(0, now);
-		inGain.gain.linearRampToValueAtTime(0.3, now + cf * 0.25);
-		inGain.gain.linearRampToValueAtTime(0.7, now + cf * 0.5);
-		inGain.gain.linearRampToValueAtTime(0.9, now + cf * 0.75);
-		inGain.gain.linearRampToValueAtTime(1.0, now + cf);
+		inGain.gain.linearRampToValueAtTime(1, now + cf);
 
-		// Outgoing: stay near full for 75% then drop gently
+		// Fade out outgoing
 		outGain.gain.cancelScheduledValues(now);
-		outGain.gain.setValueAtTime(1, now);
-		outGain.gain.linearRampToValueAtTime(1.0, now + cf * 0.5);
-		outGain.gain.linearRampToValueAtTime(0.7, now + cf * 0.75);
-		outGain.gain.linearRampToValueAtTime(0.3, now + cf * 0.9);
+		outGain.gain.setValueAtTime(outGain.gain.value, now);
 		outGain.gain.linearRampToValueAtTime(0, now + cf);
 
-		useA = !useA;
+		// Stop outgoing after crossfade finishes
+		setTimeout(
+			() => {
+				try {
+					outgoing.stop();
+				} catch {
+					/* ignore */
+				}
+			},
+			cf * 1000 + 100,
+		);
+
+		aIsPlaying = !aIsPlaying;
 	}
 
-	// Start the first copy immediately
+	// Start A immediately at full volume
 	stem.player.start();
 	stem._gainA.gain.value = 1;
 	stem._gainB.gain.value = 0;
 
-	// Schedule the crossfade cycle
-	// First crossfade happens at (dur - cf), then every (dur - cf)
-	const firstDelay = cycleDur;
-
-	const scheduleLoop = () => {
-		useA = false; // first scheduled start is B
-		startNext();
-	};
-
-	// Use a repeating timeout chain instead of setInterval for drift resistance
-	let timerId: ReturnType<typeof setTimeout>;
-	function loop() {
-		scheduleLoop();
-		timerId = setTimeout(loop, cycleDur);
-	}
-	timerId = setTimeout(loop, firstDelay);
-
-	stem.crossfadeTimer = timerId as unknown as ReturnType<typeof setInterval>;
+	// Schedule recurring crossfades
+	const id = setInterval(crossfade, overlapStart);
+	stem.crossfadeTimer = id;
 }
 
 function clearStems() {
