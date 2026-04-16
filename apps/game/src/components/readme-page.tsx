@@ -153,7 +153,7 @@ export function ReadmePage() {
 				css={h2Css}
 				style={{
 					borderBottom: `1px solid ${theme.border}`,
-					color: theme.accent,
+					color: theme.foreground,
 				}}
 			>
 				Collaborators
@@ -372,7 +372,7 @@ export function ReadmePage() {
 				css={h2Css}
 				style={{
 					borderBottom: `1px solid ${theme.border}`,
-					color: theme.accent,
+					color: theme.foreground,
 				}}
 			>
 				Support
@@ -435,7 +435,7 @@ export function ReadmePage() {
 				css={h2Css}
 				style={{
 					borderBottom: `1px solid ${theme.border}`,
-					color: theme.accent,
+					color: theme.foreground,
 				}}
 			>
 				License
