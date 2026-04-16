@@ -96,7 +96,7 @@ const PACKS: Record<MusicStyleEnum, StemPack> = {
 };
 
 const FADE_DURATION = 2; // seconds
-const LOOP_CROSSFADE = 1.5; // seconds of crossfade at loop boundary
+const LOOP_CROSSFADE = 3; // seconds of crossfade at loop boundary (long for smooth overlap)
 
 interface StemPlayer {
 	player: ToneNs.Player;
@@ -181,20 +181,29 @@ function startCrossfadeLoop(name: string) {
 	let useA = true;
 
 	function startNext() {
-		if (!stem || !stems.has(name)) return; // stem was cleared
+		if (!stem || !stems.has(name)) return;
 
-		const current = useA ? stem.player : stem.playerB;
-		const currentGain = useA ? stem._gainA : stem._gainB;
-		const prevGain = useA ? stem._gainB : stem._gainA;
+		const incoming = useA ? stem.player : stem.playerB;
+		const inGain = useA ? stem._gainA : stem._gainB;
+		const outGain = useA ? stem._gainB : stem._gainA;
 
-		// Start the next copy, fade it in, fade the previous out
-		current.start();
-		currentGain.gain.cancelScheduledValues(Tone.now());
-		currentGain.gain.setValueAtTime(0, Tone.now());
-		currentGain.gain.rampTo(1, cf);
+		const now = Tone.now();
 
-		prevGain.gain.cancelScheduledValues(Tone.now());
-		prevGain.gain.rampTo(0, cf);
+		// Start the incoming copy
+		incoming.start();
+
+		// Equal-power crossfade: both stay loud in the middle
+		// Incoming: 0 → hold at 0 briefly → ramp to 1 over most of the crossfade
+		inGain.gain.cancelScheduledValues(now);
+		inGain.gain.setValueAtTime(0, now);
+		inGain.gain.linearRampToValueAtTime(0.7, now + cf * 0.3);
+		inGain.gain.linearRampToValueAtTime(1.0, now + cf * 0.8);
+
+		// Outgoing: 1 → stay at 1 for a bit → then ramp down
+		outGain.gain.cancelScheduledValues(now);
+		outGain.gain.setValueAtTime(1, now);
+		outGain.gain.linearRampToValueAtTime(0.7, now + cf * 0.5);
+		outGain.gain.linearRampToValueAtTime(0, now + cf);
 
 		useA = !useA;
 	}
