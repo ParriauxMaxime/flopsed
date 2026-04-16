@@ -156,7 +156,7 @@ export function ReadmePage() {
 					color: theme.accent,
 				}}
 			>
-				## Collaborators
+				Collaborators
 			</div>
 
 			<div css={collaboratorsCss}>
@@ -375,7 +375,7 @@ export function ReadmePage() {
 					color: theme.accent,
 				}}
 			>
-				## Support
+				Support
 			</div>
 
 			<div
@@ -438,7 +438,7 @@ export function ReadmePage() {
 					color: theme.accent,
 				}}
 			>
-				## License
+				License
 			</div>
 
 			<p css={pCss}>
