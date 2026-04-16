@@ -232,7 +232,7 @@ export function ReadmePage() {
 						Noe Maire-Amiot
 					</div>
 					<div style={{ color: theme.textMuted, fontSize: 12 }}>
-						Human developer
+						Human advisor
 					</div>
 					<div style={{ color: theme.textMuted, fontSize: 11, marginTop: 4 }}>
 						Game design, art direction, UX, playtesting.
