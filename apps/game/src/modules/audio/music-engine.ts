@@ -189,8 +189,10 @@ function startCrossfadeLoop(name: string) {
 
 		const now = Tone.now();
 
-		// Start the incoming copy
-		incoming.start();
+		// Start incoming copy — skip the file's natural intro/fade-in
+		// by offsetting a few seconds into the buffer
+		const skipIntro = Math.min(3, dur * 0.1);
+		incoming.start(Tone.now(), skipIntro);
 
 		// Very gradual crossfade — both players loud together for most of the overlap
 		// Incoming: slowly rise from 0 → 1 over the full duration
