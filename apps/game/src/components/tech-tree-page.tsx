@@ -318,7 +318,15 @@ function NodePopover({ node }: PopoverProps) {
 	const canAfford = useLoc ? loc >= cost : cash >= cost;
 	const levelLabel = node.levelLabels?.[owned];
 
-	const x = ((node.x ?? 0) + TECH_NODE_WIDTH) * viewport.zoom + viewport.x + 12;
+	// Position popover: prefer right of node, fall back to left if clipped
+	const popoverWidth = 260;
+	const rightX =
+		((node.x ?? 0) + TECH_NODE_WIDTH) * viewport.zoom + viewport.x + 12;
+	const leftX = (node.x ?? 0) * viewport.zoom + viewport.x - popoverWidth - 12;
+	const viewportWidth =
+		typeof window !== "undefined" ? window.innerWidth : 1200;
+	const fitsRight = rightX + popoverWidth < viewportWidth - 20;
+	const x = fitsRight ? rightX : Math.max(8, leftX);
 	const y = (node.y ?? 0) * viewport.zoom + viewport.y;
 
 	const popoverStyle = css({
