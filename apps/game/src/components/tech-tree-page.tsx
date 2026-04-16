@@ -299,16 +299,17 @@ const containerBaseCss = css({
 
 interface PopoverProps {
 	node: TechNode;
+	viewport: { x: number; y: number; zoom: number };
+	containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-function NodePopover({ node }: PopoverProps) {
+function NodePopover({ node, viewport, containerRef }: PopoverProps) {
 	const { t } = useTranslation();
 	const { t: tTech } = useTranslation("tech-tree");
 	const theme = useIdeTheme();
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
 	const ownedTechNodes = useGameStore((s) => s.ownedTechNodes);
-	const viewport = useViewport();
 
 	const owned = ownedTechNodes[node.id] ?? 0;
 	const maxed = owned >= node.max;
@@ -318,20 +319,25 @@ function NodePopover({ node }: PopoverProps) {
 	const canAfford = useLoc ? loc >= cost : cash >= cost;
 	const levelLabel = node.levelLabels?.[owned];
 
-	// Position popover: prefer right of node, fall back to left if clipped
+	// Position popover relative to container using fixed positioning
+	const containerRect = containerRef.current?.getBoundingClientRect();
+	const offsetX = containerRect?.left ?? 0;
+	const offsetY = containerRect?.top ?? 0;
+	const containerWidth = containerRect?.width ?? 800;
+
 	const popoverWidth = 260;
-	const rightX =
-		((node.x ?? 0) + TECH_NODE_WIDTH) * viewport.zoom + viewport.x + 12;
-	const leftX = (node.x ?? 0) * viewport.zoom + viewport.x - popoverWidth - 12;
-	const viewportWidth =
-		typeof window !== "undefined" ? window.innerWidth : 1200;
-	const fitsRight = rightX + popoverWidth < viewportWidth - 20;
+	const nodeScreenX = (node.x ?? 0) * viewport.zoom + viewport.x + offsetX;
+	const nodeScreenY = (node.y ?? 0) * viewport.zoom + viewport.y + offsetY;
+
+	const rightX = nodeScreenX + TECH_NODE_WIDTH * viewport.zoom + 8;
+	const leftX = nodeScreenX - popoverWidth - 8;
+	const fitsRight = rightX + popoverWidth < offsetX + containerWidth - 10;
 	const x = fitsRight ? rightX : Math.max(8, leftX);
-	const y = (node.y ?? 0) * viewport.zoom + viewport.y;
+	const y = nodeScreenY;
 
 	const popoverStyle = css({
-		position: "absolute",
-		zIndex: 10,
+		position: "fixed",
+		zIndex: 9999,
 		pointerEvents: "none",
 		background: theme.panelBg,
 		border: `1px solid ${theme.border}`,
@@ -594,8 +600,14 @@ export function TechTreePage() {
 					color={theme.textMuted}
 				/>
 				<Background gap={20} color={theme.border} />
-				{hovered && <NodePopover node={hovered} />}
 			</ReactFlow>
+			{hovered && (
+				<NodePopover
+					node={hovered}
+					viewport={techTreeViewport}
+					containerRef={containerRef}
+				/>
+			)}
 		</div>
 	);
 }
