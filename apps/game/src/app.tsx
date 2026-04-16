@@ -1195,21 +1195,21 @@ export function App() {
 		}
 	}, [openTabs.length, splitEnabled]);
 
-	// Auto-expand panels when unlocked for the first time
+	// Auto-expand panels when unlocked (including after prestige)
 	const prevSidebarUnlocked = useRef(sidebarUnlocked);
 	useEffect(() => {
 		if (sidebarUnlocked && !prevSidebarUnlocked.current) {
-			prevSidebarUnlocked.current = true;
 			useUiStore.getState().toggleSidebar();
 		}
+		prevSidebarUnlocked.current = sidebarUnlocked;
 	}, [sidebarUnlocked]);
 
 	const prevStatsPanelUnlocked = useRef(statsPanelUnlocked);
 	useEffect(() => {
 		if (statsPanelUnlocked && !prevStatsPanelUnlocked.current) {
-			prevStatsPanelUnlocked.current = true;
 			useUiStore.getState().toggleStatsPanel();
 		}
+		prevStatsPanelUnlocked.current = statsPanelUnlocked;
 	}, [statsPanelUnlocked]);
 
 	// Force-trigger the CRT animation
@@ -1302,10 +1302,7 @@ export function App() {
 							overflow: "hidden",
 							flexShrink: 0,
 							width: sidebarUnlocked && !sidebarCollapsed ? sidebarWidth : 0,
-							transition:
-								sidebarUnlocked && !sidebarCollapsed
-									? "none"
-									: "width 0.25s ease",
+							transition: "width 0.25s ease",
 						}}
 					>
 						<SidebarTree onCollapse={toggleSidebar} />
@@ -1401,10 +1398,7 @@ export function App() {
 								statsPanelUnlocked && !statsPanelCollapsed
 									? statsPanelWidth
 									: 0,
-							transition:
-								statsPanelUnlocked && !statsPanelCollapsed
-									? "none"
-									: "width 0.25s ease",
+							transition: "width 0.25s ease",
 						}}
 					>
 						<StatsPanel onCollapse={toggleStatsPanel} />
