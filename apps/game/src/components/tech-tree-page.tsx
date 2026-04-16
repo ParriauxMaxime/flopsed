@@ -24,6 +24,7 @@ import {
 } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { useIsMobile } from "../hooks/use-is-mobile";
@@ -330,8 +331,8 @@ function NodePopover({ node }: PopoverProps) {
 	const y = (node.y ?? 0) * viewport.zoom + viewport.y;
 
 	const popoverStyle = css({
-		position: "absolute",
-		zIndex: 10,
+		position: "fixed",
+		zIndex: 9999,
 		pointerEvents: "none",
 		background: theme.panelBg,
 		border: `1px solid ${theme.border}`,
@@ -361,7 +362,7 @@ function NodePopover({ node }: PopoverProps) {
 		marginBottom: 2,
 	});
 
-	return (
+	return createPortal(
 		<div css={popoverStyle} style={{ left: x, top: y }}>
 			<div css={popoverNameStyle}>
 				{node.icon} {tTech(`${node.id}.name`)}
@@ -422,7 +423,8 @@ function NodePopover({ node }: PopoverProps) {
 					{t("tech_tree.locked")}
 				</div>
 			)}
-		</div>
+		</div>,
+		document.body,
 	);
 }
 
