@@ -200,6 +200,20 @@ export function ReadmePage() {
 							<GithubIcon /> GitHub
 						</a>
 						<a
+							href="https://www.linkedin.com/in/maxime-parriaux/"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{
+								color: theme.accent,
+								display: "inline-flex",
+								alignItems: "center",
+								gap: 4,
+							}}
+						>
+							<LinkIcon /> LinkedIn
+						</a>
+						<a
 							href="https://parriauxmaxime.github.io/"
 							target="_blank"
 							rel="noreferrer"
@@ -255,6 +269,20 @@ export function ReadmePage() {
 							<GithubIcon /> GitHub
 						</a>
 						<a
+							href="https://www.linkedin.com/in/noe-maireamiot/"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{
+								color: theme.accent,
+								display: "inline-flex",
+								alignItems: "center",
+								gap: 4,
+							}}
+						>
+							<LinkIcon /> LinkedIn
+						</a>
+						<a
 							href="https://noemaireamiot.com/"
 							target="_blank"
 							rel="noreferrer"
@@ -308,6 +336,20 @@ export function ReadmePage() {
 							}}
 						>
 							<LinkIcon /> Bitcrusher Studio
+						</a>
+						<a
+							href="https://www.linkedin.com/in/quentin-ferreira-casti%C3%A7o/"
+							target="_blank"
+							rel="noreferrer"
+							css={linkCss}
+							style={{
+								color: theme.accent,
+								display: "inline-flex",
+								alignItems: "center",
+								gap: 4,
+							}}
+						>
+							<LinkIcon /> LinkedIn
 						</a>
 						<a
 							href="https://www.malt.fr/profile/quentinferreiracastico"
