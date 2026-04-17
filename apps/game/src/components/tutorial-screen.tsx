@@ -368,7 +368,9 @@ export function TutorialTip() {
 	const [isNearBottom, setIsNearBottom] = useState(true);
 	const [hasNew, setHasNew] = useState(false);
 	const prevLogLen = useRef(terminalLog.length);
-	const contentHeight = useUiStore((s) => s.terminalHeight);
+	const rawHeight = useUiStore((s) => s.terminalHeight);
+	const isMobile = window.matchMedia("(max-width: 768px)").matches;
+	const contentHeight = isMobile ? Math.min(rawHeight, 120) : rawHeight;
 	const setContentHeight = useUiStore((s) => s.setTerminalHeight);
 	const isDragging = useRef(false);
 

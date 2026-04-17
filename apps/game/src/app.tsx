@@ -1160,6 +1160,16 @@ export function App() {
 	const rawStatsPanelWidth = useUiStore((s) => s.statsPanelWidth);
 	const setStatsPanelWidth = useUiStore((s) => s.setStatsPanelWidth);
 	const isMobile = useIsMobile();
+	const [isPortrait, setIsPortrait] = useState(
+		() => window.matchMedia("(orientation: portrait)").matches,
+	);
+	useEffect(() => {
+		const mql = window.matchMedia("(orientation: portrait)");
+		const h = (e: MediaQueryListEvent) => setIsPortrait(e.matches);
+		mql.addEventListener("change", h);
+		return () => mql.removeEventListener("change", h);
+	}, []);
+	const mobilePortrait = isMobile && isPortrait;
 	const sidebarWidth = isMobile
 		? Math.min(rawSidebarWidth, 180)
 		: rawSidebarWidth;
@@ -1332,14 +1342,20 @@ export function App() {
 					>
 						<div
 							data-pane-container
-							css={{ display: "flex", flex: 1, overflow: "hidden" }}
+							css={{
+								display: "flex",
+								flexDirection: mobilePortrait ? "column" : "row",
+								flex: 1,
+								overflow: "hidden",
+							}}
 						>
 							<div
 								css={{
 									display: "flex",
 									flex: splitEnabled ? splitRatio : 1,
 									overflow: "hidden",
-									minWidth: 200,
+									minWidth: mobilePortrait ? undefined : 200,
+									minHeight: mobilePortrait ? 100 : undefined,
 								}}
 							>
 								<TabbedPane
@@ -1359,12 +1375,15 @@ export function App() {
 							{splitEnabled && (
 								<>
 									<ResizeHandle
+										vertical={mobilePortrait}
 										onResize={(d) => {
 											const container = document.querySelector(
 												"[data-pane-container]",
 											);
 											if (!container) return;
-											const total = container.clientWidth;
+											const total = mobilePortrait
+												? container.clientHeight
+												: container.clientWidth;
 											setSplitRatio(splitRatio + d / total);
 										}}
 									/>
@@ -1373,7 +1392,8 @@ export function App() {
 											display: "flex",
 											flex: 1 - splitRatio,
 											overflow: "hidden",
-											minWidth: 200,
+											minWidth: mobilePortrait ? undefined : 200,
+											minHeight: mobilePortrait ? 100 : undefined,
 										}}
 									>
 										<TabbedPane
