@@ -1,10 +1,9 @@
 import { css, keyframes } from "@emotion/react";
 import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
 import { useTouchDevice } from "../hooks/use-touch-device";
 
-const SESSION_KEY = "flopsed-rotate-dismissed";
+const SESSION_KEY = "flopsed-mobile-dismissed";
 
 const fadeIn = keyframes({
 	from: { opacity: 0 },
@@ -19,9 +18,8 @@ const overlayCss = css({
 	flexDirection: "column",
 	alignItems: "center",
 	justifyContent: "center",
-	gap: 16,
+	gap: 20,
 	padding: 32,
-	cursor: "pointer",
 	animation: `${fadeIn} 0.3s ease-out`,
 	textAlign: "center",
 });
@@ -31,42 +29,61 @@ const iconCss = css({
 	lineHeight: 1,
 });
 
-const messageCss = css({
-	fontSize: 16,
-	fontWeight: 500,
-	lineHeight: 1.4,
-	maxWidth: 280,
+const titleCss = css({
+	fontSize: 20,
+	fontWeight: 700,
+	lineHeight: 1.3,
+	maxWidth: 320,
 });
 
-const hintCss = css({
-	fontSize: 12,
-	opacity: 0.6,
-	marginTop: 4,
+const messageCss = css({
+	fontSize: 14,
+	lineHeight: 1.5,
+	maxWidth: 300,
+	opacity: 0.8,
+});
+
+const buttonCss = css({
+	marginTop: 12,
+	padding: "10px 20px",
+	fontSize: 13,
+	fontWeight: 600,
+	border: "none",
+	borderRadius: 6,
+	cursor: "pointer",
+	transition: "opacity 0.15s",
+	"&:hover": { opacity: 0.85 },
 });
 
 export function RotateNudge() {
 	const isTouch = useTouchDevice();
-	const { t } = useTranslation("ui");
 	const theme = useIdeTheme();
-	const [portrait, setPortrait] = useState(false);
 	const [dismissed, setDismissed] = useState(
 		() => sessionStorage.getItem(SESSION_KEY) === "1",
 	);
 
+	// Prevent zoom on touch devices (except tech tree which handles its own)
 	useEffect(() => {
-		const mql = window.matchMedia("(orientation: portrait)");
-		setPortrait(mql.matches);
-		const handler = (e: MediaQueryListEvent) => setPortrait(e.matches);
-		mql.addEventListener("change", handler);
-		return () => mql.removeEventListener("change", handler);
-	}, []);
+		if (!isTouch) return;
+		const handler = (e: TouchEvent) => {
+			if (e.touches.length > 1) {
+				// Allow pinch zoom only inside tech tree
+				const target = e.target as HTMLElement;
+				if (!target.closest(".react-flow")) {
+					e.preventDefault();
+				}
+			}
+		};
+		document.addEventListener("touchmove", handler, { passive: false });
+		return () => document.removeEventListener("touchmove", handler);
+	}, [isTouch]);
 
 	const dismiss = useCallback(() => {
 		setDismissed(true);
 		sessionStorage.setItem(SESSION_KEY, "1");
 	}, []);
 
-	if (!isTouch || !portrait || dismissed) return null;
+	if (!isTouch || dismissed) return null;
 
 	return (
 		<div
@@ -75,16 +92,24 @@ export function RotateNudge() {
 				background: theme.background,
 				color: theme.foreground,
 			}}
-			onClick={dismiss}
-			onKeyDown={undefined}
 		>
-			<div css={iconCss}>📱↔️</div>
-			<div css={messageCss}>{t("mobile.rotate_device")}</div>
-			<div css={hintCss} style={{ color: theme.textMuted }}>
-				{t("mobile.tap_to_dismiss", {
-					defaultValue: "Tap anywhere to continue",
-				})}
+			<div css={iconCss}>🖥️</div>
+			<div css={titleCss}>Best experienced on desktop</div>
+			<div css={messageCss} style={{ color: theme.textMuted }}>
+				Flopsed is an IDE-style game with sidebars, tech trees, and terminals. A
+				bigger screen makes everything better.
 			</div>
+			<button
+				type="button"
+				css={buttonCss}
+				style={{
+					background: theme.accent,
+					color: theme.background,
+				}}
+				onClick={dismiss}
+			>
+				Continue anyway, you're not my boss
+			</button>
 		</div>
 	);
 }

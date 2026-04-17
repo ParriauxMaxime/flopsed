@@ -23,6 +23,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { match } from "ts-pattern";
 import { useIdeTheme } from "./hooks/use-ide-theme";
+import { useIsMobile } from "./hooks/use-is-mobile";
 import { supportedLanguages } from "./i18n";
 
 const TechTreePage = lazy(() =>
@@ -44,6 +45,7 @@ const globalStyles = css({
 	},
 	"html, body": {
 		background: "#000",
+		touchAction: "manipulation", // prevent double-tap zoom on mobile
 	},
 	"#root": {
 		userSelect: "none",
@@ -1153,10 +1155,17 @@ export function App() {
 	const focusPane = useUiStore((s) => s.focusPane);
 	const toggleSplit = useUiStore((s) => s.toggleSplit);
 	const uiZoom = useUiStore((s) => s.uiZoom);
-	const sidebarWidth = useUiStore((s) => s.sidebarWidth);
+	const rawSidebarWidth = useUiStore((s) => s.sidebarWidth);
 	const setSidebarWidth = useUiStore((s) => s.setSidebarWidth);
-	const statsPanelWidth = useUiStore((s) => s.statsPanelWidth);
+	const rawStatsPanelWidth = useUiStore((s) => s.statsPanelWidth);
 	const setStatsPanelWidth = useUiStore((s) => s.setStatsPanelWidth);
+	const isMobile = useIsMobile();
+	const sidebarWidth = isMobile
+		? Math.min(rawSidebarWidth, 180)
+		: rawSidebarWidth;
+	const statsPanelWidth = isMobile
+		? Math.min(rawStatsPanelWidth, 200)
+		: rawStatsPanelWidth;
 	const splitRatio = useUiStore((s) => s.splitRatio);
 	const setSplitRatio = useUiStore((s) => s.setSplitRatio);
 	const sidebarCollapsed = useUiStore((s) => s.sidebarCollapsed);
