@@ -112,7 +112,7 @@ let currentStyle: MusicStyleEnum = MusicStyleEnum.ferreira;
  * is smooth. Does NOT change loopStart/loopEnd — all stems must loop
  * the full buffer to stay in sync.
  */
-function makeBufferSeamless(player: ToneNs.Player, fadeMs = 500) {
+function makeBufferSeamless(player: ToneNs.Player, fadeMs = 50) {
 	const raw = player.buffer.get();
 	if (!raw || raw.length === 0) return;
 
@@ -151,7 +151,7 @@ async function loadPack(style: MusicStyleEnum) {
 			(name) =>
 				new Promise<void>((resolve) => {
 					const player = new Tone.Player({
-						url: `${basePath}/${name}.ogg`,
+						url: `${basePath}/${name}.wav`,
 						loop: true,
 						autostart: false,
 						onerror: () => resolve(),
