@@ -20,7 +20,7 @@ export const useAudioStore = create<AudioState & AudioActions>()(
 	persist(
 		(set) => ({
 			muted: false,
-			musicVolume: 50,
+			musicVolume: 80,
 			sfxVolume: 70,
 			musicStyle: "ferreira" as MusicStyleEnum,
 
