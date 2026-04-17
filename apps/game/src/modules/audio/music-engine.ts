@@ -112,14 +112,15 @@ let currentStyle: MusicStyleEnum = MusicStyleEnum.ferreira;
  * is smooth. Does NOT change loopStart/loopEnd — all stems must loop
  * the full buffer to stay in sync.
  */
-function makeBufferSeamless(player: ToneNs.Player, fadeMs = 200) {
+function makeBufferSeamless(player: ToneNs.Player) {
 	const raw = player.buffer.get();
 	if (!raw || raw.length === 0) return;
 
-	const sampleRate = raw.sampleRate;
+	// Simple fade-to-zero at boundaries: 5ms fade-out at end, 5ms fade-in at start.
+	// This guarantees both ends are at zero — the loop crosses at silence.
 	const fadeSamples = Math.min(
-		Math.floor((fadeMs / 1000) * sampleRate),
-		Math.floor(raw.length / 8),
+		Math.floor(0.005 * raw.sampleRate),
+		Math.floor(raw.length / 4),
 	);
 
 	if (fadeSamples < 2) return;
@@ -128,24 +129,13 @@ function makeBufferSeamless(player: ToneNs.Player, fadeMs = 200) {
 		const data = raw.getChannelData(ch);
 		const len = data.length;
 
-		// Store original values first to avoid read-after-write issues
-		const startCopy = new Float32Array(fadeSamples);
-		const endCopy = new Float32Array(fadeSamples);
 		for (let i = 0; i < fadeSamples; i++) {
-			startCopy[i] = data[i];
-			endCopy[i] = data[len - fadeSamples + i];
-		}
-
-		for (let i = 0; i < fadeSamples; i++) {
-			const t = i / fadeSamples;
-			const w = 0.5 * (1 - Math.cos(Math.PI * t));
-
-			data[i] = startCopy[i] * w + endCopy[i] * (1 - w);
-			data[len - fadeSamples + i] = endCopy[i] * w + startCopy[i] * (1 - w);
+			const t = i / fadeSamples; // 0→1
+			data[i] *= t; // fade in from zero
+			data[len - 1 - i] *= t; // fade out to zero
 		}
 	}
 
-	// Force Tone.js to use the modified buffer
 	player.buffer.set(raw);
 }
 
