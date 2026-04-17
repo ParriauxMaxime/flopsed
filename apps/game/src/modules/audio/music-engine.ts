@@ -155,9 +155,6 @@ async function loadPack(style: MusicStyleEnum) {
 						autostart: false,
 						onerror: () => resolve(),
 						onload: () => {
-							// Trim silence + blend loop boundaries
-							makeBufferSeamless(player);
-
 							const gain = new Tone.Gain(0);
 							player.connect(gain);
 							gain.toDestination();
