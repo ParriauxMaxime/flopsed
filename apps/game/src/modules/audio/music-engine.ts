@@ -151,7 +151,7 @@ async function loadPack(style: MusicStyleEnum) {
 			(name) =>
 				new Promise<void>((resolve) => {
 					const player = new Tone.Player({
-						url: `${basePath}/${name}.wav`,
+						url: `${basePath}/${name}.ogg`,
 						loop: true,
 						autostart: false,
 						onerror: () => resolve(),
