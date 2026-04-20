@@ -96,7 +96,7 @@ export function SpotlightOverlay() {
 		padding: "10px 14px",
 		zIndex: 9999,
 		boxShadow: `0 4px 16px rgba(0,0,0,0.4)`,
-		fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+		fontFamily: "inherit",
 	};
 
 	const arrowSize = 6;
@@ -131,10 +131,7 @@ export function SpotlightOverlay() {
 	return createPortal(
 		<>
 			{/* Click-through backdrop blocker (prevents interacting with game while spotlight is active) */}
-			<div
-				css={css({ position: "fixed", inset: 0, zIndex: 9997 })}
-				onClick={dismissSpotlight}
-			/>
+			<div css={css({ position: "fixed", inset: 0, zIndex: 9997 })} />
 			{/* Spotlight hole — box-shadow creates the dim effect */}
 			<div style={holeStyle} />
 			{/* Tooltip */}
