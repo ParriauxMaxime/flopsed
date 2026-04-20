@@ -140,8 +140,8 @@ export function SpotlightOverlay() {
 				<div
 					css={css({
 						fontWeight: 600,
-						fontSize: 13,
-						marginBottom: 6,
+						fontSize: 15,
+						marginBottom: 8,
 						lineHeight: 1.3,
 					})}
 					style={{ color: theme.accent }}
@@ -149,7 +149,7 @@ export function SpotlightOverlay() {
 					{t(activeSpotlight.titleKey)}
 				</div>
 				<div
-					css={css({ fontSize: 12, lineHeight: 1.6, marginBottom: 10 })}
+					css={css({ fontSize: 13, lineHeight: 1.6, marginBottom: 12 })}
 					style={{ color: theme.foreground }}
 				>
 					{t(activeSpotlight.bodyKey)}
@@ -159,8 +159,8 @@ export function SpotlightOverlay() {
 						type="button"
 						onClick={dismissSpotlight}
 						css={css({
-							fontSize: 12,
-							padding: "5px 14px",
+							fontSize: 13,
+							padding: "6px 16px",
 							borderRadius: 4,
 							cursor: "pointer",
 							fontFamily: "inherit",

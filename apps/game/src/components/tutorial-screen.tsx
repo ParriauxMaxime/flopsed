@@ -450,8 +450,15 @@ export function TutorialTip() {
 		[terminalOpen, contentHeight, setContentHeight],
 	);
 
-	// Auto-focus input when terminal is open
+	const isInitialMount = useRef(true);
+
+	// Auto-focus input when terminal is opened by the user — skip initial mount
+	// so the editor retains focus on first load
 	useEffect(() => {
+		if (isInitialMount.current) {
+			isInitialMount.current = false;
+			return;
+		}
 		if (terminalOpen) {
 			requestAnimationFrame(() => inputRef.current?.focus());
 		}
