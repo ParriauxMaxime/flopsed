@@ -34,5 +34,12 @@
 	"terminal_label": "Терминал",
 	"terminal_shortcut": "Ctrl+T",
 	"close_terminal": "Закрыть терминал (Ctrl+T)",
-	"new_content": "↓ новое"
+	"new_content": "↓ новое",
+	"spotlight_editor_title": "Давай, пиши что угодно",
+	"spotlight_editor_body": "Программисты делают вид, что кодить сложно. На самом деле всё просто. Печатай в agi.py — каждое нажатие клавиши генерирует строки кода.",
+	"spotlight_stats_unlock_title": "Разблокируй конвейер выполнения",
+	"spotlight_stats_unlock_body": "Твой код накапливается. Разблокируй панель Execute, чтобы запустить его и превратить LoC в деньги.",
+	"spotlight_execute_title": "Запусти свой код",
+	"spotlight_execute_body": "Нажми Execute для обработки строк кода в очереди. Больше FLOPS = больше пропускной способности = больше денег.",
+	"spotlight_got_it": "Понятно →"
 }

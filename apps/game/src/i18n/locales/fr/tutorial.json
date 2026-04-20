@@ -34,5 +34,12 @@
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
 	"close_terminal": "Fermer le terminal (Ctrl+T)",
-	"new_content": "↓ nouveau"
+	"new_content": "↓ nouveau",
+	"spotlight_editor_title": "Allez, écrivez n'importe quoi",
+	"spotlight_editor_body": "Les ingénieurs font croire que coder est difficile. C'est vraiment simple. Tapez dans agi.py — chaque frappe génère des Lignes de Code.",
+	"spotlight_stats_unlock_title": "Débloquez votre pipeline d'exécution",
+	"spotlight_stats_unlock_body": "Votre code s'accumule. Débloquez le panneau Execute pour l'exécuter et convertir les LoC en cash.",
+	"spotlight_execute_title": "Exécutez votre code",
+	"spotlight_execute_body": "Appuyez sur Execute pour traiter vos Lignes de Code en file. Plus de FLOPS = plus de débit = plus de cash.",
+	"spotlight_got_it": "Compris →"
 }

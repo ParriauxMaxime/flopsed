@@ -34,5 +34,12 @@
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
 	"close_terminal": "Close terminal (Ctrl+T)",
-	"new_content": "↓ new"
+	"new_content": "↓ new",
+	"spotlight_editor_title": "Go on, write anything",
+	"spotlight_editor_body": "Software engineers make it look hard. It's really easy. Type anywhere in agi.py — each keystroke generates Lines of Code.",
+	"spotlight_stats_unlock_title": "Unlock your execution pipeline",
+	"spotlight_stats_unlock_body": "You've got code piling up. Unlock the Execute panel to run it and turn LoC into cash.",
+	"spotlight_execute_title": "Run your code",
+	"spotlight_execute_body": "Hit Execute to process your queued Lines of Code. More FLOPS = more throughput = more cash.",
+	"spotlight_got_it": "Got it →"
 }

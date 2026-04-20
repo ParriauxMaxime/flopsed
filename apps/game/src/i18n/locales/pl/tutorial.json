@@ -34,5 +34,12 @@
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
 	"close_terminal": "Zamknij terminal (Ctrl+T)",
-	"new_content": "↓ nowe"
+	"new_content": "↓ nowe",
+	"spotlight_editor_title": "No dalej, napisz cokolwiek",
+	"spotlight_editor_body": "Programiści sprawiają, że kodowanie wydaje się trudne. Jest naprawdę proste. Pisz w agi.py — każde naciśnięcie klawisza generuje Linie Kodu.",
+	"spotlight_stats_unlock_title": "Odblokuj swój potok wykonania",
+	"spotlight_stats_unlock_body": "Twój kod się gromadzi. Odblokuj panel Execute, aby go uruchomić i zamienić LoC w gotówkę.",
+	"spotlight_execute_title": "Uruchom swój kod",
+	"spotlight_execute_body": "Naciśnij Execute, aby przetworzyć Linie Kodu w kolejce. Więcej FLOPS = więcej przepustowości = więcej gotówki.",
+	"spotlight_got_it": "Rozumiem →"
 }

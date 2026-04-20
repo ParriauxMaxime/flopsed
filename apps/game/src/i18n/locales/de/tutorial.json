@@ -34,5 +34,12 @@
 	"terminal_label": "Terminal",
 	"terminal_shortcut": "Ctrl+T",
 	"close_terminal": "Terminal schließen (Ctrl+T)",
-	"new_content": "↓ neu"
+	"new_content": "↓ neu",
+	"spotlight_editor_title": "Los, schreib irgendetwas",
+	"spotlight_editor_body": "Entwickler tun so, als wäre Coding schwer. Es ist wirklich einfach. Tippe in agi.py — jeder Tastendruck erzeugt Lines of Code.",
+	"spotlight_stats_unlock_title": "Entsperre deine Ausführungs-Pipeline",
+	"spotlight_stats_unlock_body": "Dein Code häuft sich an. Entsperre das Execute-Panel, um ihn auszuführen und LoC in Cash umzuwandeln.",
+	"spotlight_execute_title": "Führe deinen Code aus",
+	"spotlight_execute_body": "Drücke Execute, um deine Lines of Code zu verarbeiten. Mehr FLOPS = mehr Durchsatz = mehr Cash.",
+	"spotlight_got_it": "Verstanden →"
 }
