@@ -134,7 +134,6 @@ export function SpotlightOverlay() {
 			<div
 				css={css({ position: "fixed", inset: 0, zIndex: 9997 })}
 				onClick={dismissSpotlight}
-				onKeyDown={undefined}
 			/>
 			{/* Spotlight hole — box-shadow creates the dim effect */}
 			<div style={holeStyle} />
