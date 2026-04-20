@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useIdeTheme } from "../hooks/use-ide-theme";
+import { useIsMobile } from "../hooks/use-is-mobile";
 
 interface TargetRect {
 	top: number;
@@ -18,6 +19,7 @@ const TOOLTIP_FLIP_THRESHOLD = 148; // min px below target before flipping above
 export function SpotlightOverlay() {
 	const activeSpotlight = useUiStore((s) => s.activeSpotlight);
 	const dismissSpotlight = useUiStore((s) => s.dismissSpotlight);
+	const isMobile = useIsMobile();
 	const theme = useIdeTheme();
 	const { t } = useTranslation("tutorial");
 	const [rect, setRect] = useState<TargetRect | null>(null);
@@ -67,7 +69,7 @@ export function SpotlightOverlay() {
 		};
 	}, [activeSpotlight]);
 
-	if (!activeSpotlight || !rect) return null;
+	if (!activeSpotlight || !rect || isMobile) return null;
 
 	const holeStyle: React.CSSProperties = {
 		position: "fixed",
