@@ -91,7 +91,7 @@ export function useTutorialTriggers() {
 			// Auto-dismiss spotlights when the player has completed the action
 			const { activeSpotlight } = uiState;
 			if (activeSpotlight) {
-				if (activeSpotlight.id === "spotlight_editor" && state.totalLoc > 0) {
+				if (activeSpotlight.id === "spotlight_editor" && state.totalLoc >= 1) {
 					uiState.dismissSpotlight();
 				} else if (
 					activeSpotlight.id === "spotlight_stats_unlock" &&
