@@ -25,7 +25,7 @@
 	},
 	"ai_lab": {
 		"header": "tutorial.ai_lab()",
-		"body": "La era de escribir código ha terminado.\n\nTus trabajadores ahora producen tokens — las unidades atómicas que los modelos de IA consumen para generar LoC a gran escala.\n\nDivide tu potencia: los FLOPS ejecutan código en cola por cash, o alimentan modelos de IA para generar más código."
+		"body": "La era de escribir código ha terminado.\n\nTus trabajadores ahora producen tokens.\nLas unidades atómicas que los modelos de IA consumen para generar LoC a gran escala.\n\nDivide tu potencia: los FLOPS ejecutan código en cola por cash, o alimentan modelos de IA para generar más código."
 	},
 	"singularity_hint": {
 		"header": "tutorial.endgame()",
@@ -36,7 +36,7 @@
 	"close_terminal": "Cerrar terminal (Ctrl+T)",
 	"new_content": "↓ nuevo",
 	"spotlight_editor_title": "Venga, escribe lo que sea",
-	"spotlight_editor_body": "Los ingenieros hacen parecer difícil programar. Es realmente fácil. Escribe en agi.py — cada tecla genera Líneas de Código.",
+	"spotlight_editor_body": "Los ingenieros hacen parecer difícil programar. Es realmente fácil. Escribe en agi.py.\nCada tecla genera Líneas de Código.",
 	"spotlight_stats_unlock_title": "Desbloquea tu pipeline de ejecución",
 	"spotlight_stats_unlock_body": "Tu código se acumula. Desbloquea el panel Execute para ejecutarlo y convertir LoC en dinero.",
 	"spotlight_execute_title": "Ejecuta tu código",

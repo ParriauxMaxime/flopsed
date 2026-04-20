@@ -25,7 +25,7 @@
 	},
 	"ai_lab": {
 		"header": "tutorial.ai_lab()",
-		"body": "The age of writing code is over.\n\nYour workers now produce tokens — the atomic units AI models consume to generate LoC at massive scale.\n\nSplit your compute: FLOPS execute queued code into cash, or power AI models to generate more code."
+		"body": "The age of writing code is over.\n\nYour workers now produce tokens.\nThe atomic units AI models consume to generate LoC at massive scale.\n\nSplit your compute: FLOPS execute queued code into cash, or power AI models to generate more code."
 	},
 	"singularity_hint": {
 		"header": "tutorial.endgame()",
@@ -36,7 +36,7 @@
 	"close_terminal": "Close terminal (Ctrl+T)",
 	"new_content": "↓ new",
 	"spotlight_editor_title": "Go on, write anything",
-	"spotlight_editor_body": "Software engineers make it look hard. It's really easy. Type anywhere in agi.py — each keystroke generates Lines of Code.",
+	"spotlight_editor_body": "Software engineers make it look hard. It's really easy. Type anywhere in agi.py.\nEach keystroke generates Lines of Code.",
 	"spotlight_stats_unlock_title": "Unlock your execution pipeline",
 	"spotlight_stats_unlock_body": "You've got code piling up. Unlock the Execute panel to run it and turn LoC into cash.",
 	"spotlight_execute_title": "Run your code",

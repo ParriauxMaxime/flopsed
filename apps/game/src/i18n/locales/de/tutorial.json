@@ -25,7 +25,7 @@
 	},
 	"ai_lab": {
 		"header": "tutorial.ai_lab()",
-		"body": "Das Zeitalter des Code-Schreibens ist vorbei.\n\nIhre Arbeiter produzieren jetzt Tokens — die atomaren Einheiten, die KI-Modelle verbrauchen, um LoC in großem Maßstab zu generieren.\n\nTeilen Sie Ihre Rechenleistung auf: FLOPS führen wartenden Code für Cash aus oder treiben KI-Modelle an, um mehr Code zu generieren."
+		"body": "Das Zeitalter des Code-Schreibens ist vorbei.\n\nIhre Arbeiter produzieren jetzt Tokens.\nDie atomaren Einheiten, die KI-Modelle verbrauchen, um LoC in großem Maßstab zu generieren.\n\nTeilen Sie Ihre Rechenleistung auf: FLOPS führen wartenden Code für Cash aus oder treiben KI-Modelle an, um mehr Code zu generieren."
 	},
 	"singularity_hint": {
 		"header": "tutorial.endgame()",
@@ -36,7 +36,7 @@
 	"close_terminal": "Terminal schließen (Ctrl+T)",
 	"new_content": "↓ neu",
 	"spotlight_editor_title": "Los, schreib irgendetwas",
-	"spotlight_editor_body": "Entwickler tun so, als wäre Coding schwer. Es ist wirklich einfach. Tippe in agi.py — jeder Tastendruck erzeugt Lines of Code.",
+	"spotlight_editor_body": "Entwickler tun so, als wäre Coding schwer. Es ist wirklich einfach. Tippe in agi.py.\nJeder Tastendruck erzeugt Lines of Code.",
 	"spotlight_stats_unlock_title": "Entsperre deine Ausführungs-Pipeline",
 	"spotlight_stats_unlock_body": "Dein Code häuft sich an. Entsperre das Execute-Panel, um ihn auszuführen und LoC in Cash umzuwandeln.",
 	"spotlight_execute_title": "Führe deinen Code aus",

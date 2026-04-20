@@ -163,7 +163,12 @@ export function SpotlightOverlay() {
 					{t(activeSpotlight.titleKey)}
 				</div>
 				<div
-					css={css({ fontSize: 13, lineHeight: 1.6, marginBottom: 12 })}
+					css={css({
+						fontSize: 13,
+						lineHeight: 1.6,
+						marginBottom: 12,
+						whiteSpace: "pre-line",
+					})}
 					style={{ color: theme.foreground }}
 				>
 					{t(activeSpotlight.bodyKey)}
