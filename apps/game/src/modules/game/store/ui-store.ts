@@ -34,7 +34,7 @@ export const PaneEnum = {
 export type PaneEnum = (typeof PaneEnum)[keyof typeof PaneEnum];
 
 export type SpotlightStep = {
-	id: string;       // seen-tips key (e.g. "spotlight_editor")
+	id: string; // seen-tips key (e.g. "spotlight_editor")
 	targetId: string; // matches data-spotlight="<targetId>" on the DOM element
 	titleKey: string; // i18n key in tutorial namespace
 	bodyKey: string;
@@ -297,6 +297,7 @@ export const useUiStore = create<UiState>()(
 					terminalOpen: true,
 				})),
 			resetAll: () => {
+				localStorage.removeItem("flopsed-ui");
 				set({
 					seenTips: [],
 					activeSpotlight: null,
@@ -321,7 +322,6 @@ export const useUiStore = create<UiState>()(
 					terminalHeight: 200,
 					splitRatio: 0.5,
 				});
-				localStorage.removeItem("flopsed-ui");
 			},
 		}),
 		{

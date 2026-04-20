@@ -1,6 +1,7 @@
 import { css, keyframes } from "@emotion/react";
 import { useCallback, useEffect, useState } from "react";
 import { useIdeTheme } from "../hooks/use-ide-theme";
+import { useIsMobile } from "../hooks/use-is-mobile";
 import { useTouchDevice } from "../hooks/use-touch-device";
 
 const SESSION_KEY = "flopsed-mobile-dismissed";
@@ -56,6 +57,7 @@ const buttonCss = css({
 
 export function RotateNudge() {
 	const isTouch = useTouchDevice();
+	const isMobile = useIsMobile();
 	const theme = useIdeTheme();
 	const [dismissed, setDismissed] = useState(
 		() => sessionStorage.getItem(SESSION_KEY) === "1",
@@ -82,7 +84,7 @@ export function RotateNudge() {
 		sessionStorage.setItem(SESSION_KEY, "1");
 	}, []);
 
-	if (!isTouch || dismissed) return null;
+	if (!isTouch || !isMobile || dismissed) return null;
 
 	return (
 		<div

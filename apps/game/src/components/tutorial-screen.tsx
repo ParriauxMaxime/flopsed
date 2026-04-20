@@ -87,6 +87,25 @@ export function useTutorialTriggers() {
 
 		const unsub = useGameStore.subscribe((state) => {
 			const uiState = useUiStore.getState();
+
+			// Auto-dismiss spotlights when the player has completed the action
+			const { activeSpotlight } = uiState;
+			if (activeSpotlight) {
+				if (activeSpotlight.id === "spotlight_editor" && state.totalLoc > 0) {
+					uiState.dismissSpotlight();
+				} else if (
+					activeSpotlight.id === "spotlight_stats_unlock" &&
+					(state.ownedTechNodes.unlock_stats_panel ?? 0) > 0
+				) {
+					uiState.dismissSpotlight();
+				} else if (
+					activeSpotlight.id === "spotlight_execute" &&
+					state.totalExecutedLoc > 0
+				) {
+					uiState.dismissSpotlight();
+				}
+			}
+
 			for (const trigger of triggers) {
 				if (uiState.seenTips.includes(trigger.id)) continue;
 				if (trigger.test(state)) {
