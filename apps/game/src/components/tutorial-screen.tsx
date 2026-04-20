@@ -115,7 +115,7 @@ export function useTutorialTriggers() {
 					}
 					pushTutorial(trigger.id, trigger.i18nKey);
 					// Spotlight for discoverability
-					if (trigger.id === "sidebar_intro") {
+					if (trigger.id === "tech_tree_intro") {
 						uiState.showSpotlight({
 							id: "spotlight_stats_unlock",
 							targetId: "stats-unlock-node",

@@ -30,35 +30,40 @@ export function SpotlightOverlay() {
 			return;
 		}
 
-		const el = document.querySelector(
-			`[data-spotlight="${activeSpotlight.targetId}"]`,
-		);
-		if (!el) {
-			setRect(null);
-			return;
-		}
+		let ro: ResizeObserver | null = null;
+		let retryFrame: number;
+		let measureFn: (() => void) | null = null;
 
-		const measure = () => {
-			const r = el.getBoundingClientRect();
-			const next = {
-				top: r.top,
-				left: r.left,
-				width: r.width,
-				height: r.height,
+		const attach = (el: Element) => {
+			measureFn = () => {
+				const r = el.getBoundingClientRect();
+				setRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+				setFlipped(window.innerHeight - r.bottom < TOOLTIP_FLIP_THRESHOLD);
 			};
-			setRect(next);
-			setFlipped(window.innerHeight - r.bottom < TOOLTIP_FLIP_THRESHOLD);
+			measureFn();
+			ro = new ResizeObserver(measureFn);
+			ro.observe(el);
+			window.addEventListener("resize", measureFn);
 		};
 
-		measure();
+		const tryFind = () => {
+			const el = document.querySelector(
+				`[data-spotlight="${activeSpotlight.targetId}"]`,
+			);
+			if (el) {
+				attach(el);
+			} else {
+				// Element not in DOM yet (e.g. React Flow rendering, panel animating open)
+				retryFrame = requestAnimationFrame(tryFind);
+			}
+		};
 
-		const ro = new ResizeObserver(measure);
-		ro.observe(el);
-		window.addEventListener("resize", measure);
+		tryFind();
 
 		return () => {
-			ro.disconnect();
-			window.removeEventListener("resize", measure);
+			cancelAnimationFrame(retryFrame);
+			ro?.disconnect();
+			if (measureFn) window.removeEventListener("resize", measureFn);
 		};
 	}, [activeSpotlight]);
 
