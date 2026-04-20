@@ -170,7 +170,7 @@ const priceCss = css({
 export const TECH_NODE_WIDTH = 150;
 export const TECH_NODE_HEIGHT = 72;
 
-export function TechNodeComponent({ data, selected }: NodeProps) {
+export function TechNodeComponent({ data, selected, id }: NodeProps) {
 	const node = data as Record<string, unknown>;
 	const name = node.name as string;
 	const currency = (node.currency as string) ?? "cash";
@@ -200,6 +200,7 @@ export function TechNodeComponent({ data, selected }: NodeProps) {
 
 	return (
 		<div
+			{...(id === "unlock_stats_panel" ? { "data-spotlight": "stats-unlock-node" } : {})}
 			css={css({
 				background: style.background,
 				border: `2px solid ${style.borderColor}`,

@@ -322,6 +322,7 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 				ref={editorRef}
 				tabIndex={0}
 				onScroll={onScroll}
+				data-spotlight="editor"
 			>
 				<div style={{ height: contentHeight, position: "relative" }}>
 					{lineCount === 0 && (

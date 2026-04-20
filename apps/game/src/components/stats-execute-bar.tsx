@@ -170,6 +170,7 @@ export function StatsExecuteBar() {
 
 	return (
 		<div
+			data-spotlight="execute-button"
 			style={{
 				padding: "8px 12px",
 				borderTop: `1px solid ${theme.border}`,
