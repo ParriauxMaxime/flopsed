@@ -33,6 +33,13 @@ export const PaneEnum = {
 
 export type PaneEnum = (typeof PaneEnum)[keyof typeof PaneEnum];
 
+export type SpotlightStep = {
+	id: string;       // seen-tips key (e.g. "spotlight_editor")
+	targetId: string; // matches data-spotlight="<targetId>" on the DOM element
+	titleKey: string; // i18n key in tutorial namespace
+	bodyKey: string;
+};
+
 interface TechTreeViewport {
 	x: number;
 	y: number;
@@ -48,6 +55,7 @@ interface UiState {
 	splitEnabled: boolean;
 	editorTheme: EditorThemeEnum;
 	seenTips: string[];
+	activeSpotlight: SpotlightStep | null;
 	terminalLog: ShellLine[];
 	terminalOpen: boolean;
 	techTreeViewport: TechTreeViewport;
@@ -80,6 +88,8 @@ interface UiState {
 	setTerminalHeight: (h: number) => void;
 	setSplitRatio: (r: number) => void;
 	showTip: (id: string) => void;
+	showSpotlight: (step: SpotlightStep) => void;
+	dismissSpotlight: () => void;
 	pushTerminalLines: (lines: ShellLine[]) => void;
 	resetAll: () => void;
 	setTechTreeViewport: (viewport: TechTreeViewport) => void;
@@ -100,6 +110,7 @@ export const useUiStore = create<UiState>()(
 			splitEnabled: false,
 			editorTheme: EditorThemeEnum.one_dark,
 			seenTips: [],
+			activeSpotlight: null,
 			terminalLog: [],
 			terminalOpen: true,
 			techTreeViewport: {
@@ -269,6 +280,17 @@ export const useUiStore = create<UiState>()(
 				if (seenTips.includes(id)) return;
 				set({ seenTips: [...seenTips, id] });
 			},
+			showSpotlight: (step) => {
+				const { seenTips } = get();
+				if (seenTips.includes(step.id)) return;
+				set({ activeSpotlight: step });
+			},
+			dismissSpotlight: () => {
+				const { activeSpotlight } = get();
+				if (!activeSpotlight) return;
+				get().showTip(activeSpotlight.id);
+				set({ activeSpotlight: null });
+			},
 			pushTerminalLines: (lines) =>
 				set((s) => ({
 					terminalLog: [...s.terminalLog, ...lines],
@@ -277,6 +299,7 @@ export const useUiStore = create<UiState>()(
 			resetAll: () => {
 				set({
 					seenTips: [],
+					activeSpotlight: null,
 					terminalLog: [],
 					terminalOpen: true,
 					page: PageEnum.game,
