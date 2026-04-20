@@ -4,6 +4,7 @@ import { ReadmePage } from "@components/readme-page";
 import { ResizeHandle } from "@components/resize-handle";
 import { RotateNudge } from "@components/rotate-nudge";
 import { SidebarTree } from "@components/sidebar-tree";
+import { SpotlightOverlay } from "@components/spotlight-overlay";
 import { StatsPanel } from "@components/stats-panel";
 import { StatusBar } from "@components/status-bar";
 import {
@@ -1493,6 +1494,7 @@ export function App() {
 					<SingularitySequence animate={singularityAnimate} />
 				</Suspense>
 			)}
+			<SpotlightOverlay />
 		</>
 	);
 }

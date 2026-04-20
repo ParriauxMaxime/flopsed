@@ -27,6 +27,7 @@ export {
 	tiers,
 	useGameStore,
 } from "./store/game-store";
+export type { SpotlightStep } from "./store/ui-store";
 export {
 	EditorThemeEnum,
 	PageEnum,

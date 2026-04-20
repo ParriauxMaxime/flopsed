@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import type { SpotlightStep } from "@modules/game";
 import { useGameStore, useUiStore } from "@modules/game";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -85,6 +86,13 @@ export function useTutorialTriggers() {
 			useUiStore.getState().pushTerminalLines(lines);
 		};
 
+		const showSpotlightIfNew = (step: SpotlightStep) => {
+			const uiState = useUiStore.getState();
+			if (!uiState.seenTips.includes(step.id)) {
+				uiState.showSpotlight(step);
+			}
+		};
+
 		const unsub = useGameStore.subscribe((state) => {
 			const uiState = useUiStore.getState();
 			for (const trigger of triggers) {
@@ -95,6 +103,23 @@ export function useTutorialTriggers() {
 						uiState.toggleSplit();
 					}
 					pushTutorial(trigger.id, trigger.i18nKey);
+					// Spotlight for discoverability
+					if (trigger.id === "sidebar_intro") {
+						showSpotlightIfNew({
+							id: "spotlight_stats_unlock",
+							targetId: "stats-unlock-node",
+							titleKey: "spotlight_stats_unlock_title",
+							bodyKey: "spotlight_stats_unlock_body",
+						});
+					}
+					if (trigger.id === "execution_intro") {
+						showSpotlightIfNew({
+							id: "spotlight_execute",
+							targetId: "execute-button",
+							titleKey: "spotlight_execute_title",
+							bodyKey: "spotlight_execute_body",
+						});
+					}
 					break;
 				}
 			}
@@ -105,6 +130,12 @@ export function useTutorialTriggers() {
 		if (!uiState.seenTips.includes("welcome")) {
 			uiState.showTip("welcome");
 			pushTutorial("welcome", "welcome");
+			showSpotlightIfNew({
+				id: "spotlight_editor",
+				targetId: "editor",
+				titleKey: "spotlight_editor_title",
+				bodyKey: "spotlight_editor_body",
+			});
 		}
 
 		return () => unsub();
