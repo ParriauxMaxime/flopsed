@@ -135,8 +135,8 @@ export function SpotlightOverlay() {
 
 	return createPortal(
 		<>
-			{/* Click-through backdrop blocker (prevents interacting with game while spotlight is active) */}
-			<div css={css({ position: "fixed", inset: 0, zIndex: 9997 })} />
+			{/* Visual backdrop — pointer-events none so the spotlit element remains clickable */}
+			<div css={css({ position: "fixed", inset: 0, zIndex: 9997, pointerEvents: "none" })} />
 			{/* Spotlight hole — box-shadow creates the dim effect */}
 			<div style={holeStyle} />
 			{/* Tooltip */}
