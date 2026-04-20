@@ -16,6 +16,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **CRITICAL:** CI deployment runs `npm run check` and fails on any lint error. Always run `npm run check:fix` before committing, or set up a pre-commit hook at `.git/hooks/pre-commit` that runs it. Pattern: see `.git/hooks/pre-commit` in local clone — a shell script calling `npm run check --silent`.
 
+## Game Design Invariants
+
+**Never change game economy currencies or core design constraints without explicit approval.** Don't swap which resource an upgrade costs (e.g. LoC → cash), don't alter gate logic, don't modify win conditions. Prior incidents: FLOPS costs silently changed from LoC to cash, broken gates, wrong win conditions. When in doubt about any balance mechanic, ask before modifying.
+
 ## Stack
 
 - **React 19** with **Emotion** (`@emotion/react`) for CSS-in-JS via the `css` prop

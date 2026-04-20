@@ -200,7 +200,9 @@ export function TechNodeComponent({ data, selected, id }: NodeProps) {
 
 	return (
 		<div
-			{...(id === "unlock_stats_panel" ? { "data-spotlight": "stats-unlock-node" } : {})}
+			{...(id === "unlock_stats_panel"
+				? { "data-spotlight": "stats-unlock-node" }
+				: {})}
 			css={css({
 				background: style.background,
 				border: `2px solid ${style.borderColor}`,
