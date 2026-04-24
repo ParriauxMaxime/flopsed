@@ -1,6 +1,11 @@
 import { tierColors } from "@flopsed/design-system";
 import { tiers } from "@flopsed/domain";
-import { allMilestones, useGameStore } from "@modules/game";
+import {
+	allMilestones,
+	PageEnum,
+	useGameStore,
+	useUiStore,
+} from "@modules/game";
 import { formatNumber } from "@utils/format";
 import { autocomplete } from "./autocomplete";
 import {
@@ -111,6 +116,7 @@ class ShellEngineImpl {
 				const subCmd = args.join(" ");
 				if (subCmd === "godmode") {
 					useGameStore.setState({ endgameCompleted: true });
+					useUiStore.getState().openTab(PageEnum.god_mode);
 					allLines.push({
 						type: ShellLineTypeEnum.output,
 						text: "root access granted. You cheater.",
