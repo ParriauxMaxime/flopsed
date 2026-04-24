@@ -953,7 +953,7 @@
 			"icon": "♾️",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 25000000000,
+			"baseCost": 250000000000,
 			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
@@ -973,7 +973,7 @@
 			"icon": "📉",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 2000000000,
+			"baseCost": 20000000000,
 			"costMultiplier": 1.5,
 			"currency": "cash",
 			"effects": [
@@ -993,7 +993,7 @@
 			"icon": "⚖️",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 50000000000,
+			"baseCost": 500000000000,
 			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
@@ -1133,7 +1133,7 @@
 			"icon": "🐝",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 3000000000,
+			"baseCost": 30000000000,
 			"costMultiplier": 1.7,
 			"currency": "cash",
 			"effects": [
@@ -1153,7 +1153,7 @@
 			"icon": "🔄",
 			"requires": ["agent_gate"],
 			"max": 5,
-			"baseCost": 15000000000,
+			"baseCost": 150000000000,
 			"costMultiplier": 3,
 			"currency": "cash",
 			"effects": [
