@@ -69,6 +69,7 @@ function buildFlowNodes(
 	loc: number,
 	cash: number,
 	nodeTheme: TechNodeTheme,
+	translateName: (id: string, fallback: string) => string,
 ): Node[] {
 	const nodes: Node[] = [];
 	for (const n of techNodes) {
@@ -93,7 +94,13 @@ function buildFlowNodes(
 			id: n.id,
 			type: "techNode",
 			position: { x: n.x ?? 0, y: n.y ?? 0 },
-			data: { ...n, state, owned, nodeTheme },
+			data: {
+				...n,
+				name: translateName(n.id, n.name),
+				state,
+				owned,
+				nodeTheme,
+			},
 		});
 	}
 	return nodes;
@@ -437,6 +444,7 @@ function NodePopover({ node, viewport, containerRef }: PopoverProps) {
 export function TechTreePage() {
 	const theme = useIdeTheme();
 	const isMobile = useIsMobile();
+	const { t: tTech } = useTranslation("tech-tree");
 	const ownedTechNodes = useGameStore((s) => s.ownedTechNodes);
 	const loc = useGameStore((s) => s.loc);
 	const cash = useGameStore((s) => s.cash);
@@ -464,6 +472,12 @@ export function TechTreePage() {
 		};
 	}, [theme]);
 
+	const translateNodeName = useCallback(
+		(id: string, fallback: string) =>
+			tTech(`${id}.name`, { defaultValue: fallback }),
+		[tTech],
+	);
+
 	const flowNodes = useMemo(() => {
 		const now = Date.now();
 		const ownedChanged = prevOwned.current !== ownedTechNodes;
@@ -480,10 +494,11 @@ export function TechTreePage() {
 				loc,
 				cash,
 				nodeTheme,
+				translateNodeName,
 			);
 		}
 		return cachedNodes.current;
-	}, [ownedTechNodes, loc, cash, nodeTheme]);
+	}, [ownedTechNodes, loc, cash, nodeTheme, translateNodeName]);
 
 	const edgeDefs = useMemo(
 		() => buildEdgeDefs(flowNodes, allTechNodes, ownedTechNodes),
