@@ -1,9 +1,9 @@
 {
 	"upgrades": [
 		{
-			"id": "malt_freelancer",
+			"id": "freelancer",
 			"tier": "freelancing",
-			"name": "Malt Freelancer",
+			"name": "Freelancer",
 			"description": "Remote dev — writes 5 LoC/s",
 			"icon": "💻",
 			"baseCost": 100,

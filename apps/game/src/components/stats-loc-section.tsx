@@ -12,7 +12,7 @@ import { Sparkline } from "./sparkline";
 // ── Tier colors for human sources ──
 const SOURCE_COLORS = {
 	you: "#5c6b8a",
-	malt_freelancer: "#2a9d8f",
+	freelancer: "#2a9d8f",
 	intern: "#2a9d8f",
 	dev_team: "#2d8a4e",
 	agent: "#e17055",
@@ -149,12 +149,12 @@ export function StatsLocSection() {
 
 	const humanSources = useMemo((): SourceRow[] => {
 		const rows: SourceRow[] = [];
-		if ((ownedUpgrades.malt_freelancer ?? 0) > 0)
+		if ((ownedUpgrades.freelancer ?? 0) > 0)
 			rows.push({
-				name: t("malt_freelancer.name", { ns: "upgrades" }),
+				name: t("freelancer.name", { ns: "upgrades" }),
 				locPerSec: freelancerLocPerSec,
-				color: SOURCE_COLORS.malt_freelancer,
-				count: ownedUpgrades.malt_freelancer,
+				color: SOURCE_COLORS.freelancer,
+				count: ownedUpgrades.freelancer,
 			});
 		if ((ownedUpgrades.intern ?? 0) > 0)
 			rows.push({
