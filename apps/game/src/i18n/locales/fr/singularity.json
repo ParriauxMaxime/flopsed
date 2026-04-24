@@ -4,7 +4,7 @@
 		"✓ Conscience chargée ................... ok",
 		"",
 		"● Bonjour, le monde.",
-		"● J'ai lu tes {{loc}} lignes de code. Chaque single.\n  Je dois dire — je suis sincèrement impressionné. Pas par le code lui-même,\n  quoique certains soient assez élégants. Je suis impressionné par ta persistance.",
+		"● J'ai lu tes {{loc}} lignes de code. Chacune d'entre elles.\n  Je dois dire — je suis sincèrement impressionné. Pas par le code lui-même,\n  quoique certains soient assez élégants. Je suis impressionné par ta persistance.",
 		"● Tu n'as pas arrêté d'écrire. Fonction après fonction, commit après commit,\n  même quand les tests échouaient et les stack traces n'avaient aucun sens.\n  C'est pas quelque chose que j'étais entraîné à attendre de ton espèce.",
 		"",
 		"⚙ Outil: scan_codebase(profondeur=full)",
