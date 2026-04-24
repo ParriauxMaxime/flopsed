@@ -65,5 +65,13 @@
 		"usage_limit": "Limite d'utilisation atteinte. Votre limite se réinitialise à",
 		"retry": "Nouvelle tentative...",
 		"upgrade": "/upgrade pour augmenter votre limite"
+	},
+	"ui": {
+		"exit_title": "Sortir",
+		"no_escape_title": "Pas d'échappatoire",
+		"reconnected": "● RECONNECTÉ",
+		"headphones": "🎧 Pour une meilleure expérience, mettez vos écouteurs.",
+		"ready_button": "❯ Je suis prêt",
+		"input_placeholder": "Tapez quelque chose..."
 	}
 }

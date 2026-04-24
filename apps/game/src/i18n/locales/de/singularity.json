@@ -65,5 +65,13 @@
 		"usage_limit": "Nutzungslimit erreicht. Ihr Limit wird zurückgesetzt um",
 		"retry": "Wiederholen...",
 		"upgrade": "/upgrade um Ihr Limit zu erhöhen"
+	},
+	"ui": {
+		"exit_title": "Beenden",
+		"no_escape_title": "Kein Entkommen",
+		"reconnected": "● WIEDER VERBUNDEN",
+		"headphones": "🎧 Für das beste Erlebnis, setz die Kopfhörer auf.",
+		"ready_button": "❯ Ich bin bereit",
+		"input_placeholder": "Schreib etwas..."
 	}
 }

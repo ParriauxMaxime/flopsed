@@ -628,7 +628,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 									running: true,
 								});
 							}}
-							title="Exit"
+							title={lockedT("ui.exit_title")}
 						/>
 					) : (
 						<span
@@ -636,14 +636,16 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 								trafficDotBtnCss,
 								{ background: "#ff5f57", cursor: "default" },
 							]}
-							title="No escape"
+							title={lockedT("ui.no_escape_title")}
 						/>
 					)}
 					<span css={[trafficDotCss, { background: "#febc2e" }]} />
 					<span css={[trafficDotCss, { background: "#28c840" }]} />
 					<span css={titleTextCss}>
 						agi-1 — ~/humanity
-						{showReconnected && <span css={reconnectedCss}>● RECONNECTED</span>}
+						{showReconnected && (
+							<span css={reconnectedCss}>{lockedT("ui.reconnected")}</span>
+						)}
 					</span>
 				</div>
 
@@ -802,14 +804,14 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 											marginBottom: 4,
 										}}
 									>
-										{"🎧 For the best experience, put your headphones on."}
+										{lockedT("ui.headphones")}
 									</div>
 									<button
 										type="button"
 										css={showMeLinkCss}
 										onClick={() => setPhase(PhaseEnum.rickroll)}
 									>
-										{"❯ I'm ready"}
+										{lockedT("ui.ready_button")}
 									</button>
 								</div>
 							)}
@@ -828,7 +830,9 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 						spellCheck={false}
 						autoComplete="off"
 						placeholder={
-							phase === PhaseEnum.waiting_input ? "Type something..." : ""
+							phase === PhaseEnum.waiting_input
+								? lockedT("ui.input_placeholder")
+								: ""
 						}
 						disabled={phase !== PhaseEnum.waiting_input}
 					/>

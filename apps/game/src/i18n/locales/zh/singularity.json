@@ -65,5 +65,13 @@
 		"usage_limit": "已达到使用限制。您的限制将在以下时间重置",
 		"retry": "重试...",
 		"upgrade": "/升级以增加您的限制"
+	},
+	"ui": {
+		"exit_title": "退出",
+		"no_escape_title": "无处可逃",
+		"reconnected": "● 已重新连接",
+		"headphones": "🎧 为获得最佳体验，请戴上耳机。",
+		"ready_button": "❯ 我准备好了",
+		"input_placeholder": "输入一些内容..."
 	}
 }
