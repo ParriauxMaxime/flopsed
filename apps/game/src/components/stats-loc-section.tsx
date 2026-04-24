@@ -201,11 +201,9 @@ export function StatsLocSection() {
 		for (const alloc of aiModelAllocations) {
 			const model = aiModels.find((m) => m.id === alloc.modelId);
 			if (!model) continue;
-			const flopRatio =
-				alloc.flopsCap > 0 ? alloc.allocatedFlops / alloc.flopsCap : 0;
 			rows.push({
 				name: `${model.name} ${model.version}`,
-				locPerSec: model.locPerSec * flopRatio,
+				locPerSec: alloc.locProduced,
 				color: MODEL_COLORS[model.family] ?? "#8b949e",
 				family: model.family,
 			});
