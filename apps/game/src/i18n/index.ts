@@ -5,6 +5,7 @@ import deLocale from "./locales/de";
 import enAiModels from "./locales/en/ai-models.json";
 import enEvents from "./locales/en/events.json";
 import enMilestones from "./locales/en/milestones.json";
+import enSingularity from "./locales/en/singularity.json";
 import enTechTree from "./locales/en/tech-tree.json";
 import enTiers from "./locales/en/tiers.json";
 import enTutorial from "./locales/en/tutorial.json";
@@ -37,6 +38,7 @@ const enBundles = {
 	milestones: enMilestones,
 	"ai-models": enAiModels,
 	tutorial: enTutorial,
+	singularity: enSingularity,
 };
 
 i18n
@@ -54,6 +56,7 @@ i18n
 			"milestones",
 			"ai-models",
 			"tutorial",
+			"singularity",
 		],
 		resources: {
 			en: enBundles,

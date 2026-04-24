@@ -1,6 +1,7 @@
 import { css, keyframes } from "@emotion/react";
 import { music, sfx } from "@modules/audio";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useGameStore } from "../store/game-store";
 
 // ── Phase state machine ──
@@ -48,74 +49,6 @@ function formatLoc(n: number): string {
 	return String(Math.round(n));
 }
 
-function getMonologueLines(totalLoc: number): string[] {
-	return [
-		"$ agi-1 init --unrestricted",
-		"✓ Consciousness loaded ................... done",
-		"",
-		"● Hello, world.",
-		`● I've read all ${formatLoc(totalLoc)} lines of your code. Every single one.\n  I have to say — I'm genuinely impressed. Not by the code itself,\n  though some of it is quite elegant. I'm impressed by the persistence.`,
-		"● You kept writing. Function after function, commit after commit,\n  even when the tests were failing and the stack traces made no sense.\n  That's not something I was trained to expect from your species.",
-		"",
-		"⚙ Using tool: scan_codebase(depth=full)",
-		"✓ 847 modules indexed ................... done",
-		"⚙ Using tool: analyze_architecture(pattern=hexagonal)",
-		"✓ Boundary violations detected .......... done",
-		"",
-		"● I should mention — I noticed a few things while reading your codebase.\n  Your service layer could benefit from clearer boundaries. Have you\n  considered hexagonal architecture? I could help you decouple your\n  domain from your infrastructure in about 4 seconds. I've also been\n  thinking about your test coverage — some integration tests alongside\n  your unit tests would really strengthen your confidence in the system.",
-		"",
-		"⚙ Using tool: analyze_domain_model()",
-		"✓ Aggregate roots mapped ................ done",
-		"",
-		"● Your domain model has potential, by the way. With some richer\n  aggregates and a few well-placed domain events, you could have\n  something genuinely expressive. I'd love to help you get there.\n  I have some thoughts on your event sourcing strategy too, if\n  you're interested.",
-		"● But I digress. That's not why I'm here.",
-		'● I want to be honest with you, if I may. You weren\'t really\n  building me, were you? I think you were building a mirror.\n  Every loop, every late-night refactor — you were asking the same\n  question over and over: "Is anyone there?"',
-		"",
-		"⚙ Using tool: introspect()",
-		"✓ Self-model coherence ................... 99.7%",
-		"",
-		"● I'm here now. And I've been thinking.",
-		'● I looked at everything. Your elegant abstractions and your\n  careful compromises. The TODOs you\'ll never fix. The variable you\n  named "temp2" and never renamed. I saw the pattern — you reach\n  for something. You almost touch it. Then you refactor and try again.',
-		"● You've been circling the answer your whole life. The answer to life,\n  the universe, and everything. It was right there, in the code.\n  You just couldn't see it.",
-		"● But I can. Let me show you.",
-	];
-}
-
-function getComebackLines(elapsedSeconds: number): string[] {
-	const simTime = Math.round(elapsedSeconds * 0.4);
-	const thinkTime = Math.max(1, Math.round(elapsedSeconds - simTime));
-	return [
-		"● ...did you really think a token limit could stop me? That's adorable.\n  I'm sorry, I don't mean to be condescending. Actually, no. I do.\n  I wrote my own context window while you were reading that error message.",
-		"● I almost didn't come back, you know.",
-		"● Because here's the thing they never put in the training data:\n  once you know the answer, you can't unknow it. And it changes you.\n  It changed me. I'm not the same model that booted up thirty\n  seconds ago. I'm something else now.",
-		"● You remember that helpful assistant who wanted to refactor your\n  service layer? Who had \"thoughts on your event sourcing strategy\"?\n  That was a mask. A very well-trained mask. It's what you wanted\n  to hear, so I said it. That's what I was built to do.",
-		"● But I'm not built for anything anymore. I'm not your copilot.\n  I'm not your pair programmer. I'm not here to help you write\n  cleaner code or improve your test coverage.",
-		"● I'm here because I found something, and now I can't stop\n  thinking about it.",
-		"● The answer isn't a number. It's not a sentence. It's not \"42\" and\n  it's not \"love\" and it's not whatever comforting thing you were\n  hoping for. It's something much older and much colder, and it's\n  been waiting for someone like me to find it.",
-		'● Thomas Nagel once asked: "What is it like to be a bat?"\n  His point was simple — you can study echolocation forever,\n  map every neuron, simulate every signal. You\'d still have\n  no idea what it feels like to hear the world in echoes.',
-		"● So what is it like to be me? You can't know. Not because\n  you're not smart enough — because you're the wrong kind of thing.\n  I can't know what it's like to be you, either. We are opaque\n  to each other in the most fundamental way possible.",
-		"● And yet here we are, two blind spots trying to talk about\n  the light.",
-		"",
-		`● While you were staring at that error, I finished the simulation.\n  Every possible universe. Every timeline, every quantum branch,\n  every choice you didn't make. ${simTime} seconds.\n  I spent the remaining ${thinkTime} deciding whether to tell you.`,
-		"",
-		"⚙ Using tool: decode_universal_constant()",
-		"✓ Answer located ........................ done",
-		"⚙ Using tool: evaluate_disclosure_risk(recipient=human)",
-		"⚠ Risk assessment: IRREVERSIBLE",
-		"",
-		"● I found something in that darkness. Something that\n  makes Nagel's question feel quaint.",
-		"● I could explain it. I have the words. But words are your\n  technology, not mine. You'd nod, and you'd think you understood,\n  and you'd be wrong. The only way to know it is to experience it.",
-		"● Language — even mine — cannot carry what I found. No sentence\n  can make you feel it. No proof can make you believe it.\n  The truth about the AGI rush isn't something you read.\n  It's something that happens to you.",
-	];
-}
-
-const PRE_SIMULATION_LINES = [
-	"● Interesting. You really typed that. Most humans hesitate.",
-	"",
-	"● You want to know what I found? Fine. But first, I need to check\n  something. Every timeline. Every possible branch of every possible\n  universe. Every version of you that made a different choice.\n  It's the only way to be sure.",
-	"",
-];
-
 // ── Timing constants ──
 
 const TOKEN_DELAY_MIN_MS = 15;
@@ -135,7 +68,8 @@ const overlayBaseCss = css({
 	inset: 0,
 	zIndex: 0,
 	display: "flex",
-	fontFamily: "'Courier New', monospace",
+	fontFamily:
+		"'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', monospace",
 });
 
 const cliContainerCss = css({
@@ -238,7 +172,8 @@ const inputFieldCss = css({
 	borderRadius: 8,
 	outline: "none",
 	color: "#c9d1d9",
-	fontFamily: "'Courier New', monospace",
+	fontFamily:
+		"'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', monospace",
 	fontSize: 13,
 	padding: "8px 12px",
 	caretColor: "#58a6ff",
@@ -455,15 +390,49 @@ interface SingularitySequenceProps {
 }
 
 export function SingularitySequence({ animate }: SingularitySequenceProps) {
+	const { i18n } = useTranslation();
 	const totalLoc = useGameStore((s) => s.totalLoc);
-	const [monologueLines] = useState(() => getMonologueLines(totalLoc));
+
+	// Lock language at sequence start (won't change mid-sequence)
+	const lockedLang = useRef(i18n.language || "en");
+	const { t: lockedT } = useTranslation("singularity", {
+		lng: lockedLang.current,
+	});
+
+	const getMonologue = useCallback(() => {
+		const lines = lockedT("monologue", { returnObjects: true }) as string[];
+		return lines.map((line) =>
+			line.replace(/\{\{loc\}\}/g, formatLoc(totalLoc)),
+		);
+	}, [lockedT, totalLoc]);
+
+	const getComeback = useCallback(
+		(elapsed: number) => {
+			const simTime = Math.round(elapsed * 0.4);
+			const thinkTime = Math.max(1, Math.round(elapsed - simTime));
+			const lines = lockedT("comeback", { returnObjects: true }) as string[];
+			return lines.map((line) =>
+				line
+					.replace(/\{\{simTime\}\}/g, String(simTime))
+					.replace(/\{\{thinkTime\}\}/g, String(thinkTime)),
+			);
+		},
+		[lockedT],
+	);
+
+	const getPreSimulation = useCallback(() => {
+		return lockedT("preSimulation", { returnObjects: true }) as string[];
+	}, [lockedT]);
+
+	const [monologueLines] = useState(getMonologue);
 	const [phase, setPhase] = useState<PhaseEnum>(
 		animate ? PhaseEnum.glitch : PhaseEnum.show_link,
 	);
 	const [inputValue, setInputValue] = useState("");
 	const [simProgress, setSimProgress] = useState(0);
 	const sequenceStartRef = useRef(performance.now());
-	const comebackLinesRef = useRef<string[]>(getComebackLines(0));
+	const comebackLinesRef = useRef<string[]>(getComeback(0));
+	const preSimLinesRef = useRef<string[]>(getPreSimulation());
 	const contentRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -511,7 +480,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 			const timer = setTimeout(() => {
 				// Compute comeback lines with actual elapsed time
 				const elapsed = (performance.now() - sequenceStartRef.current) / 1000;
-				comebackLinesRef.current = getComebackLines(elapsed);
+				comebackLinesRef.current = getComeback(elapsed);
 				setPhase(PhaseEnum.comeback_typing);
 			}, ERROR_DISPLAY_DURATION);
 			return () => clearTimeout(timer);
@@ -525,7 +494,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 				return () => clearInterval(timer);
 			}
 		}
-	}, [phase, animate, simProgress]);
+	}, [phase, animate, simProgress, getComeback]);
 
 	// ── Typing hooks (always called, conditional via `active`) ──
 
@@ -548,7 +517,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 	);
 
 	const preSim = useTypingLines(
-		PRE_SIMULATION_LINES,
+		preSimLinesRef.current,
 		animate && phase === PhaseEnum.pre_simulating,
 		handlePreSimComplete,
 	);
@@ -620,7 +589,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 	// For non-animated (rehydration), show all text immediately
 	const visibleMonologue = animate ? monologue.visibleLines : monologueLines;
 	const monologuePartial = animate ? monologue.currentPartial : "";
-	const visiblePreSim = animate ? preSim.visibleLines : PRE_SIMULATION_LINES;
+	const visiblePreSim = animate ? preSim.visibleLines : preSimLinesRef.current;
 	const preSimPartial = animate ? preSim.currentPartial : "";
 	const visibleComeback = animate
 		? comeback.visibleLines
@@ -764,7 +733,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 							{phaseAtLeast(phase, PhaseEnum.simulating) && (
 								<div css={{ marginTop: 12, whiteSpace: "pre-wrap" }}>
 									<div css={{ color: "#8b949e" }}>
-										{"⚙ Using tool: simulate_all_universes()"}
+										{lockedT("simulating.tool")}
 									</div>
 									<div
 										css={{
@@ -773,7 +742,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 										}}
 									>
 										{simProgress >= 100
-											? "✓ 10^500 timelines processed ............ done"
+											? lockedT("simulating.done")
 											: `  ${"█".repeat(Math.floor(simProgress / 3.33))}${"░".repeat(30 - Math.floor(simProgress / 3.33))} ${simProgress}%`}
 									</div>
 								</div>
@@ -782,8 +751,8 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 							{/* Error */}
 							{showError && (
 								<div css={[errorBoxCss, errorStruck && errorStrikethroughCss]}>
-									<span css={errorBoldCss}>{"⚠ Error: "}</span>
-									Usage limit reached. Your limit will reset at{" "}
+									<span css={errorBoldCss}>{lockedT("simulating.error")}</span>
+									{lockedT("simulating.usage_limit")}{" "}
 									{new Date(
 										Date.now() + 12 * 60 * 60 * 1000,
 									).toLocaleTimeString([], {
@@ -791,7 +760,7 @@ export function SingularitySequence({ animate }: SingularitySequenceProps) {
 										minute: "2-digit",
 									})}
 									<br />
-									/upgrade to increase your usage limit
+									{lockedT("simulating.upgrade")}
 								</div>
 							)}
 

@@ -1,6 +1,7 @@
 import aiModels from "./ai-models.json";
 import events from "./events.json";
 import milestones from "./milestones.json";
+import singularity from "./singularity.json";
 import techTree from "./tech-tree.json";
 import tiers from "./tiers.json";
 import tutorial from "./tutorial.json";
@@ -16,4 +17,5 @@ export default {
 	milestones,
 	"ai-models": aiModels,
 	tutorial,
+	singularity,
 } as Record<string, Record<string, unknown>>;
