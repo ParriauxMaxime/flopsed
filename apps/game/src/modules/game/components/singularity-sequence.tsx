@@ -68,8 +68,7 @@ const overlayBaseCss = css({
 	inset: 0,
 	zIndex: 0,
 	display: "flex",
-	fontFamily:
-		"'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', monospace",
+	fontFamily: "'Courier New', monospace",
 });
 
 const cliContainerCss = css({
@@ -172,8 +171,7 @@ const inputFieldCss = css({
 	borderRadius: 8,
 	outline: "none",
 	color: "#c9d1d9",
-	fontFamily:
-		"'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', monospace",
+	fontFamily: "'Courier New', monospace",
 	fontSize: 13,
 	padding: "8px 12px",
 	caretColor: "#58a6ff",

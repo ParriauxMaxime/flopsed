@@ -75,4 +75,44 @@ i18n
 		},
 	});
 
+// Chinese requires a web font on systems without CJK fonts installed.
+// Load Noto Sans SC dynamically only when the active language is zh, and
+// apply it as a global fallback so every translated string renders.
+const ZH_FONT_LINK_ID = "zh-font-link";
+const ZH_FONT_STYLE_ID = "zh-font-style";
+
+function applyChineseFontSupport(lang: string): void {
+	if (typeof document === "undefined") return;
+	const isZh = lang.toLowerCase().startsWith("zh");
+	const existingLink = document.getElementById(ZH_FONT_LINK_ID);
+	const existingStyle = document.getElementById(ZH_FONT_STYLE_ID);
+
+	if (!isZh) {
+		existingLink?.remove();
+		existingStyle?.remove();
+		return;
+	}
+
+	if (!existingLink) {
+		const link = document.createElement("link");
+		link.id = ZH_FONT_LINK_ID;
+		link.rel = "stylesheet";
+		link.href =
+			"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap";
+		document.head.appendChild(link);
+	}
+
+	if (!existingStyle) {
+		const style = document.createElement("style");
+		style.id = ZH_FONT_STYLE_ID;
+		style.textContent = `body, input, button, select, textarea {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+		}`;
+		document.head.appendChild(style);
+	}
+}
+
+applyChineseFontSupport(i18n.language);
+i18n.on("languageChanged", applyChineseFontSupport);
+
 export default i18n;
