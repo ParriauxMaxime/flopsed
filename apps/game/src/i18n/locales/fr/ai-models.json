@@ -57,11 +57,11 @@
 	},
 	"deepseek_v2": {
 		"special_name": "Chaotique",
-		"special_description": "Sortie LoC fluctue de ±50% aléatoirement toutes les 10s"
+		"special_description": "Architecture MoE : Coût en FLOPS réduit de 50%."
 	},
 	"deepseek_r1": {
 		"special_name": "Chain of Thought",
-		"special_description": "Génère occasionnellement des commentaires mèmes. Pas de valeur cash, mais c'est marrant dans l'éditeur."
+		"special_description": "Réfléchit avant de coder. +20% de qualité mais coût en tokens x2."
 	},
 	"gpt_6": {
 		"special_name": "Amélioration récursive",
