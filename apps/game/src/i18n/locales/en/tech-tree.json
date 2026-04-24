@@ -99,11 +99,11 @@
 	},
 	"dev_mentoring": {
 		"name": "Mentoring",
-		"description": "+20% developer LoC/s per level"
+		"description": "+20% LoC/s for freelancers, interns, and dev teams per level"
 	},
 	"dev_recruiting": {
 		"name": "Recruiter",
-		"description": "-15% developer hiring cost per level"
+		"description": "-15% hiring cost for freelancers, interns, and dev teams per level"
 	},
 	"dev_quality": {
 		"name": "Code Standards",

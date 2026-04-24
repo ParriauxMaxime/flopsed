@@ -99,11 +99,11 @@
 	},
 	"dev_mentoring": {
 		"name": "Mentoría",
-		"description": "+20% LoC/s de desarrolladores por nivel"
+		"description": "+20% LoC/s de freelancers, becarios y equipos por nivel"
 	},
 	"dev_recruiting": {
 		"name": "Reclutador",
-		"description": "-15% coste de contratación de desarrolladores por nivel"
+		"description": "-15% coste de contratación de freelancers, becarios y equipos por nivel"
 	},
 	"dev_quality": {
 		"name": "Estándares de código",

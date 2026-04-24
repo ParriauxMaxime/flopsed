@@ -99,11 +99,11 @@
 	},
 	"dev_mentoring": {
 		"name": "导师制",
-		"description": "每级开发者 LoC/s +20%"
+		"description": "每级自由职业者、实习生和开发团队 LoC/s +20%"
 	},
 	"dev_recruiting": {
 		"name": "招聘专员",
-		"description": "每级开发者雇佣成本 -15%"
+		"description": "每级自由职业者、实习生和开发团队雇佣成本 -15%"
 	},
 	"dev_quality": {
 		"name": "代码规范",

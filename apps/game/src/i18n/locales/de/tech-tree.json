@@ -99,11 +99,11 @@
 	},
 	"dev_mentoring": {
 		"name": "Mentoring",
-		"description": "+20% LoC/s der Entwickler pro Stufe"
+		"description": "+20% LoC/s für Freelancer, Praktikanten und Dev-Teams pro Stufe"
 	},
 	"dev_recruiting": {
 		"name": "Recruiter",
-		"description": "-15% Einstellungskosten für Entwickler pro Stufe"
+		"description": "-15% Einstellungskosten für Freelancer, Praktikanten und Dev-Teams pro Stufe"
 	},
 	"dev_quality": {
 		"name": "Code-Standards",

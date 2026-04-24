@@ -389,7 +389,7 @@
 		{
 			"id": "dev_mentoring",
 			"name": "Mentoring",
-			"description": "+20% developer LoC/s per level",
+			"description": "+20% human LoC/s (freelancers, interns, teams) per level",
 			"icon": "🎓",
 			"requires": ["tier_tech_company"],
 			"max": 5,
@@ -398,7 +398,17 @@
 			"currency": "cash",
 			"effects": [
 				{
-					"type": "devLocMultiplier",
+					"type": "freelancerLocMultiplier",
+					"op": "multiply",
+					"value": 1.2
+				},
+				{
+					"type": "internLocMultiplier",
+					"op": "multiply",
+					"value": 1.2
+				},
+				{
+					"type": "teamLocMultiplier",
 					"op": "multiply",
 					"value": 1.2
 				}
@@ -409,7 +419,7 @@
 		{
 			"id": "dev_recruiting",
 			"name": "Recruiter",
-			"description": "-15% developer hiring cost per level",
+			"description": "-15% hiring cost for all humans (freelancers, interns, teams) per level",
 			"icon": "📋",
 			"requires": ["tier_tech_company"],
 			"max": 5,
@@ -418,7 +428,17 @@
 			"currency": "cash",
 			"effects": [
 				{
-					"type": "devCostDiscount",
+					"type": "freelancerCostDiscount",
+					"op": "multiply",
+					"value": 0.85
+				},
+				{
+					"type": "internCostDiscount",
+					"op": "multiply",
+					"value": 0.85
+				},
+				{
+					"type": "teamCostDiscount",
 					"op": "multiply",
 					"value": 0.85
 				}
