@@ -126,7 +126,6 @@ export function StatsLocSection() {
 	const ownedUpgrades = useGameStore((s) => s.ownedUpgrades);
 	const freelancerLocPerSec = useGameStore((s) => s.freelancerLocPerSec);
 	const internLocPerSec = useGameStore((s) => s.internLocPerSec);
-	const devLocPerSec = useGameStore((s) => s.devLocPerSec);
 	const teamLocPerSec = useGameStore((s) => s.teamLocPerSec);
 	const managerBonus = useGameStore((s) => s.managerBonus);
 	const locPerKey = useGameStore((s) => s.locPerKey);
@@ -170,12 +169,6 @@ export function StatsLocSection() {
 				color: SOURCE_COLORS.dev_team,
 				count: ownedUpgrades.dev_team,
 			});
-		if (devLocPerSec > 0 && (ownedUpgrades.dev_team ?? 0) === 0)
-			rows.push({
-				name: t("dev_team.name", { ns: "upgrades" }),
-				locPerSec: devLocPerSec,
-				color: SOURCE_COLORS.dev_team,
-			});
 		if ((ownedUpgrades.ai_agent ?? 0) > 0)
 			rows.push({
 				name: t("ai_agent.name", { ns: "upgrades" }),
@@ -194,7 +187,6 @@ export function StatsLocSection() {
 		ownedUpgrades,
 		freelancerLocPerSec,
 		internLocPerSec,
-		devLocPerSec,
 		teamLocPerSec,
 		agentLocPerSec,
 		youLocPerSec,

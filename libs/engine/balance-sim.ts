@@ -73,14 +73,11 @@ export function runBalanceSim(
 		locPerKeyMultiplier: 1,
 		locProductionMultiplier: 1,
 		internLoc: 0,
-		devLoc: 0,
 		teamLoc: 0,
 		managerCount: 0,
 		internLocMultiplier: 1,
-		devLocMultiplier: 1,
 		teamLocMultiplier: 1,
 		managerMultiplier: 1,
-		devSpeedMultiplier: 1,
 		cashMultiplier: 1,
 		tokenMultiplier: 1,
 		aiLocMultiplier: 1,
@@ -89,7 +86,6 @@ export function runBalanceSim(
 		freelancerCostDiscount: 1,
 		freelancerMaxBonus: 0,
 		internCostDiscount: 1,
-		devCostDiscount: 1,
 		teamCostDiscount: 1,
 		managerCostDiscount: 1,
 		llmLoc: 0,
@@ -274,7 +270,6 @@ export function runBalanceSim(
 			cost = Math.floor(cost * sim.freelancerCostDiscount);
 		if (u.costCategory === "intern")
 			cost = Math.floor(cost * sim.internCostDiscount);
-		if (u.costCategory === "dev") cost = Math.floor(cost * sim.devCostDiscount);
 		if (u.costCategory === "team")
 			cost = Math.floor(cost * sim.teamCostDiscount);
 		if (u.costCategory === "manager")
@@ -321,10 +316,6 @@ export function runBalanceSim(
 		sim.internLocMultiplier = 1;
 		sim.internCostDiscount = 1;
 		sim.internMaxBonus = 0;
-		sim.devLoc = 0;
-		sim.devLocMultiplier = 1;
-		sim.devCostDiscount = 1;
-		sim.devSpeedMultiplier = 1;
 		sim.teamLoc = 0;
 		sim.teamLocMultiplier = 1;
 		sim.teamCostDiscount = 1;
@@ -358,12 +349,10 @@ export function runBalanceSim(
 			if (e.op === "add") {
 				if (e.type === "locPerKey") sim.locPerKey += val * owned;
 				if (e.type === "flops") sim.flops += val * owned;
-				if (e.type === "autoLoc") sim.devLoc += val * owned;
 				if (e.type === "freelancerLoc") sim.freelancerLoc += val * owned;
 				if (e.type === "freelancerMaxBonus")
 					sim.freelancerMaxBonus += val * owned;
 				if (e.type === "internLoc") sim.internLoc += val * owned;
-				if (e.type === "devLoc") sim.devLoc += val * owned;
 				if (e.type === "teamLoc") sim.teamLoc += val * owned;
 				if (e.type === "managerLoc") sim.managerCount += val * owned;
 				if (e.type === "internMaxBonus") sim.internMaxBonus += val * owned;
@@ -383,17 +372,14 @@ export function runBalanceSim(
 					sim.locProductionMultiplier *= mult;
 				if (e.type === "cashMultiplier") sim.cashMultiplier *= mult;
 				if (e.type === "tokenMultiplier") sim.tokenMultiplier *= mult;
-				if (e.type === "devSpeed") sim.devSpeedMultiplier *= mult;
 				if (e.type === "freelancerLocMultiplier")
 					sim.freelancerLocMultiplier *= mult;
 				if (e.type === "freelancerCostDiscount")
 					sim.freelancerCostDiscount *= mult;
 				if (e.type === "internLocMultiplier") sim.internLocMultiplier *= mult;
-				if (e.type === "devLocMultiplier") sim.devLocMultiplier *= mult;
 				if (e.type === "teamLocMultiplier") sim.teamLocMultiplier *= mult;
 				if (e.type === "managerMultiplier") sim.managerMultiplier *= mult;
 				if (e.type === "internCostDiscount") sim.internCostDiscount *= mult;
-				if (e.type === "devCostDiscount") sim.devCostDiscount *= mult;
 				if (e.type === "teamCostDiscount") sim.teamCostDiscount *= mult;
 				if (e.type === "managerCostDiscount") sim.managerCostDiscount *= mult;
 				if (e.type === "llmLocMultiplier") sim.llmLocMultiplier *= mult;
@@ -458,7 +444,6 @@ export function runBalanceSim(
 		return (
 			(sim.freelancerLoc * sim.freelancerLocMultiplier +
 				sim.internLoc * sim.internLocMultiplier +
-				sim.devLoc * sim.devLocMultiplier * sim.devSpeedMultiplier +
 				sim.teamLoc * sim.teamLocMultiplier * managerTeamBonus +
 				sim.llmLoc * sim.llmLocMultiplier +
 				sim.agentLoc * sim.agentLocMultiplier) *
@@ -1003,7 +988,6 @@ export function runBalanceSim(
 						if (e.type === "autoExecute") val += flops * cashPerLoc() * 10; // high priority: unlocks continuous execution
 						if (
 							e.type === "internLocMultiplier" ||
-							e.type === "devLocMultiplier" ||
 							e.type === "teamLocMultiplier" ||
 							e.type === "freelancerLocMultiplier"
 						)
@@ -1018,7 +1002,6 @@ export function runBalanceSim(
 							val += calcAutoLoc() * cashPerLoc() * (ev - 1) * 0.5;
 						if (
 							e.type === "internCostDiscount" ||
-							e.type === "devCostDiscount" ||
 							e.type === "teamCostDiscount" ||
 							e.type === "managerCostDiscount" ||
 							e.type === "llmCostDiscount" ||
@@ -1147,12 +1130,7 @@ export function runBalanceSim(
 						if (e.type === "locPerKey" && e.op === "add")
 							val +=
 								ev * cfg.keysPerSec * cashPerLoc() * (bottlenecked ? 0.3 : 1);
-						if (
-							e.type === "autoLoc" ||
-							e.type === "freelancerLoc" ||
-							e.type === "internLoc" ||
-							e.type === "devLoc"
-						)
+						if (e.type === "freelancerLoc" || e.type === "internLoc")
 							val += ev * cashPerLoc() * (bottlenecked ? 0.3 : 1);
 						if (e.type === "teamLoc")
 							val +=

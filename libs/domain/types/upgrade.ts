@@ -15,7 +15,7 @@ export interface Upgrade {
 	costMultiplier: number;
 	max: number;
 	effects: UpgradeEffect[];
-	/** Cost category for discount tech: "intern" or "dev" */
+	/** Cost category for discount tech: "freelancer", "intern", "team", "manager", "llm", "agent" */
 	costCategory?: string;
 	codeQuality?: number;
 	flopsCost?: number | string;

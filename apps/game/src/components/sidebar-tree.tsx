@@ -118,7 +118,6 @@ const priceCss = css({
 const LOC_RATE_KEY: Record<string, keyof GameState> = {
 	freelancerLoc: "freelancerLocPerSec",
 	internLoc: "internLocPerSec",
-	devLoc: "devLocPerSec",
 	teamLoc: "teamLocPerSec",
 	agentLoc: "agentLocPerSec",
 };
@@ -151,7 +150,6 @@ function formatEffectSimple(
 			agentLocMultiplier: { label: "agent loc", color: theme.locColor },
 			freelancerLocMultiplier: { label: "freelancer", color: theme.locColor },
 			internLocMultiplier: { label: "intern", color: theme.locColor },
-			devLocMultiplier: { label: "dev loc", color: theme.locColor },
 			teamLocMultiplier: { label: "team loc", color: theme.locColor },
 			managerMultiplier: { label: "managers", color: theme.locColor },
 			freelancerCostDiscount: {
@@ -159,7 +157,6 @@ function formatEffectSimple(
 				color: theme.cashColor,
 			},
 			internCostDiscount: { label: "intern cost", color: theme.cashColor },
-			devCostDiscount: { label: "dev cost", color: theme.cashColor },
 			teamCostDiscount: { label: "team cost", color: theme.cashColor },
 			managerCostDiscount: { label: "manager cost", color: theme.cashColor },
 			llmCostDiscount: { label: "AI cost", color: theme.cashColor },
@@ -179,14 +176,7 @@ function formatEffectSimple(
 		};
 	}
 
-	const locTypes = [
-		"freelancerLoc",
-		"internLoc",
-		"devLoc",
-		"teamLoc",
-		"autoLoc",
-		"agentLoc",
-	];
+	const locTypes = ["freelancerLoc", "internLoc", "teamLoc", "agentLoc"];
 	if (locTypes.includes(effect.type))
 		return { text: `+${formatNumber(val)} loc/s`, color: theme.locColor };
 

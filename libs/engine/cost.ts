@@ -3,7 +3,6 @@ import type { TechNode, Upgrade } from "@flopsed/domain";
 interface CostDiscounts {
 	freelancerCostDiscount: number;
 	internCostDiscount: number;
-	devCostDiscount: number;
 	teamCostDiscount: number;
 	managerCostDiscount: number;
 	llmCostDiscount: number;
@@ -48,8 +47,6 @@ export function getUpgradeCost(
 			cost = Math.floor(cost * discounts.freelancerCostDiscount);
 		if (upgrade.costCategory === "intern")
 			cost = Math.floor(cost * discounts.internCostDiscount);
-		if (upgrade.costCategory === "dev")
-			cost = Math.floor(cost * discounts.devCostDiscount);
 		if (upgrade.costCategory === "team")
 			cost = Math.floor(cost * discounts.teamCostDiscount);
 		if (upgrade.costCategory === "manager")

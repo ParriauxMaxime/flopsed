@@ -78,7 +78,6 @@ export interface GameState {
 	autoTypeLocPerSec: number;
 	freelancerLocPerSec: number;
 	internLocPerSec: number;
-	devLocPerSec: number;
 	teamLocPerSec: number;
 	llmLocPerSec: number;
 	agentLocPerSec: number;
@@ -89,7 +88,6 @@ export interface GameState {
 	tokenMultiplier: number;
 	freelancerCostDiscount: number;
 	internCostDiscount: number;
-	devCostDiscount: number;
 	teamCostDiscount: number;
 	managerCostDiscount: number;
 	llmCostDiscount: number;
@@ -192,7 +190,6 @@ const initialState: GameState = {
 	autoTypeLocPerSec: 0,
 	freelancerLocPerSec: 0,
 	internLocPerSec: 0,
-	devLocPerSec: 0,
 	teamLocPerSec: 0,
 	llmLocPerSec: 0,
 	agentLocPerSec: 0,
@@ -203,7 +200,6 @@ const initialState: GameState = {
 	tokenMultiplier: 1,
 	freelancerCostDiscount: 1,
 	internCostDiscount: 1,
-	devCostDiscount: 1,
 	teamCostDiscount: 1,
 	managerCostDiscount: 1,
 	llmCostDiscount: 1,
@@ -273,7 +269,6 @@ function recalcDerivedStats(state: GameState): void {
 	let locPerKey = core.startingLocPerKey;
 	let freelancerLoc = 0;
 	let internLoc = 0;
-	let devLoc = 0;
 	let teamLoc = 0;
 	let llmLoc = 0;
 	let agentLoc = 0;
@@ -284,15 +279,12 @@ function recalcDerivedStats(state: GameState): void {
 	let tokenMultiplier = 1;
 	let freelancerLocMultiplier = 1;
 	let internLocMultiplier = 1;
-	let devLocMultiplier = 1;
 	let teamLocMultiplier = 1;
 	let llmLocMultiplier = 1;
 	let agentLocMultiplier = 1;
 	let managerMultiplier = 1;
-	let devSpeedMultiplier = 1;
 	let freelancerCostDiscount = 1;
 	let internCostDiscount = 1;
-	let devCostDiscount = 1;
 	let teamCostDiscount = 1;
 	let managerCostDiscount = 1;
 	let llmCostDiscount = 1;
@@ -323,17 +315,11 @@ function recalcDerivedStats(state: GameState): void {
 			case "locPerKey:multiply":
 				locPerKey *= val ** owned;
 				break;
-			case "autoLoc:add":
-				devLoc += val * owned;
-				break;
 			case "freelancerLoc:add":
 				freelancerLoc += val * owned;
 				break;
 			case "internLoc:add":
 				internLoc += val * owned;
-				break;
-			case "devLoc:add":
-				devLoc += val * owned;
 				break;
 			case "teamLoc:add":
 				teamLoc += val * owned;
@@ -363,17 +349,11 @@ function recalcDerivedStats(state: GameState): void {
 			case "tokenMultiplier:multiply":
 				tokenMultiplier *= val ** owned;
 				break;
-			case "devSpeed:multiply":
-				devSpeedMultiplier *= val ** owned;
-				break;
 			case "freelancerLocMultiplier:multiply":
 				freelancerLocMultiplier *= val ** owned;
 				break;
 			case "internLocMultiplier:multiply":
 				internLocMultiplier *= val ** owned;
-				break;
-			case "devLocMultiplier:multiply":
-				devLocMultiplier *= val ** owned;
 				break;
 			case "teamLocMultiplier:multiply":
 				teamLocMultiplier *= val ** owned;
@@ -394,9 +374,6 @@ function recalcDerivedStats(state: GameState): void {
 				break;
 			case "internCostDiscount:multiply":
 				internCostDiscount *= val ** owned;
-				break;
-			case "devCostDiscount:multiply":
-				devCostDiscount *= val ** owned;
 				break;
 			case "teamCostDiscount:multiply":
 				teamCostDiscount *= val ** owned;
@@ -476,7 +453,6 @@ function recalcDerivedStats(state: GameState): void {
 	const totalAutoLoc =
 		freelancerLoc * freelancerLocMultiplier +
 		internLoc * internLocMultiplier +
-		devLoc * devLocMultiplier * devSpeedMultiplier +
 		teamLoc * teamLocMultiplier * managerTeamBonus +
 		llmLoc * llmLocMultiplier +
 		agentLoc * agentLocMultiplier;
@@ -497,12 +473,6 @@ function recalcDerivedStats(state: GameState): void {
 	state.internLocPerSec =
 		internLoc *
 		internLocMultiplier *
-		locProductionMultiplier *
-		eventMods.autoLocMultiplier;
-	state.devLocPerSec =
-		devLoc *
-		devLocMultiplier *
-		devSpeedMultiplier *
 		locProductionMultiplier *
 		eventMods.autoLocMultiplier;
 	state.teamLocPerSec =
@@ -533,7 +503,6 @@ function recalcDerivedStats(state: GameState): void {
 	state.tokenMultiplier = tokenMultiplier;
 	state.freelancerCostDiscount = freelancerCostDiscount;
 	state.internCostDiscount = internCostDiscount;
-	state.devCostDiscount = devCostDiscount;
 	state.teamCostDiscount = teamCostDiscount;
 	state.managerCostDiscount = managerCostDiscount;
 	state.llmCostDiscount = llmCostDiscount;
