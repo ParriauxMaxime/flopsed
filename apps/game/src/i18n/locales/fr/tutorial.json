@@ -1,7 +1,7 @@
 {
 	"welcome": {
 		"header": "tutorial.welcome()",
-		"body": "Un clavier. Un rêve. Chaque frappe = Lignes de Code.\nTapez pour remplir la file de code. Exécutez pour gagner $$$."
+		"body": "Un clavier. Un rêve. Chaque frappe = Lignes de Code.\nTapez pour remplir la file de code. Exécutez pour gagner des $$$."
 	},
 	"tech_tree": {
 		"header": "tutorial.tech_tree()",
@@ -13,7 +13,7 @@
 	},
 	"execution": {
 		"header": "tutorial.execution()",
-		"body": "frappe → file → exécution → $$$\nLe code s'accumule. Les FLOPS le brûlent. Le cash coule."
+		"body": "code → file d'attente → exécution → des $$$\nLe code s'accumule. Les FLOPS le brûlent. Le cash coule."
 	},
 	"first_purchase": {
 		"header": "tutorial.first_purchase()",
@@ -36,7 +36,7 @@
 	"close_terminal": "Fermer le terminal (Ctrl+T)",
 	"new_content": "↓ nouveau",
 	"spotlight_editor_title": "Allez, écrivez n'importe quoi",
-	"spotlight_editor_body": "Les ingénieurs font croire que coder est difficile. C'est vraiment simple. Tapez dans agi.py.\nChaque frappe génère des Lignes de Code.",
+	"spotlight_editor_body": "Les devs font croire que c'est difficile. En vrai, c'est super simple. Tapez n'importe où dans agi.py.\nChaque frappe génère des Lignes de Code.",
 	"spotlight_stats_unlock_title": "Débloquez votre pipeline d'exécution",
 	"spotlight_stats_unlock_body": "Votre code s'accumule. Débloquez le panneau Execute pour l'exécuter et convertir les LoC en cash.",
 	"spotlight_execute_title": "Exécutez votre code",

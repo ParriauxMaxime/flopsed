@@ -20,7 +20,7 @@
 		"special_description": "+30% LoC/s mais 30% de rembourrage (valeur cash réduite)"
 	},
 	"gpt_35": {
-		"special_name": "Moment ChatGPT",
+		"special_name": "L'effet ChatGPT",
 		"special_description": "+10% multiplicateur de cash pendant 60s au déploiement"
 	},
 	"gpt_4": {

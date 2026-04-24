@@ -1,6 +1,6 @@
 {
 	"production_down": {
-		"name": "La prod est en carafe !",
+		"name": "La prod est down !",
 		"description": "FLOPS divisés par 2 pendant 30s. Tapez comme un forcené pour accélérer le correctif (chaque touche = -1s)."
 	},
 	"hackathon": {
@@ -33,7 +33,7 @@
 	},
 	"viral_tweet": {
 		"name": "Tweet viral",
-		"description": "Votre prise de position a enflammé la Fachosphère tech. Les devs affluent. +100% auto-LoC pendant 15s."
+		"description": "Votre tweet a buzzé. Les devs affluent vers votre projet. +100% auto-LoC pendant 15s."
 	},
 	"ai_hallucination": {
 		"name": "Hallucination IA",

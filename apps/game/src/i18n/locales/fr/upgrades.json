@@ -4,7 +4,10 @@
 		"description": "Développeur à distance — écrit 5 LoC/s"
 	},
 	"desktop_pc": { "name": "PC Bureau", "description": "+50 FLOPS" },
-	"second_monitor": { "name": "Deuxième écran", "description": "+25 FLOPS" },
+	"second_monitor": {
+		"name": "Double écran",
+		"description": "+25 FLOPS"
+	},
 	"server_rack": { "name": "Baie de serveurs", "description": "+200 FLOPS" },
 	"intern": {
 		"name": "Stagiaire",

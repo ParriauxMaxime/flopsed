@@ -78,11 +78,11 @@
 		"description": "+20% LoC/s des stagiaires par niveau"
 	},
 	"intern_trap": {
-		"name": "Piège à stagiaires",
+		"name": "Appât à stagiaires",
 		"description": "-15% coût de recrutement des stagiaires par niveau"
 	},
 	"intern_quality": {
-		"name": "Code Review 101",
+		"name": "Intro à la Code Review",
 		"description": "+10% cash par LoC par niveau"
 	},
 	"tier_startup": {
