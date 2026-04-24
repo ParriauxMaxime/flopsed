@@ -1,6 +1,5 @@
 import { css, keyframes } from "@emotion/react";
 import { sfx } from "@modules/audio";
-import { allEvents, useEventStore } from "@modules/event";
 import { useGameStore, useUiStore } from "@modules/game";
 import { formatNumber } from "@utils/format";
 import type { MutableRefObject } from "react";
@@ -133,29 +132,15 @@ export function Editor({ keystrokeCallbackRef }: EditorProps) {
 
 	const { advanceTokens } = useCodeTyping();
 
-	const running = useGameStore((s) => s.running);
-
 	const addLoc = useGameStore((s) => s.addLoc);
 
 	const onKeystroke = useCallback(() => {
 		sfx.typing();
 		addLoc(locPerKey);
 		advanceTokens(1); // purely visual: advance 1 token
-
-		// Check for mash-key event interaction (only while game is running)
-		if (running) {
-			const eventStore = useEventStore.getState();
-			const interactive = eventStore.getActiveInteractiveEvent();
-			if (interactive) {
-				const definition = allEvents.find(
-					(e) => e.id === interactive.definitionId,
-				);
-				if (definition?.interaction?.type === "mash_keys") {
-					eventStore.handleMashKey(interactive.definitionId);
-				}
-			}
-		}
-	}, [addLoc, advanceTokens, locPerKey, running]);
+		// Mash-key event reduction is handled by the always-on global listener
+		// in EditorPanel so keystrokes on any page count, not just agi.py.
+	}, [addLoc, advanceTokens, locPerKey]);
 
 	useEffect(() => {
 		if (keystrokeCallbackRef) {

@@ -66,24 +66,35 @@ export function EditorPanel() {
 
 			sfx.typing();
 			addLoc(locPerKey);
-
-			if (running) {
-				const es = useEventStore.getState();
-				const interactive = es.getActiveInteractiveEvent();
-				if (interactive) {
-					const def = allEvents.find(
-						(ev) => ev.id === interactive.definitionId,
-					);
-					if (def?.interaction?.type === "mash_keys") {
-						es.handleMashKey(interactive.definitionId);
-					}
-				}
-			}
 		}
 
 		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [aiUnlocked, addLoc, locPerKey, running]);
+	}, [aiUnlocked, addLoc, locPerKey]);
+
+	// Mash-key event reduction: always active, any page, any tier. Events like
+	// "Production is down" fire at T2 while the player can still be on the tech
+	// tree or sidebar, not typing in agi.py.
+	useEffect(() => {
+		function handleMash(e: KeyboardEvent) {
+			if (IGNORED_KEYS.has(e.key)) return;
+			const target = e.target as HTMLElement;
+			if (target.closest("[data-sidebar]") || target.closest("[data-terminal]"))
+				return;
+			if (!running) return;
+
+			const es = useEventStore.getState();
+			const interactive = es.getActiveInteractiveEvent();
+			if (!interactive) return;
+			const def = allEvents.find((ev) => ev.id === interactive.definitionId);
+			if (def?.interaction?.type === "mash_keys") {
+				es.handleMashKey(interactive.definitionId);
+			}
+		}
+
+		window.addEventListener("keydown", handleMash);
+		return () => window.removeEventListener("keydown", handleMash);
+	}, [running]);
 
 	if (aiUnlocked) {
 		return (
